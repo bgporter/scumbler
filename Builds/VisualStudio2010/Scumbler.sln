@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{13792402-EF44-8233-B486-DD9DD2C12704}") = "Scumbler", "Scumbler.vcxproj", "{D2217C44-6B54-2616-5921-6001DBDFDA9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2217C44-6B54-2616-5921-6001DBDFDA9C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D2217C44-6B54-2616-5921-6001DBDFDA9C}.Debug|Win32.Build.0 = Debug|Win32
+		{D2217C44-6B54-2616-5921-6001DBDFDA9C}.Release|Win32.ActiveCfg = Release|Win32
+		{D2217C44-6B54-2616-5921-6001DBDFDA9C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
