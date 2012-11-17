@@ -1,6 +1,6 @@
 Milestone 0.1.0:
- ☐ 0100: Instantiate AudioDeviceManager
- ☐ 0101: Instantiate Scumbler object, passing ref to device manager
+ ✔ 0100: Instantiate AudioDeviceManager @done (12-11-17 10:52)
+ ✔ 0101: Instantiate Scumbler object, passing ref to device manager @done (12-11-17 10:55)
  ☐ 0102: display audio config dialog.
      ☐ add menus -- file, options, help
      ☐ options menu gets a 'Configure Audio...' item

@@ -13,6 +13,8 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "Scumbler.h"
+
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
@@ -43,6 +45,7 @@ private:
      * out of the model for this app.
      */
     AudioDeviceManager  fDeviceManager;
+    Scumbler            fScumbler;
 };
 
 

@@ -15,7 +15,8 @@
 MainAppWindow::MainAppWindow()
     : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
                       Colours::lightgrey,
-                      DocumentWindow::allButtons)
+                      DocumentWindow::allButtons),
+      fScumbler(fDeviceManager)
 {
     centreWithSize (500, 400);
     setVisible (true);
