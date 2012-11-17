@@ -17,13 +17,15 @@
  * - links together the plugins owned by each track and the filter graph
  * - writing output to file, etc.
  */
-class Scumbler
+class Scumbler : public ChangeBroadcaster
 {
 public:
    /**
     * Constructor
+    * \param deviceManager A reference to an AudioDeviceManager object that's
+    *     owned elsewhere in the application. 
     */
-   Scumbler();
+   Scumbler(AudioDeviceManager& deviceManager);
 
    /**
     * dtor.
@@ -42,6 +44,14 @@ private:
     * The graph of audio processors that do all the work.
     */
    AudioProcessorGraph  fGraph;
+
+   /**
+    * The audio hardware. 
+    * In our initial version, we'll just initialize with defaults, and use 
+    * the Juce-supplied AudioDeviceSelectorComponent class to let the user tweak 
+    * settings.
+    */
+   AudioDeviceManager&   fDeviceManager;
 
 };
 

@@ -35,6 +35,14 @@ public:
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
+
+    /**
+     * The Audio devices are owned by the application window. We pass a reference 
+     * to this object to the Scumbler object that needs to use it. This lets us 
+     * keep concerns like configuring & peristing state of the underlying system
+     * out of the model for this app.
+     */
+    AudioDeviceManager  fDeviceManager;
 };
 
 

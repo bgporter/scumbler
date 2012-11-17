@@ -2,7 +2,8 @@
 
 #include "Scumbler.h"
 
-Scumbler::Scumbler()
+Scumbler::Scumbler(AudioDeviceManager& deviceManager)
+:  fDeviceManager(deviceManager)
 {
 
 }
