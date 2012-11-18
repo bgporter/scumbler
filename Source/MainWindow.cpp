@@ -20,6 +20,13 @@ MainAppWindow::MainAppWindow()
 {
     centreWithSize (500, 400);
     setVisible (true);
+
+    
+   #if JUCE_MAC
+    setMacMainMenu (this);
+   #else
+    setMenuBar (this);
+   #endif
 }
 
 MainAppWindow::~MainAppWindow()
@@ -29,4 +36,23 @@ MainAppWindow::~MainAppWindow()
 void MainAppWindow::closeButtonPressed()
 {
     JUCEApplication::getInstance()->systemRequestedQuit();
+}
+
+StringArray MainAppWindow::getMenuBarNames()
+{
+    const char* const names[] = { "File", "Plugins", "Options", "Help", nullptr };
+
+    return StringArray (names);  
+}
+
+PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& menuName)
+{
+  PopupMenu menu;
+
+  return menu;
+}
+
+void MainAppWindow::menuItemSelected (int menuItemID, int topLevelMenuIndex)
+{
+
 }

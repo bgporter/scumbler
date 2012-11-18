@@ -18,6 +18,7 @@
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
+                      , public MenuBarModel
 {
 public:
     //==============================================================================
@@ -26,6 +27,16 @@ public:
 
     void closeButtonPressed();
 
+    /**
+     * @name MenuBarModel overrides.
+     */
+    ///@{
+ 
+    StringArray getMenuBarNames();
+    PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName);
+    void menuItemSelected (int menuItemID, int topLevelMenuIndex);
+ 
+    ///@}
 
     /* Note: Be careful when overriding DocumentWindow methods - the base class
        uses a lot of them, so by overriding you might break its functionality.
