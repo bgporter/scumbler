@@ -12,6 +12,9 @@
 #include "MainWindow.h"
 
 
+ApplicationCommandManager* gCommandManager = nullptr;
+ApplicationProperties* gAppProperties = nullptr;
+
 //==============================================================================
 class ScumblerApplication  : public JUCEApplication
 {
@@ -30,12 +33,28 @@ public:
     {
         // Do your application's initialisation code here..
         mainWindow = new MainAppWindow();
+
+        PropertiesFile::Options options;
+        options.applicationName     = "Scumbler";
+        options.filenameSuffix      = "settings";
+        options.osxLibrarySubFolder = "Preferences";
+
+        gAppProperties = new ApplicationProperties();
+        gAppProperties->setStorageParameters (options);
+
+        gCommandManager = new ApplicationCommandManager();
+
+
     }
 
     void shutdown()
     {
         // Do your application's shutdown code here..
         mainWindow = 0;
+
+        gAppProperties->closeFiles();
+        deleteAndZero(gCommandManager);
+        deleteAndZero(gAppProperties);
     }
 
     //==============================================================================

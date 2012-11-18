@@ -21,7 +21,7 @@ MainAppWindow::MainAppWindow()
     centreWithSize (500, 400);
     setVisible (true);
 
-    
+
    #if JUCE_MAC
     setMacMainMenu (this);
    #else
@@ -48,7 +48,17 @@ StringArray MainAppWindow::getMenuBarNames()
 PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& menuName)
 {
   PopupMenu menu;
+  switch (topLevelMenuIndex)
+  {
+    case 0: //File menu
+    break;
 
+    case 1: // Plugins menu
+    break;
+
+    case 2: //Options menu
+    break;
+}
   return menu;
 }
 
