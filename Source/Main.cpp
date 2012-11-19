@@ -32,7 +32,6 @@ public:
     void initialise (const String& commandLine)
     {
         // Do your application's initialisation code here..
-        mainWindow = new MainAppWindow();
 
         PropertiesFile::Options options;
         options.applicationName     = "Scumbler";
@@ -44,6 +43,11 @@ public:
 
         gCommandManager = new ApplicationCommandManager();
 
+        mainWindow = new MainAppWindow();
+        gCommandManager->registerAllCommandsForTarget(this);
+        gCommandManager->registerAllCommandsForTarget(mainWindow);
+
+        mainWindow->menuItemsChanged();
 
     }
 
@@ -76,7 +80,7 @@ public:
 
     bool moreThanOneInstanceAllowed()
     {
-        return true;
+        return false;
     }
 
     void anotherInstanceStarted (const String& commandLine)

@@ -15,10 +15,27 @@
 
 #include "Scumbler.h"
 
+namespace CommandIds
+{
+    static const CommandID kNew     = 0x2FFF;
+    static const CommandID kOpen    = 0x3000;
+    static const CommandID kSave    = 0x3001;
+    static const CommandID kSaveAs  = 0x3002;
+    static const CommandID kConfigAudio = 0x3003;
+    static const CommandID kAboutBox = 0x3004;
+    static const CommandID kPlay    = 0x3005;
+    static const CommandID kPause   = 0x3006;
+    static const CommandID kRewind  = 0x3007;
+    static const CommandID kToggleRecord = 0x3008;      
+}
+
+extern ApplicationCommandManager* gCommandManager;
+extern ApplicationProperties* gAppProperties;
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
                       , public MenuBarModel
+                      , public ApplicationCommandTarget
 {
 public:
     //==============================================================================
@@ -37,6 +54,18 @@ public:
     void menuItemSelected (int menuItemID, int topLevelMenuIndex);
  
     ///@}
+    
+    /**
+     * @name ApplicationCommandTarget overrides.
+     */
+    
+    ///@{
+    ApplicationCommandTarget* getNextCommandTarget();
+    void getAllCommands(Array<CommandID>& commands);
+    void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
+    bool perform(const InvocationInfo& info);
+    ///@}
+
 
     /* Note: Be careful when overriding DocumentWindow methods - the base class
        uses a lot of them, so by overriding you might break its functionality.
