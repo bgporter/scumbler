@@ -43,6 +43,13 @@ void MainAppWindow::closeButtonPressed()
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
+
+
+void MainAppWindow::ConfigureAudio()
+{
+  
+}
+
 StringArray MainAppWindow::getMenuBarNames()
 {
     const char* const names[] = { "File", "Options", "Help", nullptr };
@@ -53,7 +60,7 @@ StringArray MainAppWindow::getMenuBarNames()
 PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& menuName)
 {
   PopupMenu menu;
-  // TODO: !!!
+
   switch (topLevelMenuIndex)
   {
     case 0:   //File menu

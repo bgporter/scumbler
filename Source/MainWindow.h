@@ -45,6 +45,13 @@ public:
     void closeButtonPressed();
 
     /**
+     * \name ConfigureAudio
+     * \brief Display the built-in JUCE audio device selector.
+     */
+    
+    void ConfigureAudio();
+
+    /**
      * @name MenuBarModel overrides.
      */
     ///@{
