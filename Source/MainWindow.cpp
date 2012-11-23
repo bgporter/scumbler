@@ -198,7 +198,7 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
 
     case CommandIds::kConfigAudio:
     {
-      result.setInfo("Change the audio device settings",
+      result.setInfo("Configure Audio...",
         String::empty, category, 0);
     }
     break;
