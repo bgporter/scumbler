@@ -18,6 +18,7 @@
  * - writing output to file, etc.
  */
 class Scumbler : public ChangeBroadcaster
+               , public ApplicationCommandTarget
 {
 public:
    /**
@@ -31,6 +32,18 @@ public:
     * dtor.
     */
    ~Scumbler();
+   
+    /**
+     * @name ApplicationCommandTarget overrides.
+     */
+    
+    ///@{
+    ApplicationCommandTarget* getNextCommandTarget();
+    void getAllCommands(Array<CommandID>& commands);
+    void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
+    bool perform(const InvocationInfo& info);
+    ///@}
+
    
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);
