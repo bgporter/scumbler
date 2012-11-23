@@ -47,7 +47,28 @@ void MainAppWindow::closeButtonPressed()
 
 void MainAppWindow::ConfigureAudio()
 {
-  
+  AudioDeviceSelectorComponent audioConfig(fDeviceManager, 
+    1, 2,     // at least one input channel, no more than 2
+    1, 2,     // at least one output channel, no more than 2
+    true,     // show midi input options
+    true,     // show midi output options
+    true,     // show channels as stereo pairs.
+    false     // don't hide the advanced options.
+    );
+
+  audioConfig.setSize(500, 450);
+
+  DialogWindow::LaunchOptions(o);
+  o.content.setNonOwned(&audioConfig);
+  o.dialogTitle = "Configure Audio";
+  o.componentToCentreAround = this;
+  o.dialogBackgroundColour = Colours::grey; 
+  o.escapeKeyTriggersCloseButton = true;
+  o.useNativeTitleBar = true;
+  o.resizable = false;
+
+  o.runModal();
+
 }
 
 StringArray MainAppWindow::getMenuBarNames()
@@ -197,7 +218,7 @@ bool MainAppWindow::perform(const InvocationInfo& info)
     break;
     case CommandIds::kConfigAudio:
     {
-
+      this->ConfigureAudio();
     }
     break;
   }
