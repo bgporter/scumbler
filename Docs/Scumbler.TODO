@@ -1,10 +1,13 @@
 Milestone 0.1.0:
  ✔ 0100: Instantiate AudioDeviceManager @done (12-11-17 10:52)
  ✔ 0101: Instantiate Scumbler object, passing ref to device manager @done (12-11-17 10:55)
- ☐ 0102: display audio config dialog.
+ ✔ 0102: display audio config dialog. @done (12-11-23 10:16)
      ✔ add menus -- file, options, help @done (12-11-17 20:03)
      ✔ options menu gets a 'Configure Audio...' item @done (12-11-19 09:51)
-     ☐ Selecting that displays the audio device config component
+     ✔ Selecting that displays the audio device config component @done (12-11-23 10:14)
+     ✔ Audio settings written to config @done (12-11-23 10:16)
+     ✔ Audio settings restored from config on next launch. @done (12-11-23 10:16)
+
  ☐ 0103: Inside Scumbler object, create in and out processors, connect them, verify pass-thru
  ☐ 0104: Create simple (pass-through) version of the loop processor, verify (single track in the scumbler object.)
  ☐ 0105: Implement loop functionality w unity gain.
