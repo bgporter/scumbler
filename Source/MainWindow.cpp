@@ -13,20 +13,28 @@
 
 //==============================================================================
 MainAppWindow::MainAppWindow()
-    : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
-                      Colours::lightgrey,
-                      DocumentWindow::allButtons),
-      fScumbler(fDeviceManager)
+    : DocumentWindow (JUCEApplication::getInstance()->getApplicationName() , Colours::lightgrey
+      , DocumentWindow::allButtons)
+    , fScumbler(fDeviceManager)
 {
-    centreWithSize (1024, 768);
-    setVisible (true);
+  PropertiesFile* userSettings = gAppProperties->getUserSettings();
+  ScopedPointer<XmlElement> savedAudioState(userSettings->getXmlValue("audioDeviceState"));
+
+  fDeviceManager.initialise(2, 2, // max 2 input and output channels.
+    savedAudioState, // pass in the last known configuration state
+    true              // select the default device if restoring the last config fails.
+     );
 
 
-   #if JUCE_MAC
+  centreWithSize (1024, 768);
+  setVisible (true);
+
+
+  #if JUCE_MAC
     setMacMainMenu (this);
-   #else
+  #else
     setMenuBar (this);
-   #endif
+  #endif
 }
 
 MainAppWindow::~MainAppWindow()
@@ -68,6 +76,14 @@ void MainAppWindow::ConfigureAudio()
   o.resizable = false;
 
   o.runModal();
+
+  // persist the settings for our next run.
+  ScopedPointer<XmlElement> audioState(fDeviceManager.createStateXml());
+  PropertiesFile* settings = gAppProperties->getUserSettings();
+  settings->setValue("audioDeviceState", audioState);
+  settings->saveIfNeeded();
+
+  // !!! notify the scumbler object that the settings have changed
 
 }
 
