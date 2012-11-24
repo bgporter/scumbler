@@ -1,9 +1,10 @@
 // Copyright (c) 2012 Bg Porter
 
 #include "Scumbler.h"
-
+#include "Commands.h"
 Scumbler::Scumbler(AudioDeviceManager& deviceManager)
 :  fDeviceManager(deviceManager)
+,  fPlaying(false)
 {
 
 }
@@ -13,23 +14,16 @@ Scumbler::~Scumbler()
    
 }
 
-ApplicationCommandTarget* Scumbler::getNextCommandTarget()
+
+void Scumbler::Play()
 {
-   return this->findFirstTargetParentComponent();
+   fPlaying = !fPlaying;
+}
+
+bool Scumbler::IsPlaying() const
+{
+   return fPlaying;
 }
 
 
-void Scumbler::getAllCommands(Array<CommandID>& commands)
-{
 
-}
-
-void Scumbler::getCommandInfo(CommandID commandID, ApplicationCommandInfo& result)
-{
-
-}
-
-bool Scumbler::perform(const InvocationInfo& info)
-{
-  return false; 
-}

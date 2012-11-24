@@ -10,6 +10,8 @@
 
 #include "MainWindow.h"
 
+#include "Commands.h"
+
 
 //==============================================================================
 MainAppWindow::MainAppWindow()
@@ -17,6 +19,12 @@ MainAppWindow::MainAppWindow()
       , DocumentWindow::allButtons)
     , fScumbler(fDeviceManager)
 {
+
+  // connect our menu bar model to the command manager -- anything changed 
+  // there will be reflected back here in our menu.
+  this->setApplicationCommandManagerToWatch(gCommandManager);
+
+  // restore anything we saved in previous instantiations.
   PropertiesFile* userSettings = gAppProperties->getUserSettings();
   ScopedPointer<XmlElement> savedAudioState(userSettings->getXmlValue("audioDeviceState"));
 
@@ -112,6 +120,7 @@ PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& m
     case 1:   // Options menu
     {
       menu.addCommandItem(gCommandManager, CommandIds::kConfigAudio);
+      menu.addCommandItem(gCommandManager, CommandIds::kPlay);
     }
     break;
 
@@ -146,7 +155,11 @@ void MainAppWindow::getAllCommands(Array<CommandID>& commands)
     CommandIds::kOpen,
     CommandIds::kSave,
     CommandIds::kSaveAs,
-    CommandIds::kConfigAudio
+    CommandIds::kConfigAudio,
+    CommandIds::kPlay,
+    //CommandIds::kPause,
+    //CommandIds::kRewind,
+    //CommandIds::kToggleRecord
   };
   commands.addArray(ids, numElementsInArray(ids));
 
@@ -182,7 +195,7 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
       result.setInfo("Save",
         "Save the current Scumbler setup to a file",
         category, 0);
-        result.defaultKeypresses.add (KeyPress('s', ModifierKeys::commandModifier, 0));
+        result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
     }
     break;
 
@@ -198,8 +211,21 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
 
     case CommandIds::kConfigAudio:
     {
-      result.setInfo("Configure Audio...",
-        String::empty, category, 0);
+      result.setInfo("Configure Audio...", String::empty, category, 0);
+    }
+    break;
+
+    case CommandIds::kPlay:
+    { 
+      if (fScumbler.IsPlaying())
+      {
+        result.setInfo("Pause", "Pause audio playback", category, 0);
+      }
+      else
+      {
+        result.setInfo("Play", "Start audio playback", category, 0);
+      }
+      result.defaultKeypresses.add(KeyPress('p', ModifierKeys::commandModifier, 0));
     }
     break;
   }
@@ -235,6 +261,16 @@ bool MainAppWindow::perform(const InvocationInfo& info)
     case CommandIds::kConfigAudio:
     {
       this->ConfigureAudio();
+    }
+    break;
+
+    case CommandIds::kPlay:
+    {
+      fScumbler.Play();
+      // tell the command manager something has changed. This will make it 
+      // re-query us with getCommandInfo() and set the menu text to display either 
+      // 'Play' or 'Pause'
+      gCommandManager->commandStatusChanged();
     }
     break;
   }

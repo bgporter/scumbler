@@ -18,7 +18,6 @@
  * - writing output to file, etc.
  */
 class Scumbler : public ChangeBroadcaster
-               , public ApplicationCommandTarget
 {
 public:
    /**
@@ -32,19 +31,22 @@ public:
     * dtor.
     */
    ~Scumbler();
-   
-    /**
-     * @name ApplicationCommandTarget overrides.
-     */
-    
-    ///@{
-    ApplicationCommandTarget* getNextCommandTarget();
-    void getAllCommands(Array<CommandID>& commands);
-    void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
-    bool perform(const InvocationInfo& info);
-    ///@}
 
-   
+   /**
+    * \name Play
+    * \brief Start audio through our processor graph.
+    */
+   void Play();
+
+   /**
+    * \name IsPlaying
+    * \brief returns bool indicating whether the Scumbler is processing 
+    *   audio right now.
+    */
+   bool IsPlaying() const;
+
+
+
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);
 
@@ -66,6 +68,10 @@ private:
     */
    AudioDeviceManager&   fDeviceManager;
 
+   /**
+    * Are we playing right now?
+    */
+   bool fPlaying;
 };
 
 
