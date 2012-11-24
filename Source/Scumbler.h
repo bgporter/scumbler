@@ -20,12 +20,12 @@
 class Scumbler : public ChangeBroadcaster
 {
 public:
-   /**
+  /**
     * Constructor
     * \param deviceManager A reference to an AudioDeviceManager object that's
     *     owned elsewhere in the application. 
     */
-   Scumbler(AudioDeviceManager& deviceManager);
+  Scumbler(AudioDeviceManager& deviceManager);
 
    /**
     * dtor.
@@ -33,17 +33,37 @@ public:
    ~Scumbler();
 
    /**
-    * \name Play
-    * \brief Start audio through our processor graph.
+    * \name TogglePlay
+    * \brief Switches the scumbler object between the play and pause states.
     */
-   void Play();
-
+    void TogglePlay();
    /**
     * \name IsPlaying
     * \brief returns bool indicating whether the Scumbler is processing 
     *   audio right now.
     */
    bool IsPlaying() const;
+
+   /**
+    * \name Reset
+    * \brief Do a complete reset on the processor graph. 
+    *
+    * After removing (and therefore deleting) all of the processor nodes that 
+    * were added to the graph, creates new input & output processors and adds them.
+    */
+    void Reset();
+protected:
+  /**
+    * \name Play
+    * \brief Start audio through our processor graph.
+    */
+  void Play();
+
+  /**
+   * \name Pause
+   * \brief Stop audio playback.
+   */
+  void Pause();
 
 
 
@@ -72,6 +92,13 @@ private:
     * Are we playing right now?
     */
    bool fPlaying;
+
+   /**
+    * node IDs for the input and output processors.
+    */
+   int fInputNode;
+   int fOutputNode;
+
 };
 
 

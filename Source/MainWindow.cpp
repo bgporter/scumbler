@@ -266,7 +266,7 @@ bool MainAppWindow::perform(const InvocationInfo& info)
 
     case CommandIds::kPlay:
     {
-      fScumbler.Play();
+      fScumbler.TogglePlay();
       // tell the command manager something has changed. This will make it 
       // re-query us with getCommandInfo() and set the menu text to display either 
       // 'Play' or 'Pause'
