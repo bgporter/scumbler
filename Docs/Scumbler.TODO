@@ -8,11 +8,11 @@ Milestone 0.1.0:
      ✔ Audio settings written to config @done (12-11-23 10:16)
      ✔ Audio settings restored from config on next launch. @done (12-11-23 10:16)
 
- ☐ 0103: Inside Scumbler object, create in and out processors, connect them, verify pass-thru
+ ✔ 0103: Inside Scumbler object, create in and out processors, connect them, verify pass-thru @done (12-11-24 19:15)
    ✔ Create instances of built-in AudioGraphIOProcessors @done (12-11-24 10:28)
    ✔ Add them to the processor graph @done (12-11-24 10:28)
-   ☐ connect them
-   ☐ verify audio passthrough.
+   ✔ connect them @done (12-11-24 19:15)
+   ✔ verify audio passthrough. @done (12-11-24 19:15)
  ☐ 0104: Create simple (pass-through) version of the loop processor, verify (single track in the scumbler object.)
  ☐ 0105: Implement loop functionality w unity gain.
  ☐ 0106: Configure loop duration when not in playback
@@ -22,3 +22,6 @@ Milestone 0.1.0:
 Milestone 0.2.0:
 
 Milestone 0.3.0:
+
+Future:
+ ☐ Make the Scumbler responsive to changes in the audio configuration (reconnecting when the IO channels change, etc.)
