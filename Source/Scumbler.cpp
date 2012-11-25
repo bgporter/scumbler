@@ -74,6 +74,7 @@ bool Scumbler::Connect(uint32 source, uint32 dest)
    // only proceed if those nodes exist.
    if (srcNode && destNode)
    {
+      retval = true;
       AudioProcessor* srcFilter = srcNode->getProcessor();
       int numSrcChannels = srcFilter->getNumOutputChannels();
       AudioProcessor* destFilter = destNode->getProcessor();
@@ -100,10 +101,7 @@ bool Scumbler::Connect(uint32 source, uint32 dest)
          fGraph.addConnection(source, 0, dest, 0);
          fGraph.addConnection(source, 1, dest, 0);
       }
-
    }
-
-
    return retval;
 }
 
