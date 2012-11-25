@@ -13,13 +13,13 @@ Milestone 0.1.0:
    ✔ Add them to the processor graph @done (12-11-24 10:28)
    ✔ connect them @done (12-11-24 19:15)
    ✔ verify audio passthrough. @done (12-11-24 19:15)
+Milestone 0.2.0:
  ☐ 0104: Create simple (pass-through) version of the loop processor, verify (single track in the scumbler object.)
  ☐ 0105: Implement loop functionality w unity gain.
  ☐ 0106: Configure loop duration when not in playback
  ☐ 0107: Save output into a .wav file
  ☐ 0108: Write scumbler config into XML (JSON?)
  ☐ 0109: Restore scumbler config from file
-Milestone 0.2.0:
 
 Milestone 0.3.0:
 
