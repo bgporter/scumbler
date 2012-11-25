@@ -52,6 +52,13 @@ public:
     * were added to the graph, creates new input & output processors and adds them.
     */
     void Reset();
+
+    /**
+     * \name Connect
+     * \brief Connect a source node to a destination node in the graph.
+     */
+    bool Connect(uint32 source, uint32 dest);
+
 protected:
   /**
     * \name Play
@@ -96,8 +103,8 @@ private:
    /**
     * node IDs for the input and output processors.
     */
-   int fInputNode;
-   int fOutputNode;
+   uint32 fInputNode;
+   uint32 fOutputNode;
 
 };
 

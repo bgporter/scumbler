@@ -33,6 +33,8 @@ MainAppWindow::MainAppWindow()
     true              // select the default device if restoring the last config fails.
      );
 
+  // reset the scumbler object now that the audio system is configured.
+  fScumbler.Reset();
 
   centreWithSize (1024, 768);
   setVisible (true);
