@@ -1,4 +1,4 @@
-/*
+ /*
   ==============================================================================
 
     This file was auto-generated!
@@ -123,13 +123,15 @@ PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& m
     {
       menu.addCommandItem(gCommandManager, CommandIds::kConfigAudio);
       menu.addCommandItem(gCommandManager, CommandIds::kPlay);
+#ifdef qUnitTests
+      menu.addSeparator();
+      menu.addCommandItem(gCommandManager, CommandIds::kRunUnitTests);
+#endif    
     }
     break;
 
     case 2:   //Help menu
-#ifdef qUnitTests
-    menu.addCommandItem(gCommandManager, CommandIds::kRunUnitTests);
-#endif
+
     break;
 
     default:
@@ -289,14 +291,19 @@ bool MainAppWindow::perform(const InvocationInfo& info)
       gCommandManager->commandStatusChanged();
     }
     break;
-#ifdef qUnitTests
+          
     case CommandIds::kRunUnitTests:
     {
+#ifdef qUnitTests
       UnitTestRunner runner;
+      // run all tests even if there are failures.
+      runner.setAssertOnFailure(false);
       runner.runAllTests();
+      AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Unit Tests",
+        "All unit tests have been run.");
+#endif    
     }
     break;
-#endif    
   }
   return retval;
 }
