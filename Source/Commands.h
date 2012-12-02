@@ -17,6 +17,7 @@ namespace CommandIds
     static const CommandID kPause        = 0x3006;
     static const CommandID kRewind       = 0x3007;
     static const CommandID kToggleRecord = 0x3008;      
+    static const CommandID kRunUnitTests = 0x3009;
 }
 
 #endif // this must be the last line in this file.

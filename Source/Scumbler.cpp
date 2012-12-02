@@ -2,12 +2,26 @@
 
 #include "Scumbler.h"
 #include "Commands.h"
+
+#ifdef qUnitTests
+namespace
+{
+   Scumbler* instance = nullptr;
+};
+
+#endif
+
 Scumbler::Scumbler(AudioDeviceManager& deviceManager)
 : fDeviceManager(deviceManager)
 , fPlaying(false)
 , fInputNode(-1)
 , fOutputNode(-1)
 {
+#ifdef qUnitTests
+   jassert(nullptr == instance);
+   // save the pointer to this scumbler instance as 'the' scumbler instance.
+   instance = this;
+#endif
    fPlayer.setProcessor(&fGraph);
    fDeviceManager.addAudioCallback(&fPlayer);
    this->Reset();
@@ -105,6 +119,10 @@ bool Scumbler::Connect(uint32 source, uint32 dest)
    return retval;
 }
 
+Scumbler* Scumbler::GetInstance()
+{
+   return instance;
+}
 
 void Scumbler::Play()
 {
@@ -123,3 +141,9 @@ void Scumbler::Pause()
       // !!! TODO
    }
 }
+
+
+/// KEEP THIS SECTION AT THE END OF THE FILE.
+#ifdef qUnitTests
+#include "Test/test_Scumbler.cpp"
+#endif

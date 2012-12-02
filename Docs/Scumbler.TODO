@@ -15,11 +15,19 @@ Milestone 0.1.0:
    ✔ verify audio passthrough. @done (12-11-24 19:15)
 Milestone 0.2.0:
  ☐ 0104: Create simple (pass-through) version of the loop processor, verify (single track in the scumbler object.)
+   ☐ pre-loop plugin slot (load, delete)
+   ☐ 'loop' (no-op AudioProcessor)
+   ☐ post-loop plug-in slot (?)
  ☐ 0105: Implement loop functionality w unity gain.
  ☐ 0106: Configure loop duration when not in playback
  ☐ 0107: Save output into a .wav file
  ☐ 0108: Write scumbler config into XML (JSON?)
  ☐ 0109: Restore scumbler config from file
+ ☐ 0110: Put unit test skeletons (at least) in place.
+   ☐ Create a dummy AudioProcessor class that can be used to test connect/disconnect logic
+   ☐ Create new logger class that feeds into a listbox model (can also be used to support app level logging)
+   ☐ Item on help menu that displays list box of the current log, [clear], [run tests] button (when in debug -- tests can't be run in release mode)
+
 
 Milestone 0.3.0:
 

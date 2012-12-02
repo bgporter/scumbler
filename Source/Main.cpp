@@ -10,6 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
+#include "ScumblerDefs.h"
 
 
 ApplicationCommandManager* gCommandManager = nullptr;

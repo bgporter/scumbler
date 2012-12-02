@@ -6,6 +6,7 @@
 #define h_Scumbler
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "ScumblerDefs.h"
 
 /**
  * \class Scumbler
@@ -58,6 +59,15 @@ public:
      * \brief Connect a source node to a destination node in the graph.
      */
     bool Connect(uint32 source, uint32 dest);
+    
+#ifdef qUnitTests
+  /**
+   * Get a pointer to the one and only scumbler object. Only used for unit tests.
+   * @return pointer to the Scumbler.
+   */
+  static Scumbler* GetInstance();
+#endif
+
 
 protected:
   /**
@@ -71,8 +81,6 @@ protected:
    * \brief Stop audio playback.
    */
   void Pause();
-
-
 
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);

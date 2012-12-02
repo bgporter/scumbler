@@ -127,6 +127,9 @@ PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& m
     break;
 
     case 2:   //Help menu
+#ifdef qUnitTests
+    menu.addCommandItem(gCommandManager, CommandIds::kRunUnitTests);
+#endif
     break;
 
     default:
@@ -162,6 +165,9 @@ void MainAppWindow::getAllCommands(Array<CommandID>& commands)
     //CommandIds::kPause,
     //CommandIds::kRewind,
     //CommandIds::kToggleRecord
+#ifdef qUnitTests
+    CommandIds::kRunUnitTests
+#endif    
   };
   commands.addArray(ids, numElementsInArray(ids));
 
@@ -230,6 +236,14 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
       result.defaultKeypresses.add(KeyPress('p', ModifierKeys::commandModifier, 0));
     }
     break;
+#ifdef qUnitTests
+    case CommandIds::kRunUnitTests:
+    {
+      result.setInfo("Run unit tests", "Run all unit tests", "Development", 0);
+
+    }
+    break;
+#endif
   }
 
 }
@@ -275,6 +289,15 @@ bool MainAppWindow::perform(const InvocationInfo& info)
       gCommandManager->commandStatusChanged();
     }
     break;
+#ifdef qUnitTests
+    case CommandIds::kRunUnitTests:
+    {
+      UnitTestRunner runner;
+      runner.runAllTests();
+    }
+    break;
+#endif    
   }
   return retval;
 }
+
