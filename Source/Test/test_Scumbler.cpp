@@ -11,23 +11,33 @@ class ScumblerTest : public UnitTest
 {
 public:
    ScumblerTest() : UnitTest("Scumbler unit tests")
+                  , fScumbler(nullptr)
    {
-      fScumbler = Scumbler::GetInstance();
 
    };
 
    void initialise()
    {
+      fScumbler = Scumbler::GetInstance();
+      fScumbler->Reset();
 
    };
 
    void shutdown()
    {
-
+      fScumbler->Reset();
+      fScumbler = nullptr;
    };
 
    void runTest()
    {
+      this->beginTest("Transport");
+      this->expect(!fScumbler->IsPlaying());
+      fScumbler->Play();
+      this->expect(fScumbler->IsPlaying());
+      fScumbler->Pause();
+      this->expect(!fScumbler->IsPlaying());
+
 
    };
 

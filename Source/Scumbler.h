@@ -21,6 +21,9 @@
 class Scumbler : public ChangeBroadcaster
 {
 public:
+#ifdef qUnitTests
+  friend class ScumblerTest;
+#endif    
   /**
     * Constructor
     * \param deviceManager A reference to an AudioDeviceManager object that's
@@ -59,7 +62,7 @@ public:
      * \brief Connect a source node to a destination node in the graph.
      */
     bool Connect(uint32 source, uint32 dest);
-    
+
 #ifdef qUnitTests
   /**
    * Get a pointer to the one and only scumbler object. Only used for unit tests.
