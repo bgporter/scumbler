@@ -19,7 +19,7 @@ public:
     * \brief Simple constructor; creates an empty track object.
     *
     * We pass in a (non-const) reference to the Scumbler object that owns us. 
-    * A reference both so eliminate the temptation to delete the pointer and 
+    * A reference both to eliminate the temptation to delete the pointer and 
     * because a track object doesn't make sense absent a Scumbler.
     */
    Track(Scumbler& owner);
