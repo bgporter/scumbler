@@ -63,6 +63,17 @@ public:
      */
     bool Connect(uint32 source, uint32 dest);
 
+
+    /**
+     * Remove a connection between two nodes in the graph. Because we're not 
+     * allowing any complex topologies now, we follow the same logic that was 
+     * used to connect 
+     * @param  source The node that's providing audio 
+     * @param  dest   The node that's receiving audio.
+     * @return        bool, was the operation successful.
+     */
+    bool Disconnect(uint32 source, uint32 dest);
+
 #ifdef qUnitTests
   /**
    * Get a pointer to the one and only scumbler object. Only used for unit tests.
@@ -84,6 +95,16 @@ protected:
    * \brief Stop audio playback.
    */
   void Pause();
+
+  typedef bool (AudioProcessorGraph::*fnPtr)(uint32, int, uint32, int);
+  /**
+   * Internal function that takes care of either connecting or disconnecting two nodes in an audio processor graph.
+   * @param  source     node id of the  source node.
+   * @param  dest       node id of the destination node.    
+   * @param  connecting If true, we are connecting the nodes (else disconnecting)
+   * @return            bool, success/fail.
+   */
+  bool HandleConnection(uint32 source, uint32 dest, bool connecting);
 
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);
