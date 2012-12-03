@@ -80,12 +80,12 @@ void Scumbler::Reset()
 }
 
 
-bool Scumbler::Connect(uint32 source, uint32 dest)
+Scumbler::Result Scumbler::Connect(uint32 source, uint32 dest)
 {
    return this->HandleConnection(source, dest, true);
 }
 
-bool Scumbler::Disconnect(uint32 source, uint32 dest)
+Scumbler::Result Scumbler::Disconnect(uint32 source, uint32 dest)
 {
    return this->HandleConnection(source, dest, false);
 
@@ -114,9 +114,9 @@ void Scumbler::Pause()
    }
 }
 
-bool Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
+Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
 {
-   bool retval = false;
+   Scumbler::Result retval = Scumbler::kFailure;
    fnPtr op = nullptr;
 
    if (connecting)
@@ -129,7 +129,7 @@ bool Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
       // bail out early if the two nodes aren't connected.
       if (!fGraph.isConnected(source, dest))
       {
-         return false;
+         return kNotConnected;
       }
    }
 
@@ -138,7 +138,7 @@ bool Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
    // only proceed if those nodes exist.
    if (srcNode && destNode)
    {
-      retval = true;
+      retval = kSuccess;
       AudioProcessor* srcFilter  = srcNode->getProcessor();
       int numSrcChannels         = srcFilter->getNumOutputChannels();
       AudioProcessor* destFilter = destNode->getProcessor();

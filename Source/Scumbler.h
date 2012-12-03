@@ -24,6 +24,20 @@ public:
 #ifdef qUnitTests
   friend class ScumblerTest;
 #endif    
+
+  /**
+   * \enum Result
+   * Result codes that can be returned from our operations.
+   */
+  enum Result
+  {
+    kSuccess = 0,         /**< The operation succeeded */
+    kFailure,             /**< (non-specific) failure */
+    kIllegalConnection,   /**< Attempt to make an illegal connection */
+    kNotConnected,        /**< Attempt to disconnect nodes that aren't connected. */
+
+  };
+
   /**
     * Constructor
     * \param deviceManager A reference to an AudioDeviceManager object that's
@@ -61,7 +75,7 @@ public:
      * \name Connect
      * \brief Connect a source node to a destination node in the graph.
      */
-    bool Connect(uint32 source, uint32 dest);
+    Result Connect(uint32 source, uint32 dest);
 
 
     /**
@@ -72,7 +86,7 @@ public:
      * @param  dest   The node that's receiving audio.
      * @return        bool, was the operation successful.
      */
-    bool Disconnect(uint32 source, uint32 dest);
+    Result Disconnect(uint32 source, uint32 dest);
 
 #ifdef qUnitTests
   /**
@@ -104,7 +118,7 @@ protected:
    * @param  connecting If true, we are connecting the nodes (else disconnecting)
    * @return            bool, success/fail.
    */
-  bool HandleConnection(uint32 source, uint32 dest, bool connecting);
+  Result HandleConnection(uint32 source, uint32 dest, bool connecting);
 
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);
