@@ -118,7 +118,7 @@ bool Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
 {
    bool retval = false;
    fnPtr op = nullptr;
-   
+
    if (connecting)
    {
       op = &AudioProcessorGraph::addConnection;
@@ -133,16 +133,16 @@ bool Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
       }
    }
 
-   AudioProcessorGraph::Node* srcNode = fGraph.getNodeForId(source);
+   AudioProcessorGraph::Node* srcNode  = fGraph.getNodeForId(source);
    AudioProcessorGraph::Node* destNode = fGraph.getNodeForId(dest);
    // only proceed if those nodes exist.
    if (srcNode && destNode)
    {
       retval = true;
-      AudioProcessor* srcFilter = srcNode->getProcessor();
-      int numSrcChannels = srcFilter->getNumOutputChannels();
+      AudioProcessor* srcFilter  = srcNode->getProcessor();
+      int numSrcChannels         = srcFilter->getNumOutputChannels();
       AudioProcessor* destFilter = destNode->getProcessor();
-      int numDestChannels = destFilter->getNumInputChannels();
+      int numDestChannels        = destFilter->getNumInputChannels();
       // in our immediate situation, we're only interested in 2 channels at most. 
       // Future versions might be interested in more.
       if (numSrcChannels == numDestChannels)
@@ -167,10 +167,6 @@ bool Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
       }
    }
    return retval;
-
-
-
-   mCallMemberFn(fGraph, op)(source, 0, dest, 0);
 }
 
 
