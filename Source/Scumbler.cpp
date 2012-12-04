@@ -122,6 +122,11 @@ Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool con
    if (connecting)
    {
       op = &AudioProcessorGraph::addConnection;
+      // verify that we can at least connect the lower channels of these nodes.
+      if (!fGraph.canConnect(source, 0, dest, 0))
+      {
+         return kIllegalConnection;
+      }
    }
    else
    {
@@ -164,6 +169,18 @@ Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool con
          // connect both source pins to the single pin of the dest filter.
          mCallMemberFn(fGraph, op)(source, 0, dest, 0);
          mCallMemberFn(fGraph, op)(source, 1, dest, 0);
+      }
+   }
+   else
+   {
+      // one or other of the requested nodes aren't present in the graph.
+      if (nullptr == srcNode)
+      {
+         return kNoSourceNode;
+      }
+      if (nullptr == destNode)
+      {
+         return kNoDestNode;
       }
    }
    return retval;

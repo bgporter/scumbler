@@ -35,6 +35,9 @@ public:
     kFailure,             /**< (non-specific) failure */
     kIllegalConnection,   /**< Attempt to make an illegal connection */
     kNotConnected,        /**< Attempt to disconnect nodes that aren't connected. */
+    kAlreadyConnected,    /**< Attempt to connect two nodes already connected. */
+    kNoSourceNode,        /**< The specified source node doesn't exist. */
+    kNoDestNode,          /**< The specified destination node doesn't exist. */
 
   };
 

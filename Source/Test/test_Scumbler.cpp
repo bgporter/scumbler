@@ -31,13 +31,22 @@ public:
 
    void runTest()
    {
-      this->beginTest("Transport");
+      this->beginTest("Initial State");
+      // better not be playing
       this->expect(!fScumbler->IsPlaying());
+      // ...and after a reset, there should only be the input and output nodes.
+      this->expect(2 == fScumbler->fGraph.getNumNodes());
+
+      this->beginTest("Transport");
       fScumbler->Play();
       this->expect(fScumbler->IsPlaying());
       fScumbler->Pause();
       this->expect(!fScumbler->IsPlaying());
 
+      this->beginTest("Connections");
+      // test some bogus states first
+      this->expect(Scumbler::kIllegalConnection == \
+         fScumbler->Connect(fScumbler->fOutputNode, fScumbler->fInputNode)); 
 
    };
 
