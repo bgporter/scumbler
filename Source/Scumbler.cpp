@@ -74,8 +74,7 @@ void Scumbler::Reset()
    node = fGraph.addNode(out);
    fOutputNode = node->nodeId;
 
-   this->Connect(fInputNode, fOutputNode);
-
+   Scumbler::Result retval = this->Connect(fInputNode, fOutputNode);
 
 }
 
@@ -122,11 +121,17 @@ Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool con
    if (connecting)
    {
       op = &AudioProcessorGraph::addConnection;
+      // if they're already connected, there's nothing to do.
+      if (fGraph.isConnected(source, dest))
+      {
+         return kAlreadyConnected;
+      }      
       // verify that we can at least connect the lower channels of these nodes.
       if (!fGraph.canConnect(source, 0, dest, 0))
       {
          return kIllegalConnection;
       }
+
    }
    else
    {

@@ -242,7 +242,7 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
     case CommandIds::kRunUnitTests:
     {
       result.setInfo("Run unit tests", "Run all unit tests", "Development", 0);
-
+      result.defaultKeypresses.add(KeyPress('t', ModifierKeys::commandModifier, 0));
     }
     break;
 #endif

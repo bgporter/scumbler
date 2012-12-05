@@ -77,6 +77,7 @@ public:
     /**
      * \name Connect
      * \brief Connect a source node to a destination node in the graph.
+     * @return Scumbler::Result code indicating success or the reason for failure.
      */
     Result Connect(uint32 source, uint32 dest);
 
@@ -87,7 +88,7 @@ public:
      * used to connect 
      * @param  source The node that's providing audio 
      * @param  dest   The node that's receiving audio.
-     * @return        bool, was the operation successful.
+     * @return Scumbler::Result code indicating success or the reason for failure.
      */
     Result Disconnect(uint32 source, uint32 dest);
 
@@ -119,7 +120,7 @@ protected:
    * @param  source     node id of the  source node.
    * @param  dest       node id of the destination node.    
    * @param  connecting If true, we are connecting the nodes (else disconnecting)
-   * @return            bool, success/fail.
+   * @return            Scumbler::Result code indicating success or the reason for failure.
    */
   Result HandleConnection(uint32 source, uint32 dest, bool connecting);
 

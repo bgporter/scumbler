@@ -44,9 +44,14 @@ public:
       this->expect(!fScumbler->IsPlaying());
 
       this->beginTest("Connections");
+      this->expect(2 == fScumbler->fGraph.getNumNodes());
       // test some bogus states first
+      this->expect(Scumbler::kAlreadyConnected == \
+         fScumbler->Connect(fScumbler->fInputNode, fScumbler->fOutputNode)); 
       this->expect(Scumbler::kIllegalConnection == \
          fScumbler->Connect(fScumbler->fOutputNode, fScumbler->fInputNode)); 
+
+
 
    };
 
