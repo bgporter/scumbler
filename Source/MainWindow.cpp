@@ -299,8 +299,6 @@ bool MainAppWindow::perform(const InvocationInfo& info)
       // run all tests even if there are failures.
       runner.setAssertOnFailure(false);
       runner.runAllTests();
-      AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Unit Tests",
-        "All unit tests have been run.");
 #endif    
     }
     break;

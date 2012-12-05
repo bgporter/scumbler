@@ -51,7 +51,12 @@ public:
       this->expect(Scumbler::kIllegalConnection == \
          fScumbler->Connect(fScumbler->fOutputNode, fScumbler->fInputNode)); 
 
+      this->expect(Scumbler::kNoSourceNode == \
+         fScumbler->Connect(0xffffffff, fScumbler->fOutputNode)); 
 
+
+      this->expect(Scumbler::kNoDestNode == \
+         fScumbler->Connect(fScumbler->fInputNode, 0xFFFF)); 
 
    };
 
