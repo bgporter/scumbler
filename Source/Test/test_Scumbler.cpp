@@ -7,6 +7,9 @@
 // a separate file to avoid cluttering our file under test.
 
 
+#include "../Processors/Passthrough.h"
+
+
 class ScumblerTest : public UnitTest
 {
 public:
@@ -20,6 +23,8 @@ public:
    {
       fScumbler = Scumbler::GetInstance();
       fScumbler->Reset();
+      PassthroughProcessor* pp = new PassthroughProcessor(1, 1);
+      delete pp;
 
    };
 
@@ -27,6 +32,7 @@ public:
    {
       fScumbler->Reset();
       fScumbler = nullptr;
+
    };
 
    void runTest()
