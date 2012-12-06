@@ -60,21 +60,18 @@ void Scumbler::Reset()
    fGraph.clear();
    
    // Create and add new input/output processor nodes. 
-   AudioProcessorGraph::Node* node;
-
    AudioProcessorGraph::AudioGraphIOProcessor* in = 
     new AudioProcessorGraph::AudioGraphIOProcessor(
       AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
-   node = fGraph.addNode(in);
-   fInputNode = node->nodeId;
+   fInputNode = this->AddProcessor(in);
+   //fInputNode = node->nodeId;
 
    AudioProcessorGraph::AudioGraphIOProcessor* out = 
     new AudioProcessorGraph::AudioGraphIOProcessor(
       AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
-   node = fGraph.addNode(out);
-   fOutputNode = node->nodeId;
+   fOutputNode = this->AddProcessor(out);
 
-   Scumbler::Result retval = this->Connect(fInputNode, fOutputNode);
+   this->Connect(fInputNode, fOutputNode);
 
 }
 
@@ -191,6 +188,12 @@ Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool con
    return retval;
 }
 
+uint32 Scumbler::AddProcessor(AudioProcessor* p)
+{
+   AudioProcessorGraph::Node* node;
+   node = fGraph.addNode(p);
+   return node->nodeId;
+}
 
 /// KEEP THIS SECTION AT THE END OF THE FILE.
 #ifdef qUnitTests

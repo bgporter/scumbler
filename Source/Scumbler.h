@@ -92,6 +92,15 @@ public:
      */
     Result Disconnect(uint32 source, uint32 dest);
 
+    /**
+     * Insert the provided AudioProcessor object into the Scumbler's filter 
+     * graph.  The Scumbler takes ownership of the object, and it should 
+     * **not** be deleted elsewhere.
+     * @param  p The audio processor.
+     * @return the identifier of the node.
+     */
+    uint32  AddProcessor(AudioProcessor* p);
+
 #ifdef qUnitTests
   /**
    * Get a pointer to the one and only scumbler object. Only used for unit tests.

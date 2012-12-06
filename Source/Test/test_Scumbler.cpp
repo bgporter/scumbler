@@ -15,6 +15,7 @@ class ScumblerTest : public UnitTest
 public:
    ScumblerTest() : UnitTest("Scumbler unit tests")
                   , fScumbler(nullptr)
+                  , fProc(nullptr)
    {
 
    };
@@ -23,8 +24,7 @@ public:
    {
       fScumbler = Scumbler::GetInstance();
       fScumbler->Reset();
-      PassthroughProcessor* pp = new PassthroughProcessor(1, 1);
-      delete pp;
+      fProc = new PassthroughProcessor(1, 1);
 
    };
 
@@ -32,6 +32,8 @@ public:
    {
       fScumbler->Reset();
       fScumbler = nullptr;
+      delete fProc;
+      fProc = nullptr;
 
    };
 
@@ -49,7 +51,7 @@ public:
       fScumbler->Pause();
       this->expect(!fScumbler->IsPlaying());
 
-      this->beginTest("Connections");
+      this->beginTest("Basic Connections");
       this->expect(2 == fScumbler->fGraph.getNumNodes());
       // test some bogus states first
       this->expect(Scumbler::kAlreadyConnected == \
@@ -75,11 +77,14 @@ public:
       this->expect(fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
          fScumbler->fOutputNode));
 
+      this->beginTest("Complex connections");
+
+
    };
 
 private:
    Scumbler* fScumbler;
-
+   PassthroughProcessor* fProc;
 };
 
 static ScumblerTest test;
