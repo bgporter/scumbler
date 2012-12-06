@@ -63,6 +63,17 @@ public:
 
       this->expect(Scumbler::kNoDestNode == \
          fScumbler->Connect(fScumbler->fInputNode, 0xFFFF)); 
+      // test disconnections.
+      this->expect(fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
+         fScumbler->fOutputNode));
+      this->expect(Scumbler::kSuccess == fScumbler->Disconnect(
+         fScumbler->fInputNode, fScumbler->fOutputNode));
+      this->expect(!fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
+         fScumbler->fOutputNode));
+      this->expect(Scumbler::kSuccess == fScumbler->Connect(
+         fScumbler->fInputNode, fScumbler->fOutputNode));
+      this->expect(fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
+         fScumbler->fOutputNode));
 
    };
 
