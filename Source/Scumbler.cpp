@@ -78,30 +78,24 @@ void Scumbler::Reset()
 }
 
 
-Scumbler::Result Scumbler::Connect(uint32 source, uint32 dest)
+Scumbler::Result Scumbler::Connect(NodeId source, NodeId dest)
 {
    return this->HandleConnection(source, dest, true);
 }
 
-Scumbler::Result Scumbler::Disconnect(uint32 source, uint32 dest)
+Scumbler::Result Scumbler::Disconnect(NodeId source, NodeId dest)
 {
    return this->HandleConnection(source, dest, false);
 
 }
 
 
-Scumbler::Result Scumbler::InsertBetween(uint32 before, uint32 newNode, uint32 after)
+Scumbler::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
 {
    Scumbler::Result retval = kFailure;
 
-   if (kInput == before)
-   {
-      before = fInputNode;
-   }
-   if (kOutput == after)
-   {
-      after = fOutputNode;
-   }
+   before = this->HandleSpecialNode(before);
+   after = this->HandleSpecialNode(after);
 
    // 1: we can't succeed of before and after aren't connected.
    if (!fGraph.isConnected(before, after))
@@ -128,6 +122,50 @@ Scumbler::Result Scumbler::InsertBetween(uint32 before, uint32 newNode, uint32 a
    return retval;
 }
 
+
+
+Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after)
+{
+   Scumbler::Result retval = kFailure;
+
+   // if needed, look up the node ids for the input/output nodes.
+   before = this->HandleSpecialNode(before);
+   after = this->HandleSpecialNode(after);
+
+   // 1. First pre-condition: before must already be connected to nTR, and 
+   // nTR must be connected to after.
+   if (! (fGraph.isConnected(before, nodeToRemove) && 
+          fGraph.isConnected(nodeToRemove, after)))
+   {
+      return kNotConnected;
+   }
+
+   // 2. Next precondition: The connection between `before` and `after` needs 
+   // to be a legal connection. I don't think this one is possible if we assume
+   // that all graphs start out connecting input->output and are after that only 
+   // added to with the InsertBetween() method. 
+   if (! fGraph.canConnect(before, 0, after, 0))
+   {
+      return kIllegalConnection;
+   }
+
+   // 3. Disconnect `nodeToRemove on either side.
+   retval = this->Disconnect(before, nodeToRemove);
+   if (kSuccess == retval)
+   {
+      retval = this->Disconnect(nodeToRemove, after);
+      if (kSuccess == retval)
+      {
+         // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
+         // never been there.
+         retval = this->Connect(before, after);
+      }
+   }
+
+   return retval;
+}
+
+
 Scumbler* Scumbler::GetInstance()
 {
    return instance;
@@ -151,7 +189,7 @@ void Scumbler::Pause()
    }
 }
 
-Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool connecting)
+Scumbler::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool connecting)
 {
    Scumbler::Result retval = Scumbler::kFailure;
    fnPtr op = nullptr;
@@ -229,13 +267,27 @@ Scumbler::Result Scumbler::HandleConnection(uint32 source, uint32 dest, bool con
    return retval;
 }
 
-uint32 Scumbler::AddProcessor(AudioProcessor* p)
+NodeId Scumbler::AddProcessor(AudioProcessor* p)
 {
    AudioProcessorGraph::Node* node;
    node = fGraph.addNode(p);
    return node->nodeId;
 }
 
+NodeId Scumbler::HandleSpecialNode(NodeId node)
+{
+   NodeId retval = node;
+   if (kInput == node)
+   {
+      retval = fInputNode;
+   }
+   else if (kOutput == node)
+   {
+      retval = fOutputNode;
+   }
+
+   return retval;
+}
 /// KEEP THIS SECTION AT THE END OF THE FILE.
 #ifdef qUnitTests
 #include "Test/test_Scumbler.cpp"

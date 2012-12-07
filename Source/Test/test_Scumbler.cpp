@@ -78,11 +78,41 @@ public:
          fScumbler->fOutputNode));
 
       this->beginTest("Complex connections");
+      // create the processors that we'll be passing audio through.
       PassthroughProcessor* proc = new PassthroughProcessor(1, 1);
+      this->expect(1 == proc->getNumInputChannels());
+      this->expect(1 == proc->getNumOutputChannels());
+      PassthroughProcessor* proc2 = new PassthroughProcessor(2,2);
+      this->expect(2 == proc2->getNumInputChannels());
+      this->expect(2 == proc2->getNumOutputChannels());
+
+      //  add the 1-in 1-out node to the graph & connect it in the middle.
+      this->expect(2 == fScumbler->fGraph.getNumNodes());
       uint32 node = fScumbler->AddProcessor(proc);
       Scumbler::Result r = fScumbler->InsertBetween(
          Scumbler::kInput, node, Scumbler::kOutput);
       this->expect(Scumbler::kSuccess == r);
+      this->expect(3 == fScumbler->fGraph.getNumNodes());
+
+      uint32 node2 = fScumbler->AddProcessor(proc2);
+      r = fScumbler->InsertBetween(
+         Scumbler::kInput, node2, Scumbler::kOutput);
+      this->expect(Scumbler::kNotConnected == r);
+      r = fScumbler->InsertBetween(node, node2, Scumbler::kOutput);
+      this->expect(Scumbler::kSuccess == r);
+      this->expect(4 == fScumbler->fGraph.getNumNodes());
+
+      this->beginTest("Disconncections");
+      r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput);
+      this->expect(Scumbler::kNotConnected == r);
+
+      r = fScumbler->RemoveBetween(Scumbler::kInput, node, node2);
+      this->expect(Scumbler::kSuccess == r);
+
+      r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput);
+      this->expect(Scumbler::kSuccess == r);
+
+
 
 
    };

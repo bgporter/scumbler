@@ -9,6 +9,13 @@
 #include "ScumblerDefs.h"
 
 /**
+ * @typedef NodeId
+ *
+ * We create a typedef to make it clear that we're referring to NodeIds.
+ */
+typedef uint32  NodeId;
+
+/**
  * \class Scumbler
  * \brief The 'model' class for our MVC architecture in the Scumbler app
  *
@@ -84,7 +91,7 @@ public:
      * \brief Connect a source node to a destination node in the graph.
      * @return Scumbler::Result code indicating success or the reason for failure.
      */
-    Result Connect(uint32 source, uint32 dest);
+    Result Connect(NodeId source, NodeId dest);
 
 
     /**
@@ -95,7 +102,7 @@ public:
      * @param  dest   The node that's receiving audio.
      * @return Scumbler::Result code indicating success or the reason for failure.
      */
-    Result Disconnect(uint32 source, uint32 dest);
+    Result Disconnect(NodeId source, NodeId dest);
 
     /**
      * Insert 'newNode' in the graph inbetween 'before' and 'after'.
@@ -109,8 +116,22 @@ public:
      *                 newNode to the Scumbler's output.
      * @return         Scumbler::Result
      */
-    Result InsertBetween(uint32 before, uint32 newNode, uint32 after);
+    Result InsertBetween(NodeId before, NodeId newNode, NodeId after);
 
+    /**
+     * Disconnect the node `nodetoRemove` that's connected between `before` and 
+     * `after`. The `nodeToRemove` is still owned by the graph and can be reconnected
+     * elsewhere.
+     * @param  before       The node that must be connected to `nodeToRemove` as its
+     *                      input. After this operation, `before` will be connected to 
+     *                      `after`.
+     * @param  nodeToRemove The node that we're trying to remove.
+     * @param  after        The node that must be connected to `nodeToRemove`
+     *                      as its output. After this operation, `before` will 
+     *                      be connected to `after`.
+     * @return              Scumbler::Result
+     */
+    Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after);
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
      * graph.  The Scumbler takes ownership of the object, and it should 
@@ -118,7 +139,7 @@ public:
      * @param  p The audio processor.
      * @return the identifier of the node.
      */
-    uint32  AddProcessor(AudioProcessor* p);
+    NodeId  AddProcessor(AudioProcessor* p);
 
 #ifdef qUnitTests
   /**
@@ -150,7 +171,16 @@ protected:
    * @param  connecting If true, we are connecting the nodes (else disconnecting)
    * @return            Scumbler::Result code indicating success or the reason for failure.
    */
-  Result HandleConnection(uint32 source, uint32 dest, bool connecting);
+  Result HandleConnection(NodeId source, NodeId dest, bool connecting);
+
+  /**
+   * Use this to convert one of the special enum values `Scumbler::kInput` or 
+   * `Scumbler::kOutput` into the actual node ids that 
+   * @param  node value that may either be a real node id (< 0xfffffffe) or one of the
+   *              special values for the Scumbler's pre-existing in/out nodes.
+   * @return      an actual node id (possibly the same value that was passed in.)
+   */
+  NodeId HandleSpecialNode(NodeId node);
 
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);
@@ -181,8 +211,8 @@ private:
    /**
     * node IDs for the input and output processors.
     */
-   uint32 fInputNode;
-   uint32 fOutputNode;
+   NodeId fInputNode;
+   NodeId fOutputNode;
 
 };
 
