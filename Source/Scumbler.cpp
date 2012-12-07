@@ -3,6 +3,8 @@
 #include "Scumbler.h"
 #include "Commands.h"
 
+#include "Processors/Passthrough.h"
+
 #ifdef qUnitTests
 namespace
 {
@@ -85,6 +87,45 @@ Scumbler::Result Scumbler::Disconnect(uint32 source, uint32 dest)
 {
    return this->HandleConnection(source, dest, false);
 
+}
+
+
+Scumbler::Result Scumbler::InsertBetween(uint32 before, uint32 newNode, uint32 after)
+{
+   Scumbler::Result retval = kFailure;
+
+   if (kInput == before)
+   {
+      before = fInputNode;
+   }
+   if (kOutput == after)
+   {
+      after = fOutputNode;
+   }
+
+   // 1: we can't succeed of before and after aren't connected.
+   if (!fGraph.isConnected(before, after))
+   {
+      return kNotConnected;
+   }
+   // the new connections both need to be legal before we start messing with things. 
+   if (!fGraph.canConnect(before, 0, newNode, 0) || 
+       !fGraph.canConnect(newNode, 0, after, 0))
+   {
+      return kIllegalConnection;
+   }
+   //  first, disconnect the two nodes that are already being connected.
+   retval = this->Disconnect(before, after);
+   if (kSuccess == retval)
+   {
+      retval = this->Connect(before, newNode);
+      if (kSuccess == retval)
+      {
+         retval = this->Connect(newNode, after);
+      }
+   }
+
+   return retval;
 }
 
 Scumbler* Scumbler::GetInstance()

@@ -24,7 +24,6 @@ public:
    {
       fScumbler = Scumbler::GetInstance();
       fScumbler->Reset();
-      fProc = new PassthroughProcessor(1, 1);
 
    };
 
@@ -32,6 +31,7 @@ public:
    {
       fScumbler->Reset();
       fScumbler = nullptr;
+      // NOTE -- we do NOT delete fProc
       delete fProc;
       fProc = nullptr;
 
@@ -78,6 +78,11 @@ public:
          fScumbler->fOutputNode));
 
       this->beginTest("Complex connections");
+      PassthroughProcessor* proc = new PassthroughProcessor(1, 1);
+      uint32 node = fScumbler->AddProcessor(proc);
+      Scumbler::Result r = fScumbler->InsertBetween(
+         Scumbler::kInput, node, Scumbler::kOutput);
+      this->expect(Scumbler::kSuccess == r);
 
 
    };

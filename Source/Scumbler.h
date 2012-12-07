@@ -38,7 +38,12 @@ public:
     kAlreadyConnected,    /**< Attempt to connect two nodes already connected. */
     kNoSourceNode,        /**< The specified source node doesn't exist. */
     kNoDestNode,          /**< The specified destination node doesn't exist. */
+  };
 
+  enum
+  {
+    kInput  = 0xffffffff,
+    kOutput = 0xfffffffe
   };
 
   /**
@@ -91,6 +96,20 @@ public:
      * @return Scumbler::Result code indicating success or the reason for failure.
      */
     Result Disconnect(uint32 source, uint32 dest);
+
+    /**
+     * Insert 'newNode' in the graph inbetween 'before' and 'after'.
+     * @param  before  The node that 'newNode' should be inserted after. The 
+     *                 special value Scumbler::kInput can be used to connect 
+     *                 newNode to the input node.
+     * @param  newNode id of the node to connect in the middle. It should 
+     *                 already have been added to the graph with AddProcessor
+     * @param  after   The node that 'newNode' should be inserted before. The 
+     *                 special value Scumbler::kOutput can be used to connect the 
+     *                 newNode to the Scumbler's output.
+     * @return         Scumbler::Result
+     */
+    Result InsertBetween(uint32 before, uint32 newNode, uint32 after);
 
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
