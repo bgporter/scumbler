@@ -31,10 +31,6 @@ public:
    {
       fScumbler->Reset();
       fScumbler = nullptr;
-      // NOTE -- we do NOT delete fProc
-      delete fProc;
-      fProc = nullptr;
-
    };
 
    void runTest()
@@ -113,15 +109,10 @@ public:
       r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput, true);
       this->expect(Scumbler::kSuccess == r);
       this->expect(3 == fScumbler->fGraph.getNumNodes());
-
-
-
-
    };
 
 private:
    Scumbler* fScumbler;
-   PassthroughProcessor* fProc;
 };
 
 static ScumblerTest test;
