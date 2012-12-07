@@ -8,6 +8,13 @@ PassthroughProcessor::PassthroughProcessor(int inputChannelCount, int outputChan
 ,  fOutputChannels(outputChannelCount)
 {
    this->setLatencySamples(0);
+   // if this was a plug-in, the plug-in wrapper code in JUCE would query us
+   // for our channel configuration and call the setPlayConfigDetails() method
+   // so that things would be set correctly internally as an AudioProcessor
+   // object (which are always initialized as zero in, zero out). The sample rate
+   // and blockSize values will get sent to us again when our prepareToPlay() 
+   // method is called before playback begins.
+   this->setPlayConfigDetails(fInputChannels, fOutputChannels, 0, 0);
 }
 
 PassthroughProcessor::~PassthroughProcessor()
@@ -22,6 +29,8 @@ const String PassthroughProcessor::getName() const
 
 void PassthroughProcessor::prepareToPlay(double sampleRate, int estimatedSamplesPerBlock)
 {
+   this->setPlayConfigDetails(fInputChannels, fOutputChannels, sampleRate, 
+      estimatedSamplesPerBlock);
 
 }
 
