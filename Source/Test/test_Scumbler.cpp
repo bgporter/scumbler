@@ -108,9 +108,11 @@ public:
 
       r = fScumbler->RemoveBetween(Scumbler::kInput, node, node2);
       this->expect(Scumbler::kSuccess == r);
+      this->expect(4 == fScumbler->fGraph.getNumNodes());
 
-      r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput);
+      r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput, true);
       this->expect(Scumbler::kSuccess == r);
+      this->expect(3 == fScumbler->fGraph.getNumNodes());
 
 
 

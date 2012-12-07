@@ -124,7 +124,8 @@ Scumbler::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId a
 
 
 
-Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after)
+Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, 
+   NodeId after, bool deleteNode)
 {
    Scumbler::Result retval = kFailure;
 
@@ -159,6 +160,10 @@ Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, Nod
          // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
          // never been there.
          retval = this->Connect(before, after);
+         if (deleteNode)
+         {
+            fGraph.removeNode(nodeToRemove);
+         }
       }
    }
 

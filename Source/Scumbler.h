@@ -121,7 +121,7 @@ public:
     /**
      * Disconnect the node `nodetoRemove` that's connected between `before` and 
      * `after`. The `nodeToRemove` is still owned by the graph and can be reconnected
-     * elsewhere.
+     * elsewhere, unless the `deleteNode` argument is true.
      * @param  before       The node that must be connected to `nodeToRemove` as its
      *                      input. After this operation, `before` will be connected to 
      *                      `after`.
@@ -129,9 +129,11 @@ public:
      * @param  after        The node that must be connected to `nodeToRemove`
      *                      as its output. After this operation, `before` will 
      *                      be connected to `after`.
+     * @param  deleteNode   Should the node be deleted from the graph after it's 
+     *                      disconnected?
      * @return              Scumbler::Result
      */
-    Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after);
+    Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false);
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
      * graph.  The Scumbler takes ownership of the object, and it should 
