@@ -11,6 +11,7 @@
 #include "MainWindow.h"
 
 #include "Commands.h"
+#include "Components/ScumblerComponent.h"
 
 
 //==============================================================================
@@ -36,6 +37,10 @@ MainAppWindow::MainAppWindow()
   // reset the scumbler object now that the audio system is configured.
   fScumbler.Reset();
 
+  // create the scumbler component that owns & operates our user interface.
+  ScumblerComponent* c = new ScumblerComponent(&fScumbler);
+  this->setContentOwned(c, true);
+  this->setResizable(true, true);
   centreWithSize (1024, 768);
   setVisible (true);
 
