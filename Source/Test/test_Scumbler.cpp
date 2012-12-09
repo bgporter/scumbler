@@ -15,7 +15,6 @@ class ScumblerTest : public UnitTest
 public:
    ScumblerTest() : UnitTest("Scumbler unit tests")
                   , fScumbler(nullptr)
-                  , fProc(nullptr)
    {
 
    };
