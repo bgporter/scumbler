@@ -36,7 +36,7 @@ MainAppWindow::MainAppWindow()
 
   // create and reset the scumbler object now that the audio system is configured.
   fScumbler = new Scumbler(fDeviceManager);
-  fScumbler->Reset();
+  //fScumbler->Reset();
 
   // create the scumbler component that owns & operates our user interface.
   ScumblerComponent* c = new ScumblerComponent(fScumbler);

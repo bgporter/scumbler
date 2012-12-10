@@ -30,7 +30,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager)
 #endif
    fPlayer.setProcessor(&fGraph);
    fDeviceManager.addAudioCallback(&fPlayer);
-   //this->Reset();
+   this->Reset();
 }
 
 Scumbler::~Scumbler()
