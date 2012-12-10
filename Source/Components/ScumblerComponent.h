@@ -32,9 +32,10 @@
 //==============================================================================
 /**
                                                                     //[Comments]
-    An auto-generated component, created by the Jucer.
+  @class ScumblerComponent
 
-    Describe your class and how it works here!
+  We use a MVC design for the app here. The ScumblerComponent acts as the model 
+  and the view, while the Scumbler itself functions as the model.
                                                                     //[/Comments]
 */
 class ScumblerComponent  : public Component,
@@ -53,7 +54,7 @@ public:
      */
     Scumbler::Result AddTrack();
 
-    
+
     //[/UserMethods]
 
     void paint (Graphics& g);
