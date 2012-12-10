@@ -83,6 +83,8 @@ public:
     *
     * After removing (and therefore deleting) all of the processor nodes that 
     * were added to the graph, creates new input & output processors and adds them.
+    * **NOTE that the Scumbler object should be reset after creation, after the 
+    * Audio device manager is initialized.
     */
     void Reset();
 

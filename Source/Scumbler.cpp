@@ -6,6 +6,10 @@
 #include "Processors/Passthrough.h"
 
 #ifdef qUnitTests
+// If we are compiling unit tests in, we do a fake singleton that's only
+// visible in file scope so the unit test code can have access to the 
+// one and only Scumbler object.
+
 namespace
 {
    Scumbler* instance = nullptr;
@@ -26,7 +30,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager)
 #endif
    fPlayer.setProcessor(&fGraph);
    fDeviceManager.addAudioCallback(&fPlayer);
-   this->Reset();
+   //this->Reset();
 }
 
 Scumbler::~Scumbler()
