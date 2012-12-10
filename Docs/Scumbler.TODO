@@ -19,11 +19,15 @@ Milestone 0.2.0:
    ☐ 'loop' (no-op AudioProcessor)
    ☐ post-loop plug-in slot (?)
  ☐ 0105: Implement loop functionality w unity gain.
-
+ ☐ 0106: Scumbler component
+   ☐ hosts one or more TrackComponents
+   ☐ hosts TransportComponent
+ ☐ 0107: TrackComponent
+ ☐ 0108: LoopComponent
+ ☐ 0109: PluginComponent
  ☐ 0110: Put unit test skeletons (at least) in place.
    ✔ Create a dummy AudioProcessor class that can be used to test connect/disconnect logic @done (12-12-07 15:24)
-   ☐ Create new logger class that feeds into a listbox model (can also be used to support app level logging)
-   ☐ Item on help menu that displays list box of the current log, [clear], [run tests] button (when in debug -- tests can't be run in release mode)
+ ☐ 0111: TransportComponent
 
 
 Milestone 0.3.0:
