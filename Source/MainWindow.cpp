@@ -18,7 +18,7 @@
 MainAppWindow::MainAppWindow()
     : DocumentWindow (JUCEApplication::getInstance()->getApplicationName() , Colours::lightgrey
       , DocumentWindow::allButtons)
-    , fScumbler(fDeviceManager)
+    , fScumbler(nullptr)
 {
 
   // connect our menu bar model to the command manager -- anything changed 
@@ -34,11 +34,12 @@ MainAppWindow::MainAppWindow()
     true              // select the default device if restoring the last config fails.
      );
 
-  // reset the scumbler object now that the audio system is configured.
-  fScumbler.Reset();
+  // create and reset the scumbler object now that the audio system is configured.
+  fScumbler = new Scumbler(fDeviceManager);
+  fScumbler->Reset();
 
   // create the scumbler component that owns & operates our user interface.
-  ScumblerComponent* c = new ScumblerComponent(&fScumbler);
+  ScumblerComponent* c = new ScumblerComponent(fScumbler);
   this->setContentOwned(c, true);
   this->setResizable(true, true);
   centreWithSize (1024, 768);
@@ -232,7 +233,7 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
 
     case CommandIds::kPlay:
     { 
-      if (fScumbler.IsPlaying())
+      if (fScumbler->IsPlaying())
       {
         result.setInfo("Pause", "Pause audio playback", category, 0);
       }
@@ -289,7 +290,7 @@ bool MainAppWindow::perform(const InvocationInfo& info)
 
     case CommandIds::kPlay:
     {
-      fScumbler.TogglePlay();
+      fScumbler->TogglePlay();
       // tell the command manager something has changed. This will make it 
       // re-query us with getCommandInfo() and set the menu text to display either 
       // 'Play' or 'Pause'

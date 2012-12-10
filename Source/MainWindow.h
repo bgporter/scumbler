@@ -77,8 +77,8 @@ private:
      * keep concerns like configuring & peristing state of the underlying system
      * out of the model for this app.
      */
-    AudioDeviceManager  fDeviceManager;
-    Scumbler            fScumbler;
+    AudioDeviceManager      fDeviceManager;
+    ScopedPointer<Scumbler> fScumbler;
 };
 
 
