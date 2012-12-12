@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  8 Dec 2012 7:47:02pm
+  Creation date:  10 Dec 2012 10:15:28pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -26,6 +26,7 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+extern ApplicationCommandManager* gCommandManager;  
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -99,6 +100,135 @@ void ScumblerComponent::buttonClicked (Button* buttonThatWasClicked)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+
+ApplicationCommandTarget* ScumblerComponent::getNextCommandTarget()
+{
+  return this->findFirstTargetParentComponent();
+
+}
+
+void ScumblerComponent::getAllCommands(Array<CommandID>& commands)
+{
+  const CommandID ids[] = {
+    CommandIds::kNew,
+    CommandIds::kOpen,
+    CommandIds::kSave,
+    CommandIds::kSaveAs,
+    CommandIds::kPlay,
+    //CommandIds::kPause,
+    //CommandIds::kRewind,
+    //CommandIds::kToggleRecord,
+    //CommandIds::kAddTrack
+  };
+
+  commands.addArray(ids, numElementsInArray(ids));
+
+}
+
+void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandInfo& result)
+{
+  String category = "General";
+  switch (commandID)
+  {
+    case CommandIds::kNew:
+    { 
+      result.setInfo("New", 
+        "Create a new (empty) Scumbler file", category, 0);
+      result.defaultKeypresses.add(KeyPress('n', ModifierKeys::commandModifier, 0));
+
+    }
+    break;
+
+    case CommandIds::kOpen:
+    {
+      result.setInfo("Open...",
+        "Open a Scumbler file",
+        category, 0);
+        result.defaultKeypresses.add (KeyPress('o', ModifierKeys::commandModifier, 0));
+
+    }
+    break;
+
+    case CommandIds::kSave:
+    {
+      result.setInfo("Save",
+        "Save the current Scumbler setup to a file",
+        category, 0);
+        result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
+    }
+    break;
+
+    case CommandIds::kSaveAs:
+    {
+      result.setInfo("Save As...",
+        "Save a copy of the current Scumbler setup to a file",
+        category, 0);
+        result.defaultKeypresses.add(KeyPress('s', 
+          ModifierKeys::shiftModifier | ModifierKeys::commandModifier, 0));
+    }
+    break;
+
+    case CommandIds::kPlay:
+    { 
+      if (fScumbler->IsPlaying())
+      {
+        result.setInfo("Pause", "Pause audio playback", category, 0);
+      }
+      else
+      {
+        result.setInfo("Play", "Start audio playback", category, 0);
+      }
+      result.defaultKeypresses.add(KeyPress('p', ModifierKeys::commandModifier, 0));
+    }
+    break;
+  }
+}
+
+bool ScumblerComponent::perform(const InvocationInfo& info)
+{
+  bool retval = true;
+  switch (info.commandID)
+  {
+    case CommandIds::kNew:
+    {
+
+    }
+    break;
+
+    case CommandIds::kOpen:
+    {
+
+    }
+    break;
+    case CommandIds::kSave:
+    {
+
+    }
+    break;
+    case CommandIds::kSaveAs:
+    {
+
+    }
+    break;
+
+    case CommandIds::kPlay:
+    {
+      fScumbler->TogglePlay();
+      // tell the command manager something has changed. This will make it 
+      // re-query us with getCommandInfo() and set the menu text to display either 
+      // 'Play' or 'Pause'
+      gCommandManager->commandStatusChanged();
+    }
+    break;
+  }
+  return retval;
+}
+
+void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
+{
+
+}
+
 //[/MiscUserCode]
 
 
@@ -111,10 +241,10 @@ void ScumblerComponent::buttonClicked (Button* buttonThatWasClicked)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ScumblerComponent" componentName="The Scumbler"
-                 parentClasses="public Component" constructorParams="Scumbler* scumbler"
-                 variableInitialisers="fScumbler(scumbler)" snapPixels="8" snapActive="1"
-                 snapShown="1" overlayOpacity="0.330000013" fixedSize="0" initialWidth="600"
-                 initialHeight="400">
+                 parentClasses="public Component, public ApplicationCommandTarget, public ChangeListener"
+                 constructorParams="Scumbler* scumbler" variableInitialisers="fScumbler(scumbler)"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff3f3f3f"/>
   <TEXTBUTTON name="new track" id="afec3388486bebff" memberName="fNewTrackButton"
               virtualName="" explicitFocusOrder="0" pos="32 456 24 24" bgColOff="ffcccce2"

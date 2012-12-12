@@ -40,13 +40,16 @@ MainAppWindow::MainAppWindow()
 
   // create the scumbler component that owns & operates our user interface.
   ScumblerComponent* c = new ScumblerComponent(fScumbler);
+  gCommandManager->registerAllCommandsForTarget(c);
+  // set that component as this window's content (and take ownership of the pointer)
   this->setContentOwned(c, true);
   this->setResizable(true, true);
-  centreWithSize (1024, 768);
-  setVisible (true);
+  this->centreWithSize (1024, 768);
+  this->setVisible (true);
 
 
   #if JUCE_MAC
+    // !!! TODO: Add About & Preferences items to the apple menu
     setMacMainMenu (this);
   #else
     setMenuBar (this);
@@ -164,12 +167,12 @@ ApplicationCommandTarget* MainAppWindow::getNextCommandTarget()
 void MainAppWindow::getAllCommands(Array<CommandID>& commands)
 {
   const CommandID ids[] = {
-    CommandIds::kNew,
-    CommandIds::kOpen,
-    CommandIds::kSave,
-    CommandIds::kSaveAs,
+    //CommandIds::kNew,
+    //CommandIds::kOpen,
+    //CommandIds::kSave,
+    //CommandIds::kSaveAs,
     CommandIds::kConfigAudio,
-    CommandIds::kPlay,
+    //CommandIds::kPlay,
     //CommandIds::kPause,
     //CommandIds::kRewind,
     //CommandIds::kToggleRecord
@@ -185,65 +188,16 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
 {
   const String category("General");
 
+
   switch (commandID)
   {
-    case CommandIds::kNew:
-    { 
-      result.setInfo("New", 
-        "Create a new (empty) Scumbler file", category, 0);
-      result.defaultKeypresses.add(KeyPress('n', ModifierKeys::commandModifier, 0));
-
-    }
-    break;
-
-    case CommandIds::kOpen:
-    {
-      result.setInfo("Open...",
-        "Open a Scumbler file",
-        category, 0);
-        result.defaultKeypresses.add (KeyPress('o', ModifierKeys::commandModifier, 0));
-
-    }
-    break;
-
-    case CommandIds::kSave:
-    {
-      result.setInfo("Save",
-        "Save the current Scumbler setup to a file",
-        category, 0);
-        result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
-    }
-    break;
-
-    case CommandIds::kSaveAs:
-    {
-      result.setInfo("Save As...",
-        "Save a copy of the current Scumbler setup to a file",
-        category, 0);
-        result.defaultKeypresses.add(KeyPress('s', 
-          ModifierKeys::shiftModifier | ModifierKeys::commandModifier, 0));
-    }
-    break;
-
     case CommandIds::kConfigAudio:
     {
       result.setInfo("Configure Audio...", String::empty, category, 0);
     }
     break;
 
-    case CommandIds::kPlay:
-    { 
-      if (fScumbler->IsPlaying())
-      {
-        result.setInfo("Pause", "Pause audio playback", category, 0);
-      }
-      else
-      {
-        result.setInfo("Play", "Start audio playback", category, 0);
-      }
-      result.defaultKeypresses.add(KeyPress('p', ModifierKeys::commandModifier, 0));
-    }
-    break;
+
 #ifdef qUnitTests
     case CommandIds::kRunUnitTests:
     {
@@ -261,42 +215,14 @@ bool MainAppWindow::perform(const InvocationInfo& info)
   bool retval = true;
   switch (info.commandID)
   {
-    case CommandIds::kNew:
-    {
 
-    }
-    break;
-
-    case CommandIds::kOpen:
-    {
-
-    }
-    break;
-    case CommandIds::kSave:
-    {
-
-    }
-    break;
-    case CommandIds::kSaveAs:
-    {
-
-    }
-    break;
     case CommandIds::kConfigAudio:
     {
       this->ConfigureAudio();
     }
     break;
 
-    case CommandIds::kPlay:
-    {
-      fScumbler->TogglePlay();
-      // tell the command manager something has changed. This will make it 
-      // re-query us with getCommandInfo() and set the menu text to display either 
-      // 'Play' or 'Pause'
-      gCommandManager->commandStatusChanged();
-    }
-    break;
+
           
     case CommandIds::kRunUnitTests:
     {
