@@ -8,6 +8,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ScumblerDefs.h"
 
+class Track;
+
 /**
  * @typedef NodeId
  *
@@ -64,6 +66,7 @@ public:
     * dtor.
     */
    ~Scumbler();
+
 
    /**
     * \name TogglePlay
@@ -217,6 +220,12 @@ private:
     */
    NodeId fInputNode;
    NodeId fOutputNode;
+
+   /**
+    * Pointers to the track objects that we own. See the docs for OwnedArray 
+    * (it takes ownership of the objects and deletes them when necessary.)
+    */
+   OwnedArray<Track>  fTracks; 
 
 };
 

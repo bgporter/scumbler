@@ -40,6 +40,12 @@ Scumbler::~Scumbler()
    fGraph.clear();
 }
 
+#ifdef qUnitTests 
+Scumbler* Scumbler::GetInstance()
+{
+   return instance;
+}
+#endif
 
 void Scumbler::TogglePlay()
 {
@@ -174,11 +180,6 @@ Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove,
    return retval;
 }
 
-
-Scumbler* Scumbler::GetInstance()
-{
-   return instance;
-}
 
 void Scumbler::Play()
 {
