@@ -7,3 +7,18 @@
 #ifdef qUnitTests
 #include "Test/test_Track.cpp"
 #endif
+
+
+Track::Track(Scumbler* owner)
+:  fOwner(owner)
+,  fPreLoopPlugin(kInvalidNode)
+,  fLoop(kInvalidNode)
+,  fPostLoopPlugin(kInvalidNode)
+{
+
+}
+
+Track::~Track()
+{
+   
+}

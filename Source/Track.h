@@ -22,7 +22,7 @@ public:
     * A reference both to eliminate the temptation to delete the pointer and 
     * because a track object doesn't make sense absent a Scumbler.
     */
-   Track(Scumbler& owner);
+   Track(Scumbler* owner);
 
    /**
     * \brief destructor. 
@@ -40,21 +40,27 @@ private:
    // SIMPLE version to start with.
    
    /**
+    * The scumbler object that owns us. We do not own this pointer, so 
+    * don't delete it.
+    */
+   Scumbler* fOwner;
+
+   /**
     * node id of a single pre-loop plug-in -- eventually we'll support 
     * multiple slots here
     */
-   uint_32 fPreLoopPlugin;
+   NodeId fPreLoopPlugin;
 
    /**
     * node id of the loop.
     */
-   uint32 fLoop;
+   NodeId fLoop;
 
    /**
     * node id of the post-loop plug-in. (again, the plan is to 
     * expand this to support multiple plugins here.)
     */
-   uint32 fPostLoopPlugin;
+   NodeId fPostLoopPlugin;
 
 
 };
