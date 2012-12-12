@@ -49,10 +49,14 @@ public:
     kNoDestNode,          /**< The specified destination node doesn't exist. */
   };
 
+  /**
+   * @enum Special NodeId values used in the system.
+   */
   enum
   {
-    kInput  = 0xffffffff,
-    kOutput = 0xfffffffe
+    kInvalidNode = 0,           /**< indicates a an empty node variable */
+    kInput       = 0xffffffff,  /**< our input node. */
+    kOutput      = 0xfffffffe   /**< our output node. */
   };
 
   /**
