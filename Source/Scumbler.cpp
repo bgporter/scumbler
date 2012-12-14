@@ -37,6 +37,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager)
 
 Scumbler::~Scumbler()
 {
+   this->removeAllChangeListeners();
    fDeviceManager.removeAudioCallback(&fPlayer);
    fPlayer.setProcessor(nullptr);
    fGraph.clear();
@@ -59,6 +60,8 @@ void Scumbler::TogglePlay()
    {
       this->Play();
    }
+   this->sendChangeMessage();
+
 }
 
 bool Scumbler::IsPlaying() const
@@ -89,6 +92,8 @@ void Scumbler::Reset()
 
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
+   // let anyone listening know that we've changed.
+   this->sendChangeMessage();
 
 }
 
@@ -213,6 +218,7 @@ int Scumbler::GetNumTracks() const
 Scumbler::Result Scumbler::AddTrack(const String& name)
 {
    fTracks.add(new Track(this, name));
+   this->sendChangeMessage();
    return kSuccess;
 }
 
@@ -224,6 +230,7 @@ Scumbler::Result Scumbler::DeleteTrack(int index)
    {
       fTracks.remove(index);
       retval = kSuccess;
+      this->sendChangeMessage();
    }
    return retval;
 }
@@ -244,6 +251,7 @@ Scumbler::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
       }
       fTracks.move(fromIndex, toIndex);
       retval = kSuccess;
+      this->sendChangeMessage();
    }
    return retval;
 }
@@ -357,6 +365,9 @@ NodeId Scumbler::HandleSpecialNode(NodeId node)
 
    return retval;
 }
+
+
+
 /// KEEP THIS SECTION AT THE END OF THE FILE.
 #ifdef qUnitTests
 #include "Test/test_Scumbler.cpp"

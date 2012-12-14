@@ -53,7 +53,7 @@ public:
   /**
    * @enum Special NodeId values used in the system.
    */
-  enum
+  enum 
   {
     kInvalidNode = 0,           /**< indicates a an empty node variable */
     kInput       = 0xffffffff,  /**< our input node. */
