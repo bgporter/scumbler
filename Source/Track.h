@@ -29,7 +29,17 @@ public:
     */
    ~Track();
 
+   /**
+    * Change the name of this track.
+    * @param name new name.
+    */
+   void SetName(const String& name);
 
+   /**
+    * Return the name of this track
+    * @return string, track name.
+    */
+   String GetName() const;
 
 
 private:
@@ -44,6 +54,11 @@ private:
     * don't delete it.
     */
    Scumbler* fOwner;
+
+   /**
+    * We can give each track a name for display in th
+    */
+   String fName;
 
    /**
     * node id of a single pre-loop plug-in -- eventually we'll support 

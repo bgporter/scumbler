@@ -152,6 +152,43 @@ public:
      */
     NodeId  AddProcessor(AudioProcessor* p);
 
+    /**
+     * @name Track operations
+     */
+    ///@{
+    
+    /**
+     * Returns the number of tracks that are currently in the Scumbler.
+     * @return [description]
+     */
+    int GetNumTracks() const;
+
+    /**
+     * Add a new (empty) track to the end of the array of track objects. 
+     * @return kSuccess, ideally. If we are capping the number of possible tracks, 
+     * we'll need to define a new Scumbler::Result value(s) to reflect the 
+     * reason for failure.
+     */
+    Result AddTrack();
+
+    /**
+     * Assign a name to a track object.
+     * @param index index of the track to affect.
+     * @param  name New track name,
+     * @return      Result of the operation.
+     */
+    Result SetTrackName(int index, const String& name);
+
+    /**
+     * Retrieve the name of a specified track
+     * @param index index of the track to query (0-based)
+     * @param name reference to string object to hold the name on return
+     * @return Result -- if this isn't kSuccess, the name variable is not filled in.
+     */
+    Result GetTrackName(int index, String& name) const;
+
+
+    ///@}
 #ifdef qUnitTests
   /**
    * Get a pointer to the one and only scumbler object. Only used for unit tests.

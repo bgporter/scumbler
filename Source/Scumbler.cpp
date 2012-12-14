@@ -1,7 +1,9 @@
 // Copyright (c) 2012 Bg Porter
 
 #include "Scumbler.h"
+
 #include "Commands.h"
+#include "Track.h"
 
 #include "Processors/Passthrough.h"
 
@@ -84,6 +86,9 @@ void Scumbler::Reset()
    fOutputNode = this->AddProcessor(out);
 
    this->Connect(fInputNode, fOutputNode);
+
+   // Delete any tracks that we have, returning to zero tracks.
+   fTracks.clear();
 
 }
 
@@ -198,6 +203,46 @@ void Scumbler::Pause()
       // !!! TODO
    }
 }
+
+
+int Scumbler::GetNumTracks() const
+{
+   return fTracks.size();
+}
+
+Scumbler::Result Scumbler::AddTrack()
+{
+   fTracks.add(new Track(this));
+   return kSuccess;
+}
+
+
+Scumbler::Result Scumbler::SetTrackName(int index, const String& name)
+{
+   Scumbler::Result retval = kFailure;
+   Track* track = fTracks[index];
+   if (track)
+   {
+      track->SetName(name);
+      retval = kSuccess;
+   }
+
+   return retval;
+}
+
+Scumbler::Result Scumbler::GetTrackName(int index, String& name) const
+{
+   Scumbler::Result retval = kFailure;
+   Track* track = fTracks[index];
+   if (track)
+   {
+      name = track->GetName();
+      retval = kSuccess;
+   }
+
+   return retval;
+}
+
 
 Scumbler::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool connecting)
 {

@@ -8,6 +8,7 @@
 
 Track::Track(Scumbler* owner)
 :  fOwner(owner)
+,  fName(String::empty)
 ,  fPreLoopPlugin(Scumbler::kInvalidNode)
 ,  fLoop(Scumbler::kInvalidNode)
 ,  fPostLoopPlugin(Scumbler::kInvalidNode)
@@ -18,6 +19,17 @@ Track::Track(Scumbler* owner)
 Track::~Track()
 {
    
+}
+
+
+void Track::SetName(const String& name)
+{
+   fName = name;
+}
+
+String Track::GetName() const
+{
+   return fName;
 }
 
 /// KEEP THIS SECTION AT THE END OF THE FILE.

@@ -27,8 +27,30 @@ public:
 
    void runTest()
    {
-   }
+      Scumbler* scumbler = Scumbler::GetInstance();
+      this->beginTest("Add/Delete");
+      expect(0 == scumbler->GetNumTracks());
+      expect(Scumbler::kSuccess == scumbler->AddTrack());
+      expect(1 == scumbler->GetNumTracks());
+      expect(Scumbler::kSuccess == scumbler->AddTrack());
+      expect(2 == scumbler->GetNumTracks());
+      scumbler->Reset();
+      //  make sure that when we do a reset that the tracks also go away.
+      expect(0 == scumbler->GetNumTracks());
+      expect(Scumbler::kSuccess == scumbler->AddTrack());
+      expect(Scumbler::kSuccess == scumbler->SetTrackName(0, "First"));
+      expect(Scumbler::kSuccess == scumbler->AddTrack());
+      expect(Scumbler::kSuccess == scumbler->SetTrackName(1, "Second"));
+      this->beginTest("Names");
+      String name;
+      expect(Scumbler::kSuccess == scumbler->GetTrackName(0, name));
+      expect(String("First") == name);
+      expect(Scumbler::kSuccess == scumbler->GetTrackName(1, name));
+      expect(String("Second") == name);
 
+   }
 private:
 
 };
+
+static TrackTest trackTest;

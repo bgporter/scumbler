@@ -1,0 +1,375 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"getNext",
+				"getNextCommandTarget"
+			],
+			[
+				"li",
+				"lineNum"
+			],
+			[
+				"line",
+				"linenum"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 47.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				"lore",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				"Snippet: ",
+				"Snippet: newTask"
+			],
+			[
+				":wa",
+				":w - Save"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"tag",
+				"Package Control: Install Package"
+			],
+			[
+				"pa",
+				"Package Control: Install Package"
+			],
+			[
+				"p",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"Package Control: List Packages"
+			],
+			[
+				":q",
+				"Set Syntax: SQL"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 143.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
+		"/Users/bgporter/personal/juce/extras/Introjucer/Source/Project/jucer_ProjectContentComponent.h",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Alignment/Base File.sublime-settings",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/bgporter/temp/lister.py",
+		"/Users/bgporter/AnL/svn/TrantorClient/Marketing/20121126.txt",
+		"/Users/bgporter/personal/tetrakite/scumbler/JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.mm",
+		"/Users/bgporter/personal/juce/docs/JUCE readme.html",
+		"/Users/bgporter/personal/juce/docs/gpl.txt",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoSetupPage.cpp",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoSetupPage.h",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoSynthPage.cpp",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoTabComponent.h",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoTabComponent.cpp",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoSynthPage.h",
+		"/Users/bgporter/personal/juce/modules/juce_audio_devices/juce_audio_devices.h",
+		"/Users/bgporter/personal/juce/modules/juce_audio_devices/juce_audio_devices.cpp",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/SublimeBlockCursor/SublimeBlockCursor.py",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/bgporter/incoming/spfmba/committee.html",
+		"/Users/bgporter/incoming/spfmba/CommitteePeople.txt",
+		"/Users/bgporter/incoming/spfmba/CommitteeTable.py",
+		"/Users/bgporter/incoming/spfmba/rows.txt",
+		"/Users/bgporter/AnL/ArtLogic/CodeReviews/AlDocs/TaskList.txt",
+		"/Users/bgporter/personal/juce/README.txt",
+		"/Users/bgporter/temp/linenum.py",
+		"/Users/bgporter/temp/showLine.py",
+		"/Users/bgporter/AnL/svn/TrantorClient/Marketing/20121015.txt",
+		"/Users/bgporter/AnL/git/Estimator/docs/dev_guide.xhtml",
+		"/Users/bgporter/personal/utilities/mp3/mover/artistTest.py",
+		"/Users/bgporter/AnL/tests/Gurrola/Part 1a/main.cpp",
+		"/Users/bgporter/AnL/tests/Gurrola/Part 1a/fp32.h",
+		"/Users/bgporter/AnL/tests/Gurrola/Part 2/text.h",
+		"/Users/bgporter/AnL/tests/Gurrola/Part 2/text.cpp",
+		"/Users/bgporter/AnL/tests/Gurrola/Part 2/main.cpp",
+		"/Users/bgporter/AnL/tests/Gurrola/Part 1a/fp32.cpp",
+		"/Users/bgporter/personal/utilities/mp3/mover/echonest.py",
+		"/Users/bgporter/personal/utilities/mp3/mover/mover.py",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge2/ConfigObjects.php",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge2/ConfigReader.php",
+		"/Users/bgporter/AnL/ArtLogic/CodeReviews/AlDocs/boiler.txt",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge3/Brokenc.c",
+		"/Users/bgporter/AnL/tests/culhane/alpc-solutions/Part1b/index.html",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/Challenge1A-Info.plist",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/Challenge1A-Prefix.pch",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/Challenge1AAppDelegate.h",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/Challenge1AAppDelegate.mm",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/FixedPointRepresentation.cpp",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/FixedPointRepresentation.h",
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/main.m",
+		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Controller.py",
+		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Buzzword.py",
+		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/LocalConfig.py",
+		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Day.py",
+		"/Users/bgporter/AnL/temp/discount.py",
+		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Config.py",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Global.sublime-settings",
+		"/Users/bgporter/temp/methods.py",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Base File.sublime-settings",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/appengine_config.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/context.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/date.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/help.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/mapper.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/models.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/nav.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/page.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/project.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/pymarkdown.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/settings.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/tag.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/task.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/util.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/wastebokpage.py",
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/wastebook.py",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings",
+		"/Users/bgporter/Documents/Kath/worksheet/worksheet.py",
+		"/Users/bgporter/temp/temp.html",
+		"/Users/bgporter/Documents/Kath/worksheet/test2.html",
+		"/Users/bgporter/Documents/Kath/worksheet/worksheet.css",
+		"/Users/bgporter/Documents/Kath/worksheet/test3.html",
+		"/Users/bgporter/Documents/Kath/worksheet/w2.css",
+		"/Users/bgporter/Documents/Kath/worksheet/q.html",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Base File.sublime-settings",
+		"/Users/bgporter/Documents/Kath/worksheet/test.html",
+		"/Users/bgporter/Documents/Kath/worksheet/test2.html~",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"align",
+			"curvy claire",
+			"tryTo",
+			"commandManager",
+			"showAudioSettings",
+			"AudioDe",
+			"AudioDeviceManager",
+			"AudioProcessorGraph",
+			"AudioProcessorPlayer",
+			"knownPluginList",
+			"formatManager",
+			"GraphDocumentComponent",
+			"getChosenType",
+			"PLuginListCom",
+			"knownPlu",
+			"/knownPlu",
+			"Known",
+			"recordedSound",
+			"audioCallback",
+			"callback",
+			"Node",
+			"addNode",
+			"buildRenderingSequence",
+			"RenderingOpSequenceCalculator",
+			"createRenderingOpsForNode",
+			"AudioGraphRenderingOp",
+			"processBl",
+			"lastCallbackTime",
+			"outputChannelD",
+			"setPro",
+			"2px",
+			"td",
+			"\n",
+			"addFil",
+			"createNewPlugin",
+			"createNewPl",
+			"commandManager",
+			"player",
+			"getGraph",
+			"graphPlater",
+			"setProcessor",
+			"player",
+			"addFilter",
+			"Player",
+			"createNodeXml",
+			"restoreFromXml",
+			"saveD",
+			"Audio",
+			"ignored",
+			"PluginListCom",
+			"knownP",
+			"knownPluginList",
+			"PluginListWin",
+			"showPluginList",
+			"PluginDirectory",
+			"addFil",
+			"createNewPl",
+			"deviceManager",
+			"AudioDeviceManager",
+			"key",
+			"midi",
+			"ignored",
+			"Drape",
+			"print",
+			"HandleRe",
+			"print",
+			"HandleReq",
+			"like",
+			"false",
+			"input",
+			"border",
+			"tab_s"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"1px",
+			"th"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 118.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"fil",
+				"FilterGraph.cpp"
+			],
+			[
+				"at",
+				"Assembler_test.py"
+			],
+			[
+				"ass",
+				"Assembler.py"
+			],
+			[
+				"art",
+				"artistTest.py"
+			],
+			[
+				"ec",
+				"echonest.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 189.0,
+	"status_bar_visible": true
+}
