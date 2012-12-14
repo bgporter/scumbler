@@ -6,6 +6,7 @@
 #define h_Scumbler
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
 #include "ScumblerDefs.h"
 
 class Track;
@@ -169,24 +170,29 @@ public:
      * we'll need to define a new Scumbler::Result value(s) to reflect the 
      * reason for failure.
      */
-    Result AddTrack();
+    Result AddTrack(const String& name = String::empty);
 
     /**
-     * Assign a name to a track object.
-     * @param index index of the track to affect.
-     * @param  name New track name,
-     * @return      Result of the operation.
+     * Remove a track from the scumbler and clean everything up.
+     * @param  index index of the track to remove
+     * @return       Success/failure.
      */
-    Result SetTrackName(int index, const String& name);
+    Result DeleteTrack(int index);
 
     /**
-     * Retrieve the name of a specified track
-     * @param index index of the track to query (0-based)
-     * @param name reference to string object to hold the name on return
-     * @return Result -- if this isn't kSuccess, the name variable is not filled in.
+     * Move an existing track to a different index in the array. 
+     * @param  fromIndex The current index of the track that we want to move
+     * @param  toIndex   The index we want the track to occupy (using an index less 
+     * than zero or greater than the highest index will move the track to the last position.)
+     * @return           Success/failure.
      */
-    Result GetTrackName(int index, String& name) const;
-
+    Scumbler::Result MoveTrack(int fromIndex, int toIndex);
+    /**
+     * Get a pointer to a specific track object that's owned by the Scumbler.
+     * @param  index 0-based index of the track to retrieve
+     * @return       pointer, nullptr if there's not a Track at that index.
+     */
+    Track* GetTrack(int index) const;
 
     ///@}
 #ifdef qUnitTests
@@ -211,7 +217,19 @@ protected:
    */
   void Pause();
 
+  /**
+   * Typedef for a pointer-to-member-function that's exposed by the 
+   * AudioProcessorGraph used to both connect and disconnect a single channel pair
+   * of two nodes.
+   * @param  uint32 node ID of source node
+   * @param  int    source channel
+   * @param  uint32 node ID of destination node
+   * @param  int    destination channel index
+   * @return        success/failure of the operation.
+   */
   typedef bool (AudioProcessorGraph::*fnPtr)(uint32, int, uint32, int);
+  
+
   /**
    * Internal function that takes care of either connecting or disconnecting two nodes in an audio processor graph.
    * @param  source     node id of the  source node.

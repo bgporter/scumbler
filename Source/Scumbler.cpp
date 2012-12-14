@@ -2,16 +2,16 @@
 
 #include "Scumbler.h"
 
+
 #include "Commands.h"
+#include "Processors/Passthrough.h"
 #include "Track.h"
 
-#include "Processors/Passthrough.h"
 
 #ifdef qUnitTests
 // If we are compiling unit tests in, we do a fake singleton that's only
 // visible in file scope so the unit test code can have access to the 
 // one and only Scumbler object.
-
 namespace
 {
    Scumbler* instance = nullptr;
@@ -210,37 +210,51 @@ int Scumbler::GetNumTracks() const
    return fTracks.size();
 }
 
-Scumbler::Result Scumbler::AddTrack()
+Scumbler::Result Scumbler::AddTrack(const String& name)
 {
-   fTracks.add(new Track(this));
+   fTracks.add(new Track(this, name));
    return kSuccess;
 }
 
 
-Scumbler::Result Scumbler::SetTrackName(int index, const String& name)
+Scumbler::Result Scumbler::DeleteTrack(int index)
 {
    Scumbler::Result retval = kFailure;
-   Track* track = fTracks[index];
-   if (track)
+   if (fTracks[index])
    {
-      track->SetName(name);
+      fTracks.remove(index);
       retval = kSuccess;
    }
-
    return retval;
 }
 
-Scumbler::Result Scumbler::GetTrackName(int index, String& name) const
+
+Scumbler::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
 {
    Scumbler::Result retval = kFailure;
-   Track* track = fTracks[index];
-   if (track)
+   // make sure the track really exists
+   if (fTracks[fromIndex])
    {
-      name = track->GetName();
+      if (toIndex >= fTracks.size())
+      {
+         // rely on the behavior of the OwnedArray class -- a toIndex < 0 
+         // means 'move this to the end.' We modify that slightly so that anything
+         // out of bounds results in move to the end.
+         toIndex = -1;
+      }
+      fTracks.move(fromIndex, toIndex);
       retval = kSuccess;
    }
-
    return retval;
+}
+
+
+
+Track* Scumbler::GetTrack(int index) const
+{
+   // if index is out of range (or if the array is legitimately holding a 
+   // nullptr), this will return nullptr;
+   return fTracks[index];
 }
 
 

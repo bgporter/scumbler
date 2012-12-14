@@ -7,7 +7,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "Loop.h"
 #include "Scumbler.h"
 
 
@@ -22,7 +21,7 @@ public:
     * A reference both to eliminate the temptation to delete the pointer and 
     * because a track object doesn't make sense absent a Scumbler.
     */
-   Track(Scumbler* owner);
+   Track(Scumbler* owner, const String& name=String::empty);
 
    /**
     * \brief destructor. 

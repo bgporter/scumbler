@@ -28,7 +28,7 @@ public:
    void runTest()
    {
       Scumbler* scumbler = Scumbler::GetInstance();
-      this->beginTest("Add/Delete");
+      this->beginTest("Add tracks");
       expect(0 == scumbler->GetNumTracks());
       expect(Scumbler::kSuccess == scumbler->AddTrack());
       expect(1 == scumbler->GetNumTracks());
@@ -37,16 +37,78 @@ public:
       scumbler->Reset();
       //  make sure that when we do a reset that the tracks also go away.
       expect(0 == scumbler->GetNumTracks());
+
+      this->beginTest("Deleting tracks");
       expect(Scumbler::kSuccess == scumbler->AddTrack());
-      expect(Scumbler::kSuccess == scumbler->SetTrackName(0, "First"));
+      Track* track = scumbler->GetTrack(1);
+      expect(nullptr == track);
+      track = scumbler->GetTrack(0);
+      expect(nullptr != track);
+      track->SetName("first");
+      expect(String("first") == track->GetName());
       expect(Scumbler::kSuccess == scumbler->AddTrack());
-      expect(Scumbler::kSuccess == scumbler->SetTrackName(1, "Second"));
-      this->beginTest("Names");
-      String name;
-      expect(Scumbler::kSuccess == scumbler->GetTrackName(0, name));
-      expect(String("First") == name);
-      expect(Scumbler::kSuccess == scumbler->GetTrackName(1, name));
-      expect(String("Second") == name);
+      track = scumbler->GetTrack(1);
+      expect(nullptr != track);
+      track->SetName("second");
+      expect(Scumbler::kFailure == scumbler->DeleteTrack(2));
+      expect(Scumbler::kSuccess == scumbler->DeleteTrack(0));
+      expect(1 == scumbler->GetNumTracks());
+      track = scumbler->GetTrack(0);
+      expect(nullptr != track);
+      expect(String("second") == track->GetName());
+
+      this->beginTest("Name @ construction");
+      scumbler->Reset();
+      expect(Scumbler::kSuccess == scumbler->AddTrack("zero"));
+      expect(String("zero") == scumbler->GetTrack(0)->GetName());
+      expect(Scumbler::kSuccess == scumbler->AddTrack("one"));
+      expect(String("one") == scumbler->GetTrack(1)->GetName());
+      expect(Scumbler::kSuccess == scumbler->AddTrack("two"));
+      expect(String("two") == scumbler->GetTrack(2)->GetName());
+
+      this->beginTest("Moving Tracks");
+      scumbler->Reset();
+      const char* kNames[]  ={"zero", "one", "two", "three", nullptr};
+      Array<String> names(kNames );
+      for (int i = 0; i < names.size(); ++i)
+      {
+         expect(Scumbler::kSuccess == scumbler->AddTrack(names[i]));
+      }
+      for (int i = 0; i < names.size(); ++i)
+      {
+         expect(names[i] == scumbler->GetTrack(i)->GetName());
+      }
+      scumbler->MoveTrack(0, 1);
+      expect(String("one") == scumbler->GetTrack(0)->GetName());      
+      expect(String("zero") == scumbler->GetTrack(1)->GetName());      
+      expect(String("two") == scumbler->GetTrack(2)->GetName());      
+      expect(String("three") == scumbler->GetTrack(3)->GetName());      
+      scumbler->MoveTrack(0, 1);
+      expect(String("zero") == scumbler->GetTrack(0)->GetName());      
+      expect(String("one") == scumbler->GetTrack(1)->GetName());      
+      expect(String("two") == scumbler->GetTrack(2)->GetName());      
+      expect(String("three") == scumbler->GetTrack(3)->GetName());      
+      scumbler->MoveTrack(0, -1);
+      expect(String("one") == scumbler->GetTrack(0)->GetName());      
+      expect(String("two") == scumbler->GetTrack(1)->GetName());      
+      expect(String("three") == scumbler->GetTrack(2)->GetName());      
+      expect(String("zero") == scumbler->GetTrack(3)->GetName());      
+
+      scumbler->MoveTrack(0, 4);
+      expect(String("two") == scumbler->GetTrack(0)->GetName());      
+      expect(String("three") == scumbler->GetTrack(1)->GetName());      
+      expect(String("zero") == scumbler->GetTrack(2)->GetName());      
+      expect(String("one") == scumbler->GetTrack(3)->GetName());      
+      scumbler->MoveTrack(3, 0);
+      scumbler->MoveTrack(3, 0);
+      expect(String("zero") == scumbler->GetTrack(0)->GetName());      
+      expect(String("one") == scumbler->GetTrack(1)->GetName());      
+      expect(String("two") == scumbler->GetTrack(2)->GetName());      
+      expect(String("three") == scumbler->GetTrack(3)->GetName());  
+
+
+
+
 
    }
 private:
