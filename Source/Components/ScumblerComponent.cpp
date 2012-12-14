@@ -48,6 +48,8 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
 
 
     //[Constructor] You can add your own custom stuff here..
+    // subscribe to change notifications coming from the scumbler object.
+    fScumbler->addChangeListener(this);
     //[/Constructor]
 }
 
@@ -119,6 +121,9 @@ void ScumblerComponent::getAllCommands(Array<CommandID>& commands)
     //CommandIds::kRewind,
     //CommandIds::kToggleRecord,
     //CommandIds::kAddTrack
+#ifdef qUnitTests
+    CommandIds::kRunUnitTests
+#endif 
   };
 
   commands.addArray(ids, numElementsInArray(ids));
@@ -181,6 +186,17 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
       result.defaultKeypresses.add(KeyPress('p', ModifierKeys::commandModifier, 0));
     }
     break;
+#ifdef qUnitTests
+    case CommandIds::kRunUnitTests:
+    {
+      result.setInfo("Run unit tests", "Run all unit tests", "Development", 0);
+      result.defaultKeypresses.add(KeyPress('t', ModifierKeys::commandModifier, 0));
+    }
+    break;
+#endif
+
+
+
   }
 }
 
@@ -220,6 +236,23 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
       gCommandManager->commandStatusChanged();
     }
     break;
+    case CommandIds::kRunUnitTests:
+    {
+#ifdef qUnitTests
+      // Unsubscribe this component from change notifications so we don't go 
+      // crazy when the tests are running
+      fScumbler->removeChangeListener(this);
+      UnitTestRunner runner;
+      // run all tests even if there are failures.
+      runner.setAssertOnFailure(false);
+      runner.runAllTests();
+      // hook us back up to the notifications.
+      fScumbler->addChangeListener(this);
+#endif    
+    }
+    break;
+
+
   }
   return retval;
 }

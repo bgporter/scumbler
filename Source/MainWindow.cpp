@@ -176,9 +176,7 @@ void MainAppWindow::getAllCommands(Array<CommandID>& commands)
     //CommandIds::kPause,
     //CommandIds::kRewind,
     //CommandIds::kToggleRecord
-#ifdef qUnitTests
-    CommandIds::kRunUnitTests
-#endif    
+   
   };
   commands.addArray(ids, numElementsInArray(ids));
 
@@ -198,16 +196,9 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
     break;
 
 
-#ifdef qUnitTests
-    case CommandIds::kRunUnitTests:
-    {
-      result.setInfo("Run unit tests", "Run all unit tests", "Development", 0);
-      result.defaultKeypresses.add(KeyPress('t', ModifierKeys::commandModifier, 0));
-    }
-    break;
-#endif
-  }
 
+    
+  }
 }
 
 bool MainAppWindow::perform(const InvocationInfo& info)
@@ -224,16 +215,7 @@ bool MainAppWindow::perform(const InvocationInfo& info)
 
 
           
-    case CommandIds::kRunUnitTests:
-    {
-#ifdef qUnitTests
-      UnitTestRunner runner;
-      // run all tests even if there are failures.
-      runner.setAssertOnFailure(false);
-      runner.runAllTests();
-#endif    
-    }
-    break;
+
   }
   return retval;
 }
