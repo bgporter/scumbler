@@ -7,16 +7,11 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "ScumblerDefs.h"
+#include "PluginConnector.h"
 
 class Track;
 
-/**
- * @typedef NodeId
- *
- * We create a typedef to make it clear that we're referring to NodeIds.
- */
-typedef uint32  NodeId;
+
 
 /**
  * \class Scumbler
@@ -28,7 +23,7 @@ typedef uint32  NodeId;
  * - links together the plugins owned by each track and the filter graph
  * - writing output to file, etc.
  */
-class Scumbler : public ChangeBroadcaster
+class Scumbler : public ChangeBroadcaster, public PluginConnector
 {
 public:
 #ifdef qUnitTests
@@ -73,13 +68,12 @@ public:
     * Audio device manager is initialized.
     */
     void Reset();
-
-    /**
+   /**
      * \name Connect
      * \brief Connect a source node to a destination node in the graph.
      * @return tk::Result code indicating success or the reason for failure.
      */
-    tk::Result Connect(NodeId source, NodeId dest);
+    virtual tk::Result Connect(NodeId source, NodeId dest);
 
 
     /**
@@ -130,7 +124,7 @@ public:
      * @return the identifier of the node.
      */
     NodeId  AddProcessor(AudioProcessor* p);
-
+ 
     /**
      * @name Track operations
      */

@@ -81,7 +81,6 @@ void Scumbler::Reset()
     new AudioProcessorGraph::AudioGraphIOProcessor(
       AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
    fInputNode = this->AddProcessor(in);
-   //fInputNode = node->nodeId;
 
    AudioProcessorGraph::AudioGraphIOProcessor* out = 
     new AudioProcessorGraph::AudioGraphIOProcessor(
@@ -106,7 +105,6 @@ tk::Result Scumbler::Connect(NodeId source, NodeId dest)
 tk::Result Scumbler::Disconnect(NodeId source, NodeId dest)
 {
    return this->HandleConnection(source, dest, false);
-
 }
 
 

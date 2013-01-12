@@ -15,6 +15,12 @@
 
 #define mCallMemberFn(object, ptrToMember)   ((object).*(ptrToMember))
 
+/**
+ * @typedef NodeId
+ *
+ * We create a typedef to make it clear that we're referring to NodeIds.
+ */
+typedef uint32  NodeId;
 
 namespace tk
 {
