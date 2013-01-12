@@ -9,9 +9,9 @@
 Track::Track(Scumbler* owner, const String& name)
 :  fOwner(owner)
 ,  fName(name)
-,  fPreLoopPlugin(Scumbler::kInvalidNode)
-,  fLoop(Scumbler::kInvalidNode)
-,  fPostLoopPlugin(Scumbler::kInvalidNode)
+,  fPreLoopPlugin(tk::kInvalidNode)
+,  fLoop(tk::kInvalidNode)
+,  fPostLoopPlugin(tk::kInvalidNode)
 {
 
 }

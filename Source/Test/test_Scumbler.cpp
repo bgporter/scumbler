@@ -49,25 +49,25 @@ public:
       this->beginTest("Basic Connections");
       this->expect(2 == fScumbler->fGraph.getNumNodes());
       // test some bogus states first
-      this->expect(Scumbler::kAlreadyConnected == \
+      this->expect(tk::kAlreadyConnected == \
          fScumbler->Connect(fScumbler->fInputNode, fScumbler->fOutputNode)); 
-      this->expect(Scumbler::kIllegalConnection == \
+      this->expect(tk::kIllegalConnection == \
          fScumbler->Connect(fScumbler->fOutputNode, fScumbler->fInputNode)); 
 
-      this->expect(Scumbler::kNoSourceNode == \
+      this->expect(tk::kNoSourceNode == \
          fScumbler->Connect(0xffffffff, fScumbler->fOutputNode)); 
 
 
-      this->expect(Scumbler::kNoDestNode == \
+      this->expect(tk::kNoDestNode == \
          fScumbler->Connect(fScumbler->fInputNode, 0xFFFF)); 
       // test disconnections.
       this->expect(fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
          fScumbler->fOutputNode));
-      this->expect(Scumbler::kSuccess == fScumbler->Disconnect(
+      this->expect(tk::kSuccess == fScumbler->Disconnect(
          fScumbler->fInputNode, fScumbler->fOutputNode));
       this->expect(!fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
          fScumbler->fOutputNode));
-      this->expect(Scumbler::kSuccess == fScumbler->Connect(
+      this->expect(tk::kSuccess == fScumbler->Connect(
          fScumbler->fInputNode, fScumbler->fOutputNode));
       this->expect(fScumbler->fGraph.isConnected(fScumbler->fInputNode, 
          fScumbler->fOutputNode));
@@ -84,29 +84,29 @@ public:
       //  add the 1-in 1-out node to the graph & connect it in the middle.
       this->expect(2 == fScumbler->fGraph.getNumNodes());
       uint32 node = fScumbler->AddProcessor(proc);
-      Scumbler::Result r = fScumbler->InsertBetween(
-         Scumbler::kInput, node, Scumbler::kOutput);
-      this->expect(Scumbler::kSuccess == r);
+      tk::Result r = fScumbler->InsertBetween(
+         tk::kInput, node, tk::kOutput);
+      this->expect(tk::kSuccess == r);
       this->expect(3 == fScumbler->fGraph.getNumNodes());
 
       uint32 node2 = fScumbler->AddProcessor(proc2);
       r = fScumbler->InsertBetween(
-         Scumbler::kInput, node2, Scumbler::kOutput);
-      this->expect(Scumbler::kNotConnected == r);
-      r = fScumbler->InsertBetween(node, node2, Scumbler::kOutput);
-      this->expect(Scumbler::kSuccess == r);
+         tk::kInput, node2, tk::kOutput);
+      this->expect(tk::kNotConnected == r);
+      r = fScumbler->InsertBetween(node, node2, tk::kOutput);
+      this->expect(tk::kSuccess == r);
       this->expect(4 == fScumbler->fGraph.getNumNodes());
 
       this->beginTest("Disconncections");
-      r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput);
-      this->expect(Scumbler::kNotConnected == r);
+      r = fScumbler->RemoveBetween(tk::kInput, node2, tk::kOutput);
+      this->expect(tk::kNotConnected == r);
 
-      r = fScumbler->RemoveBetween(Scumbler::kInput, node, node2);
-      this->expect(Scumbler::kSuccess == r);
+      r = fScumbler->RemoveBetween(tk::kInput, node, node2);
+      this->expect(tk::kSuccess == r);
       this->expect(4 == fScumbler->fGraph.getNumNodes());
 
-      r = fScumbler->RemoveBetween(Scumbler::kInput, node2, Scumbler::kOutput, true);
-      this->expect(Scumbler::kSuccess == r);
+      r = fScumbler->RemoveBetween(tk::kInput, node2, tk::kOutput, true);
+      this->expect(tk::kSuccess == r);
       this->expect(3 == fScumbler->fGraph.getNumNodes());
    };
 

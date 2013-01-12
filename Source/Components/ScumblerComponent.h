@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  10 Dec 2012 10:15:28pm
+  Creation date:  16 Dec 2012 10:55:55am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,13 +19,14 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_CE75389E__
-#define __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_CE75389E__
+#ifndef __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_A102A7FF__
+#define __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_A102A7FF__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
 #include "../Scumbler.h"
 #include "../Commands.h"
+#include "TrackComponent.h"
 //[/Headers]
 
 
@@ -55,12 +56,12 @@ public:
      * Add a new track to the scumbler object.
      * @return result code indicating success or reason for failure.
      */
-    Scumbler::Result AddTrack();
+    tk::Result AddTrack();
 
     /**
      * @name ApplicationCommandTarget overrides.
      */
-    
+
     ///@{
     ApplicationCommandTarget* getNextCommandTarget();
     void getAllCommands(Array<CommandID>& commands);
@@ -71,7 +72,7 @@ public:
     /**
       * @name ChangeListener overrides.
       */
-    
+
     /**
      * Called when something we're watching calls us back with a notification.
      */
@@ -92,6 +93,7 @@ private:
 
     //==============================================================================
     TextButton* fNewTrackButton;
+    TrackComponent* fTrackComponent;
 
 
     //==============================================================================
@@ -99,4 +101,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_CE75389E__
+#endif   // __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_A102A7FF__

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"begin",
+				"beginTest"
+			],
+			[
 				"getNext",
 				"getNextCommandTarget"
 			],
@@ -19,6 +23,78 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Scumbler.h",
+			"settings":
+			{
+				"buffer_size": 9573,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Track.h",
+			"settings":
+			{
+				"buffer_size": 1698,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Test/test_Track.cpp",
+			"settings":
+			{
+				"buffer_size": 4393,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scumbler.cpp",
+			"settings":
+			{
+				"buffer_size": 9302,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Track.cpp",
+			"settings":
+			{
+				"buffer_size": 504,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/ScumblerComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 8442,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "MainWindow.cpp",
+			"settings":
+			{
+				"buffer_size": 5522,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Components/TrackComponent.h",
+			"settings":
+			{
+				"buffer_size": 2410,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Components/TrackComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 3842,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -88,6 +164,8 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
 		"/Users/bgporter/personal/juce/extras/Introjucer/Source/Project/jucer_ProjectContentComponent.h",
@@ -194,6 +272,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Estim",
+			".\n",
+			"());\n",
 			"align",
 			"curvy claire",
 			"tryTo",
@@ -285,8 +366,259 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Scumbler.h",
+					"settings":
+					{
+						"buffer_size": 9573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7212,
+								7219
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3629.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Track.h",
+					"settings":
+					{
+						"buffer_size": 1698,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								540,
+								540
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Test/test_Track.cpp",
+					"settings":
+					{
+						"buffer_size": 4393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4180,
+								4180
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1284.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Scumbler.cpp",
+					"settings":
+					{
+						"buffer_size": 9302,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7839,
+								7839
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5043.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Track.cpp",
+					"settings":
+					{
+						"buffer_size": 504,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								286,
+								286
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Components/ScumblerComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 8442,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7129,
+								7129
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3087.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "MainWindow.cpp",
+					"settings":
+					{
+						"buffer_size": 5522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5497,
+								5497
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3565.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Components/TrackComponent.h",
+					"settings":
+					{
+						"buffer_size": 2410,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2073,
+								2073
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 654.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Components/TrackComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 3842,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1016,
+								1016
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -335,6 +667,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"sc",
+				"Scumbler.cpp"
+			],
 			[
 				"fil",
 				"FilterGraph.cpp"

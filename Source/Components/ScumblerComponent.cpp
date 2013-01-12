@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  10 Dec 2012 10:15:28pm
+  Creation date:  16 Dec 2012 10:55:55am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -26,19 +26,23 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
-extern ApplicationCommandManager* gCommandManager;  
+extern ApplicationCommandManager* gCommandManager;
 //[/MiscUserDefs]
 
 //==============================================================================
 ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
     : Component ("The Scumbler"),
       fScumbler(scumbler),
-      fNewTrackButton (0)
+      fNewTrackButton (0),
+      fTrackComponent (0)
 {
     addAndMakeVisible (fNewTrackButton = new TextButton ("new track"));
     fNewTrackButton->setButtonText ("+");
     fNewTrackButton->addListener (this);
     fNewTrackButton->setColour (TextButton::buttonColourId, Colour (0xffcccce2));
+
+    addAndMakeVisible (fTrackComponent = new TrackComponent(fScumbler));
+    fTrackComponent->setName ("base track");
 
 
     //[UserPreSize]
@@ -59,6 +63,7 @@ ScumblerComponent::~ScumblerComponent()
     //[/Destructor_pre]
 
     deleteAndZero (fNewTrackButton);
+    deleteAndZero (fTrackComponent);
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -81,6 +86,8 @@ void ScumblerComponent::resized()
 {
     fNewTrackButton->setBounds (32, 456, 24, 24);
     //[UserResized] Add your own custom resize handling here..
+    Point<int> topLeft = fTrackComponent->getScreenPosition();
+    fTrackComponent->setBounds (5, 100, this->getWidth()- 10 , 100);
     //[/UserResized]
 }
 
@@ -92,6 +99,7 @@ void ScumblerComponent::buttonClicked (Button* buttonThatWasClicked)
     if (buttonThatWasClicked == fNewTrackButton)
     {
         //[UserButtonCode_fNewTrackButton] -- add your button handler code here..
+        fScumbler->AddTrack();
         //[/UserButtonCode_fNewTrackButton]
     }
 
@@ -120,10 +128,10 @@ void ScumblerComponent::getAllCommands(Array<CommandID>& commands)
     //CommandIds::kPause,
     //CommandIds::kRewind,
     //CommandIds::kToggleRecord,
-    //CommandIds::kAddTrack
+    CommandIds::kAddTrack,
 #ifdef qUnitTests
     CommandIds::kRunUnitTests
-#endif 
+#endif
   };
 
   commands.addArray(ids, numElementsInArray(ids));
@@ -136,8 +144,8 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
   switch (commandID)
   {
     case CommandIds::kNew:
-    { 
-      result.setInfo("New", 
+    {
+      result.setInfo("New",
         "Create a new (empty) Scumbler file", category, 0);
       result.defaultKeypresses.add(KeyPress('n', ModifierKeys::commandModifier, 0));
 
@@ -168,13 +176,13 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
       result.setInfo("Save As...",
         "Save a copy of the current Scumbler setup to a file",
         category, 0);
-        result.defaultKeypresses.add(KeyPress('s', 
+        result.defaultKeypresses.add(KeyPress('s',
           ModifierKeys::shiftModifier | ModifierKeys::commandModifier, 0));
     }
     break;
 
     case CommandIds::kPlay:
-    { 
+    {
       if (fScumbler->IsPlaying())
       {
         result.setInfo("Pause", "Pause audio playback", category, 0);
@@ -186,6 +194,16 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
       result.defaultKeypresses.add(KeyPress('p', ModifierKeys::commandModifier, 0));
     }
     break;
+
+    case CommandIds::kAddTrack:
+    {
+      result.setInfo("Add Track", "Add a new audio track to the scumbler",
+        "Audio", 0);
+      result.defaultKeypresses.add(KeyPress('a', ModifierKeys::commandModifier, 0));
+
+    }
+    break;
+
 #ifdef qUnitTests
     case CommandIds::kRunUnitTests:
     {
@@ -230,8 +248,8 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
     case CommandIds::kPlay:
     {
       fScumbler->TogglePlay();
-      // tell the command manager something has changed. This will make it 
-      // re-query us with getCommandInfo() and set the menu text to display either 
+      // tell the command manager something has changed. This will make it
+      // re-query us with getCommandInfo() and set the menu text to display either
       // 'Play' or 'Pause'
       gCommandManager->commandStatusChanged();
     }
@@ -239,7 +257,7 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
     case CommandIds::kRunUnitTests:
     {
 #ifdef qUnitTests
-      // Unsubscribe this component from change notifications so we don't go 
+      // Unsubscribe this component from change notifications so we don't go
       // crazy when the tests are running
       fScumbler->removeChangeListener(this);
       UnitTestRunner runner;
@@ -248,7 +266,7 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
       runner.runAllTests();
       // hook us back up to the notifications.
       fScumbler->addChangeListener(this);
-#endif    
+#endif
     }
     break;
 
@@ -259,6 +277,10 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
 
 void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+  if (source == fScumbler)
+  {
+    this->repaint();
+  }
 
 }
 
@@ -282,6 +304,9 @@ BEGIN_JUCER_METADATA
   <TEXTBUTTON name="new track" id="afec3388486bebff" memberName="fNewTrackButton"
               virtualName="" explicitFocusOrder="0" pos="32 456 24 24" bgColOff="ffcccce2"
               buttonText="+" connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <GENERICCOMPONENT name="base track" id="b7e382f5ea847640" memberName="fTrackComponent"
+                    virtualName="TrackComponent" explicitFocusOrder="0" pos="0 50 872 100"
+                    class="TrackComponent" params=""/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

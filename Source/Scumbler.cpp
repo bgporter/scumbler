@@ -92,27 +92,27 @@ void Scumbler::Reset()
 
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
-   // let anyone listening know that we've changed.
+   // let anyone listening tk::know that we've changed.
    this->sendChangeMessage();
 
 }
 
 
-Scumbler::Result Scumbler::Connect(NodeId source, NodeId dest)
+tk::Result Scumbler::Connect(NodeId source, NodeId dest)
 {
    return this->HandleConnection(source, dest, true);
 }
 
-Scumbler::Result Scumbler::Disconnect(NodeId source, NodeId dest)
+tk::Result Scumbler::Disconnect(NodeId source, NodeId dest)
 {
    return this->HandleConnection(source, dest, false);
 
 }
 
 
-Scumbler::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
+tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
 {
-   Scumbler::Result retval = kFailure;
+   tk::Result retval = tk::kFailure;
 
    before = this->HandleSpecialNode(before);
    after = this->HandleSpecialNode(after);
@@ -120,20 +120,20 @@ Scumbler::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId a
    // 1: we can't succeed of before and after aren't connected.
    if (!fGraph.isConnected(before, after))
    {
-      return kNotConnected;
+      return tk::kNotConnected;
    }
    // the new connections both need to be legal before we start messing with things. 
    if (!fGraph.canConnect(before, 0, newNode, 0) || 
        !fGraph.canConnect(newNode, 0, after, 0))
    {
-      return kIllegalConnection;
+      return tk::kIllegalConnection;
    }
    //  first, disconnect the two nodes that are already being connected.
    retval = this->Disconnect(before, after);
-   if (kSuccess == retval)
+   if (tk::kSuccess == retval)
    {
       retval = this->Connect(before, newNode);
-      if (kSuccess == retval)
+      if (tk::kSuccess == retval)
       {
          retval = this->Connect(newNode, after);
       }
@@ -144,10 +144,10 @@ Scumbler::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId a
 
 
 
-Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, 
+tk::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, 
    NodeId after, bool deleteNode)
 {
-   Scumbler::Result retval = kFailure;
+   tk::Result retval = tk::kFailure;
 
    // if needed, look up the node ids for the input/output nodes.
    before = this->HandleSpecialNode(before);
@@ -158,7 +158,7 @@ Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove,
    if (! (fGraph.isConnected(before, nodeToRemove) && 
           fGraph.isConnected(nodeToRemove, after)))
    {
-      return kNotConnected;
+      return tk::kNotConnected;
    }
 
    // 2. Next precondition: The connection between `before` and `after` needs 
@@ -167,15 +167,15 @@ Scumbler::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove,
    // added to with the InsertBetween() method. 
    if (! fGraph.canConnect(before, 0, after, 0))
    {
-      return kIllegalConnection;
+      return tk::kIllegalConnection;
    }
 
    // 3. Disconnect `nodeToRemove on either side.
    retval = this->Disconnect(before, nodeToRemove);
-   if (kSuccess == retval)
+   if (tk::kSuccess == retval)
    {
       retval = this->Disconnect(nodeToRemove, after);
-      if (kSuccess == retval)
+      if (tk::kSuccess == retval)
       {
          // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
          // never been there.
@@ -215,30 +215,30 @@ int Scumbler::GetNumTracks() const
    return fTracks.size();
 }
 
-Scumbler::Result Scumbler::AddTrack(const String& name)
+tk::Result Scumbler::AddTrack(const String& name)
 {
    fTracks.add(new Track(this, name));
    this->sendChangeMessage();
-   return kSuccess;
+   return tk::kSuccess;
 }
 
 
-Scumbler::Result Scumbler::DeleteTrack(int index)
+tk::Result Scumbler::DeleteTrack(int index)
 {
-   Scumbler::Result retval = kFailure;
+   tk::Result retval = tk::kFailure;
    if (fTracks[index])
    {
       fTracks.remove(index);
-      retval = kSuccess;
+      retval = tk::kSuccess;
       this->sendChangeMessage();
    }
    return retval;
 }
 
 
-Scumbler::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
+tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
 {
-   Scumbler::Result retval = kFailure;
+   tk::Result retval = tk::kFailure;
    // make sure the track really exists
    if (fTracks[fromIndex])
    {
@@ -250,7 +250,7 @@ Scumbler::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
          toIndex = -1;
       }
       fTracks.move(fromIndex, toIndex);
-      retval = kSuccess;
+      retval = tk::kSuccess;
       this->sendChangeMessage();
    }
    return retval;
@@ -266,9 +266,9 @@ Track* Scumbler::GetTrack(int index) const
 }
 
 
-Scumbler::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool connecting)
+tk::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool connecting)
 {
-   Scumbler::Result retval = Scumbler::kFailure;
+   tk::Result retval = tk::kFailure;
    fnPtr op = nullptr;
 
    AudioProcessorGraph::Node* srcNode  = fGraph.getNodeForId(source);
@@ -282,12 +282,12 @@ Scumbler::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool con
          // if they're already connected, there's nothing to do.
          if (fGraph.isConnected(source, dest))
          {
-            return kAlreadyConnected;
+            return tk::kAlreadyConnected;
          }      
          // verify that we can at least connect the lower channels of these nodes.
          if (!fGraph.canConnect(source, 0, dest, 0))
          {
-            return kIllegalConnection;
+            return tk::kIllegalConnection;
          }
 
       }
@@ -297,17 +297,20 @@ Scumbler::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool con
          // bail out early if the two nodes aren't connected.
          if (!fGraph.isConnected(source, dest))
          {
-            return kNotConnected;
+            return tk::kNotConnected;
          }
       }
 
-      retval = kSuccess;
+      retval = tk::kSuccess;
       AudioProcessor* srcFilter  = srcNode->getProcessor();
       int numSrcChannels         = srcFilter->getNumOutputChannels();
       AudioProcessor* destFilter = destNode->getProcessor();
       int numDestChannels        = destFilter->getNumInputChannels();
       // in our immediate situation, we're only interested in 2 channels at most. 
       // Future versions might be interested in more.
+      // !!! NOTE that a better way to do this is to instead check whether 
+      // isInputChannelStereoPair/isOutputChannelStereoPair() is true and to 
+      // hook things up accordingly.
       if (numSrcChannels == numDestChannels)
       {
          for (int index = 0; index < numSrcChannels; ++index)
@@ -334,11 +337,11 @@ Scumbler::Result Scumbler::HandleConnection(NodeId source, NodeId dest, bool con
       // one or other of the requested nodes aren't present in the graph.
       if (nullptr == srcNode)
       {
-         return kNoSourceNode;
+         return tk::kNoSourceNode;
       }
       if (nullptr == destNode)
       {
-         return kNoDestNode;
+         return tk::kNoDestNode;
       }
    }
    return retval;
@@ -354,11 +357,11 @@ NodeId Scumbler::AddProcessor(AudioProcessor* p)
 NodeId Scumbler::HandleSpecialNode(NodeId node)
 {
    NodeId retval = node;
-   if (kInput == node)
+   if (tk::kInput == node)
    {
       retval = fInputNode;
    }
-   else if (kOutput == node)
+   else if (tk::kOutput == node)
    {
       retval = fOutputNode;
    }

@@ -35,30 +35,8 @@ public:
   friend class ScumblerTest;
 #endif    
 
-  /**
-   * \enum Result
-   * Result codes that can be returned from our operations.
-   */
-  enum Result
-  {
-    kSuccess = 0,         /**< The operation succeeded */
-    kFailure,             /**< (non-specific) failure */
-    kIllegalConnection,   /**< Attempt to make an illegal connection */
-    kNotConnected,        /**< Attempt to disconnect nodes that aren't connected. */
-    kAlreadyConnected,    /**< Attempt to connect two nodes already connected. */
-    kNoSourceNode,        /**< The specified source node doesn't exist. */
-    kNoDestNode,          /**< The specified destination node doesn't exist. */
-  };
 
-  /**
-   * @enum Special NodeId values used in the system.
-   */
-  enum 
-  {
-    kInvalidNode = 0,           /**< indicates a an empty node variable */
-    kInput       = 0xffffffff,  /**< our input node. */
-    kOutput      = 0xfffffffe   /**< our output node. */
-  };
+
 
   /**
     * Constructor
@@ -99,9 +77,9 @@ public:
     /**
      * \name Connect
      * \brief Connect a source node to a destination node in the graph.
-     * @return Scumbler::Result code indicating success or the reason for failure.
+     * @return tk::Result code indicating success or the reason for failure.
      */
-    Result Connect(NodeId source, NodeId dest);
+    tk::Result Connect(NodeId source, NodeId dest);
 
 
     /**
@@ -110,9 +88,9 @@ public:
      * used to connect 
      * @param  source The node that's providing audio 
      * @param  dest   The node that's receiving audio.
-     * @return Scumbler::Result code indicating success or the reason for failure.
+     * @return tk::Result code indicating success or the reason for failure.
      */
-    Result Disconnect(NodeId source, NodeId dest);
+    tk::Result Disconnect(NodeId source, NodeId dest);
 
     /**
      * Insert 'newNode' in the graph inbetween 'before' and 'after'.
@@ -124,9 +102,9 @@ public:
      * @param  after   The node that 'newNode' should be inserted before. The 
      *                 special value Scumbler::kOutput can be used to connect the 
      *                 newNode to the Scumbler's output.
-     * @return         Scumbler::Result
+     * @return         tk::Result
      */
-    Result InsertBetween(NodeId before, NodeId newNode, NodeId after);
+    tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after);
 
     /**
      * Disconnect the node `nodetoRemove` that's connected between `before` and 
@@ -141,9 +119,9 @@ public:
      *                      be connected to `after`.
      * @param  deleteNode   Should the node be deleted from the graph after it's 
      *                      disconnected?
-     * @return              Scumbler::Result
+     * @return              tk::Result
      */
-    Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false);
+    tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false);
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
      * graph.  The Scumbler takes ownership of the object, and it should 
@@ -167,17 +145,17 @@ public:
     /**
      * Add a new (empty) track to the end of the array of track objects. 
      * @return kSuccess, ideally. If we are capping the number of possible tracks, 
-     * we'll need to define a new Scumbler::Result value(s) to reflect the 
+     * we'll need to define a new tk::Result value(s) to reflect the 
      * reason for failure.
      */
-    Result AddTrack(const String& name = String::empty);
+    tk::Result AddTrack(const String& name = String::empty);
 
     /**
      * Remove a track from the scumbler and clean everything up.
      * @param  index index of the track to remove
      * @return       Success/failure.
      */
-    Result DeleteTrack(int index);
+    tk::Result DeleteTrack(int index);
 
     /**
      * Move an existing track to a different index in the array. 
@@ -186,7 +164,7 @@ public:
      * than zero or greater than the highest index will move the track to the last position.)
      * @return           Success/failure.
      */
-    Scumbler::Result MoveTrack(int fromIndex, int toIndex);
+    tk::Result MoveTrack(int fromIndex, int toIndex);
     /**
      * Get a pointer to a specific track object that's owned by the Scumbler.
      * @param  index 0-based index of the track to retrieve
@@ -235,9 +213,9 @@ protected:
    * @param  source     node id of the  source node.
    * @param  dest       node id of the destination node.    
    * @param  connecting If true, we are connecting the nodes (else disconnecting)
-   * @return            Scumbler::Result code indicating success or the reason for failure.
+   * @return            tk::Result code indicating success or the reason for failure.
    */
-  Result HandleConnection(NodeId source, NodeId dest, bool connecting);
+  tk::Result HandleConnection(NodeId source, NodeId dest, bool connecting);
 
   /**
    * Use this to convert one of the special enum values `Scumbler::kInput` or 

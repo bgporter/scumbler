@@ -15,4 +15,36 @@
 
 #define mCallMemberFn(object, ptrToMember)   ((object).*(ptrToMember))
 
+
+namespace tk
+{
+  /**
+   * \enum Result
+   * Result codes that can be returned from our operations.
+   */
+  enum Result
+  {
+    kSuccess = 0,         /**< The operation succeeded */
+    kFailure,             /**< (non-specific) failure */
+    kIllegalConnection,   /**< Attempt to make an illegal connection */
+    kNotConnected,        /**< Attempt to disconnect nodes that aren't connected. */
+    kAlreadyConnected,    /**< Attempt to connect two nodes already connected. */
+    kNoSourceNode,        /**< The specified source node doesn't exist. */
+    kNoDestNode,          /**< The specified destination node doesn't exist. */
+  };
+
+  /**
+   * @enum Special NodeId values used in the system.
+   */
+  enum Node
+  {
+    kInvalidNode = 0,           /**< indicates a an empty node variable */
+    kInput       = 0xffffffff,  /**< our input node. */
+    kOutput      = 0xfffffffe   /**< our output node. */
+  }; 
+
+};
+
+
+
 #endif // this must be the last line in this file.
