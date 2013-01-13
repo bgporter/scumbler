@@ -7,7 +7,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#include "Scumbler.h"
+#include "PluginConnector.h"
 
 class PluginBlock
 {
@@ -29,7 +29,7 @@ public:
     * @param output ID of the node we need to send output from our last plugin
     * @param size Number of nodes that this block can hold. 
     */
-   PluginBlock(Scumbler* scumbler, NodeId input, NodeId output, size_t size);
+   PluginBlock(PluginConnector* scumbler, NodeId input, NodeId output, size_t size);
 
    /**
     * Destroy the plugin block, disconnecting and removing all plugins from the 
@@ -63,7 +63,7 @@ private:
    /**
     * The scumbler object owning the filter graph.
     */
-   Scumbler* fScumbler;
+   PluginConnector* fScumbler;
 
    /**
     * Where our inupt comes from.

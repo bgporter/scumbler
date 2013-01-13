@@ -68,6 +68,12 @@ public:
     * Audio device manager is initialized.
     */
     void Reset();
+
+    /**
+     * @name PluginConnector operations
+     */
+    ///@{
+
    /**
      * \name Connect
      * \brief Connect a source node to a destination node in the graph.
@@ -124,6 +130,7 @@ public:
      * @return the identifier of the node.
      */
     NodeId  AddProcessor(AudioProcessor* p);
+    ///@}
  
     /**
      * @name Track operations

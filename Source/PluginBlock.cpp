@@ -2,7 +2,7 @@
 
 #include "PluginBlock.h"
 
-PluginBlock::PluginBlock(Scumbler* scumbler, NodeId input, NodeId output, size_t size)
+PluginBlock::PluginBlock(PluginConnector* scumbler, NodeId input, NodeId output, size_t size)
 :  fScumbler(scumbler)
 ,  fInput(input)
 ,  fOutput(output)
@@ -11,7 +11,7 @@ PluginBlock::PluginBlock(Scumbler* scumbler, NodeId input, NodeId output, size_t
    // just in case someday the value of invalid node is something other than zero.
    for (size_t i = 0; i < size; ++i)
    {
-      fPluginNodes.set(i, Scumbler::kInvalidNode);
+      fPluginNodes.set(i, tk::kInvalidNode);
    }
 }
 
@@ -28,7 +28,7 @@ NodeId PluginBlock::FindNodeBeforeIndex(int i)
    {
       for (int j = i-1; i > -1; --i)
       {
-         if (fPluginNodes[j] != kInvalidNode)
+         if (fPluginNodes[j] != tk::kInvalidNode)
          {
             retval = fPluginNodes[j];
             break;
@@ -43,12 +43,12 @@ NodeId PluginBlock::FindNodeBeforeIndex(int i)
 NodeId PluginBlock::FindNodeAfterIndex(int i)
 {
    NodeId retval = fOutput;
-   int size = fPLuginNodes.size();
+   int size = fPluginNodes.size();
    if (i < (size-1))
    {
       for (int j = i+1; j < size; ++j)
       {
-         if (fPluginNodes[j] != kInvalidNode)
+         if (fPluginNodes[j] != tk::kInvalidNode)
          {
             retval = fPluginNodes[j];
             break;
