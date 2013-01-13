@@ -41,7 +41,8 @@ public:
 
 private:
    /**
-    * Returns the ID of the previous plugin in the block (which may be the input node.)        
+    * Returns the ID of the previous plugin in the block (which may be the input node.)
+    * Because this is private, we're assuming that 'i' is in a valid range for this block.        
     * @param  i Index of the node we're working with
     * @return   NodeId.
     */
@@ -49,6 +50,7 @@ private:
 
    /**
     * Returns the id of the next plugin after this one (which may be output)
+    * Because this is private, we're assuming that 'i' is in a valid range for this block.        
     * @param  i Index of the node we're working with.
     * @return   NodeId
     */
