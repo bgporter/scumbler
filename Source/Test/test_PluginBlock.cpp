@@ -132,6 +132,12 @@ public:
    
    };
 
+   PluginBlock* Reset(int length)
+   {
+      fGraph->Reset();
+      return new PluginBlock(fGraph, fInput, fOutput, length);
+   }
+
    void shutdown()
    {
       delete fGraph;
@@ -141,7 +147,7 @@ public:
    void runTest()
    {
       beginTest("Finding preceding/following nodes.");
-      ScopedPointer<PluginBlock> pb(new PluginBlock(fGraph, fInput, fOutput, 4));
+      ScopedPointer<PluginBlock> pb(this->Reset(4));
       // just checking the before/after logic. We're not actually adding anything
       // to the fake graph. 
       pb->fPluginNodes.set(1, 11);
@@ -152,6 +158,12 @@ public:
       pb->fPluginNodes.set(3, 15);
       expect(11 == pb->FindNodeBeforeIndex(3));
       expect(15 == pb->FindNodeAfterIndex(1));
+      expect(fOutput == pb->FindNodeAfterIndex(3));
+      expect(11 == pb->FindNodeBeforeIndex(2));
+      expect(15 == pb->FindNodeAfterIndex(2));
+
+      // clear out for the next test
+      pb = this->Reset(4);
 
 
 
