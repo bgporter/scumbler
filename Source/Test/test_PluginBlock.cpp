@@ -93,6 +93,11 @@ public:
       return -1;
    };
 
+   void Reset()
+   {
+      fConnections.clear(); 
+   };
+
 private:
    struct Connection
    {
@@ -121,17 +126,43 @@ public:
 
    void initialise()
    {
+      fGraph = new FakeConnector();
+      fInput = fGraph->AddProcessor(nullptr);
+      fOutput = fGraph->AddProcessor(nullptr);
    
    };
 
    void shutdown()
    {
-   
+      delete fGraph;
+      fGraph = nullptr;
    };
 
    void runTest()
    {
+      beginTest("Finding preceding/following nodes.");
+      ScopedPointer<PluginBlock> pb(new PluginBlock(fGraph, fInput, fOutput, 4));
+      // just checking the before/after logic. We're not actually adding anything
+      // to the fake graph. 
+      pb->fPluginNodes.set(1, 11);
+      expect(fInput == pb->FindNodeBeforeIndex(1));
+      expect(fOutput == pb->FindNodeAfterIndex(1));
+      expect(fInput == pb->FindNodeBeforeIndex(0));
+      expect(11 == pb->FindNodeAfterIndex(0));
+      pb->fPluginNodes.set(3, 15);
+      expect(11 == pb->FindNodeBeforeIndex(3));
+      expect(15 == pb->FindNodeAfterIndex(1));
+
+
+
+
    };
+
+private:
+   FakeConnector* fGraph;
+   NodeId fInput;
+   NodeId fOutput;
+
 };
 
 
