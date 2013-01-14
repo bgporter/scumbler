@@ -176,7 +176,7 @@ public:
 
       }
 
-      beginTest("Insert/Remove tests");
+      beginTest("Insert tests");
       // create 4 node IDs that we can use in tests.
       NodeId a = fGraph->AddProcessor(nullptr);
       NodeId b = fGraph->AddProcessor(nullptr);
@@ -202,14 +202,23 @@ public:
       expect(fGraph->AreConnected(c, d));
       expect(fGraph->AreConnected(d, fOutput));
 
+      beginTest("Remove/reinsert tests");
       // now start switching things around.
       // pull out 'b' 
       expect(tk::kSuccess == pb->RemoveNodeAtIndex(1));
       expect(tk::kNoTargetNode == pb->RemoveNodeAtIndex(1));
+      expect(fGraph->AreConnected(a, c));
       // pull out 'c'
       expect(tk::kSuccess == pb->RemoveNodeAtIndex(2));
       // so now a should be connected to d
       expect(fGraph->AreConnected(a, d));
+      // swap the old positions of b and c
+      expect(tk::kSuccess == pb->InsertNodeAtIndex(b, 2));
+      expect(fGraph->AreConnected(a, b));
+      expect(fGraph->AreConnected(b, d));
+      expect(tk::kSuccess == pb->InsertNodeAtIndex(c, 1));
+      expect(fGraph->AreConnected(a, c));
+      expect(fGraph->AreConnected(c, b));
 
 
    };
