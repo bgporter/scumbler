@@ -201,6 +201,10 @@ public:
       expect(fGraph->AreConnected(b, c));
       expect(fGraph->AreConnected(c, d));
       expect(fGraph->AreConnected(d, fOutput));
+      expect(a == pb->NodeInSlot(0));
+      expect(b == pb->NodeInSlot(1));
+      expect(c == pb->NodeInSlot(2));
+      expect(d == pb->NodeInSlot(3));
 
       beginTest("Remove/reinsert tests");
       // now start switching things around.
@@ -212,6 +216,8 @@ public:
       expect(tk::kSuccess == pb->RemoveNodeAtIndex(2));
       // so now a should be connected to d
       expect(fGraph->AreConnected(a, d));
+      expect(tk::kInvalidNode == pb->NodeInSlot(1));
+      expect(tk::kInvalidNode == pb->NodeInSlot(2));
       // swap the old positions of b and c
       expect(tk::kSuccess == pb->InsertNodeAtIndex(b, 2));
       expect(fGraph->AreConnected(a, b));
@@ -219,6 +225,10 @@ public:
       expect(tk::kSuccess == pb->InsertNodeAtIndex(c, 1));
       expect(fGraph->AreConnected(a, c));
       expect(fGraph->AreConnected(c, b));
+      expect(a == pb->NodeInSlot(0));
+      expect(c == pb->NodeInSlot(1));
+      expect(b == pb->NodeInSlot(2));
+      expect(d == pb->NodeInSlot(3));
 
 
    };
