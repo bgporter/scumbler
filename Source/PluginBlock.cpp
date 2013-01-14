@@ -38,6 +38,85 @@ PluginBlock::~PluginBlock()
    }
 }
 
+int PluginBlock::Size() const
+{
+   return fPluginNodes.size();
+}
+
+tk::Result PluginBlock::InsertNodeAtIndex(NodeId node, int index)
+{
+   tk::Result retval = tk::kIndexOutOfRange;
+   if (index >= 0 && index < this->Size())
+   {
+      if (tk::kInvalidNode == this->NodeInSlot(index))
+      {
+         // the index is in range, and the slot is empty.
+         fPluginNodes.set(index, node); 
+         // Now, connect everything together:
+         NodeId before = this->FindNodeBeforeIndex(index);
+         NodeId after = this->FindNodeAfterIndex(index);
+         if (tk::kInvalidNode != before && tk::kInvalidNode != after)
+         {
+            retval = fScumbler->InsertBetween(before, node, after);
+         }
+         else
+         {
+            // unknown weird failure.
+            retval = tk::kFailure;
+         }
+      }
+      else
+      {
+         retval = tk::kSlotFull;
+      }
+   }
+   return retval;
+}
+
+tk::Result PluginBlock::RemoveNodeAtIndex(int index, bool deleteNode)
+{
+   tk::Result retval = tk::kIndexOutOfRange;
+   if (index >= 0 && index < this->Size())
+   {
+      NodeId node = this->NodeInSlot(index);
+      if (tk::kInvalidNode != node)
+      {
+         NodeId before = this->FindNodeBeforeIndex(index);
+         NodeId after = this->FindNodeAfterIndex(index);
+         if (tk::kInvalidNode != before && tk::kInvalidNode != after)
+         {
+            retval = fScumbler->RemoveBetween(before, node, after, deleteNode);
+            if (tk::kSuccess == retval)
+            {
+               fPluginNodes.set(index, tk::kInvalidNode);
+            }
+         }
+         else
+         {
+            // unknown weird failure.
+            retval = tk::kFailure;
+         }
+      }
+      else
+      {
+         // this slot was empty.
+         retval = tk::kNoTargetNode;
+      }
+   }  
+   return retval; 
+}
+
+NodeId PluginBlock::NodeInSlot(int index) const
+{
+   NodeId retval = tk::kIndexOutOfRange;
+   if (index >= 0 && index < this->Size())
+   {
+      // We'll either return a real node if there's one in place, otherwise invalid node.
+      // 
+      retval = fPluginNodes[index];
+   }
+   return retval;
+}
 
 NodeId PluginBlock::FindNodeBeforeIndex(int i)
 {

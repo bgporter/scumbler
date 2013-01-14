@@ -162,10 +162,54 @@ public:
       expect(11 == pb->FindNodeBeforeIndex(2));
       expect(15 == pb->FindNodeAfterIndex(2));
 
+      beginTest("test resetting the block");
+      expect(tk::kInvalidNode == pb->NodeInSlot(0));
+      expect(11 == pb->NodeInSlot(1));
+      expect(tk::kInvalidNode == pb->NodeInSlot(2));
+      expect(15 == pb->NodeInSlot(3));
+
       // clear out for the next test
       pb = this->Reset(4);
+      for (int i = 0; i < pb->Size(); ++i)
+      {
+         expect(tk::kInvalidNode == pb->NodeInSlot(i));
 
+      }
 
+      beginTest("Insert/Remove tests");
+      // create 4 node IDs that we can use in tests.
+      NodeId a = fGraph->AddProcessor(nullptr);
+      NodeId b = fGraph->AddProcessor(nullptr);
+      NodeId c = fGraph->AddProcessor(nullptr);
+      NodeId d = fGraph->AddProcessor(nullptr);
+
+      // should start with input & output connected.
+      expect(fGraph->AreConnected(fInput, fOutput));
+      expect(tk::kSuccess == pb->InsertNodeAtIndex(a, 0));
+      expect(fGraph->AreConnected(fInput, a));
+      expect(fGraph->AreConnected(a, fOutput));
+      expect(!fGraph->AreConnected(a, b));
+      expect(!fGraph->AreConnected(fInput, fOutput));
+
+      expect(tk::kSuccess == pb->InsertNodeAtIndex(b, 1));
+      expect(tk::kSlotFull == pb->InsertNodeAtIndex(b, 1));
+      expect(tk::kSuccess == pb->InsertNodeAtIndex(c, 2));
+      expect(tk::kSuccess == pb->InsertNodeAtIndex(d, 3));
+      expect(fGraph->AreConnected(fInput, a));
+      expect(!fGraph->AreConnected(a, fOutput));
+      expect(fGraph->AreConnected(a, b));
+      expect(fGraph->AreConnected(b, c));
+      expect(fGraph->AreConnected(c, d));
+      expect(fGraph->AreConnected(d, fOutput));
+
+      // now start switching things around.
+      // pull out 'b' 
+      expect(tk::kSuccess == pb->RemoveNodeAtIndex(1));
+      expect(tk::kNoTargetNode == pb->RemoveNodeAtIndex(1));
+      // pull out 'c'
+      expect(tk::kSuccess == pb->RemoveNodeAtIndex(2));
+      // so now a should be connected to d
+      expect(fGraph->AreConnected(a, d));
 
 
    };

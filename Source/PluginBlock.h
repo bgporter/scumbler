@@ -37,6 +37,36 @@ public:
     */
    ~PluginBlock();
 
+   /**
+    * How many slots does this block have?
+    * @return Integer, number of total slots (>= 1)
+    */
+   int Size() const;
+
+   /**
+    * Find out about the node that's living in s specified slot in this block
+    * @param  index slot index.    
+    * @return       NodeId. tk::kInvalidNode indicates an empty (or out of range index) slot.
+    */
+   NodeId NodeInSlot(int index) const;
+
+   /**
+    * After an audio processor has been added to the graph, this places it at
+    * the sepcified index in the block and sets the connections in place.
+    * @param  node  Existing node to add. 
+    * @param  index index (0..this->Size()) to insert the node at.
+    * @return       Result of the operation. may fail if the node isn't valid, 
+    *               if the index is out of range, or if that index is already occupied.
+    */
+   tk::Result InsertNodeAtIndex(NodeId node, int index);
+
+   /**
+    * Remove the processor node at the specified index, optionally deleting the plugin instance.
+    * @param  index      Index of the node (0 <= index < this->Size())     
+    * @param  deleteNode If true, delete the processor instance as well.
+    * @return            Result of the operation.
+    */
+   tk::Result RemoveNodeAtIndex(int index, bool deleteNode=false);
 
 
 private:
