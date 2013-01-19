@@ -132,6 +132,9 @@ public:
      */
     NodeId  AddProcessor(AudioProcessor* p);
 
+
+    tk::Result DeleteNode(NodeId node);
+
    /**
     * Load the specified plugin into the Scumbler (but don't yet connect it to anything.) 
     * On success, returns a new NodeId to the caller, which can then call InsertNodeAtIndex()

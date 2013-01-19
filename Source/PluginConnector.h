@@ -86,6 +86,16 @@ public:
      */
     virtual NodeId  AddProcessor(AudioProcessor* p) = 0;
 
+    /**
+     * Remove a node from the graph. This should rarely be needed outside the class 
+     * that implements it. An obvious use is when we load a plugin but aren't able to
+     * insert it into the graph. This *shouldn't* happen. But just in case.
+     * @param  node Id of the node to delete.
+     * @return      Success or Fail.
+     */
+    virtual tk::Result DeleteNode(NodeId node) = 0;
+
+
    /**
     * Load the specified plugin into the Scumbler (but don't yet connect it to anything.) 
     * On success, returns a new NodeId to the caller, which can then call InsertNodeAtIndex()

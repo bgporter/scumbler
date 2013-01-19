@@ -354,6 +354,17 @@ NodeId Scumbler::AddProcessor(AudioProcessor* p)
    return node->nodeId;
 }
 
+tk::Result Scumbler::DeleteNode(NodeId node)
+{
+   tk::Result retval = tk::kFailure;
+   if (fGraph.removeNode(node))
+   {
+      retval = tk::kSuccess;
+   }
+   return retval;
+}
+
+
 NodeId Scumbler::LoadPlugin(const PluginDescription& description, String& errorMessage)
 {
    NodeId retval = tk::kInvalidNode;

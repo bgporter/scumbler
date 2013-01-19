@@ -76,10 +76,22 @@ public:
       return fNextNodeId++;
    };
 
+
+   tk::Result DeleteNode(NodeId node)
+   {
+      return tk::kSuccess;
+   }
+
    NodeId LoadPlugin(const PluginDescription& description, String& errorMessage)
    {
-      errorMessage = String("This implementation can't actually load plugins.");
-      return tk::kInvalidNode;
+      NodeId retval = tk::kInvalidNode;
+      errorMessage = String("Failure to load (unit test)");
+
+      if (String("FAIL") != description.name)
+      {
+         retval = this->AddProcessor(nullptr);
+      }
+      return retval;
    }
 
    bool AreConnected(NodeId source, NodeId dest)
