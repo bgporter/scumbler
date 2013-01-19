@@ -22,7 +22,7 @@ public:
     * A reference both to eliminate the temptation to delete the pointer and 
     * because a track object doesn't make sense absent a Scumbler.
     */
-   Track(Scumbler* owner, const String& name=String::empty);
+   Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name=String::empty);
 
    /**
     * \brief destructor. 
@@ -53,18 +53,19 @@ private:
     * The scumbler object that owns us. We do not own this pointer, so 
     * don't delete it.
     */
-   Scumbler* fOwner;
+   Scumbler* fScumbler;
 
    /**
     * We can give each track a name for display in the UI.
     */
    String fName;
 
+
    /**
-    * node id of a single pre-loop plug-in -- eventually we'll support 
-    * multiple slots here
+    * A block of effects that should be applied before the loop processor.
     */
-   NodeId fPreLoopPlugin;
+   int fPreEffectCount;
+   ScopedPointer<PluginBlock>  fPreEffects;
 
    /**
     * node id of the loop.
@@ -72,10 +73,11 @@ private:
    NodeId fLoop;
 
    /**
-    * node id of the post-loop plug-in. (again, the plan is to 
-    * expand this to support multiple plugins here.)
+    * A block of effects that should be applied after the loop processor.
     */
-   NodeId fPostLoopPlugin;
+   int fPostEffectCount;
+   ScopedPointer<PluginBlock>   fPostEffects;
+
 
 
 };

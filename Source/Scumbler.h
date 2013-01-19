@@ -30,6 +30,8 @@ public:
 #ifdef qUnitTests
   friend class ScumblerTest;
 #endif    
+  // The Track class needs to be able to access the input and output nodes.
+  friend class Track;
 
 
 
@@ -132,6 +134,14 @@ public:
      */
     NodeId  AddProcessor(AudioProcessor* p);
 
+
+   /**
+     * Remove a node from the graph. This should rarely be needed outside the class 
+     * that implements it. An obvious use is when we load a plugin but aren't able to
+     * insert it into the graph. This *shouldn't* happen. But just in case.
+     * @param  node Id of the node to delete.
+     * @return      Success or Fail.
+     */
 
     tk::Result DeleteNode(NodeId node);
 
@@ -247,6 +257,12 @@ protected:
 private:
    JUCE_DECLARE_NON_COPYABLE(Scumbler);
 
+  enum
+  {
+    kPreEffects = 4,
+    kPostEffects = 4
+  };
+  
    /**
     * The player object that pushes audio through the filter graph.
     */

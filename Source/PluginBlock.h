@@ -9,6 +9,17 @@
 
 #include "PluginConnector.h"
 
+/**
+ * @class PluginBlock
+ *
+ * This class handles the connecting plugins in a chain using the simple linear 
+ * track-like topology that we support. Given a pair of (source, dest) Nodes that 
+ * pass audio to us, we can insert new plugins into any open 'slot' in this block, 
+ * remove plugins, re-order them, delete them, etc, and be assured that everything 
+ * ends up connected together as you'd want it to be.
+ */
+
+
 class PluginBlock
 {
 public:
@@ -20,7 +31,7 @@ public:
    /**
     * Create a block of plugin nodes that know how to connect between themselves 
     * and to the specified input and output nodes. On creation, it's empty and 
-    * just connects its input and output nodes together. NOTE that the 
+    * just connects its input and output nodes together. **NOTE** that the 
     * 'input' and 'output' parameters here aren't (necessarily) either the overall input 
     * or output nodes, just the I/O for this block of plugins.
     * 
@@ -46,7 +57,7 @@ public:
    /**
     * Find out about the node that's living in s specified slot in this block
     * @param  index slot index.    
-    * @return       NodeId. tk::kInvalidNode indicates an empty (or out of range index) slot.
+    * @return       NodeId. `tk::kInvalidNode` indicates an empty (or out of range index) slot.
     */
    NodeId NodeInSlot(int index) const;
 

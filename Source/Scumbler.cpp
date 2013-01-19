@@ -217,7 +217,7 @@ int Scumbler::GetNumTracks() const
 
 tk::Result Scumbler::AddTrack(const String& name)
 {
-   fTracks.add(new Track(this, name));
+   fTracks.add(new Track(this, kPreEffects, kPostEffects, name));
    this->sendChangeMessage();
    return tk::kSuccess;
 }

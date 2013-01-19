@@ -256,6 +256,7 @@ public:
       expect(tk::kSuccess == pb->LoadPluginAtIndex(0, desc, msg));
       expect(tk::kSuccess == pb->LoadPluginAtIndex(1, desc, msg));
       expect(tk::kSlotFull == pb->LoadPluginAtIndex(1, desc, msg));
+      // force a failed plugin load.
       desc.name = "FAIL";
       expect(tk::kPluginLoadError == pb->LoadPluginAtIndex(2, desc, msg));
 
