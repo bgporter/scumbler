@@ -41,6 +41,7 @@ namespace tk
       kNoTargetNode,         /**< The node you're trying to manipulate isn't there. */
       kIndexOutOfRange,     /**< The index value was too high or low. */
       kSlotFull,            /**< Attempting to put something into a full slot */  
+      kPluginLoadError,     /**< error loading a plugin; check error string */
 
    };
 

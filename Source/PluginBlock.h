@@ -80,6 +80,18 @@ public:
     */
    NodeId LoadPlugin(const PluginDescription& description, String& errorMessage);
 
+   /**
+    * Convenience function. Does these things:
+    *   - checks that the slot at index is free. If so:
+    *   - tells the Scumbler to load the plugin. If that succeeds:
+    *   - inserts the resulting node at the requested index, returns Success.
+    * @param  index Node to insert a new plugin at. Must be empty.
+    * @param  desc  description of the plugin to load.
+    * @param  msg   Error message string, filled in on error.
+    * @return       Result value
+    */
+   tk::Result LoadPluginAtIndex(int index, const PluginDescription& desc, String& msg);
+
 
 private:
    /**

@@ -123,6 +123,31 @@ NodeId PluginBlock::LoadPlugin(const PluginDescription& description, String& err
    return fScumbler->LoadPlugin(description, errorMessage);
 }
 
+
+tk::Result PluginBlock::LoadPluginAtIndex(int index, const PluginDescription& desc, String& msg)
+{
+   tk::Result retval = tk::kSlotFull;
+   if (tk::kInvalidNode == this->NodeInSlot(index))
+   {
+      retval = tk::kPluginLoadError;
+      NodeId newNode = this->LoadPlugin(desc, msg);
+      if (tk::kInvalidNode != newNode)
+      {
+         retval = this->InsertNodeAtIndex(newNode, index);
+         // that may have failed for weird reasons. If so, we need to delete the plugin 
+         // that we just loaded.
+         if (tk::kSuccess != retval)
+         {
+            // we actually ignore the result here; we need to report failure, so 
+            // reporting success here would be useless. If this fails, we have other problems.
+            fScumbler->DeleteNode(newNode);
+         }
+      }
+   }
+   return retval;
+}
+
+
 NodeId PluginBlock::FindNodeBeforeIndex(int i)
 {
    NodeId retval = fInput;
