@@ -118,6 +118,11 @@ NodeId PluginBlock::NodeInSlot(int index) const
    return retval;
 }
 
+NodeId PluginBlock::LoadPlugin(const PluginDescription& description, String& errorMessage)
+{
+   return fScumbler->LoadPlugin(description, errorMessage);
+}
+
 NodeId PluginBlock::FindNodeBeforeIndex(int i)
 {
    NodeId retval = fInput;
