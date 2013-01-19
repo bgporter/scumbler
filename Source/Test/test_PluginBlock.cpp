@@ -76,6 +76,12 @@ public:
       return fNextNodeId++;
    };
 
+   NodeId LoadPlugin(const PluginDescription& description, String& errorMessage)
+   {
+      errorMessage = String("This implementation can't actually load plugins.");
+      return tk::kInvalidNode;
+   }
+
    bool AreConnected(NodeId source, NodeId dest)
    {
       return this->FindConnection(source, dest) != -1;

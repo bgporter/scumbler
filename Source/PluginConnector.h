@@ -76,6 +76,7 @@ public:
      * @return              tk::Result
      */
     virtual tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false) = 0;
+
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
      * graph.  The Scumbler takes ownership of the object, and it should 
@@ -85,6 +86,17 @@ public:
      */
     virtual NodeId  AddProcessor(AudioProcessor* p) = 0;
 
+   /**
+    * Load the specified plugin into the Scumbler (but don't yet connect it to anything.) 
+    * On success, returns a new NodeId to the caller, which can then call InsertNodeAtIndex()
+    * to put it where it wants it. Obviously, it's a good idea to call NodeInSlot() 
+    * first to make sure that the slot you want to use is currently empty.
+    * @param  description  A populated PluginDescription object, probably gotten from a menu
+    *                      selection (or being restored from disk)   
+    * @param  errorMessage If this fails, JUCE will put an error string in here for display .
+    * @return              The NodeID of the new plug-in. If we fail, this is kInvalidNode.
+    */
+   virtual NodeId LoadPlugin(const PluginDescription& description, String& errorMessage) = 0;
 
 };
 

@@ -23,7 +23,8 @@ class Track;
  * - links together the plugins owned by each track and the filter graph
  * - writing output to file, etc.
  */
-class Scumbler : public ChangeBroadcaster, public PluginConnector
+class Scumbler  : public ChangeBroadcaster
+                , public PluginConnector
 {
 public:
 #ifdef qUnitTests
@@ -38,7 +39,7 @@ public:
     * \param deviceManager A reference to an AudioDeviceManager object that's
     *     owned elsewhere in the application. 
     */
-  Scumbler(AudioDeviceManager& deviceManager);
+  Scumbler(AudioDeviceManager& deviceManager, AudioPluginFormatManager& pluginManager);
 
    /**
     * dtor.
@@ -64,7 +65,7 @@ public:
     *
     * After removing (and therefore deleting) all of the processor nodes that 
     * were added to the graph, creates new input & output processors and adds them.
-    * **NOTE that the Scumbler object should be reset after creation, after the 
+    * **NOTE** that the Scumbler object should be reset after creation, after the 
     * Audio device manager is initialized.
     */
     void Reset();
@@ -130,6 +131,19 @@ public:
      * @return the identifier of the node.
      */
     NodeId  AddProcessor(AudioProcessor* p);
+
+   /**
+    * Load the specified plugin into the Scumbler (but don't yet connect it to anything.) 
+    * On success, returns a new NodeId to the caller, which can then call InsertNodeAtIndex()
+    * to put it where it wants it. Obviously, it's a good idea to call NodeInSlot() 
+    * first to make sure that the slot you want to use is currently empty.
+    * @param  description  A populated PluginDescription object, probably gotten from a menu
+    *                      selection (or being restored from disk)   
+    * @param  errorMessage If this fails, JUCE will put an error string in here for display .
+    * @return              The NodeID of the new plug-in. If we fail, this is kInvalidNode.
+    */
+   NodeId LoadPlugin(const PluginDescription& description, String& errorMessage);
+
     ///@}
  
     /**
@@ -247,6 +261,8 @@ private:
     * settings.
     */
    AudioDeviceManager&   fDeviceManager;
+
+   AudioPluginFormatManager& fPluginManager;
 
    /**
     * Are we playing right now?

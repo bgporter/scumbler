@@ -7,6 +7,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "PluginBlock.h"
 #include "Scumbler.h"
 
 
@@ -55,7 +56,7 @@ private:
    Scumbler* fOwner;
 
    /**
-    * We can give each track a name for display in th
+    * We can give each track a name for display in the UI.
     */
    String fName;
 

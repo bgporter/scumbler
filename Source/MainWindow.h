@@ -78,6 +78,18 @@ private:
      * out of the model for this app.
      */
     AudioDeviceManager      fDeviceManager;
+
+    /**
+     * We also own the single plugin format manager here. It's needed in the UI to
+     * get the list of available plugins, and it's needed in the model to actually
+     * create instances plugins.
+     */
+    AudioPluginFormatManager fPluginManager;
+
+    /**
+     * We keep this as a ScopedPointer so it's sure to be cleaned up correctly when the 
+     * app closes.
+     */
     ScopedPointer<Scumbler> fScumbler;
 };
 

@@ -19,8 +19,10 @@ namespace
 
 #endif
 
-Scumbler::Scumbler(AudioDeviceManager& deviceManager)
+Scumbler::Scumbler(AudioDeviceManager& deviceManager, 
+                  AudioPluginFormatManager& pluginManager)
 : fDeviceManager(deviceManager)
+, fPluginManager(pluginManager)
 , fPlaying(false)
 , fInputNode(-1)
 , fOutputNode(-1)
@@ -351,6 +353,18 @@ NodeId Scumbler::AddProcessor(AudioProcessor* p)
    node = fGraph.addNode(p);
    return node->nodeId;
 }
+
+NodeId Scumbler::LoadPlugin(const PluginDescription& description, String& errorMessage)
+{
+   NodeId retval = tk::kInvalidNode;
+   AudioPluginInstance* loaded = fPluginManager.createPluginInstance(description, errorMessage);
+   if (loaded)
+   {
+      retval = this->AddProcessor(loaded);
+   }
+   return retval;
+}
+
 
 NodeId Scumbler::HandleSpecialNode(NodeId node)
 {
