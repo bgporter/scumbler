@@ -93,6 +93,7 @@ public:
      * @param  node Id of the node to delete.
      * @return      Success or Fail.
      */
+
     virtual tk::Result DeleteNode(NodeId node) = 0;
 
 

@@ -248,6 +248,17 @@ public:
       expect(b == pb->NodeInSlot(2));
       expect(d == pb->NodeInSlot(3));
 
+      beginTest("Loading & inserting 'plugins'.");
+      pb = this->Reset(4);
+      PluginDescription desc;
+      String msg = "";
+
+      expect(tk::kSuccess == pb->LoadPluginAtIndex(0, desc, msg));
+      expect(tk::kSuccess == pb->LoadPluginAtIndex(1, desc, msg));
+      expect(tk::kSlotFull == pb->LoadPluginAtIndex(1, desc, msg));
+      desc.name = "FAIL";
+      expect(tk::kPluginLoadError == pb->LoadPluginAtIndex(2, desc, msg));
+
 
    };
 
