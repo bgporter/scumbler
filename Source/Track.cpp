@@ -55,6 +55,33 @@ String Track::GetName() const
    return fName;
 }
 
+
+void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener)
+{
+   ChangeBroadcaster* sender;
+   switch (target)
+   {
+      case kPreFx: sender = fPreEffects; break;
+
+      case kTrack: sender = this; break;
+
+      case kPostFx: sender = fPostEffects; break;
+
+      // assert on an error.
+      default: jassert(false); break;
+   }
+
+   if (add)
+   {
+      sender->addChangeListener(listener);
+   }
+   else
+   {
+      sender->removeChangeListener(listener);
+   }
+}
+
+
 /// KEEP THIS SECTION AT THE END OF THE FILE.
 #ifdef qUnitTests
 #include "Test/test_Track.cpp"

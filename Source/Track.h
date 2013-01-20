@@ -12,7 +12,7 @@
 
 
 
-class Track
+class Track : public ChangeBroadcaster
 {
 public:
    /**
@@ -40,6 +40,20 @@ public:
     * @return string, track name.
     */
    String GetName() const;
+
+   enum ListenTo
+   {
+      kPreFx = 0,
+      kTrack,
+      kPostFx
+   };
+   /**
+    * Connect a ChangeListener object to one of the things we own that can send change notifications.
+    * @param  add     If true, add the `listener`, otherwise remove it.
+    * @param target   One of the `ListenTo` enum items (kPreFx, kTrack, kPostFx)
+    * @param listener Pointer to the object we need to send updates to.
+    */
+   void UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener);
 
 
 private:

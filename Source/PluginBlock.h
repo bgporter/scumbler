@@ -20,7 +20,7 @@
  */
 
 
-class PluginBlock
+class PluginBlock : public ChangeBroadcaster
 {
 public:
 #ifdef qUnitTests
