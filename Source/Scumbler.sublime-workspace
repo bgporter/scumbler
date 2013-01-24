@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"remo",
+				"removeNode"
+			],
+			[
+				"Inv",
+				"kInvalidNode"
+			],
+			[
+				"FInd",
+				"FindNodeAfterIndex"
+			],
+			[
+				"FindNode",
+				"FindNodeBeforeIndex"
+			],
+			[
+				"Find",
+				"FindNodeAfterIndex"
+			],
+			[
 				"begin",
 				"beginTest"
 			],
@@ -24,58 +44,10 @@
 	"buffers":
 	[
 		{
-			"file": "Scumbler.h",
+			"file": "Components/TrackComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 9573,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Track.h",
-			"settings":
-			{
-				"buffer_size": 1698,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Test/test_Track.cpp",
-			"settings":
-			{
-				"buffer_size": 4393,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Scumbler.cpp",
-			"settings":
-			{
-				"buffer_size": 9302,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Track.cpp",
-			"settings":
-			{
-				"buffer_size": 504,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/ScumblerComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 8442,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "MainWindow.cpp",
-			"settings":
-			{
-				"buffer_size": 5522,
+				"buffer_size": 3842,
 				"line_ending": "Windows"
 			}
 		},
@@ -88,10 +60,61 @@
 			}
 		},
 		{
-			"file": "Components/TrackComponent.cpp",
+			"file": "Track.cpp",
 			"settings":
 			{
-				"buffer_size": 3842,
+				"buffer_size": 2135,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "// Copyright (c) 2012 Bg Porter.\n\n// !!! License\n\n#ifndef h_Track\n#define h_Track\n\n#include \"../JuceLibraryCode/JuceHeader.h\"\n\n#include \"PluginBlock.h\"\n#include \"Scumbler.h\"\n\n\n\nclass Track : public ChangeBroadcaster\n{\npublic:\n   /**\n    * \\brief Simple constructor; creates an empty track object.\n    *\n    * We pass in a (non-const) reference to the Scumbler object that owns us. \n    * A reference both to eliminate the temptation to delete the pointer and \n    * because a track object doesn't make sense absent a Scumbler. \n    */\n   Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name=String::empty);\n\n   /**\n    * \\brief destructor. \n    */\n   ~Track();\n\n   /**\n    * Change the name of this track.\n    * @param name new name.\n    */\n   void SetName(const String& name);\n\n   /**\n    * Return the name of this track\n    * @return string, track name.\n    */\n   String GetName() const;\n\n   enum ListenTo\n   {\n      kPreFx = 0,\n      kTrack,\n      kPostFx\n   };\n   /**\n    * Connect a ChangeListener object to one of the things we own that can send change notifications.\n    * @param  add     If true, add the `listener`, otherwise remove it.\n    * @param target   One of the `ListenTo` enum items (kPreFx, kTrack, kPostFx)\n    * @param listener Pointer to the object we need to send updates to.\n    */\n   void UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener);\n\n\nprivate:\n   // !!! NOTE that at some point I expect Tracks to be copyable, either with \n   // or without the audio contents of a loop buffer. Not today, though.\n   JUCE_DECLARE_NON_COPYABLE(Track);\n\n   // SIMPLE version to start with.\n   \n   /**\n    * The scumbler object that owns us. We do not own this pointer, so \n    * don't delete it.\n    */\n   Scumbler* fScumbler;\n\n   /**\n    * We can give each track a name for display in the UI.\n    */\n   String fName;\n\n\n   /**\n    * A block of effects that should be applied before the loop processor.\n    */\n   int fPreEffectCount;\n   ScopedPointer<PluginBlock>  fPreEffects;\n\n   /**\n    * node id of the loop.\n    */\n   NodeId fLoop;\n\n   /**\n    * A block of effects that should be applied after the loop processor.\n    */\n   int fPostEffectCount;\n   ScopedPointer<PluginBlock>   fPostEffects;\n\n\n\n};\n\n\n#endif // this must be the last line in this file.\n",
+			"file": "Track.h",
+			"file_size": 2313,
+			"file_write_time": 1358696971000000,
+			"settings":
+			{
+				"buffer_size": 2314,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "PluginBlock.h",
+			"settings":
+			{
+				"buffer_size": 5620,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "// Copyright (c) 2012 Bg Porter.\n\n// !!! License\n\n#ifndef h_Scumbler\n#define h_Scumbler\n\n#include \"../JuceLibraryCode/JuceHeader.h\"\n\n#include \"PluginConnector.h\"\n\nclass Track;\n\n\n\n/**\n * \\class Scumbler\n * \\brief The 'model' class for our MVC architecture in the Scumbler app\n *\n * This class owns/manages all of\n * - the audio IO and the filter graph\n * - the track objects\n * - links together the plugins owned by each track and the filter graph\n * - writing output to file, etc.\n */\nclass Scumbler  : public ChangeBroadcaster\n                , public PluginConnector\n{\npublic:\n#ifdef qUnitTests\n  friend class ScumblerTest;\n#endif    \n  // The Track class needs to be able to access the input and output nodes.\n  friend class Track;\n\n\n\n\n  /**\n    * Constructor\n    * \\param deviceManager A reference to an AudioDeviceManager object that's\n    *     owned elsewhere in the application. \n    */\n  Scumbler(AudioDeviceManager& deviceManager, AudioPluginFormatManager& pluginManager);\n\n   /**\n    * dtor.\n    */\n   ~Scumbler();\n\n\n   /**\n    * \\name TogglePlay\n    * \\brief Switches the scumbler object between the play and pause states.\n    */\n    void TogglePlay();\n   /**\n    * \\name IsPlaying\n    * \\brief returns bool indicating whether the Scumbler is processing \n    *   audio right now.\n    */\n   bool IsPlaying() const;\n\n   /**\n    * \\name Reset\n    * \\brief Do a complete reset on the processor graph. \n    *\n    * After removing (and therefore deleting) all of the processor nodes that \n    * were added to the graph, creates new input & output processors and adds them.\n    * **NOTE** that the Scumbler object should be reset after creation, after the \n    * Audio device manager is initialized.\n    */\n    void Reset();\n\n    /**\n     * @name PluginConnector operations\n     */\n    ///@{\n\n   /**\n     * \\name Connect\n     * \\brief Connect a source node to a destination node in the graph.\n     * @return tk::Result code indicating success or the reason for failure.\n     */\n    virtual tk::Result Connect(NodeId source, NodeId dest);\n\n\n    /**\n     * Remove a connection between two nodes in the graph. Because we're not \n     * allowing any complex topologies now, we follow the same logic that was \n     * used to connect \n     * @param  source The node that's providing audio \n     * @param  dest   The node that's receiving audio.\n     * @return tk::Result code indicating success or the reason for failure.\n     */\n    tk::Result Disconnect(NodeId source, NodeId dest);\n\n    /**\n     * Insert 'newNode' in the graph inbetween 'before' and 'after'.\n     * @param  before  The node that 'newNode' should be inserted after. The \n     *                 special value Scumbler::kInput can be used to connect \n     *                 newNode to the input node.\n     * @param  newNode id of the node to connect in the middle. It should \n     *                 already have been added to the graph with AddProcessor\n     * @param  after   The node that 'newNode' should be inserted before. The \n     *                 special value Scumbler::kOutput can be used to connect the \n     *                 newNode to the Scumbler's output.\n     * @return         tk::Result\n     */\n    tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after);\n\n    /**\n     * Disconnect the node `nodetoRemove` that's connected between `before` and \n     * `after`. The `nodeToRemove` is still owned by the graph and can be reconnected\n     * elsewhere, unless the `deleteNode` argument is true.\n     * @param  before       The node that must be connected to `nodeToRemove` as its\n     *                      input. After this operation, `before` will be connected to \n     *                      `after`.\n     * @param  nodeToRemove The node that we're trying to remove.\n     * @param  after        The node that must be connected to `nodeToRemove`\n     *                      as its output. After this operation, `before` will \n     *                      be connected to `after`.\n     * @param  deleteNode   Should the node be deleted from the graph after it's \n     *                      disconnected?\n     * @return              tk::Result\n     */\n    tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false);\n    /**\n     * Insert the provided AudioProcessor object into the Scumbler's filter \n     * graph.  The Scumbler takes ownership of the object, and it should \n     * **not** be deleted elsewhere.\n     * @param  p The audio processor.\n     * @return the identifier of the node.\n     */\n    NodeId  AddProcessor(AudioProcessor* p);\n\n\n   /**\n     * Remove a node from the graph. This should rarely be needed outside the class \n     * that implements it. An obvious use is when we load a plugin but aren't able to\n     * insert it into the graph. This *shouldn't* happen. But just in case.\n     * @param  node Id of the node to delete.\n     * @return      Success or Fail.\n     */\n\n    tk::Result DeleteNode(NodeId node);\n\n   /**\n    * Load the specified plugin into the Scumbler (but don't yet connect it to anything.) \n    * On success, returns a new NodeId to the caller, which can then call InsertNodeAtIndex()\n    * to put it where it wants it. Obviously, it's a good idea to call NodeInSlot() \n    * first to make sure that the slot you want to use is currently empty.\n    * @param  description  A populated PluginDescription object, probably gotten from a menu\n    *                      selection (or being restored from disk)   \n    * @param  errorMessage If this fails, JUCE will put an error string in here for display .\n    * @return              The NodeID of the new plug-in. If we fail, this is kInvalidNode.\n    */\n   NodeId LoadPlugin(const PluginDescription& description, String& errorMessage);\n\n    ///@}\n \n    /**\n     * @name Track operations\n     */\n    ///@{\n    \n    /**\n     * Returns the number of tracks that are currently in the Scumbler. \n     * @return [description]\n     */\n    int GetNumTracks() const;\n\n    /**\n     * Add a new (empty) track to the end of the array of track objects. \n     * @return kSuccess, ideally. If we are capping the number of possible tracks, \n     * we'll need to define a new tk::Result value(s) to reflect the \n     * reason for failure.\n     */\n    tk::Result AddTrack(const String& name = String::empty);\n\n    /**\n     * Remove a track from the scumbler and clean everything up.\n     * @param  index index of the track to remove\n     * @return       Success/failure.\n     */\n    tk::Result DeleteTrack(int index);\n\n    /**\n     * Move an existing track to a different index in the array. \n     * @param  fromIndex The current index of the track that we want to move\n     * @param  toIndex   The index we want the track to occupy (using an index less \n     * than zero or greater than the highest index will move the track to the last position.)\n     * @return           Success/failure.\n     */\n    tk::Result MoveTrack(int fromIndex, int toIndex);\n    /**\n     * Get a pointer to a specific track object that's owned by the Scumbler.\n     * @param  index 0-based index of the track to retrieve\n     * @return       pointer, nullptr if there's not a Track at that index.\n     */\n    Track* GetTrack(int index) const;\n\n    ///@}\n#ifdef qUnitTests\n  /**\n   * Get a pointer to the one and only scumbler object. Only used for unit tests.\n   * @return pointer to the Scumbler.\n   */\n  static Scumbler* GetInstance();\n#endif\n\n\nprotected:\n  /**\n    * \\name Play\n    * \\brief Start audio through our processor graph.\n    */\n  void Play();\n\n  /**\n   * \\name Pause\n   * \\brief Stop audio playback.\n   */\n  void Pause();\n\n  /**\n   * Typedef for a pointer-to-member-function that's exposed by the \n   * AudioProcessorGraph used to both connect and disconnect a single channel pair\n   * of two nodes.\n   * @param  uint32 node ID of source node\n   * @param  int    source channel\n   * @param  uint32 node ID of destination node\n   * @param  int    destination channel index\n   * @return        success/failure of the operation.\n   */\n  typedef bool (AudioProcessorGraph::*fnPtr)(uint32, int, uint32, int);\n  \n\n  /**\n   * Internal function that takes care of either connecting or disconnecting two nodes in an audio processor graph.\n   * @param  source     node id of the  source node.\n   * @param  dest       node id of the destination node.    \n   * @param  connecting If true, we are connecting the nodes (else disconnecting)\n   * @return            tk::Result code indicating success or the reason for failure.\n   */\n  tk::Result HandleConnection(NodeId source, NodeId dest, bool connecting);\n\n  /**\n   * Use this to convert one of the special enum values `Scumbler::kInput` or \n   * `Scumbler::kOutput` into the actual node ids that \n   * @param  node value that may either be a real node id (< 0xfffffffe) or one of the\n   *              special values for the Scumbler's pre-existing in/out nodes.\n   * @return      an actual node id (possibly the same value that was passed in.)\n   */\n  NodeId HandleSpecialNode(NodeId node);\n\nprivate:\n   JUCE_DECLARE_NON_COPYABLE(Scumbler);\n\n  enum\n  {\n    kPreEffects = 4,\n    kPostEffects = 4\n  };\n\n   /**\n    * The player object that pushes audio through the filter graph.\n    */\n   AudioProcessorPlayer fPlayer;\n\n   /**\n    * The graph of audio processors that do all the work.\n    */\n   AudioProcessorGraph  fGraph;\n\n   /**\n    * The audio hardware. \n    * In our initial version, we'll just initialize with defaults, and use \n    * the Juce-supplied AudioDeviceSelectorComponent class to let the user tweak \n    * settings.\n    */\n   AudioDeviceManager&   fDeviceManager;\n\n   AudioPluginFormatManager& fPluginManager;\n\n   /**\n    * Are we playing right now?\n    */\n   bool fPlaying;\n\n   /**\n    * node IDs for the input and output processors.\n    */\n   NodeId fInputNode;\n   NodeId fOutputNode;\n\n   /**\n    * Pointers to the track objects that we own. See the docs for OwnedArray \n    * (it takes ownership of the objects and deletes them when necessary.)\n    */\n   OwnedArray<Track>  fTracks; \n\n};\n\n\n#endif // this must be the final line in this file.",
+			"file": "Scumbler.h",
+			"file_size": 10100,
+			"file_write_time": 1358795619000000,
+			"settings":
+			{
+				"buffer_size": 10099,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 24 files for \"TODO\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp:\n   50  \n   51    #if JUCE_MAC\n   52:     // !!! TODO: Add About & Preferences items to the apple menu\n   53      setMacMainMenu (this);\n   54    #else\n   ..\n  155  void MainAppWindow::menuItemSelected (int menuItemID, int topLevelMenuIndex)\n  156  {\n  157:   // TODO: !!!\n  158  }\n  159  \n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp:\n  197     {\n  198        fPlaying = true;\n  199:       // !!! TODO\n  200     }\n  201  }\n  ...\n  206     {\n  207        fPlaying = false;\n  208:       // !!! TODO\n  209     }\n  210  }\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp:\n    3  #include \"Track.h\"\n    4  \n    5: // TODO: replace with the real loop processor.\n    6  #include \"Processors/Passthrough.h\"\n    7  \n\n5 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 864,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"contents": " /*\n  ==============================================================================\n\n    This file was auto-generated!\n\n    It contains the basic outline for a simple desktop window.\n\n  ==============================================================================\n*/\n\n#include \"MainWindow.h\"\n\n#include \"Commands.h\"\n#include \"Components/ScumblerComponent.h\"\n\n\n//==============================================================================\nMainAppWindow::MainAppWindow()\n    : DocumentWindow (JUCEApplication::getInstance()->getApplicationName() , Colours::lightgrey\n      , DocumentWindow::allButtons)\n    , fScumbler(nullptr)\n{\n\n  // connect our menu bar model to the command manager -- anything changed \n  // there will be reflected back here in our menu.\n  this->setApplicationCommandManagerToWatch(gCommandManager);\n\n  // restore anything we saved in previous instantiations.\n  PropertiesFile* userSettings = gAppProperties->getUserSettings();\n  ScopedPointer<XmlElement> savedAudioState(userSettings->getXmlValue(\"audioDeviceState\"));\n\n  fDeviceManager.initialise(2, 2, // max 2 input and output channels.\n    savedAudioState, // pass in the last known configuration state\n    true              // select the default device if restoring the last config fails.\n     );\n\n  // create and reset the scumbler object now that the audio system is configured.\n  fScumbler = new Scumbler(fDeviceManager, fPluginManager);\n  //fScumbler->Reset();\n\n  // create the scumbler component that owns & operates our user interface.\n  ScumblerComponent* c = new ScumblerComponent(fScumbler);\n  gCommandManager->registerAllCommandsForTarget(c);\n  // set that component as this window's content (and take ownership of the pointer)\n  this->setContentOwned(c, true);\n  this->setResizable(true, true);\n  this->centreWithSize (1024, 768);\n  this->setVisible (true);\n\n\n  #if JUCE_MAC\n    // !!! TODO: Add About & Preferences items to the apple menu\n    setMacMainMenu (this);\n  #else\n    setMenuBar (this);\n  #endif\n}\n\nMainAppWindow::~MainAppWindow()\n{\n   #if JUCE_MAC\n    setMacMainMenu (nullptr);\n   #else\n    setMenuBar (nullptr);\n   #endif\n}\n\nvoid MainAppWindow::closeButtonPressed()\n{\n    JUCEApplication::getInstance()->systemRequestedQuit();\n}\n\n\n\nvoid MainAppWindow::ConfigureAudio()\n{\n  AudioDeviceSelectorComponent audioConfig(fDeviceManager, \n    1, 2,     // at least one input channel, no more than 2\n    1, 2,     // at least one output channel, no more than 2\n    true,     // show midi input options\n    true,     // show midi output options\n    true,     // show channels as stereo pairs.\n    false     // don't hide the advanced options.\n    );\n\n  audioConfig.setSize(500, 450);\n\n  DialogWindow::LaunchOptions(o);\n  o.content.setNonOwned(&audioConfig);\n  o.dialogTitle = \"Configure Audio\";\n  o.componentToCentreAround = this;\n  o.dialogBackgroundColour = Colours::grey; \n  o.escapeKeyTriggersCloseButton = true;\n  o.useNativeTitleBar = true;\n  o.resizable = false;\n\n  o.runModal();\n\n  // persist the settings for our next run.\n  ScopedPointer<XmlElement> audioState(fDeviceManager.createStateXml());\n  PropertiesFile* settings = gAppProperties->getUserSettings();\n  settings->setValue(\"audioDeviceState\", audioState);\n  settings->saveIfNeeded();\n\n  // !!! notify the scumbler object that the settings have changed\n\n}\n\nStringArray MainAppWindow::getMenuBarNames()\n{\n    const char* const names[] = { \"File\", \"Options\", \"Help\", nullptr };\n\n    return StringArray (names);  \n}\n\nPopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& menuName)\n{\n  PopupMenu menu;\n\n  switch (topLevelMenuIndex)\n  {\n    case 0:   //File menu\n    {\n      menu.addCommandItem(gCommandManager, CommandIds::kNew);\n      menu.addCommandItem(gCommandManager, CommandIds::kOpen);\n      menu.addCommandItem(gCommandManager, CommandIds::kSave);\n      menu.addCommandItem(gCommandManager, CommandIds::kSaveAs);\n    }\n    break;\n\n    case 1:   // Options menu\n    {\n      menu.addCommandItem(gCommandManager, CommandIds::kConfigAudio);\n      menu.addCommandItem(gCommandManager, CommandIds::kPlay);\n#ifdef qUnitTests\n      menu.addSeparator();\n      menu.addCommandItem(gCommandManager, CommandIds::kRunUnitTests);\n#endif    \n    }\n    break;\n\n    case 2:   //Help menu\n\n    break;\n\n    default:\n    // There's shouldn't be a menu at this index! \n    jassertfalse;\n    break;\n\n}\n  return menu;\n}\n\nvoid MainAppWindow::menuItemSelected (int menuItemID, int topLevelMenuIndex)\n{\n  // @TODO: !!!\n}\n\n\n\nApplicationCommandTarget* MainAppWindow::getNextCommandTarget()\n{\n    return this->findFirstTargetParentComponent();\n}\n\nvoid MainAppWindow::getAllCommands(Array<CommandID>& commands)\n{\n  const CommandID ids[] = {\n    //CommandIds::kNew,\n    //CommandIds::kOpen,\n    //CommandIds::kSave,\n    //CommandIds::kSaveAs,\n    CommandIds::kConfigAudio,\n    //CommandIds::kPlay,\n    //CommandIds::kPause,\n    //CommandIds::kRewind,\n    //CommandIds::kToggleRecord\n   \n  };\n  commands.addArray(ids, numElementsInArray(ids));\n\n}\n\nvoid MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& result)\n{\n  const String category(\"General\");\n\n\n  switch (commandID)\n  {\n    case CommandIds::kConfigAudio:\n    {\n      result.setInfo(\"Configure Audio...\", String::empty, category, 0);\n    }\n    break;\n\n\n\n    \n  }\n}\n\nbool MainAppWindow::perform(const InvocationInfo& info)\n{\n  bool retval = true;\n  switch (info.commandID)\n  {\n\n    case CommandIds::kConfigAudio:\n    {\n      this->ConfigureAudio();\n    }\n    break;\n\n\n          \n\n  }\n  return retval;\n}\n\n",
+			"file": "MainWindow.cpp",
+			"file_size": 5760,
+			"file_write_time": 1358557518000000,
+			"settings":
+			{
+				"buffer_size": 5539,
 				"line_ending": "Windows"
 			}
 		}
@@ -105,6 +128,14 @@
 			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				":w - Save"
 			],
 			[
 				":w",
@@ -139,15 +170,11 @@
 				"Package Control: Install Package"
 			],
 			[
-				"",
-				"Package Control: List Packages"
-			],
-			[
 				":q",
 				"Set Syntax: SQL"
 			]
 		],
-		"width": 449.0
+		"width": 593.0
 	},
 	"console":
 	{
@@ -164,10 +191,28 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Base File.sublime-settings",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Scumbler.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Track.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
 		"/Users/bgporter/personal/juce/extras/Introjucer/Source/Project/jucer_ProjectContentComponent.h",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Alignment/Base File.sublime-settings",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
@@ -185,7 +230,6 @@
 		"/Users/bgporter/personal/juce/modules/juce_audio_devices/juce_audio_devices.h",
 		"/Users/bgporter/personal/juce/modules/juce_audio_devices/juce_audio_devices.cpp",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/SublimeBlockCursor/SublimeBlockCursor.py",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/incoming/spfmba/committee.html",
 		"/Users/bgporter/incoming/spfmba/CommitteePeople.txt",
 		"/Users/bgporter/incoming/spfmba/CommitteeTable.py",
@@ -250,7 +294,6 @@
 		"/Users/bgporter/Documents/Kath/worksheet/test3.html",
 		"/Users/bgporter/Documents/Kath/worksheet/w2.css",
 		"/Users/bgporter/Documents/Kath/worksheet/q.html",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Base File.sublime-settings",
 		"/Users/bgporter/Documents/Kath/worksheet/test.html",
 		"/Users/bgporter/Documents/Kath/worksheet/test2.html~",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap"
@@ -261,7 +304,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 			""
@@ -272,6 +315,16 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"TODO",
+			";\n",
+			"AudioDeviceManager",
+			"NOTE",
+			"         \n",
+			");\n",
+			";\n",
+			".\n",
+			"]]",
+			"[[",
 			"Estim",
 			".\n",
 			"());\n",
@@ -354,6 +407,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			">>",
+			"<<",
 			"1px",
 			"th"
 		],
@@ -371,228 +426,6 @@
 			[
 				{
 					"buffer": 0,
-					"file": "Scumbler.h",
-					"settings":
-					{
-						"buffer_size": 9573,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7212,
-								7219
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3629.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "Track.h",
-					"settings":
-					{
-						"buffer_size": 1698,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								540,
-								540
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Test/test_Track.cpp",
-					"settings":
-					{
-						"buffer_size": 4393,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4180,
-								4180
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1284.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Scumbler.cpp",
-					"settings":
-					{
-						"buffer_size": 9302,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7839,
-								7839
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5043.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Track.cpp",
-					"settings":
-					{
-						"buffer_size": 504,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								286,
-								286
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "Components/ScumblerComponent.cpp",
-					"settings":
-					{
-						"buffer_size": 8442,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7129,
-								7129
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3087.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "MainWindow.cpp",
-					"settings":
-					{
-						"buffer_size": 5522,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5497,
-								5497
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3565.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "Components/TrackComponent.h",
-					"settings":
-					{
-						"buffer_size": 2410,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2073,
-								2073
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 654.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
 					"file": "Components/TrackComponent.cpp",
 					"settings":
 					{
@@ -603,8 +436,92 @@
 						"selection":
 						[
 							[
-								1016,
-								1016
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 121.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Components/TrackComponent.h",
+					"settings":
+					{
+						"buffer_size": 2410,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 366.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Track.cpp",
+					"settings":
+					{
+						"buffer_size": 2135,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2024,
+								2024
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 726.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Track.h",
+					"settings":
+					{
+						"buffer_size": 2314,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								527,
+								527
 							]
 						],
 						"settings":
@@ -615,6 +532,150 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "PluginBlock.h",
+					"settings":
+					{
+						"buffer_size": 5620,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								623,
+								623
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 292.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Scumbler.h",
+					"settings":
+					{
+						"buffer_size": 10099,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4486,
+								4486
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1988.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"settings":
+					{
+						"buffer_size": 864,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										146,
+										150
+									],
+									[
+										360,
+										364
+									],
+									[
+										515,
+										519
+									],
+									[
+										610,
+										614
+									],
+									[
+										743,
+										747
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								361,
+								361
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "MainWindow.cpp",
+					"settings":
+					{
+						"buffer_size": 5539,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4483,
+								4483
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1434.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

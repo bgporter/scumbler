@@ -36,10 +36,15 @@ TrackComponent::TrackComponent (Scumbler* owner)
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (600, 80);
+    //setSize (600, 80);
 
 
     //[Constructor] You can add your own custom stuff here..
+    fPreEffects = new PluginBlockComponent(nullptr);
+    fPostEffects = new PluginBlockComponent(nullptr);
+    this->addAndMakeVisible(fPreEffects);
+    this->addAndMakeVisible(fPostEffects);
+
     //[/Constructor]
 }
 
@@ -51,6 +56,7 @@ TrackComponent::~TrackComponent()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+    this->deleteAllChildren();
     //[/Destructor]
 }
 
@@ -63,12 +69,27 @@ void TrackComponent::paint (Graphics& g)
     g.fillAll (Colour (0xffb6b6b6));
 
     //[UserPaint] Add your own custom painting code here..
+    
+
+
     //[/UserPaint]
 }
 
 void TrackComponent::resized()
 {
     //[UserResized] Add your own custom resize handling here..
+    int trackWidth = this->getWidth();
+    int trackHeight = this->getHeight();
+    int pluginBlockWidth = trackWidth / 4;
+    int pluginBlockHeight = trackHeight * 0.8;
+
+    fPreEffects->setBounds((trackWidth * 0.25) - (pluginBlockWidth / 2), trackHeight * 0.1, 
+      pluginBlockWidth, pluginBlockHeight);
+
+    fPostEffects->setBounds((trackWidth * 0.75) - (pluginBlockWidth / 2), trackHeight * 0.1, 
+      pluginBlockWidth, pluginBlockHeight);
+
+
     //[/UserResized]
 }
 

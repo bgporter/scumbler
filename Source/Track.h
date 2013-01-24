@@ -20,7 +20,7 @@ public:
     *
     * We pass in a (non-const) reference to the Scumbler object that owns us. 
     * A reference both to eliminate the temptation to delete the pointer and 
-    * because a track object doesn't make sense absent a Scumbler.
+    * because a track object doesn't make sense absent a Scumbler. 
     */
    Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name=String::empty);
 
@@ -54,6 +54,10 @@ public:
     * @param listener Pointer to the object we need to send updates to.
     */
    void UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener);
+
+   int GetPreEffectCount() const { return fPreEffectCount; };
+   int GetPostEffectCount() const { return fPostEffectCount; };
+   
 
 
 private:

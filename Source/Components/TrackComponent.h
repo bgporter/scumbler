@@ -24,7 +24,9 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
+
 #include "../Scumbler.h"
+#include "PluginBlockComponent.h"
 //[/Headers]
 
 
@@ -62,6 +64,8 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Scumbler* fScumbler;
+    PluginBlockComponent* fPreEffects;
+    PluginBlockComponent* fPostEffects;
     //[/UserVariables]
 
     //==============================================================================

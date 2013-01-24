@@ -165,7 +165,7 @@ public:
     ///@{
     
     /**
-     * Returns the number of tracks that are currently in the Scumbler.
+     * Returns the number of tracks that are currently in the Scumbler. 
      * @return [description]
      */
     int GetNumTracks() const;
@@ -262,7 +262,7 @@ private:
     kPreEffects = 4,
     kPostEffects = 4
   };
-  
+
    /**
     * The player object that pushes audio through the filter graph.
     */
