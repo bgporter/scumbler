@@ -29,8 +29,8 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-TrackComponent::TrackComponent (Scumbler* owner)
-    : fScumbler(owner)
+TrackComponent::TrackComponent (Track* track)
+    : fTrack(track)
 {
 
     //[UserPreSize]
@@ -51,6 +51,8 @@ TrackComponent::TrackComponent (Scumbler* owner)
 TrackComponent::~TrackComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
+    // Preven us (and our children!) from receiving any new change notifications
+    this->ConnectToTrack(nullptr);
     //[/Destructor_pre]
 
 
@@ -78,6 +80,9 @@ void TrackComponent::paint (Graphics& g)
 void TrackComponent::resized()
 {
     //[UserResized] Add your own custom resize handling here..
+    //
+    //!!! *NOTE* that all the literal const values here are temp placeholders. These need to be 
+    //designed/chosen much more carefully.
     int trackWidth = this->getWidth();
     int trackHeight = this->getHeight();
     int pluginBlockWidth = trackWidth / 4;
@@ -132,6 +137,45 @@ void TrackComponent::focusLost (FocusChangeType cause)
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+
+
+void TrackComponent::ConnectToTrack(Track* track)
+{
+  // if we are already listening to this track, there's nothing to do. Carry on.
+  if (track != fTrack)
+  {
+    // disconnect any old track from us and our children..
+    if (fTrack)
+    {
+      fTrack->removeChangeListener(this);
+      fPreEffects->ConnectToPluginBlock(nullptr);
+      fPostEffects->ConnectToPluginBlock(nullptr);
+    }
+    fTrack = track;
+    if (fTrack)
+    {
+      fTrack->addChangeListener(this);
+      fPreEffects->ConnectToPluginBlock(fTrack->GetPreEffectBlock());
+      fPostEffects->ConnectToPluginBlock(fTrack->GetPostEffectBlock());
+    }
+  }
+
+}
+
+
+Track* TrackComponent::GetTrack() const
+{
+   return fTrack;  
+}
+
+void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
+{
+  if (source == fTrack)
+  {
+
+  }
+}
+
 //[/MiscUserCode]
 
 

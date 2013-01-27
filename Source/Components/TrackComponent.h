@@ -25,7 +25,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
 
-#include "../Scumbler.h"
+#include "../Track.h"
 #include "PluginBlockComponent.h"
 //[/Headers]
 
@@ -40,14 +40,39 @@
                                                                     //[/Comments]
 */
 class TrackComponent  : public Component
+                      , public ChangeListener
 {
 public:
     //==============================================================================
-    TrackComponent (Scumbler* owner);
+    TrackComponent (Track* owner=nullptr);
     ~TrackComponent();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
+
+    /**
+     * Set the Track object inside the Scumbler that this component will be representing 
+     * on screen. 
+     * @param track A pointer to the track object we should use. Passing in a null pointer 
+     *              has the effect of disconnecting us from the track we are already connected
+     *              to.
+     */
+    void ConnectToTrack(Track* track);    
+
+    /**
+     * Returns a pointer to the track object within the Scumbler that's being represented 
+     * on screen by this component (and its children). Note that this may change at runtime,
+     * so it's important for child components to *not* cache this pointer.       
+     * @return pointer to a Track object.
+     */
+    Track* GetTrack() const;
+
+
+    /**
+     * Called when something we're watching calls us back with a notification.
+     */
+    void changeListenerCallback(ChangeBroadcaster* source);
+
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -63,7 +88,7 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-    Scumbler* fScumbler;
+    Track*  fTrack;
     PluginBlockComponent* fPreEffects;
     PluginBlockComponent* fPostEffects;
     //[/UserVariables]

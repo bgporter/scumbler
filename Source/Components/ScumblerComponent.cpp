@@ -31,18 +31,17 @@ extern ApplicationCommandManager* gCommandManager;
 
 //==============================================================================
 ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
-    : Component ("The Scumbler"),
-      fScumbler(scumbler),
-      fNewTrackButton (0),
-      fTrackComponent (0)
+    : Component ("The Scumbler")
+    , fScumbler(scumbler)
+    , fNewTrackButton (0)
 {
     addAndMakeVisible (fNewTrackButton = new TextButton ("new track"));
     fNewTrackButton->setButtonText ("+");
     fNewTrackButton->addListener (this);
     fNewTrackButton->setColour (TextButton::buttonColourId, Colour (0xffcccce2));
 
-    addAndMakeVisible (fTrackComponent = new TrackComponent(fScumbler));
-    fTrackComponent->setName ("base track");
+    //addAndMakeVisible (fTrackComponent = new TrackComponent(nullptr));
+    //fTrackComponent->setName ("base track");
 
 
     //[UserPreSize]
@@ -63,7 +62,6 @@ ScumblerComponent::~ScumblerComponent()
     //[/Destructor_pre]
 
     deleteAndZero (fNewTrackButton);
-    deleteAndZero (fTrackComponent);
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -86,8 +84,13 @@ void ScumblerComponent::resized()
 {
     fNewTrackButton->setBounds (32, 456, 24, 24);
     //[UserResized] Add your own custom resize handling here..
+    /*
     Point<int> topLeft = fTrackComponent->getScreenPosition();
     fTrackComponent->setBounds (5, 100, this->getWidth()- 10 , 100);
+    */
+   
+    // !!! TODO: resize and move the track components appropriately
+
     //[/UserResized]
 }
 
@@ -279,6 +282,57 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
   if (source == fScumbler)
   {
+    // if the number of tracks has changed, we need to refresh things.
+    int trackCount = fScumbler->GetNumTracks();
+    int trackDelta = trackCount - fTracks.size();
+    if (trackDelta != 0)
+    {
+      // obviously, if the delta is > 0, we've added a track, if < 0, 
+      // a track has been deleted.
+      if (trackDelta > 0)
+      {
+        // adding track(s)
+        for (int i = 0; i < trackDelta; ++i)
+        {
+          TrackComponent* tc = new TrackComponent();
+          fTracks.add(tc);
+          this->addAndMakeVisible(tc);
+        }
+
+      }
+      else
+      {
+        // deleting track(s)
+        trackDelta *= -1;
+        for (int i = 0; i < trackDelta; ++i)
+        {
+          // remove the last trackComponent from the list and delete it.
+          fTracks.removeLast();
+        }
+
+      }
+
+    }
+    // Note that it's also possible that we just changed the order of tracks. That's
+    // why we don't connect TrackComponents to tracks until after the numbers match, 
+    // because we'll re-connect the two things here after every change callback, just
+    // in case.
+    int height = this->getHeight();
+    int width = this->getWidth();
+    int trackHeight = jmin(height/6, height/trackCount);
+    int trackLeft = 5;
+    int trackWidth = width - (2*trackLeft);
+
+
+
+    for (int i = 0; i < trackCount; ++i)
+    {
+      TrackComponent* tc = fTracks.getUnchecked(i);
+      Track* track = fScumbler->GetTrack(i);
+      tc->ConnectToTrack(track);
+      tc->setBounds(trackLeft, i * trackHeight, trackWidth, trackHeight);
+    }
+
     this->repaint();
   }
 

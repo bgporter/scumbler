@@ -56,7 +56,9 @@ public:
    void UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener);
 
    int GetPreEffectCount() const { return fPreEffectCount; };
+   PluginBlock* GetPreEffectBlock() const { return fPreEffects; };
    int GetPostEffectCount() const { return fPostEffectCount; };
+   PluginBlock* GetPostEffectBlock() const { return fPostEffects; };
    
 
 

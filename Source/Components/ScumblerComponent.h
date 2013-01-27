@@ -89,11 +89,11 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Scumbler* fScumbler;
+    OwnedArray<TrackComponent>  fTracks;
     //[/UserVariables]
 
     //==============================================================================
     TextButton* fNewTrackButton;
-    TrackComponent* fTrackComponent;
 
 
     //==============================================================================
