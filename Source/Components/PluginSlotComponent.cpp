@@ -18,7 +18,7 @@ PluginSlotComponent::~PluginSlotComponent()
 
 void PluginSlotComponent::paint (Graphics& g)
 {
-   Rectangle<int> bounds = this->getBounds();
+   Rectangle<int> rect = Rectangle<int>(0, 0, this->getWidth(), this->getHeight());
    if (tk::kInvalidNode == fPluginBlock->NodeInSlot(fIndex))
    {
       g.setColour(Colours::lightgrey);
@@ -27,10 +27,10 @@ void PluginSlotComponent::paint (Graphics& g)
    {
       g.setColour(Colours::goldenrod);
    }
-   g.fillRect(bounds);
-   
+   g.fillRect(rect);
+
    g.setColour(Colours::white);
-   g.drawRect(bounds, 3);
+   g.drawRect(rect, 3);
 
 
 }
