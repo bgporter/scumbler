@@ -7,16 +7,22 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "PluginBlock.h"
+
 
 class PluginSlotComponent : public Component 
 {
 public:
-   PluginSlotComponent(Track* track);
+   PluginSlotComponent(PluginBlock* block, int index);
    ~PluginSlotComponent();
 
    void paint (Graphics& g);
    void resized();   
-   void mouseDown (const MouseEvent& e);
+   void mouseDown(const MouseEvent& e);
+
+private:
+   PluginBlock*   fPluginBlock;
+   int            fIndex;
 };
 
 

@@ -8,6 +8,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginBlock.h"
+#include "PluginSlotComponent.h"
 
 class PluginBlockComponent : public Component 
                            , public ChangeListener
@@ -28,6 +29,13 @@ public:
    void ConnectToPluginBlock(PluginBlock* plugins);
 
    /**
+    * Set the bounds of an individual plugin slot component that we own.    
+    * @param index Index of the slot.
+    * @param slot  pointer to the slot object.
+    */
+   void SetSlotBounds(int index, PluginSlotComponent* slot);
+
+   /**
     * Called when something we're watching calls us back with a notification.
     */
    void changeListenerCallback(ChangeBroadcaster* source);
@@ -35,6 +43,7 @@ public:
 
 private:
    PluginBlock* fPlugins;
+   OwnedArray<PluginSlotComponent>  fSlots;
    
 };
 

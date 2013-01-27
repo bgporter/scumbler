@@ -15,6 +15,7 @@
 		29CEA7CB356F0F8339499AD7 /* juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5704DAEE900F41B12B4CBC46 /* juce_gui_basics.mm */; };
 		33EC4A5A827ED3B097CD7C7E /* juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C33D5966FFDBBC65A4AB3C7 /* juce_audio_utils.mm */; };
 		3B7507D4F5DCB16F9912BDE5 /* juce_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4202B2BED2BDBBDB448D187 /* juce_core.mm */; };
+		4407EAA716B596D70024F3D7 /* PluginSlotComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4407EAA516B596D70024F3D7 /* PluginSlotComponent.cpp */; };
 		440C787D167A9660004648C3 /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787B167A9660004648C3 /* Track.cpp */; };
 		440C7881167E26C7004648C3 /* TrackComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787F167E26C6004648C3 /* TrackComponent.cpp */; };
 		443D1E3516572573004E645C /* Scumbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D1E3316572573004E645C /* Scumbler.cpp */; };
@@ -273,6 +274,8 @@
 		43A92514B6C73E39D6596966 /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		43CC2A84571BDD412732D0CB /* juce_Result.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Result.h; path = ../../JuceLibraryCode/modules/juce_core/misc/juce_Result.h; sourceTree = SOURCE_ROOT; };
 		43E606A339C8571253E2BCD5 /* juce_Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Memory.h; path = ../../JuceLibraryCode/modules/juce_core/memory/juce_Memory.h; sourceTree = SOURCE_ROOT; };
+		4407EAA516B596D70024F3D7 /* PluginSlotComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginSlotComponent.cpp; path = ../../Source/Components/PluginSlotComponent.cpp; sourceTree = "<group>"; };
+		4407EAA616B596D70024F3D7 /* PluginSlotComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginSlotComponent.h; path = ../../Source/Components/PluginSlotComponent.h; sourceTree = "<group>"; };
 		440C787B167A9660004648C3 /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Track.cpp; path = ../../Source/Track.cpp; sourceTree = "<group>"; };
 		440C787C167A9660004648C3 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Track.h; path = ../../Source/Track.h; sourceTree = "<group>"; };
 		440C787F167E26C6004648C3 /* TrackComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TrackComponent.cpp; path = ../../Source/Components/TrackComponent.cpp; sourceTree = "<group>"; };
@@ -1262,6 +1265,8 @@
 		44ABE5321674199D0045030E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				4407EAA516B596D70024F3D7 /* PluginSlotComponent.cpp */,
+				4407EAA616B596D70024F3D7 /* PluginSlotComponent.h */,
 				443D225116B0CDB8006B3CA6 /* PluginBlockComponent.cpp */,
 				443D225216B0CDB8006B3CA6 /* PluginBlockComponent.h */,
 				440C787F167E26C6004648C3 /* TrackComponent.cpp */,
@@ -2660,6 +2665,7 @@
 				440C7881167E26C7004648C3 /* TrackComponent.cpp in Sources */,
 				44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */,
 				443D225316B0CDB8006B3CA6 /* PluginBlockComponent.cpp in Sources */,
+				4407EAA716B596D70024F3D7 /* PluginSlotComponent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
