@@ -84,12 +84,12 @@ void ScumblerComponent::resized()
 {
     fNewTrackButton->setBounds (32, 456, 24, 24);
     //[UserResized] Add your own custom resize handling here..
-    /*
-    Point<int> topLeft = fTrackComponent->getScreenPosition();
-    fTrackComponent->setBounds (5, 100, this->getWidth()- 10 , 100);
-    */
-   
-    // !!! TODO: resize and move the track components appropriately
+    int trackCount = fTracks.size();
+    for (int i = 0; i < trackCount; ++i)
+    {
+      TrackComponent* tc = fTracks.getUnchecked(i);
+      this->SetTrackBounds(i, tc);
+    }
 
     //[/UserResized]
 }
@@ -317,26 +317,35 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
     // why we don't connect TrackComponents to tracks until after the numbers match, 
     // because we'll re-connect the two things here after every change callback, just
     // in case.
-    int height = this->getHeight();
-    int width = this->getWidth();
-    int trackHeight = jmin(height/6, height/trackCount);
-    int trackLeft = 5;
-    int trackWidth = width - (2*trackLeft);
-
-
+    
 
     for (int i = 0; i < trackCount; ++i)
     {
       TrackComponent* tc = fTracks.getUnchecked(i);
       Track* track = fScumbler->GetTrack(i);
       tc->ConnectToTrack(track);
-      tc->setBounds(trackLeft, i * trackHeight, trackWidth, trackHeight);
+      this->SetTrackBounds(i, tc);
     }
 
     this->repaint();
   }
 
 }
+
+
+void ScumblerComponent::SetTrackBounds(int index, TrackComponent* tc)
+{
+  int trackCount = fTracks.size();
+
+  int height = this->getHeight();
+  int width = this->getWidth();
+  int trackHeight = jmin(height/6, height/trackCount);
+  int trackLeft = 5;
+  int trackWidth = width - (2*trackLeft);
+
+  tc->setBounds(trackLeft, index * trackHeight, trackWidth, trackHeight);
+}
+
 
 //[/MiscUserCode]
 

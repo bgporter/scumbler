@@ -59,6 +59,16 @@ public:
     tk::Result AddTrack();
 
     /**
+     * Set the specified track's bounds to the correct location, dependent on:
+     * - current size of this component
+     * - the number of tracks
+     * - (future) whether that track is active??
+     * @param index zero-based index of the track to set.
+     * @param tc pointer to the TrackComponent to set th elocation of.
+     */
+    void SetTrackBounds(int index, TrackComponent* tc);
+
+    /**
      * @name ApplicationCommandTarget overrides.
      */
 
