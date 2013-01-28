@@ -42,7 +42,7 @@ void PluginBlockComponent::SetSlotBounds(int index, PluginSlotComponent* slot)
    float slotWidth = blockWidth / elementCount;
    float margin = slotWidth / elementCount;
 
-   int x = margin + index * slotWidth;
+   int x = (index + 1) * margin + index * slotWidth;
    int y =  blockHeight * 0.1;
    slot->setBounds(x, y, slotWidth, slotHeight);
 
