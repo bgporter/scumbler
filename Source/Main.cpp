@@ -15,6 +15,7 @@
 
 ApplicationCommandManager* gCommandManager = nullptr;
 ApplicationProperties* gAppProperties = nullptr;
+KnownPluginList gKnownPlugins;
 
 //==============================================================================
 class ScumblerApplication  : public JUCEApplication

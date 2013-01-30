@@ -17,6 +17,7 @@
 
 extern ApplicationCommandManager* gCommandManager;
 extern ApplicationProperties* gAppProperties;
+extern KnownPluginList  gKnownPlugins;
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow

@@ -16,6 +16,8 @@ public:
    PluginSlotComponent(PluginBlock* block, int index);
    ~PluginSlotComponent();
 
+   bool IsEmpty() const;
+
    void paint (Graphics& g);
    void resized();   
    void mouseDown(const MouseEvent& e);

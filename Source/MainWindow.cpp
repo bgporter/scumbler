@@ -34,6 +34,17 @@ MainAppWindow::MainAppWindow()
     true              // select the default device if restoring the last config fails.
      );
 
+  // restore the saved plugin list from the preferences file.
+  ScopedPointer<XmlElement> pluginList(userSettings->getXmlValue("pluginList"));
+  if (nullptr != pluginList)
+  {
+    gKnownPlugins.recreateFromXml(*pluginList);
+  }
+  else
+  {
+    // we need to scan for plugins before we can do anything  
+  }
+
   // create and reset the scumbler object now that the audio system is configured.
   fScumbler = new Scumbler(fDeviceManager, fPluginManager);
   //fScumbler->Reset();
