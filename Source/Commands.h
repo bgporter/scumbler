@@ -18,6 +18,7 @@ namespace CommandIds
     static const CommandID kRewind       = 0x3007;
     static const CommandID kToggleRecord = 0x3008;
     static const CommandID kAddTrack     = 0x3009;
+    static const CommandID kViewPlugins  = 0x300A;
 
 
 

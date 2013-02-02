@@ -19,6 +19,8 @@ extern ApplicationCommandManager* gCommandManager;
 extern ApplicationProperties* gAppProperties;
 extern KnownPluginList  gKnownPlugins;
 
+class PluginListWindow;
+
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
                       , public MenuBarModel
@@ -37,6 +39,12 @@ public:
      */
     
     void ConfigureAudio();
+
+    /**
+     * View (or delete) the plugin window that lets us scan for plugins.
+     * @param display Passing `true` will display the plugin window, `false` will delete it. 
+     */
+    void ViewPlugins(bool display=true);
 
     /**
      * @name MenuBarModel overrides.
@@ -92,6 +100,11 @@ private:
      * app closes.
      */
     ScopedPointer<Scumbler> fScumbler;
+
+    /**
+     * A pointer to the window that lists/scans for plugins.
+     */
+    ScopedPointer<PluginListWindow>  fPluginWindow;
 };
 
 

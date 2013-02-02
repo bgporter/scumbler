@@ -12,6 +12,7 @@
 
 #include "Commands.h"
 #include "Components/ScumblerComponent.h"
+#include "PluginListWindow.h"
 
 
 //==============================================================================
@@ -20,6 +21,9 @@ MainAppWindow::MainAppWindow()
       , DocumentWindow::allButtons)
     , fScumbler(nullptr)
 {
+
+  // make sure that the plugin format manager knows to look for AU/VST formats.
+  fPluginManager.addDefaultFormats();
 
   // connect our menu bar model to the command manager -- anything changed 
   // there will be reflected back here in our menu.
@@ -42,7 +46,7 @@ MainAppWindow::MainAppWindow()
   }
   else
   {
-    // we need to scan for plugins before we can do anything  
+    this->ViewPlugins();
   }
 
   // create and reset the scumbler object now that the audio system is configured.
@@ -114,6 +118,26 @@ void MainAppWindow::ConfigureAudio()
   settings->saveIfNeeded();
 
   // !!! notify the scumbler object that the settings have changed
+
+}
+
+
+void MainAppWindow::ViewPlugins(bool display)
+{
+  if (display)
+  {
+    // don't create a second instance!
+    if (nullptr == fPluginWindow)
+    {
+      fPluginWindow = new PluginListWindow(this, fPluginManager);
+      fPluginWindow->toFront(true);
+    }
+  }
+  else
+  {
+    // make the window go away.
+    fPluginWindow = nullptr;
+  }
 
 }
 
