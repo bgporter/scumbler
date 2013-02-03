@@ -89,6 +89,11 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
          m.addItem(1, "Delete plugin");
 
          const int r = m.show();
+         if (1 == r)
+         {
+            // Delete the filter we have loaded.
+            fPluginBlock->RemoveNodeAtIndex(fIndex, true);
+         }
       }
    }
 
