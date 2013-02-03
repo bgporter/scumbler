@@ -25,6 +25,7 @@ MainAppWindow::MainAppWindow()
   // make sure that the plugin format manager knows to look for AU/VST formats.
   fPluginManager.addDefaultFormats();
 
+
   // connect our menu bar model to the command manager -- anything changed 
   // there will be reflected back here in our menu.
   this->setApplicationCommandManagerToWatch(gCommandManager);
@@ -38,13 +39,21 @@ MainAppWindow::MainAppWindow()
     true              // select the default device if restoring the last config fails.
      );
 
-  // restore the saved plugin list from the preferences file.
+  // restore the saved plugin list from the preferences file. NOTE that the weird 
+  // code structure below around subscribing to changes in the known plugin 
+  // list is intentional (two separate `if()` statements instead of if/else). 
+  // We want to be sure to subscribe to those changes after we restore from XML 
+  // (if we can), but before we do our first scan of plugins (assuming that's 
+  // what happens.)
   ScopedPointer<XmlElement> pluginList(userSettings->getXmlValue("pluginList"));
   if (nullptr != pluginList)
   {
     gKnownPlugins.recreateFromXml(*pluginList);
   }
-  else
+
+  gKnownPlugins.addChangeListener(this);
+  
+  if (nullptr == pluginList)
   {
     this->ViewPlugins();
   }
@@ -73,11 +82,15 @@ MainAppWindow::MainAppWindow()
 
 MainAppWindow::~MainAppWindow()
 {
+
+  // if the list of plugins is being displayed, make sure it gets cleaned up
+  this->ViewPlugins(false);
    #if JUCE_MAC
     setMacMainMenu (nullptr);
    #else
     setMenuBar (nullptr);
    #endif
+    gKnownPlugins.removeChangeListener(this);
 }
 
 void MainAppWindow::closeButtonPressed()
@@ -85,6 +98,20 @@ void MainAppWindow::closeButtonPressed()
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
+void MainAppWindow::changeListenerCallback(ChangeBroadcaster*)
+{
+  this->menuItemsChanged();
+  // re-save the plug-in list as it changes so we have at least a partial inventory
+  // in the event of a crash.
+  ScopedPointer<XmlElement> savedPluginList(gKnownPlugins.createXml());
+
+  if (nullptr != savedPluginList)
+  {
+    PropertiesFile* userSettings = gAppProperties->getUserSettings();
+    userSettings->setValue("pluginList", savedPluginList);
+    gAppProperties->saveIfNeeded();
+  } 
+}
 
 
 void MainAppWindow::ConfigureAudio()

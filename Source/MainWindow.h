@@ -25,6 +25,7 @@ class PluginListWindow;
 class MainAppWindow   : public DocumentWindow
                       , public MenuBarModel
                       , public ApplicationCommandTarget
+                      , public ChangeListener
 {
 public:
     //==============================================================================
@@ -32,6 +33,9 @@ public:
     ~MainAppWindow();
 
     void closeButtonPressed();
+
+    void changeListenerCallback(ChangeBroadcaster*);
+
 
     /**
      * \name ConfigureAudio

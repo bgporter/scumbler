@@ -61,6 +61,7 @@ public:
         gAppProperties->closeFiles();
         deleteAndZero(gCommandManager);
         deleteAndZero(gAppProperties);
+        gKnownPlugins.clear();
     }
 
     //==============================================================================
