@@ -21,10 +21,6 @@ PluginSlotComponent::~PluginSlotComponent()
 
 bool PluginSlotComponent::IsEmpty() const
 {
-   if (2 == fIndex)
-   {
-      return false;
-   }
    return (tk::kInvalidNode == fPluginBlock->NodeInSlot(fIndex));
 }
 
@@ -75,6 +71,18 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
       {
          gKnownPlugins.addToMenu(m, KnownPluginList::defaultOrder);
          const int r = m.show();
+         int pluginIndex = gKnownPlugins.getIndexChosenByMenu(r);
+         PluginDescription* pd = gKnownPlugins.getType(pluginIndex);
+         if (pd)
+         {
+            String errorMsg;
+            if (tk::kSuccess != fPluginBlock->LoadPluginAtIndex(fIndex, *pd, errorMsg))
+            {
+               AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "Error Loading Plugin",
+                  errorMsg);
+            }
+         }
+
       }
       else
       {

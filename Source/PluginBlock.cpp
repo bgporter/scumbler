@@ -58,6 +58,7 @@ tk::Result PluginBlock::InsertNodeAtIndex(NodeId node, int index)
          if (tk::kInvalidNode != before && tk::kInvalidNode != after)
          {
             retval = fScumbler->InsertBetween(before, node, after);
+            this->sendChangeMessage();
          }
          else
          {
@@ -90,6 +91,7 @@ tk::Result PluginBlock::RemoveNodeAtIndex(int index, bool deleteNode)
             {
                fPluginNodes.set(index, tk::kInvalidNode);
             }
+            this->sendChangeMessage();
          }
          else
          {

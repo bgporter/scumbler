@@ -10,7 +10,7 @@
 #include "PluginBlock.h"
 
 
-class PluginSlotComponent : public Component 
+class PluginSlotComponent  : public Component
 {
 public:
    PluginSlotComponent(PluginBlock* block, int index);

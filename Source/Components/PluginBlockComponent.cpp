@@ -84,7 +84,7 @@ void PluginBlockComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (source == fPlugins)
    {
-
+      this->repaint();
    }
 
 }
