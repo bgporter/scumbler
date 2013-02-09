@@ -74,7 +74,7 @@ void ScumblerComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xff3f3f3f));
+    g.fillAll (Colours::white);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]

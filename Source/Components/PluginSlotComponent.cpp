@@ -8,6 +8,7 @@ extern KnownPluginList gKnownPlugins;
 PluginSlotComponent::PluginSlotComponent(PluginBlock* block, int index)
 :  fPluginBlock(block)
 ,  fIndex(index)
+,  fMouseOver(false)
 {
 
 }
@@ -27,19 +28,21 @@ bool PluginSlotComponent::IsEmpty() const
 void PluginSlotComponent::paint (Graphics& g)
 {
    Rectangle<float> rect = Rectangle<float>(0, 0, this->getWidth(), this->getHeight());
-   const float kCornerSize = 18.0f;
-   if (this->IsEmpty())
-   {
-      //g.setColour(Colours::lightgrey);
-      g.setColour(Colours::white);
-      g.drawRoundedRectangle(rect, kCornerSize, 2);
-   }
-   else
+   rect.reduce(2.0f, 2.0f);
+   const float kCornerSize = this->getHeight() / 2;
+   if (!this->IsEmpty())
    {
       g.setColour(Colours::goldenrod);
       g.fillRoundedRectangle(rect, kCornerSize);
    }
-
+   Colour c = Colours::lightgrey;
+   if (fMouseOver)
+   {
+      c = Colours::white;
+   }
+   g.setColour(c);
+   g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
+  
    if (0 == fIndex)
    {
       g.setColour(Colours::black);
@@ -86,15 +89,42 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
       }
       else
       {
-         m.addItem(1, "Delete plugin");
+         enum
+         {
+            kDelete = 1,
+            kEdit
+
+         };
+         m.addItem(kDelete, "Delete plugin");
 
          const int r = m.show();
-         if (1 == r)
+         switch (r)
          {
-            // Delete the filter we have loaded.
-            fPluginBlock->RemoveNodeAtIndex(fIndex, true);
+            case kDelete:
+            {
+               // Delete the filter we have loaded.
+               fPluginBlock->RemoveNodeAtIndex(fIndex, true);
+            }
+            break;
+            default:
+            {
+               // do nothing...
+            }
+            break;
          }
       }
    }
+}
 
+void PluginSlotComponent::mouseEnter(const MouseEvent& e)
+{
+   fMouseOver = true;
+   this->repaint();
+}
+
+
+void PluginSlotComponent::mouseExit(const MouseEvent& e)
+{
+   fMouseOver = false;
+   this->repaint();
 }

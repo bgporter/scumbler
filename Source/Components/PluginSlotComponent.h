@@ -21,10 +21,13 @@ public:
    void paint (Graphics& g);
    void resized();   
    void mouseDown(const MouseEvent& e);
+   void mouseEnter(const MouseEvent& e);
+   void mouseExit(const MouseEvent& e);
 
 private:
    PluginBlock*   fPluginBlock;
    int            fIndex;
+   bool           fMouseOver;
 };
 
 

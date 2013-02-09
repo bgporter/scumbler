@@ -87,13 +87,12 @@ void TrackComponent::resized()
     int trackHeight = this->getHeight();
     int pluginBlockWidth = trackWidth / 4;
     int pluginBlockHeight = trackHeight * 0.8;
-
-    fPreEffects->setBounds((trackWidth * 0.25) - (pluginBlockWidth / 2), trackHeight * 0.1, 
+    int trackMargin = 40;
+    fPreEffects->setBounds(trackMargin, trackHeight * 0.1, 
       pluginBlockWidth, pluginBlockHeight);
 
-    fPostEffects->setBounds((trackWidth * 0.75) - (pluginBlockWidth / 2), trackHeight * 0.1, 
+    fPostEffects->setBounds((trackWidth  - trackMargin) - pluginBlockWidth, trackHeight * 0.1, 
       pluginBlockWidth, pluginBlockHeight);
-
 
     //[/UserResized]
 }
