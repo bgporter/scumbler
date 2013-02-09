@@ -9,6 +9,7 @@ PluginSlotComponent::PluginSlotComponent(PluginBlock* block, int index)
 :  fPluginBlock(block)
 ,  fIndex(index)
 ,  fMouseOver(false)
+,  fPluginName(String::empty)
 {
 
 }
@@ -22,7 +23,7 @@ PluginSlotComponent::~PluginSlotComponent()
 
 bool PluginSlotComponent::IsEmpty() const
 {
-   return (tk::kInvalidNode == fPluginBlock->NodeInSlot(fIndex));
+    return (tk::kInvalidNode == fPluginBlock->PluginInSlot(fIndex).id);
 }
 
 void PluginSlotComponent::paint (Graphics& g)
@@ -103,7 +104,7 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
             case kDelete:
             {
                // Delete the filter we have loaded.
-               fPluginBlock->RemoveNodeAtIndex(fIndex, true);
+               fPluginBlock->RemovePluginAtIndex(fIndex, true);
             }
             break;
             default:

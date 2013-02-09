@@ -28,6 +28,7 @@ private:
    PluginBlock*   fPluginBlock;
    int            fIndex;
    bool           fMouseOver;
+   String         fPluginName;
 };
 
 

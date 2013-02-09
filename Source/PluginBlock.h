@@ -9,6 +9,25 @@
 
 #include "PluginConnector.h"
 
+
+/**
+  * @struct PluginInfo
+  * We store both the nodeId for a plugin (so we can manipulate it inside the Scumbler),
+  * and also the name of it so we can display it in the UI. The PluginBlock seems
+  * to be the appropriate place to link these two things. This struct is small and 
+  * light enough that we can pass by value without being concerned.
+  */
+struct PluginInfo
+{
+public:
+   PluginInfo(NodeId id_=tk::kInvalidNode, String name_=String::empty)
+   : id(id_), name(name_){};
+   NodeId id;
+   String name;
+
+};
+
+
 /**
  * @class PluginBlock
  *
@@ -27,6 +46,7 @@ public:
    // the class that tests us can have access to our private parts.
    friend class PluginBlockTest;
 #endif
+
 
    /**
     * Create a block of plugin nodes that know how to connect between themselves 
@@ -57,9 +77,9 @@ public:
    /**
     * Find out about the node that's living in s specified slot in this block
     * @param  index slot index.    
-    * @return       NodeId. `tk::kInvalidNode` indicates an empty (or out of range index) slot.
+    * @return PluginInfo. `tk::kInvalidNode` indicates an empty (or out of range index) slot.
     */
-   NodeId NodeInSlot(int index) const;
+   PluginInfo PluginInSlot(int index) const;
 
    /**
     * After an audio processor has been added to the graph, this places it at
@@ -69,7 +89,7 @@ public:
     * @return       Result of the operation. may fail if the node isn't valid, 
     *               if the index is out of range, or if that index is already occupied.
     */
-   tk::Result InsertNodeAtIndex(NodeId node, int index);
+   tk::Result InsertPluginAtIndex(PluginInfo node, int index);
 
    /**
     * Remove the processor node at the specified index, optionally deleting the plugin instance.
@@ -77,7 +97,7 @@ public:
     * @param  deleteNode If true, delete the processor instance as well.
     * @return            Result of the operation.
     */
-   tk::Result RemoveNodeAtIndex(int index, bool deleteNode=false);
+   tk::Result RemovePluginAtIndex(int index, bool deleteNode=false);
 
    /**
     * Load the specified plugin into the Scumbler (but don't yet connect it to anything.) 
@@ -89,7 +109,7 @@ public:
     * @param  errorMessage If this fails, JUCE will put an error string in here for display .
     * @return              The NodeID of the new plug-in. If we fail, this is kInvalidNode.
     */
-   NodeId LoadPlugin(const PluginDescription& description, String& errorMessage);
+   PluginInfo LoadPlugin(const PluginDescription& description, String& errorMessage);
 
    /**
     * Convenience function. Does these things:
@@ -111,7 +131,7 @@ private:
     * @param  i Index of the node we're working with
     * @return   NodeId.
     */
-   NodeId FindNodeBeforeIndex(int i);
+   PluginInfo FindPluginBeforeIndex(int i);
 
    /**
     * Returns the id of the next plugin after this one (which may be output)
@@ -119,7 +139,7 @@ private:
     * @param  i Index of the node we're working with.
     * @return   NodeId
     */
-   NodeId FindNodeAfterIndex(int i);
+   PluginInfo FindPluginAfterIndex(int i);
 
 
 private:   
@@ -150,7 +170,7 @@ private:
     * Array<T> type is resizable and we don't want to resize, make sure 
     * that the only operation we perform on the array is set().
     */
-   Array<NodeId> fPluginNodes;
+   Array<PluginInfo> fPlugins;
 };
 
 #endif // this MUST be the last line in this file.

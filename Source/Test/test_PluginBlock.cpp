@@ -168,29 +168,29 @@ public:
       ScopedPointer<PluginBlock> pb(this->Reset(4));
       // just checking the before/after logic. We're not actually adding anything
       // to the fake graph. 
-      pb->fPluginNodes.set(1, 11);
-      expect(fInput == pb->FindNodeBeforeIndex(1));
-      expect(fOutput == pb->FindNodeAfterIndex(1));
-      expect(fInput == pb->FindNodeBeforeIndex(0));
-      expect(11 == pb->FindNodeAfterIndex(0));
-      pb->fPluginNodes.set(3, 15);
-      expect(11 == pb->FindNodeBeforeIndex(3));
-      expect(15 == pb->FindNodeAfterIndex(1));
-      expect(fOutput == pb->FindNodeAfterIndex(3));
-      expect(11 == pb->FindNodeBeforeIndex(2));
-      expect(15 == pb->FindNodeAfterIndex(2));
+      pb->fPlugins.set(1, PluginInfo(11));
+      expect(fInput == pb->FindPluginBeforeIndex(1).id);
+      expect(fOutput == pb->FindPluginAfterIndex(1).id);
+      expect(fInput == pb->FindPluginBeforeIndex(0).id);
+      expect(11 == pb->FindPluginAfterIndex(0).id);
+      pb->fPlugins.set(3, PluginInfo(15));
+      expect(11 == pb->FindPluginBeforeIndex(3).id);
+      expect(15 == pb->FindPluginAfterIndex(1).id);
+      expect(fOutput == pb->FindPluginAfterIndex(3).id);
+      expect(11 == pb->FindPluginBeforeIndex(2).id);
+      expect(15 == pb->FindPluginAfterIndex(2).id);
 
       beginTest("test resetting the block");
-      expect(tk::kInvalidNode == pb->NodeInSlot(0));
-      expect(11 == pb->NodeInSlot(1));
-      expect(tk::kInvalidNode == pb->NodeInSlot(2));
-      expect(15 == pb->NodeInSlot(3));
+      expect(tk::kInvalidNode == pb->PluginInSlot(0).id);
+      expect(11 == pb->PluginInSlot(1).id);
+      expect(tk::kInvalidNode == pb->PluginInSlot(2).id);
+      expect(15 == pb->PluginInSlot(3).id);
 
       // clear out for the next test
       pb = this->Reset(4);
       for (int i = 0; i < pb->Size(); ++i)
       {
-         expect(tk::kInvalidNode == pb->NodeInSlot(i));
+         expect(tk::kInvalidNode == pb->PluginInSlot(i).id);
 
       }
 
@@ -203,50 +203,50 @@ public:
 
       // should start with input & output connected.
       expect(fGraph->AreConnected(fInput, fOutput));
-      expect(tk::kSuccess == pb->InsertNodeAtIndex(a, 0));
+      expect(tk::kSuccess == pb->InsertPluginAtIndex(a, 0));
       expect(fGraph->AreConnected(fInput, a));
       expect(fGraph->AreConnected(a, fOutput));
       expect(!fGraph->AreConnected(a, b));
       expect(!fGraph->AreConnected(fInput, fOutput));
 
-      expect(tk::kSuccess == pb->InsertNodeAtIndex(b, 1));
-      expect(tk::kSlotFull == pb->InsertNodeAtIndex(b, 1));
-      expect(tk::kSuccess == pb->InsertNodeAtIndex(c, 2));
-      expect(tk::kSuccess == pb->InsertNodeAtIndex(d, 3));
+      expect(tk::kSuccess == pb->InsertPluginAtIndex(b, 1));
+      expect(tk::kSlotFull == pb->InsertPluginAtIndex(b, 1));
+      expect(tk::kSuccess == pb->InsertPluginAtIndex(c, 2));
+      expect(tk::kSuccess == pb->InsertPluginAtIndex(d, 3));
       expect(fGraph->AreConnected(fInput, a));
       expect(!fGraph->AreConnected(a, fOutput));
       expect(fGraph->AreConnected(a, b));
       expect(fGraph->AreConnected(b, c));
       expect(fGraph->AreConnected(c, d));
       expect(fGraph->AreConnected(d, fOutput));
-      expect(a == pb->NodeInSlot(0));
-      expect(b == pb->NodeInSlot(1));
-      expect(c == pb->NodeInSlot(2));
-      expect(d == pb->NodeInSlot(3));
+      expect(a == pb->PluginInSlot(0).id);
+      expect(b == pb->PluginInSlot(1).id);
+      expect(c == pb->PluginInSlot(2).id);
+      expect(d == pb->PluginInSlot(3).id);
 
       beginTest("Remove/reinsert tests");
       // now start switching things around.
       // pull out 'b' 
-      expect(tk::kSuccess == pb->RemoveNodeAtIndex(1));
-      expect(tk::kNoTargetNode == pb->RemoveNodeAtIndex(1));
+      expect(tk::kSuccess == pb->RemovePluginAtIndex(1));
+      expect(tk::kNoTargetNode == pb->RemovePluginAtIndex(1));
       expect(fGraph->AreConnected(a, c));
       // pull out 'c'
-      expect(tk::kSuccess == pb->RemoveNodeAtIndex(2));
+      expect(tk::kSuccess == pb->RemovePluginAtIndex(2));
       // so now a should be connected to d
       expect(fGraph->AreConnected(a, d));
-      expect(tk::kInvalidNode == pb->NodeInSlot(1));
-      expect(tk::kInvalidNode == pb->NodeInSlot(2));
+      expect(tk::kInvalidNode == pb->PluginInSlot(1).id);
+      expect(tk::kInvalidNode == pb->PluginInSlot(2).id);
       // swap the old positions of b and c
-      expect(tk::kSuccess == pb->InsertNodeAtIndex(b, 2));
+      expect(tk::kSuccess == pb->InsertPluginAtIndex(b, 2));
       expect(fGraph->AreConnected(a, b));
       expect(fGraph->AreConnected(b, d));
-      expect(tk::kSuccess == pb->InsertNodeAtIndex(c, 1));
+      expect(tk::kSuccess == pb->InsertPluginAtIndex(c, 1));
       expect(fGraph->AreConnected(a, c));
       expect(fGraph->AreConnected(c, b));
-      expect(a == pb->NodeInSlot(0));
-      expect(c == pb->NodeInSlot(1));
-      expect(b == pb->NodeInSlot(2));
-      expect(d == pb->NodeInSlot(3));
+      expect(a == pb->PluginInSlot(0).id);
+      expect(c == pb->PluginInSlot(1).id);
+      expect(b == pb->PluginInSlot(2).id);
+      expect(d == pb->PluginInSlot(3).id);
 
       beginTest("Loading & inserting 'plugins'.");
       pb = this->Reset(4);
