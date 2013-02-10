@@ -157,6 +157,16 @@ public:
     */
    NodeId LoadPlugin(const PluginDescription& description, String& errorMessage);
 
+
+   /**
+    * Return a pointer to an editor component for the requested Node in the graph.
+    * @param  node       ID of the node we're interested in.
+    * @param  useGeneric If true, use JUCE's generic editor component for this.
+    * @return            Pointer to the editor component. Calling code is responsible
+    *                    for cleaning this up.
+    */
+   AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric);
+
    /**
     * Fill in a PluginDescription object for the specified node. We use this when 
     * saving a Scumbler to disk.

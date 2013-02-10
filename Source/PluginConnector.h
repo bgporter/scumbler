@@ -109,6 +109,15 @@ public:
     */
    virtual NodeId LoadPlugin(const PluginDescription& description, String& errorMessage) = 0;
 
+   /**
+    * Return a pointer to an editor component for the requested Node in the graph.
+    * @param  node       ID of the node we're interested in.
+    * @param  useGeneric If true, use JUCE's generic editor component for this.
+    * @return            Pointer to the editor component. Calling code is responsible
+    *                    for cleaning this up.
+    */
+   virtual AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric) = 0;
+
 };
 
 #endif  // this MUST be the last line in this file.

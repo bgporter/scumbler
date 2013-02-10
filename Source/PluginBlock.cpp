@@ -153,6 +153,17 @@ tk::Result PluginBlock::LoadPluginAtIndex(int index, const PluginDescription& de
    return retval;
 }
 
+AudioProcessorEditor* PluginBlock::GetEditorForIndex(int index, bool useGeneric)
+{
+   AudioProcessorEditor* retval = nullptr;
+
+   PluginInfo plugin = this->PluginInSlot(index);
+   if (tk::kInvalidNode != plugin.id)
+   {
+      retval = fScumbler->GetEditorForNode(plugin.id, useGeneric);
+   }
+   return retval;
+}
 
 PluginInfo PluginBlock::FindPluginBeforeIndex(int i)
 {

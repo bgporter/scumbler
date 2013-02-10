@@ -50,10 +50,18 @@ void PluginSlotComponent::ShowEditor(bool display)
       else
       {
          // create the window.
-
+         AudioProcessorEditor* editor = fPluginBlock->GetEditorForIndex(fIndex, false);
+         if (nullptr != editor)
+         {
+            fEditor = new PluginEditorWindow(editor, this);
+         }
+         else
+         {
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "Error Loading Editor",
+               "Can't load the editor for " + fPluginName);            
+         }
       }
    }
-
 }
 
 
@@ -136,17 +144,27 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
 
          };
          m.addItem(kDelete, "Delete plugin");
+         m.addItem(kEdit, "Show plugin editor");
 
          const int r = m.show();
          switch (r)
          {
             case kDelete:
             {
+               // if there's an editor window open for this plugin, close it.
+               fEditor = nullptr;
                // Delete the filter we have loaded.
                fPluginBlock->RemovePluginAtIndex(fIndex, true);
                this->setTooltip("(empty)");
             }
             break;
+            
+            case kEdit:
+            {
+               this->ShowEditor();
+            }
+            break;
+
             default:
             {
                // do nothing...

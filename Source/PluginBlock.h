@@ -123,6 +123,14 @@ public:
     */
    tk::Result LoadPluginAtIndex(int index, const PluginDescription& desc, String& msg);
 
+   /**
+    * Have the Scumbler create and return an AudioProcessorEditor component for the 
+    * plugin at the specified index.
+    * @param  index Index in this block of the plugin to edit.
+    * @param  useGeneric Ask for JUCE's built-in generic editor.
+    * @return pointer to the editor component.
+    */
+   AudioProcessorEditor* GetEditorForIndex(int index, bool useGeneric);
 
 private:
    /**

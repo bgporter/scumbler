@@ -377,6 +377,29 @@ NodeId Scumbler::LoadPlugin(const PluginDescription& description, String& errorM
 }
 
 
+AudioProcessorEditor* Scumbler::GetEditorForNode(NodeId node, bool useGeneric)
+{
+   AudioProcessorEditor* retval = nullptr;
+   AudioProcessorGraph::Node* plugin = fGraph.getNodeForId(node); 
+   if (nullptr != plugin)
+   {
+      if (!useGeneric)
+      {
+         retval = plugin->getProcessor()->createEditorIfNeeded();
+         if (nullptr == retval)
+         {
+            // we failed to create a native editor, so fall back to the generic.
+            useGeneric = true;
+         }
+      }
+      if (useGeneric)
+      {
+         retval = new GenericAudioProcessorEditor(plugin->getProcessor());
+      }
+
+   }
+   return retval;
+}
 
 tk::Result Scumbler::GetPluginDescriptionForNode(NodeId nodeId, PluginDescription& desc)
 {

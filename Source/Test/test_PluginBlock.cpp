@@ -94,6 +94,13 @@ public:
       return retval;
    }
 
+
+   AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric)
+   {
+      return nullptr;
+   }
+
+
    bool AreConnected(NodeId source, NodeId dest)
    {
       return this->FindConnection(source, dest) != -1;
