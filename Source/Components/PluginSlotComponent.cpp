@@ -53,6 +53,7 @@ void PluginSlotComponent::ShowEditor(bool display)
          AudioProcessorEditor* editor = fPluginBlock->GetEditorForIndex(fIndex, false);
          if (nullptr != editor)
          {
+            editor->setName(fPluginName);
             fEditor = new PluginEditorWindow(editor, this);
          }
          else
@@ -126,6 +127,7 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
             if (tk::kSuccess == fPluginBlock->LoadPluginAtIndex(fIndex, *pd, errorMsg))
             {
                this->setTooltip(pd->manufacturerName + ": " + pd->name);
+               fPluginName = pd->name;
             }
             else
             {
