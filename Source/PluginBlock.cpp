@@ -51,14 +51,17 @@ tk::Result PluginBlock::InsertPluginAtIndex(PluginInfo plugin, int index)
       if (tk::kInvalidNode == this->PluginInSlot(index).id)
       {
          // the index is in range, and the slot is empty.
-         fPlugins.set(index, plugin); 
          // Now, connect everything together:
          PluginInfo before = this->FindPluginBeforeIndex(index);
          PluginInfo after = this->FindPluginAfterIndex(index);
          if (tk::kInvalidNode != before.id && tk::kInvalidNode != after.id)
          {
             retval = fScumbler->InsertBetween(before.id, plugin.id, after.id);
-            this->sendChangeMessage();
+            if (tk::kSuccess == retval)
+            {
+               fPlugins.set(index, plugin); 
+               this->sendChangeMessage();
+            }
          }
          else
          {
