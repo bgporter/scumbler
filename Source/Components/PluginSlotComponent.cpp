@@ -187,3 +187,12 @@ void PluginSlotComponent::mouseExit(const MouseEvent& e)
    fMouseOver = false;
    this->repaint();
 }
+
+
+void PluginSlotComponent::mouseDoubleClick(const MouseEvent& e)
+{
+   if (! this->IsEmpty())
+   {
+      this->ShowEditor();
+   }
+}

@@ -47,11 +47,16 @@ public:
 
 
    ///@}
+   
+   ///@{ @name JUCE Component virtual overrides.
    void paint(Graphics& g);
    void resized();   
    void mouseDown(const MouseEvent& e);
    void mouseEnter(const MouseEvent& e);
    void mouseExit(const MouseEvent& e);
+   void mouseDoubleClick(const MouseEvent& e);
+
+   ///@}
 
 private:
    PluginBlock*   fPluginBlock;
