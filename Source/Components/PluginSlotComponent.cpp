@@ -11,7 +11,7 @@ PluginSlotComponent::PluginSlotComponent(PluginBlock* block, int index)
 ,  fMouseOver(false)
 ,  fPluginName(String::empty)
 {
-
+   this->setTooltip("(empty)");
 }
 
 
@@ -44,15 +44,14 @@ void PluginSlotComponent::paint (Graphics& g)
    g.setColour(c);
    g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
   
-   if (0 == fIndex)
+   PluginInfo info = fPluginBlock->PluginInSlot(fIndex);
+   if (String::empty != info.name)
    {
       g.setColour(Colours::black);
-      g.drawText(String(1.0 * this->getWidth()  / this->getHeight()), 0, 0, 
-         this->getWidth(), this->getHeight(), 
-         Justification::horizontallyCentred | Justification::verticallyCentred, false);
+      g.drawText(info.name, 2, 0, 
+         this->getWidth() - 2, this->getHeight(), 
+         Justification::horizontallyCentred | Justification::verticallyCentred, true);
    }
-
-
 }
 
 void PluginSlotComponent::resized()
@@ -80,7 +79,11 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
          if (pd)
          {
             String errorMsg;
-            if (tk::kSuccess != fPluginBlock->LoadPluginAtIndex(fIndex, *pd, errorMsg))
+            if (tk::kSuccess == fPluginBlock->LoadPluginAtIndex(fIndex, *pd, errorMsg))
+            {
+               this->setTooltip(pd->manufacturerName + ": " + pd->name);
+            }
+            else
             {
                AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "Error Loading Plugin",
                   errorMsg);
@@ -105,6 +108,7 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
             {
                // Delete the filter we have loaded.
                fPluginBlock->RemovePluginAtIndex(fIndex, true);
+               this->setTooltip("(empty)");
             }
             break;
             default:

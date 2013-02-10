@@ -11,6 +11,7 @@
 
 
 class PluginSlotComponent  : public Component
+                           , public SettableTooltipClient
 {
 public:
    PluginSlotComponent(PluginBlock* block, int index);
