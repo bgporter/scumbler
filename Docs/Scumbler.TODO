@@ -14,26 +14,25 @@ Milestone 0.1.0:
    ✔ connect them @done (12-11-24 19:15)
    ✔ verify audio passthrough. @done (12-11-24 19:15)
 Milestone 0.2.0:
- ☐ 0104: Create simple (pass-through) version of the loop processor, verify (single track in the scumbler object.)
-   ☐ pre-loop plugin slot (load, delete)
-   ☐ 'loop' (no-op AudioProcessor)
-   ☐ post-loop plug-in slot (?)
- ☐ 0105: Implement loop functionality w unity gain.
+ ✔ 0104: Create simple (pass-through) version of the loop processor, verify (single track in the scumbler object.) @done (13-02-10 13:19)
+   ✔ pre-loop plugin slot (load, delete) @done (13-02-10 13:19)
+   ✔ 'loop' (no-op AudioProcessor) @done (13-02-10 13:19)
+   ✔ post-loop plug-in slot (?) @done (13-02-10 13:19)
  ☐ 0106: Scumbler component
-   ☐ hosts one or more TrackComponents
+   ✔ hosts one or more TrackComponents @done (13-02-10 13:19)
    ☐ hosts TransportComponent
- ☐ 0107: TrackComponent
+ ✔ 0107: TrackComponent @done (13-02-10 13:19)
  ☐ 0108: LoopComponent
- ☐ 0109: PluginComponent
- ☐ 0110: Put unit test skeletons (at least) in place.
+ ✔ 0109: PluginComponent @done (13-02-10 13:19)
+ ✔ 0110: Put unit test skeletons (at least) in place. @done (13-02-10 13:19)
    ✔ Create a dummy AudioProcessor class that can be used to test connect/disconnect logic @done (12-12-07 15:24)
  ☐ 0111: TransportComponent
 
 
 Milestone 0.3.0:
+ ☐ 0105: Implement loop functionality w unity gain.
  ☐ 0106: Configure loop duration when not in playback
- ☐ 0107: Save output into a .wav file
  ☐ 0108: Write scumbler config into XML (JSON?)
  ☐ 0109: Restore scumbler config from file
 Future:
- ☐ Make the Scumbler responsive to changes in the audio configuration (reconnecting when the IO channels change, etc.)
+ ☐ Make the Scumbler responsive to changes in the audio configuration (reconnecting when the IO channels change, etc.) ☐ 0107: Save output into a .wav file
