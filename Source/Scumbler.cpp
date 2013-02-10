@@ -377,6 +377,24 @@ NodeId Scumbler::LoadPlugin(const PluginDescription& description, String& errorM
 }
 
 
+
+tk::Result Scumbler::GetPluginDescriptionForNode(NodeId nodeId, PluginDescription& desc)
+{
+   tk::Result retval = tk::kFailure;
+   AudioProcessorGraph::Node* node = fGraph.getNodeForId(nodeId);
+   if (nullptr != node)
+   {
+      AudioPluginInstance* plugin = dynamic_cast<AudioPluginInstance*>(node->getProcessor());
+      if (nullptr != plugin)
+      {
+         plugin->fillInPluginDescription(desc);
+         retval = tk::kSuccess;
+      }
+   }
+   return retval;
+}
+
+
 NodeId Scumbler::HandleSpecialNode(NodeId node)
 {
    NodeId retval = node;

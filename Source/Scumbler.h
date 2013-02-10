@@ -157,6 +157,15 @@ public:
     */
    NodeId LoadPlugin(const PluginDescription& description, String& errorMessage);
 
+   /**
+    * Fill in a PluginDescription object for the specified node. We use this when 
+    * saving a Scumbler to disk.
+    * @param  node The NodeId of the plugin we're interested in.
+    * @param  desc Empty PluginDescription object to be filled in.   
+    * @return      Success or Failure
+    */
+   tk::Result GetPluginDescriptionForNode(NodeId node, PluginDescription& desc);  
+
     ///@}
  
     /**
