@@ -157,6 +157,7 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
                fEditor = nullptr;
                // Delete the filter we have loaded.
                fPluginBlock->RemovePluginAtIndex(fIndex, true);
+               fPLuginName = String::empty;
                this->setTooltip("(empty)");
             }
             break;
