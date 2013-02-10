@@ -22,7 +22,7 @@ public:
 
    void shutdown()
    {
-   
+
    };
 
    void runTest()
@@ -106,7 +106,7 @@ public:
       expect(String("two") == scumbler->GetTrack(2)->GetName());      
       expect(String("three") == scumbler->GetTrack(3)->GetName());  
 
-
+      scumbler->Reset();
 
 
 
