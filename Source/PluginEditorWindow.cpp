@@ -13,6 +13,7 @@ PluginEditorWindow::PluginEditorWindow(Component* const ui, PluginSlotComponent*
    this->setContentOwned(ui, true); 
    this->setTopLeftPosition(fOwner->GetEditorPosition());
    this->setVisible(true);
+   this->setAlwaysOnTop(true);
 
 }
 
