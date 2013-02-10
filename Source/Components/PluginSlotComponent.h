@@ -8,7 +8,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginBlock.h"
-
+#include "PluginEditorWindow.h"
 
 class PluginSlotComponent  : public Component
                            , public SettableTooltipClient
@@ -19,7 +19,35 @@ public:
 
    bool IsEmpty() const;
 
-   void paint (Graphics& g);
+   /**
+     * @name PluginEditorWindow operations.
+     */
+   ///@{   
+   
+   /**
+    * Remember where the editor window is located so we can restore things 
+    * from disk correctly.
+    * @param x x position of the upper left
+    * @param y y position of the upper left.
+    */
+   void SetEditorPosition(int x, int y);
+
+   /**
+    * Find out where the editor window should go -- used inside the ctor of
+    * the pluginEditorWindow.
+    */
+   Point<int> GetEditorPosition() const;
+
+   /**
+    * Display or hide the editor window. If the editor is already displayed but 
+    * minimized, it will be restored to its last size and location.
+    * @param display True to display/restore, False to delete.
+    */
+   void ShowEditor(bool display = true);
+
+
+   ///@}
+   void paint(Graphics& g);
    void resized();   
    void mouseDown(const MouseEvent& e);
    void mouseEnter(const MouseEvent& e);
@@ -30,6 +58,8 @@ private:
    int            fIndex;
    bool           fMouseOver;
    String         fPluginName;
+   Point<int>     fPluginEditorLocation;
+   ScopedPointer<PluginEditorWindow> fEditor;
 };
 
 

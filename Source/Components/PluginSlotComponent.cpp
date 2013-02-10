@@ -12,11 +12,47 @@ PluginSlotComponent::PluginSlotComponent(PluginBlock* block, int index)
 ,  fPluginName(String::empty)
 {
    this->setTooltip("(empty)");
+   Random r;
+   this->SetEditorPosition(r.nextInt(200), r.nextInt(200));
 }
 
 
 PluginSlotComponent::~PluginSlotComponent()
 {
+
+}
+
+void PluginSlotComponent::SetEditorPosition(int x, int y)
+{
+   fPluginEditorLocation.setXY(x, y);
+}
+
+Point<int> PluginSlotComponent::GetEditorPosition() const
+{
+   return fPluginEditorLocation;
+}
+
+void PluginSlotComponent::ShowEditor(bool display)
+{
+   if (!display)
+   {
+      // just delete the editor window. 
+      fEditor = nullptr;
+   }
+   else
+   {
+      // either restore or show the editor window.
+      if (nullptr != fEditor)
+      {
+         // restore the window.
+         fEditor->setMinimised(false);
+      }
+      else
+      {
+         // create the window.
+
+      }
+   }
 
 }
 
