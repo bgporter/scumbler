@@ -83,14 +83,16 @@ MainAppWindow::MainAppWindow()
 MainAppWindow::~MainAppWindow()
 {
 
-  // if the list of plugins is being displayed, make sure it gets cleaned up
-  this->ViewPlugins(false);
+   // if the list of plugins is being displayed, make sure it gets cleaned up
+   gKnownPlugins.removeChangeListener(this);
+   this->ViewPlugins(false);
+   // destroy the UI components
+   this->clearContentComponent();
    #if JUCE_MAC
     setMacMainMenu (nullptr);
    #else
     setMenuBar (nullptr);
    #endif
-    gKnownPlugins.removeChangeListener(this);
 }
 
 void MainAppWindow::closeButtonPressed()
