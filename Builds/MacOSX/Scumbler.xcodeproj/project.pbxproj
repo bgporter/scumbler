@@ -21,6 +21,7 @@
 		443D1E3516572573004E645C /* Scumbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D1E3316572573004E645C /* Scumbler.cpp */; };
 		443D225316B0CDB8006B3CA6 /* PluginBlockComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D225116B0CDB8006B3CA6 /* PluginBlockComponent.cpp */; };
 		446DF52B16BD4FF9001FB962 /* PluginListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 446DF52916BD4FF9001FB962 /* PluginListWindow.cpp */; };
+		44A7179916C7F64300E187F9 /* PluginEditorWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */; };
 		44ABE52C16702D650045030E /* Passthrough.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE52B16702D650045030E /* Passthrough.cpp */; };
 		44ABE535167419B70045030E /* ScumblerComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE533167419B70045030E /* ScumblerComponent.cpp */; };
 		44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44B8599416A2FAC90028785C /* PluginBlock.cpp */; };
@@ -289,6 +290,8 @@
 		4457035AFC9481193465F92F /* juce_RelativeCoordinatePositioner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_RelativeCoordinatePositioner.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/positioning/juce_RelativeCoordinatePositioner.cpp; sourceTree = SOURCE_ROOT; };
 		446DF52916BD4FF9001FB962 /* PluginListWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginListWindow.cpp; path = ../../Source/PluginListWindow.cpp; sourceTree = "<group>"; };
 		446DF52A16BD4FF9001FB962 /* PluginListWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginListWindow.h; path = ../../Source/PluginListWindow.h; sourceTree = "<group>"; };
+		44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditorWindow.cpp; path = ../../Source/PluginEditorWindow.cpp; sourceTree = "<group>"; };
+		44A7179816C7F64300E187F9 /* PluginEditorWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginEditorWindow.h; path = ../../Source/PluginEditorWindow.h; sourceTree = "<group>"; };
 		44ABE52B16702D650045030E /* Passthrough.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Passthrough.cpp; path = ../../Source/Processors/Passthrough.cpp; sourceTree = "<group>"; };
 		44ABE52D1670D9960045030E /* Passthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Passthrough.h; path = ../../Source/Processors/Passthrough.h; sourceTree = "<group>"; };
 		44ABE533167419B70045030E /* ScumblerComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScumblerComponent.cpp; path = ../../Source/Components/ScumblerComponent.cpp; sourceTree = "<group>"; };
@@ -2328,6 +2331,8 @@
 		E0F565E740A3ECC493494B36 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */,
+				44A7179816C7F64300E187F9 /* PluginEditorWindow.h */,
 				446DF52916BD4FF9001FB962 /* PluginListWindow.cpp */,
 				446DF52A16BD4FF9001FB962 /* PluginListWindow.h */,
 				44B8599416A2FAC90028785C /* PluginBlock.cpp */,
@@ -2672,6 +2677,7 @@
 				443D225316B0CDB8006B3CA6 /* PluginBlockComponent.cpp in Sources */,
 				4407EAA716B596D70024F3D7 /* PluginSlotComponent.cpp in Sources */,
 				446DF52B16BD4FF9001FB962 /* PluginListWindow.cpp in Sources */,
+				44A7179916C7F64300E187F9 /* PluginEditorWindow.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
