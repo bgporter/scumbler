@@ -74,10 +74,10 @@ public:
 
       this->beginTest("Complex connections");
       // create the processors that we'll be passing audio through.
-      PassthroughProcessor* proc = new PassthroughProcessor(1, 1);
+      PassthroughProcessor* proc = new PassthroughProcessor(1);
       this->expect(1 == proc->getNumInputChannels());
       this->expect(1 == proc->getNumOutputChannels());
-      PassthroughProcessor* proc2 = new PassthroughProcessor(2,2);
+      PassthroughProcessor* proc2 = new PassthroughProcessor(2);
       this->expect(2 == proc2->getNumInputChannels());
       this->expect(2 == proc2->getNumOutputChannels());
 

@@ -3,9 +3,8 @@
 
 #include "Passthrough.h"
 
-PassthroughProcessor::PassthroughProcessor(int inputChannelCount, int outputChannelCount)
-:  fInputChannels(inputChannelCount)
-,  fOutputChannels(outputChannelCount)
+PassthroughProcessor::PassthroughProcessor(int channelCount)
+:  fChannelCount(channelCount)
 {
    this->setLatencySamples(0);
    // if this was a plug-in, the plug-in wrapper code in JUCE would query us
@@ -14,7 +13,7 @@ PassthroughProcessor::PassthroughProcessor(int inputChannelCount, int outputChan
    // object (which are always initialized as zero in, zero out). The sample rate
    // and blockSize values will get sent to us again when our prepareToPlay() 
    // method is called before playback begins.
-   this->setPlayConfigDetails(fInputChannels, fOutputChannels, 0, 0);
+   this->setPlayConfigDetails(fChannelCount, fChannelCount, 0, 0);
 }
 
 PassthroughProcessor::~PassthroughProcessor()
@@ -29,7 +28,7 @@ const String PassthroughProcessor::getName() const
 
 void PassthroughProcessor::prepareToPlay(double sampleRate, int estimatedSamplesPerBlock)
 {
-   this->setPlayConfigDetails(fInputChannels, fOutputChannels, sampleRate, 
+   this->setPlayConfigDetails(fChannelCount, fChannelCount, sampleRate, 
       estimatedSamplesPerBlock);
 
 }
@@ -56,12 +55,12 @@ const String PassthroughProcessor::getOutputChannelName(int channelIndex) const
 
 bool PassthroughProcessor::isInputChannelStereoPair(int index) const
 {
-   return false;
+   return (2 == fChannelCount);
 }
 
 bool PassthroughProcessor::isOutputChannelStereoPair(int index) const
 {
-   return false;
+   return (2 == fChannelCount);
 }
 
 bool PassthroughProcessor::silenceInProducesSilenceOut() const
