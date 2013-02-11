@@ -4,6 +4,7 @@
 
 // TODO: replace with the real loop processor.
 #include "Processors/Passthrough.h"
+#include "Processors/Loop.h"
 
 
 
@@ -22,7 +23,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 
    // create & insert the loop processor
    // (FOR NOW this is just the passthrough processor.)
-   AudioProcessor* loop = new PassthroughProcessor();
+   AudioProcessor* loop = new LoopProcessor();
    fLoop = fScumbler->AddProcessor(loop);
    fScumbler->InsertBetween(input, fLoop, output);
 
