@@ -2,6 +2,9 @@
 
 #include "Loop.h"
 
+#define mMin(x, y) (x) < (y) ? (x) : (y)
+#define mMax(x, y) (x) < (y) ? (y) : (x)
+
 LoopProcessor::LoopProcessor(int channelCount)
 :  PassthroughProcessor(channelCount)
 ,  fLoopDuration(2000)
@@ -19,9 +22,9 @@ LoopProcessor::~LoopProcessor()
 
 void LoopProcessor::SetLoopDuration(int milliseconds)
 {
-   // ensure that our duration falls within an acceptable range
-   fLoopDuration = jmax(kMinDuration, milliseconds);
-   fLoopDuration = jmin(fLoopDuration,  kMaxDuration);
+   // ensure that our duration falls within an accept20able range
+   fLoopDuration = mMax((int)kMinDuration, milliseconds);
+   fLoopDuration = mMin(fLoopDuration,  kMaxDuration);
 
 }
 
@@ -39,7 +42,7 @@ void LoopProcessor::prepareToPlay(double sampleRate, int estimatedSamplesPerBloc
 {
    PassthroughProcessor::prepareToPlay(sampleRate, estimatedSamplesPerBlock);
    // we may need to resize our internal buffers.
-   int bufferLength = fLoopDuration * sampleRate;
+   int bufferLength = fLoopDuration * (sampleRate / 1000);
    if (nullptr == fLoopBuffer)
    {
       fLoopBuffer = new AudioSampleBuffer(fChannelCount, bufferLength);
@@ -82,7 +85,7 @@ void LoopProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMess
       {
          // first, process as many samples as we can fit in at the end of the loop
          // buffer.
-         int roomAtEnd = (fLoopPosition + sampleCount) - loopSampleCount;
+         int roomAtEnd = loopSampleCount - fLoopPosition;
          // and we need to put this many samples back at the beginning.
          int wrapped = sampleCount - roomAtEnd;
 
