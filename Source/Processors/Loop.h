@@ -22,6 +22,20 @@ public:
 
    };
 
+   /**
+    * @struct LoopInfo
+    *
+    * UI components can use this structure to get useful information about 
+    * the current state of this processor.
+    */
+   struct LoopInfo
+   {
+      int   fLoopSample;
+      int   fLoopLength;
+      int   fLoopCount;
+      bool  fIsPlaying;   
+   };
+
    LoopProcessor(Track* track, int channelCount = 1);
 
    ~LoopProcessor();
@@ -39,6 +53,13 @@ public:
     */
    int GetLoopDuration() const;
 
+
+   /**
+    * Retrieve useful and current data about the state of our looping so we can 
+    * update the UI correctly.
+    * @param info LoopInfo struct. Filled on output.
+    */
+   void GetLoopInfo(LoopInfo& info) const;
    /**
      * @name required overrides of pure virtual functions.
      */
@@ -127,6 +148,7 @@ private:
    /**
     * Number of times we've looped. Updated each time 
     */
+   int fLoopCount;
 
 };
 

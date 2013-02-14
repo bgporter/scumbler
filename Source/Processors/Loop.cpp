@@ -7,6 +7,7 @@
 #define mMin(x, y) (x) < (y) ? (x) : (y)
 #define mMax(x, y) (x) < (y) ? (y) : (x)
 
+
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
 :  PassthroughProcessor(channelCount)
 ,  fTrack(track)
@@ -14,6 +15,7 @@ LoopProcessor::LoopProcessor(Track* track, int channelCount)
 ,  fFeedback(0.9f)
 ,  fLoopBuffer(nullptr)
 ,  fLoopPosition(0)
+,  fLoopCount(0)
 {
 
 }
@@ -34,6 +36,14 @@ void LoopProcessor::SetLoopDuration(int milliseconds)
 int LoopProcessor::GetLoopDuration() const
 {
    return fLoopDuration;
+}
+
+void LoopProcessor::GetLoopInfo(LoopInfo& info) const
+{
+   info.fLoopSample = fLoopPosition;
+   info.fLoopLength = fLoopBuffer->getNumSamples();
+   info.fLoopCount = fLoopCount;
+   info.fIsPlaying = fTrack->IsPlaying();
 }
 
 const String LoopProcessor::getName() const
