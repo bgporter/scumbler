@@ -40,18 +40,22 @@ TrackComponent::TrackComponent (Track* track)
 
     PluginBlock* pre = nullptr;
     PluginBlock* post = nullptr;
+    LoopProcessor* loop = nullptr;
 
     if (nullptr != track)
     {
        pre = track->GetPreEffectBlock();
        post = track->GetPostEffectBlock();  
+       loop = track->GetLoop();
     }
 
     //[Constructor] You can add your own custom stuff here..
     fPreEffects = new PluginBlockComponent(pre);
     fPostEffects = new PluginBlockComponent(post);
+    fLoop = new LoopComponent(loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
+    this->addAndMakeVisible(fLoop);
 
     //[/Constructor]
 }
@@ -99,11 +103,15 @@ void TrackComponent::resized()
     int pluginBlockWidth = trackWidth / 4;
     int pluginBlockHeight = trackHeight * 0.8;
     int trackMargin = 40;
-    fPreEffects->setBounds(trackMargin, trackHeight * 0.1, 
-      pluginBlockWidth, pluginBlockHeight);
+    int preX = trackMargin;
+    int postX = trackWidth - trackMargin - pluginBlockWidth;
+    int loopX = preX + pluginBlockWidth;
+    int loopWidth = postX - (preX + pluginBlockWidth);
+    
+    fPreEffects->setBounds(preX, trackHeight * 0.1, pluginBlockWidth, pluginBlockHeight);
+    fLoop->setBounds(loopX, trackHeight * 0.1, loopWidth, pluginBlockHeight);
+    fPostEffects->setBounds(postX, trackHeight * 0.1, pluginBlockWidth, pluginBlockHeight);
 
-    fPostEffects->setBounds((trackWidth  - trackMargin) - pluginBlockWidth, trackHeight * 0.1, 
-      pluginBlockWidth, pluginBlockHeight);
 
     //[/UserResized]
 }
@@ -160,6 +168,7 @@ void TrackComponent::ConnectToTrack(Track* track)
       fTrack->removeChangeListener(this);
       fPreEffects->ConnectToPluginBlock(nullptr);
       fPostEffects->ConnectToPluginBlock(nullptr);
+      fLoop->ConnectToLoop(nullptr);
     }
     fTrack = track;
     if (fTrack)
@@ -167,6 +176,7 @@ void TrackComponent::ConnectToTrack(Track* track)
       fTrack->addChangeListener(this);
       fPreEffects->ConnectToPluginBlock(fTrack->GetPreEffectBlock());
       fPostEffects->ConnectToPluginBlock(fTrack->GetPostEffectBlock());
+      fLoop->ConnectToLoop(fTrack->GetLoop());
     }
   }
 

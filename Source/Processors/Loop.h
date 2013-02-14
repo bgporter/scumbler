@@ -8,6 +8,7 @@
 #include "Passthrough.h"
 
 class LoopProcessor : public PassthroughProcessor
+                    , public ChangeBroadcaster
 {
 public:
 

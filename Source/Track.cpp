@@ -2,9 +2,6 @@
 
 #include "Track.h"
 
-// TODO: replace with the real loop processor.
-#include "Processors/Passthrough.h"
-#include "Processors/Loop.h"
 
 
 
@@ -13,9 +10,10 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 ,  fName(name)
 ,  fPreEffectCount(preFxCount)
 ,  fPreEffects(nullptr)
-,  fLoop(tk::kInvalidNode)
+,  fLoopId(tk::kInvalidNode)
 ,  fPostEffectCount(postFxCount)
 ,  fPostEffects(nullptr)
+,  fLoop(nullptr)
 {
    // we need the input and output nodes that the Scumbler controls.
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
@@ -23,13 +21,13 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 
    // create & insert the loop processor
    // (FOR NOW this is just the passthrough processor.)
-   AudioProcessor* loop = new LoopProcessor();
-   fLoop = fScumbler->AddProcessor(loop);
-   fScumbler->InsertBetween(input, fLoop, output);
+   AudioProcessor* fLoop = new LoopProcessor();
+   fLoopId = fScumbler->AddProcessor(fLoop);
+   fScumbler->InsertBetween(input, fLoopId, output);
 
    // create the plugin blocks and hook them in.
-   fPreEffects = new PluginBlock(fScumbler, input, fLoop, fPreEffectCount);
-   fPostEffects = new PluginBlock(fScumbler, fLoop, output, fPostEffectCount);
+   fPreEffects = new PluginBlock(fScumbler, input, fLoopId, fPreEffectCount);
+   fPostEffects = new PluginBlock(fScumbler, fLoopId, output, fPostEffectCount);
 
 
 }
@@ -42,7 +40,7 @@ Track::~Track()
    fPostEffects = nullptr;
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
-   fScumbler->RemoveBetween(input, fLoop, output, true);
+   fScumbler->RemoveBetween(input, fLoopId, output, true);
 }
 
 

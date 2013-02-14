@@ -27,6 +27,7 @@
 
 #include "../Track.h"
 #include "PluginBlockComponent.h"
+#include "LoopComponent.h"
 //[/Headers]
 
 
@@ -91,6 +92,7 @@ private:
     Track*  fTrack;
     PluginBlockComponent* fPreEffects;
     PluginBlockComponent* fPostEffects;
+    LoopComponent*  fLoop;
     //[/UserVariables]
 
     //==============================================================================

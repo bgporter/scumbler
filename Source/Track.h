@@ -8,8 +8,9 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginBlock.h"
+#include "Processors/Loop.h"
+#include "Processors/Passthrough.h"
 #include "Scumbler.h"
-
 
 
 class Track : public ChangeBroadcaster
@@ -45,6 +46,7 @@ public:
    {
       kPreFx = 0,
       kTrack,
+      kLoop,
       kPostFx
    };
    /**
@@ -59,6 +61,8 @@ public:
    PluginBlock* GetPreEffectBlock() const { return fPreEffects; };
    int GetPostEffectCount() const { return fPostEffectCount; };
    PluginBlock* GetPostEffectBlock() const { return fPostEffects; };
+
+   LoopProcessor* GetLoop() const { return fLoop; };
    
 
 
@@ -87,10 +91,7 @@ private:
    int fPreEffectCount;
    ScopedPointer<PluginBlock>  fPreEffects;
 
-   /**
-    * node id of the loop.
-    */
-   NodeId fLoop;
+
 
    /**
     * A block of effects that should be applied after the loop processor.
@@ -98,6 +99,15 @@ private:
    int fPostEffectCount;
    ScopedPointer<PluginBlock>   fPostEffects;
 
+   /**
+    * A non-owning pointer to the loop processor for this track.
+    */
+   LoopProcessor* fLoop;
+
+   /**
+    * node id of the loop.
+    */
+   NodeId fLoopId;
 
 
 };
