@@ -23,10 +23,15 @@
 #define __JUCER_HEADER_SCUMBLERCOMPONENT_SCUMBLERCOMPONENT_A102A7FF__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "JuceHeader.h"
+
+
 #include "../Scumbler.h"
+
 #include "../Commands.h"
+#include "JuceHeader.h"
 #include "TrackComponent.h"
+#include "TransportComponent.h"  
+
 //[/Headers]
 
 
@@ -100,6 +105,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Scumbler* fScumbler;
     OwnedArray<TrackComponent>  fTracks;
+    TransportComponent* fTransport;
     TooltipWindow fTooltipWindow;
     //[/UserVariables]
 

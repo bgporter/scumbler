@@ -33,13 +33,12 @@ extern ApplicationCommandManager* gCommandManager;
 ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
     : Component ("The Scumbler")
     , fScumbler(scumbler)
+    , fTransport(nullptr)
 {
 
 
     //[UserPreSize]
     //[/UserPreSize]
-
-    setSize (600, 400);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -51,6 +50,11 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
       this->addAndMakeVisible(tc);
     }
 
+    fTransport = new TransportComponent(fScumbler);
+    this->addAndMakeVisible(fTransport);
+
+    
+    setSize (600, 400);
 
 
     // subscribe to change notifications coming from the scumbler object.
@@ -63,7 +67,7 @@ ScumblerComponent::~ScumblerComponent()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-
+    deleteAndZero(fTransport);
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -91,6 +95,7 @@ void ScumblerComponent::resized()
       this->SetTrackBounds(i, tc);
     }
 
+    fTransport->setBounds(0, this->getHeight() - 50, this->getWidth(), 50);
     //[/UserResized]
 }
 
