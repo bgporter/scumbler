@@ -38,10 +38,18 @@ TrackComponent::TrackComponent (Track* track)
 
     //setSize (600, 80);
 
+    PluginBlock* pre = nullptr;
+    PluginBlock* post = nullptr;
+
+    if (nullptr != track)
+    {
+       pre = track->GetPreEffectBlock();
+       post = track->GetPostEffectBlock();  
+    }
 
     //[Constructor] You can add your own custom stuff here..
-    fPreEffects = new PluginBlockComponent(nullptr);
-    fPostEffects = new PluginBlockComponent(nullptr);
+    fPreEffects = new PluginBlockComponent(pre);
+    fPostEffects = new PluginBlockComponent(post);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
 
@@ -68,7 +76,10 @@ void TrackComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffb6b6b6));
+#ifdef qSketch
+   g.setColour(Colours::lightslategrey);
+   g.drawRect(0, 0, this->getWidth(), this->getHeight());
+#endif
 
     //[UserPaint] Add your own custom painting code here..
     

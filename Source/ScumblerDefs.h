@@ -9,6 +9,9 @@
 // builds if we like.
 #define qUnitTests
 
+// If 'qSketch' is defined, our components may draw helpful debugging stuff 
+// (sketching out bounds of a component, etc.)
+#define qSketch
 
 // A macro to make it easier to calling a member function using a 
 // pointer to member function.

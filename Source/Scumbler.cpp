@@ -93,6 +93,8 @@ void Scumbler::Reset()
 
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
+   // ... and then add a single track to start out.
+   this->AddTrack();
    // let anyone listening tk::know that we've changed.
    this->sendChangeMessage();
 

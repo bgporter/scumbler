@@ -7,7 +7,7 @@
 
 LoopProcessor::LoopProcessor(int channelCount)
 :  PassthroughProcessor(channelCount)
-,  fLoopDuration(2000)
+,  fLoopDuration(4000)
 ,  fFeedback(0.9f)
 ,  fLoopBuffer(nullptr)
 ,  fLoopPosition(0)

@@ -19,7 +19,10 @@ PluginBlockComponent::~PluginBlockComponent()
 
 void PluginBlockComponent::paint (Graphics& g)
 {
-   g.fillAll(Colours::blue);
+#ifdef qSketch
+   g.setColour(Colours::lightslategrey);
+   g.drawRect(0, 0, this->getWidth(), this->getHeight());
+#endif
 }
 
 

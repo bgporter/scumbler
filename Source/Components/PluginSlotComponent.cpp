@@ -74,6 +74,11 @@ bool PluginSlotComponent::IsEmpty() const
 void PluginSlotComponent::paint (Graphics& g)
 {
    Rectangle<float> rect = Rectangle<float>(0, 0, this->getWidth(), this->getHeight());
+#ifdef qSketch
+   g.setColour(Colours::lightslategrey);
+   g.drawRect(rect);
+#endif
+
    rect.reduce(2.0f, 2.0f);
    const float kCornerSize = this->getHeight() / 2;
    if (!this->IsEmpty())
@@ -84,7 +89,7 @@ void PluginSlotComponent::paint (Graphics& g)
    Colour c = Colours::lightgrey;
    if (fMouseOver)
    {
-      c = Colours::white;
+      c = Colours::black;
    }
    g.setColour(c);
    g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
