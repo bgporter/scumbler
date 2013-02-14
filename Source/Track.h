@@ -42,6 +42,12 @@ public:
     */
    String GetName() const;
 
+   /**
+    * Should this track be playing (i.e. looping audio) right now? 
+    * @return [description]
+    */
+   bool IsPlaying() const;
+
    enum ListenTo
    {
       kPreFx = 0,
@@ -83,6 +89,12 @@ private:
     * We can give each track a name for display in the UI.
     */
    String fName;
+
+   /**
+    * Is this track playing (a separate variable here so that eventually we'll
+    * be able to stop individual tracks while others keep playing.)
+    */
+   bool fPlaying;
 
 
    /**

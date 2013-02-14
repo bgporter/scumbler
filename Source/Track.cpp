@@ -8,20 +8,20 @@
 Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name)
 :  fScumbler(owner)
 ,  fName(name)
+,  fPlaying(true)
 ,  fPreEffectCount(preFxCount)
 ,  fPreEffects(nullptr)
-,  fLoopId(tk::kInvalidNode)
 ,  fPostEffectCount(postFxCount)
 ,  fPostEffects(nullptr)
 ,  fLoop(nullptr)
+,  fLoopId(tk::kInvalidNode)
 {
    // we need the input and output nodes that the Scumbler controls.
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
 
    // create & insert the loop processor
-   // (FOR NOW this is just the passthrough processor.)
-   AudioProcessor* fLoop = new LoopProcessor();
+   AudioProcessor* fLoop = new LoopProcessor(this);
    fLoopId = fScumbler->AddProcessor(fLoop);
    fScumbler->InsertBetween(input, fLoopId, output);
 
@@ -54,6 +54,10 @@ String Track::GetName() const
    return fName;
 }
 
+bool Track::IsPlaying() const
+{
+   return fPlaying && fScumbler->IsPlaying();
+}
 
 void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener)
 {
@@ -65,6 +69,8 @@ void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* lis
       case kTrack: sender = this; break;
 
       case kPostFx: sender = fPostEffects; break;
+
+      case kLoop: sender = fLoop; break;
 
       // assert on an error.
       default: jassert(false); break;

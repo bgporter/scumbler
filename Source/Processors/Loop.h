@@ -7,6 +7,8 @@
 
 #include "Passthrough.h"
 
+class Track;
+
 class LoopProcessor : public PassthroughProcessor
                     , public ChangeBroadcaster
 {
@@ -16,11 +18,11 @@ public:
    {
 
       kMinDuration = 100, /**< a resonable minimum duration */
-      kMaxDuration = 20000, /**< an arbitrate maximum duration */
+      kMaxDuration = 20000, /**< an arbitrary maximum duration */
 
    };
 
-   LoopProcessor(int channelCount = 1);
+   LoopProcessor(Track* track, int channelCount = 1);
 
    ~LoopProcessor();
 
@@ -95,6 +97,12 @@ public:
 
 
 private:
+
+   /**
+    * Track that we belong to.
+    */
+   Track* fTrack;
+
    /**
     * Loop duration in ms.
     */
@@ -110,7 +118,15 @@ private:
     */
    ScopedPointer<AudioSampleBuffer> fLoopBuffer;
 
+   /**
+    * Index of the next sample inside the buffer for us to deal with; updated 
+    * on each call to processBlock()
+    */
    int fLoopPosition;
+
+   /**
+    * Number of times we've looped. Updated each time 
+    */
 
 };
 
