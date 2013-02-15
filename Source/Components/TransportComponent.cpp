@@ -71,6 +71,10 @@ void TransportComponent::paint (Graphics& g)
    g.setColour(Colours::lightslategrey);
    g.drawRect(0, 0, this->getWidth(), this->getHeight());
 #endif  
+   bool playing = fScumbler->IsPlaying();
+   fPlayButton->setEnabled(!playing);
+   fResetButton->setEnabled(!playing);
+   fStopButton->setEnabled(playing);
 }
 
 void TransportComponent::resized()
@@ -85,7 +89,28 @@ void TransportComponent::resized()
 
 void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
 {
-
+   if (fAddTrackButton == buttonThatWasClicked)
+   {
+      fScumbler->AddTrack();
+   }
+   else if (fStopButton == buttonThatWasClicked)
+   {
+      if (fScumbler->IsPlaying())
+      {
+         fScumbler->TogglePlay();
+      }
+   }
+   else if (fPlayButton == buttonThatWasClicked)
+   {
+      if (!fScumbler->IsPlaying())
+      {
+         fScumbler->TogglePlay();
+      }
+   }
+   else if (fResetButton == buttonThatWasClicked)
+   {
+      // !!! todo.
+   }
 }
 
 void TransportComponent::sliderValueChanged (Slider* sliderThatWasMoved)
@@ -95,5 +120,9 @@ void TransportComponent::sliderValueChanged (Slider* sliderThatWasMoved)
 
 void TransportComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+   if (fScumbler == source)
+   {
+      this->repaint();
+   }
 
 }

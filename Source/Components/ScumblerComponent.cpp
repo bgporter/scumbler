@@ -335,7 +335,7 @@ void ScumblerComponent::SetTrackBounds(int index, TrackComponent* tc)
 {
   int trackCount = fTracks.size();
 
-  int height = this->getHeight();
+  int height = this->getHeight() - fTransport->getHeight();
   int width = this->getWidth();
   int trackHeight = jmin(height/6, height/trackCount);
   int trackBlockHeight = trackHeight * trackCount;
