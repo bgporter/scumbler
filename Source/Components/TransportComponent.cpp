@@ -19,6 +19,7 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
    fAddTrackButton->setButtonText("+");
    fAddTrackButton->addListener(this);
    fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
+   fAddTrackButton->setEnabled(false);
    this->addAndMakeVisible(fAddTrackButton);
 
    fResetButton = new TextButton("reset button");
@@ -79,6 +80,7 @@ void TransportComponent::paint (Graphics& g)
 
 void TransportComponent::resized()
 {
+
    fAddTrackButton->setBounds (40, 16, 24, 24);
    fStopButton->setBounds (240, 16, 47, 24);
    fPlayButton->setBounds (296, 16, 47, 24);
