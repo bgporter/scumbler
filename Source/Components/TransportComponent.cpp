@@ -50,11 +50,13 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
 
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Output volume");
-   fOutputVolume->setRange (0, 10, 0);
+   fOutputVolume->setRange (-96.0, 0.0, 0);
    fOutputVolume->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fOutputVolume->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
    fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
    fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+   fOutputVolume->setPopupDisplayEnabled(true, this);
+   fOutputVolume->setTextValueSuffix("dB");
    fOutputVolume->addListener (this);   
 
    this->setSize(600, 50);
@@ -76,6 +78,7 @@ void TransportComponent::paint (Graphics& g)
    fPlayButton->setEnabled(!playing);
    fResetButton->setEnabled(!playing);
    fStopButton->setEnabled(playing);
+   fOutputVolume->setValue(fScumbler->GetOutputVolume());
 }
 
 void TransportComponent::resized()
@@ -117,6 +120,11 @@ void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
 
 void TransportComponent::sliderValueChanged (Slider* sliderThatWasMoved)
 {
+   if (fOutputVolume == sliderThatWasMoved)
+   {
+      fScumbler->SetOutputVolume(fOutputVolume->getValue());
+
+   }
 
 }
 
@@ -124,6 +132,7 @@ void TransportComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (fScumbler == source)
    {
+
       this->repaint();
    }
 

@@ -12,6 +12,12 @@
 class Track;
 
 
+/**
+ * Convert a decibel value into the equivalent floating-point gain.
+ * @param  db decibels, probably <= 0 (but not necessarily  ) 
+ * @return    the corresponding floating-point amplitude gain value (e.g., -6.0 ~= 0.5)
+ */
+float dbToFloat(float db);
 
 /**
  * \class Scumbler
@@ -71,6 +77,19 @@ public:
     * Audio device manager is initialized.
     */
     void Reset();
+
+    /**
+     * Set the scumbler's master output volume. 
+     * @param volumeInDb dB, probably -96..0
+     */
+    void SetOutputVolume(float volumeInDb);
+
+    /**
+     * Get the current master output volume in dB
+     * @return floating point dB value, probably in the range -96.0 .. 0.0
+     */
+    float GetOutputVolume() const;
+
 
     /**
      * @name PluginConnector operations
@@ -318,6 +337,11 @@ private:
     * (it takes ownership of the objects and deletes them when necessary.)
     */
    OwnedArray<Track>  fTracks; 
+
+   /**
+    * Our current output volume in dB (default = 0)
+    */
+   float fOutputVolume;
 
 };
 

@@ -2,6 +2,7 @@
 
 #include "Scumbler.h"
 
+#include <math.h>
 
 #include "Commands.h"
 #include "Processors/Passthrough.h"
@@ -19,6 +20,15 @@ namespace
 
 #endif
 
+
+
+
+float dbToFloat(float db)
+{
+   return pow(10.0, db/20.0);
+}
+
+
 Scumbler::Scumbler(AudioDeviceManager& deviceManager, 
                   AudioPluginFormatManager& pluginManager)
 : fDeviceManager(deviceManager)
@@ -26,6 +36,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fPlaying(false)
 , fInputNode(-1)
 , fOutputNode(-1)
+, fOutputVolume(0.0f) 
 {
 #ifdef qUnitTests
    jassert(nullptr == instance);
@@ -99,6 +110,27 @@ void Scumbler::Reset()
    this->sendChangeMessage();
 
 }
+
+void Scumbler::SetOutputVolume(float volumeInDb)
+{
+   if (volumeInDb != fOutputVolume)
+   {
+      fOutputVolume = volumeInDb;
+
+      //!!! Send the new gain to the audio processor that actually controls
+      // the output.
+      // float gain = dbToFloat(fOutputVolume);
+
+      // update our observers.
+      this->sendChangeMessage();
+   }
+}
+
+float Scumbler::GetOutputVolume() const
+{
+   return fOutputVolume;
+}
+
 
 
 tk::Result Scumbler::Connect(NodeId source, NodeId dest)
