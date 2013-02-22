@@ -35,8 +35,8 @@ MainAppWindow::MainAppWindow()
   ScopedPointer<XmlElement> savedAudioState(userSettings->getXmlValue("audioDeviceState"));
 
   fDeviceManager.initialise(2, 2, // max 2 input and output channels.
-    savedAudioState, // pass in the last known configuration state
-    true              // select the default device if restoring the last config fails.
+    savedAudioState,              // pass in the last known configuration state
+    true                          // select the default device if restoring the last config fails.
      );
 
   // restore the saved plugin list from the preferences file. NOTE that the weird 
@@ -140,7 +140,7 @@ void MainAppWindow::ConfigureAudio()
 
   o.runModal();
 
-  // persist the settings for our next run.
+  // User closed the dialog -- persist the settings for our next run.
   ScopedPointer<XmlElement> audioState(fDeviceManager.createStateXml());
   PropertiesFile* settings = gAppProperties->getUserSettings();
   settings->setValue("audioDeviceState", audioState);

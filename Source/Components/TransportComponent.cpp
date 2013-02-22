@@ -45,8 +45,8 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
    fPlayTime->setFont (Font ("Helvetica", 26.0000f, Font::plain));
    fPlayTime->setJustificationType (Justification::centred);
    fPlayTime->setEditable (false, false, false);
-   fPlayTime->setColour (TextEditor::textColourId, Colours::black);
-   fPlayTime->setColour (TextEditor::backgroundColourId, Colour (0x0));
+   fPlayTime->setColour(TextEditor::textColourId, Colours::black);
+   fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));
 
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Output volume");
@@ -57,7 +57,7 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
    fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
    fOutputVolume->setPopupDisplayEnabled(true, this);
    fOutputVolume->setTextValueSuffix("dB");
-   fOutputVolume->addListener (this);   
+   fOutputVolume->addListener(this);   
 
    this->setSize(600, 50);
 
@@ -123,7 +123,6 @@ void TransportComponent::sliderValueChanged (Slider* sliderThatWasMoved)
    if (fOutputVolume == sliderThatWasMoved)
    {
       fScumbler->SetOutputVolume(fOutputVolume->getValue());
-
    }
 
 }

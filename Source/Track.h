@@ -48,6 +48,40 @@ public:
     */
    bool IsPlaying() const;
 
+   /**
+    * Set this track as soloed in the Scumbler.
+    * @param soloed -- are we turning the solo on or off? Note that if another
+    *               track get soloed, this happens automatically.
+    * @return success/failure
+    */
+   tk::Result Solo(bool soloed);
+
+   enum SoloState
+   {
+      kNoTracksSoloed = 0,
+      kOtherTrackSoloed,
+      kThisTrackSoloed
+   };
+
+   /**
+    * Is this track currently being soloed?
+    * @return SoloState enum value.
+    */
+   SoloState IsSoloed() const;
+
+   /**
+    * Mute/unmute this track.
+    * @param  muted Should we mute or unmute this channel?
+    * @return       Success/fail.
+    */
+   tk::Result Mute(bool muted);
+
+   /**
+    * Is this track currently muted?
+    * @return bool, current mute state.
+    */
+   bool IsMuted() const;
+
    enum ListenTo
    {
       kPreFx = 0,
@@ -96,6 +130,10 @@ private:
     */
    bool fPlaying;
 
+   /**
+    * Is this track currently muted?
+    */
+   bool fMuted;
 
    /**
     * A block of effects that should be applied before the loop processor.

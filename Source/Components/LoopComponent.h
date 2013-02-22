@@ -11,6 +11,7 @@
 
 class LoopComponent  :  public Component 
                      ,  public ChangeListener
+                     ,  public Slider::Listener
 {
 public:
    LoopComponent(LoopProcessor* loop=nullptr);
@@ -30,6 +31,12 @@ public:
    void changeListenerCallback(ChangeBroadcaster* source);
 
    /**
+    * Called when the feedback knob is moved.
+    * @param slider [description]
+    */
+   void sliderValueChanged(Slider* slider);
+
+   /**
     * Called by JUCE when our size changes.
     */
    void resized();
@@ -44,6 +51,7 @@ public:
 
 private:
    LoopProcessor* fLoop;
+   Slider*  fFeedback;
 
 };
 

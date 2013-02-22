@@ -5,12 +5,25 @@
 
 LoopComponent::LoopComponent(LoopProcessor* loop)
 :  fLoop(loop)
+,  fFeedback(nullptr)
 {
-   
+   fFeedback = new Slider("feedback");
+   fFeedback->setTooltip ("Output volume");
+   fFeedback->setRange (-96.0, 0.0, 0);
+   fFeedback->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
+   fFeedback->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+   fFeedback->setColour (Slider::thumbColourId, Colours::black);
+   fFeedback->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+   fFeedback->setPopupDisplayEnabled(true, this);
+   fFeedback->setTextValueSuffix("dB");
+   fFeedback->addListener(this);     
+   this->addAndMakeVisible(fFeedback);
+
 }
 
 LoopComponent::~LoopComponent()
 {
+   this->deleteAllChildren();
    
 }
 
@@ -37,6 +50,13 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
    {
       this->repaint();
    }
+  
+   
+}
+
+
+void LoopComponent::sliderValueChanged(Slider* slider)
+{
    
 }
 

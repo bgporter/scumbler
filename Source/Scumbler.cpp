@@ -6,6 +6,7 @@
 
 #include "Commands.h"
 #include "Processors/Passthrough.h"
+#include "Processors/Gain.h"
 #include "Track.h"
 
 
@@ -23,9 +24,14 @@ namespace
 
 
 
-float dbToFloat(float db)
+float DbToFloat(float db)
 {
    return pow(10.0, db/20.0);
+}
+
+float GainToDb(float gain)
+{
+   return 20.0 * log10(gain);
 }
 
 
@@ -34,8 +40,10 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 : fDeviceManager(deviceManager)
 , fPluginManager(pluginManager)
 , fPlaying(false)
-, fInputNode(-1)
-, fOutputNode(-1)
+, fInputNode(tk::kInvalidNode)
+, fOutputNode(tk::kInvalidNode)
+, fGainNode(tk::kInvalidNode)
+, fSoloTrack(nullptr)
 , fOutputVolume(0.0f) 
 {
 #ifdef qUnitTests
@@ -102,6 +110,23 @@ void Scumbler::Reset()
 
    this->Connect(fInputNode, fOutputNode);
 
+   // connect a gain processor in the middle:
+   GainProcessor* gain = new GainProcessor(2);
+   NodeId gainNode = this->AddProcessor(gain);
+   if (tk::kSuccess == this->InsertBetween(fInputNode, gainNode, fOutputNode))
+   {
+      fOutputGain = gain;
+      fGainNode = gainNode;
+
+   }
+   else
+   {
+      fOutputGain = nullptr;
+      fGainNode = tk::kInvalidNode;
+   }
+
+
+
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
    // ... and then add a single track to start out.
@@ -119,7 +144,8 @@ void Scumbler::SetOutputVolume(float volumeInDb)
 
       //!!! Send the new gain to the audio processor that actually controls
       // the output.
-      // float gain = dbToFloat(fOutputVolume);
+      float gain = DbToFloat(fOutputVolume);
+      fOutputGain->SetGain(gain);
 
       // update our observers.
       this->sendChangeMessage();
@@ -267,6 +293,17 @@ tk::Result Scumbler::DeleteTrack(int index)
       this->sendChangeMessage();
    }
    return retval;
+}
+
+tk::Result Scumbler::SoloTrack(Track* trackToSolo)
+{
+   fSoloTrack = trackToSolo;
+   return tk::kSuccess;
+}
+
+Track* Scumbler::GetSoloTrack() const
+{
+   return fSoloTrack;
 }
 
 
@@ -461,7 +498,9 @@ NodeId Scumbler::HandleSpecialNode(NodeId node)
    }
    else if (tk::kOutput == node)
    {
-      retval = fOutputNode;
+      // if we have inserted a gain processor before the output, that should
+      // be treated as the output; everything goes through it.
+      retval = (tk::kInvalidNode == fGainNode)  ? fOutputNode : fGainNode;
    }
 
    return retval;

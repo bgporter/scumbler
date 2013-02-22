@@ -28,6 +28,7 @@
 		44ABE52C16702D650045030E /* Passthrough.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE52B16702D650045030E /* Passthrough.cpp */; };
 		44ABE535167419B70045030E /* ScumblerComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE533167419B70045030E /* ScumblerComponent.cpp */; };
 		44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44B8599416A2FAC90028785C /* PluginBlock.cpp */; };
+		44FFF83C16D5AE5600E53F1F /* Gain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44FFF83A16D5AE5600E53F1F /* Gain.cpp */; };
 		465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 969C40A1B4F980BFB51FD60B /* juce_audio_basics.mm */; };
 		469C39A90EA46A522ABF5DAB /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A92514B6C73E39D6596966 /* DiscRecording.framework */; };
 		78FEEF8AF4F48F82D152D6F2 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE8762DC465C13A3C638EBC3 /* WebKit.framework */; };
@@ -309,6 +310,8 @@
 		44B8599516A2FAC90028785C /* PluginBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginBlock.h; path = ../../Source/PluginBlock.h; sourceTree = "<group>"; };
 		44B8599616A2FAC90028785C /* PluginConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginConnector.h; path = ../../Source/PluginConnector.h; sourceTree = "<group>"; };
 		44D5556AA04C6895D8DF32EF /* juce_HyperlinkButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_HyperlinkButton.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_HyperlinkButton.h; sourceTree = SOURCE_ROOT; };
+		44FFF83A16D5AE5600E53F1F /* Gain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gain.cpp; path = ../../Source/Processors/Gain.cpp; sourceTree = "<group>"; };
+		44FFF83B16D5AE5600E53F1F /* Gain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gain.h; path = ../../Source/Processors/Gain.h; sourceTree = "<group>"; };
 		45239C877F4865981E28389E /* juce_Button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Button.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_Button.h; sourceTree = SOURCE_ROOT; };
 		458F0A9C85361066567A5C52 /* juce_mac_Network.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = juce_mac_Network.mm; path = ../../JuceLibraryCode/modules/juce_core/native/juce_mac_Network.mm; sourceTree = SOURCE_ROOT; };
 		45C3CBA1DAC9ADCC96648590 /* juce_Atomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Atomic.h; path = ../../JuceLibraryCode/modules/juce_core/memory/juce_Atomic.h; sourceTree = SOURCE_ROOT; };
@@ -1271,6 +1274,8 @@
 		44ABE52916702D330045030E /* Processors */ = {
 			isa = PBXGroup;
 			children = (
+				44FFF83A16D5AE5600E53F1F /* Gain.cpp */,
+				44FFF83B16D5AE5600E53F1F /* Gain.h */,
 				44A7179A16C8871D00E187F9 /* Loop.cpp */,
 				44A7179B16C8871D00E187F9 /* Loop.h */,
 				44ABE52D1670D9960045030E /* Passthrough.h */,
@@ -2696,6 +2701,7 @@
 				44A7179C16C8871D00E187F9 /* Loop.cpp in Sources */,
 				4471332516CC75A800ED5338 /* LoopComponent.cpp in Sources */,
 				4471332816CD8FF600ED5338 /* TransportComponent.cpp in Sources */,
+				44FFF83C16D5AE5600E53F1F /* Gain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

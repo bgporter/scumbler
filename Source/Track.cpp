@@ -9,6 +9,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 :  fScumbler(owner)
 ,  fName(name)
 ,  fPlaying(true)
+,  fMuted(false)
 ,  fPreEffectCount(preFxCount)
 ,  fPreEffects(nullptr)
 ,  fPostEffectCount(postFxCount)
@@ -47,6 +48,7 @@ Track::~Track()
 void Track::SetName(const String& name)
 {
    fName = name;
+   this->sendChangeMessage();
 }
 
 String Track::GetName() const
@@ -57,6 +59,46 @@ String Track::GetName() const
 bool Track::IsPlaying() const
 {
    return fPlaying && fScumbler->IsPlaying();
+}
+
+
+tk::Result Track::Solo(bool soloed)
+{
+   Track* track = soloed ? this : nullptr; 
+   return fScumbler->SoloTrack(track);
+   this->sendChangeMessage();
+}
+
+Track::SoloState Track::IsSoloed() const
+{
+   Track::SoloState retval = Track::kNoTracksSoloed;
+   Track* soloTrack = fScumbler->GetSoloTrack();
+   if (soloTrack)
+   {
+      if (this == soloTrack)
+      {
+         retval = Track::kThisTrackSoloed;
+      }
+      else
+      {
+         retval = Track::kOtherTrackSoloed;
+      }
+   }
+
+   return retval;
+}
+
+tk::Result Track::Mute(bool muted)
+{
+   fMuted = muted;
+   this->sendChangeMessage();
+   return tk::kSuccess;
+
+}
+
+bool Track::IsMuted() const
+{
+   return fMuted;
 }
 
 void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener)
