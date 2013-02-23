@@ -83,13 +83,13 @@ void TransportComponent::paint (Graphics& g)
 
 void TransportComponent::resized()
 {
-
-   fAddTrackButton->setBounds (40, 16, 24, 24);
-   fStopButton->setBounds (240, 16, 47, 24);
-   fPlayButton->setBounds (296, 16, 47, 24);
-   fPlayTime->setBounds (480, 16, 150, 24);
-   fOutputVolume->setBounds (920, 16, 32, 24);
-   fResetButton->setBounds (176, 16, 47, 24);
+   int parentHeight = this->getHeight();
+   fAddTrackButton->setBounds (40, (parentHeight-24)/2, 24, 24);
+   fStopButton->setBounds (240, (parentHeight-24)/2, 47, 24);
+   fPlayButton->setBounds (296, (parentHeight-24)/2, 47, 24);
+   fPlayTime->setBounds (480, (parentHeight-24)/2, 150, 24);
+   fOutputVolume->setBounds (920, (parentHeight-24)/2, 32, 24);
+   fResetButton->setBounds (176, (parentHeight-24)/2, 47, 24);
 }
 
 void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
@@ -131,7 +131,6 @@ void TransportComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (fScumbler == source)
    {
-
       this->repaint();
    }
 
