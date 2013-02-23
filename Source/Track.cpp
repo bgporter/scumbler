@@ -22,7 +22,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
 
    // create & insert the loop processor
-   AudioProcessor* fLoop = new LoopProcessor(this);
+   fLoop = new LoopProcessor(this);
    fLoopId = fScumbler->AddProcessor(fLoop);
    fScumbler->InsertBetween(input, fLoopId, output);
 
@@ -64,6 +64,7 @@ bool Track::IsPlaying() const
 
 tk::Result Track::Solo(bool soloed)
 {
+   ScopedLock sl(fMutex);
    Track* track = soloed ? this : nullptr; 
    return fScumbler->SoloTrack(track);
    this->sendChangeMessage();
@@ -71,6 +72,7 @@ tk::Result Track::Solo(bool soloed)
 
 Track::SoloState Track::IsSoloed() const
 {
+   ScopedLock sl(fMutex);
    Track::SoloState retval = Track::kNoTracksSoloed;
    Track* soloTrack = fScumbler->GetSoloTrack();
    if (soloTrack)
@@ -90,6 +92,7 @@ Track::SoloState Track::IsSoloed() const
 
 tk::Result Track::Mute(bool muted)
 {
+   ScopedLock sl(fMutex);
    fMuted = muted;
    this->sendChangeMessage();
    return tk::kSuccess;
@@ -98,6 +101,7 @@ tk::Result Track::Mute(bool muted)
 
 bool Track::IsMuted() const
 {
+   ScopedLock sl(fMutex);
    return fMuted;
 }
 

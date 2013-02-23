@@ -159,6 +159,8 @@ private:
     */
    NodeId fLoopId;
 
+   CriticalSection fMutex;
+
 
 };
 
