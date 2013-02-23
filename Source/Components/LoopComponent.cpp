@@ -2,6 +2,8 @@
 
 #include "LoopComponent.h"
 
+#include "Scumbler.h"
+
 
 LoopComponent::LoopComponent(LoopProcessor* loop)
 :  fLoop(loop)
@@ -57,12 +59,16 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
 
 void LoopComponent::sliderValueChanged(Slider* slider)
 {
+   if (fFeedback == slider)
+   {
+      fLoop->SetFeedback(DbToFloat(slider->getValue()));
+   }
    
 }
 
 void LoopComponent::resized()
 {
-   
+   fFeedback->setBounds(this->getWidth() - 30, (this->getHeight() - 24)/2, 32, 24);
 }
 
 void LoopComponent::paint(Graphics& g)
@@ -71,4 +77,7 @@ void LoopComponent::paint(Graphics& g)
    g.setColour(Colours::lightslategrey);
    g.drawRect(0, 0, this->getWidth(), this->getHeight());
 #endif   
+
+   float feedback = fLoop->GetFeedback();
+   fFeedback->setValue(GainToDb(feedback));
 }
