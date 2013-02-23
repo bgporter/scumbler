@@ -5,8 +5,9 @@
 #include "Scumbler.h"
 
 
-LoopComponent::LoopComponent(LoopProcessor* loop)
-:  fLoop(loop)
+LoopComponent::LoopComponent(Track* track)
+:  fTrack(track)
+,  fLoop(track->GetLoop())
 ,  fFeedback(nullptr)
 {
    fFeedback = new Slider("feedback");
@@ -52,8 +53,6 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
    {
       this->repaint();
    }
-  
-   
 }
 
 

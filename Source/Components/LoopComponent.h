@@ -8,13 +8,14 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Loop.h"
+#include "Track.h"
 
 class LoopComponent  :  public Component 
                      ,  public ChangeListener
                      ,  public Slider::Listener
 {
 public:
-   LoopComponent(LoopProcessor* loop=nullptr);
+   LoopComponent(Track* track);
 
    ~LoopComponent();
 
@@ -50,6 +51,7 @@ public:
 
 
 private:
+   Track* fTrack;
    LoopProcessor* fLoop;
    Slider*  fFeedback;
 
