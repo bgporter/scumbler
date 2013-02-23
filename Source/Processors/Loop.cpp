@@ -38,6 +38,22 @@ int LoopProcessor::GetLoopDuration() const
    return fLoopDuration;
 }
 
+
+void LoopProcessor::SetFeedback(float gain)
+{
+   ScopedLock sl(fMutex);
+   fFeedback = gain;
+   this->sendChangeMessage();
+
+}
+
+float LoopProcessor::GetFeedback() const
+{
+   ScopedLock sl(fMutex);
+   return fFeedback;
+
+}
+
 void LoopProcessor::GetLoopInfo(LoopInfo& info) const
 {
    info.fLoopSample = fLoopPosition;

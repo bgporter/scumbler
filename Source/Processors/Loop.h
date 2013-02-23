@@ -53,6 +53,17 @@ public:
     */
    int GetLoopDuration() const;
 
+   /**
+    * Change the feedback applied to the loop.
+    * @param gain 0..1
+    */
+   void SetFeedback(float gain);  
+
+   /**
+    * Get the current feedback being applied to the loop.
+    * @return [description]
+    */
+   float GetFeedback() const;
 
    /**
     * Retrieve useful and current data about the state of our looping so we can 
@@ -149,6 +160,11 @@ private:
     * Number of times we've looped. Updated each time 
     */
    int fLoopCount;
+
+   /**
+    * Make access to variables threadsafe.
+    */
+   CriticalSection fMutex;
 
 };
 
