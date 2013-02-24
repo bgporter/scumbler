@@ -20,6 +20,7 @@
 		440C7881167E26C7004648C3 /* TrackComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787F167E26C6004648C3 /* TrackComponent.cpp */; };
 		443D1E3516572573004E645C /* Scumbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D1E3316572573004E645C /* Scumbler.cpp */; };
 		443D225316B0CDB8006B3CA6 /* PluginBlockComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D225116B0CDB8006B3CA6 /* PluginBlockComponent.cpp */; };
+		44647C7416DA4A6F00FA33BD /* WaveformComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44647C7216DA4A6E00FA33BD /* WaveformComponent.cpp */; };
 		446DF52B16BD4FF9001FB962 /* PluginListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 446DF52916BD4FF9001FB962 /* PluginListWindow.cpp */; };
 		4471332516CC75A800ED5338 /* LoopComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4471332316CC75A800ED5338 /* LoopComponent.cpp */; };
 		4471332816CD8FF600ED5338 /* TransportComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4471332616CD8FF500ED5338 /* TransportComponent.cpp */; };
@@ -292,6 +293,8 @@
 		443D225116B0CDB8006B3CA6 /* PluginBlockComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginBlockComponent.cpp; path = ../../Source/Components/PluginBlockComponent.cpp; sourceTree = "<group>"; };
 		443D225216B0CDB8006B3CA6 /* PluginBlockComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginBlockComponent.h; path = ../../Source/Components/PluginBlockComponent.h; sourceTree = "<group>"; };
 		4457035AFC9481193465F92F /* juce_RelativeCoordinatePositioner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_RelativeCoordinatePositioner.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/positioning/juce_RelativeCoordinatePositioner.cpp; sourceTree = SOURCE_ROOT; };
+		44647C7216DA4A6E00FA33BD /* WaveformComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaveformComponent.cpp; path = ../../Source/Components/WaveformComponent.cpp; sourceTree = "<group>"; };
+		44647C7316DA4A6F00FA33BD /* WaveformComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaveformComponent.h; path = ../../Source/Components/WaveformComponent.h; sourceTree = "<group>"; };
 		446DF52916BD4FF9001FB962 /* PluginListWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginListWindow.cpp; path = ../../Source/PluginListWindow.cpp; sourceTree = "<group>"; };
 		446DF52A16BD4FF9001FB962 /* PluginListWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginListWindow.h; path = ../../Source/PluginListWindow.h; sourceTree = "<group>"; };
 		4471332316CC75A800ED5338 /* LoopComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LoopComponent.cpp; path = ../../Source/Components/LoopComponent.cpp; sourceTree = "<group>"; };
@@ -1287,6 +1290,8 @@
 		44ABE5321674199D0045030E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				44647C7216DA4A6E00FA33BD /* WaveformComponent.cpp */,
+				44647C7316DA4A6F00FA33BD /* WaveformComponent.h */,
 				4471332616CD8FF500ED5338 /* TransportComponent.cpp */,
 				4471332716CD8FF500ED5338 /* TransportComponent.h */,
 				4471332316CC75A800ED5338 /* LoopComponent.cpp */,
@@ -2702,6 +2707,7 @@
 				4471332516CC75A800ED5338 /* LoopComponent.cpp in Sources */,
 				4471332816CD8FF600ED5338 /* TransportComponent.cpp in Sources */,
 				44FFF83C16D5AE5600E53F1F /* Gain.cpp in Sources */,
+				44647C7416DA4A6F00FA33BD /* WaveformComponent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
