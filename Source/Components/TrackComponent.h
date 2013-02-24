@@ -42,6 +42,7 @@
 */
 class TrackComponent  : public Component
                       , public ChangeListener
+                      , public Slider::Listener
 {
 public:
     //==============================================================================
@@ -73,6 +74,12 @@ public:
      * Called when something we're watching calls us back with a notification.
      */
     void changeListenerCallback(ChangeBroadcaster* source);
+
+    /**
+     * Called when the volume knob changes.
+     * @param sliderThatWasMoved [description]
+     */
+    void sliderValueChanged (Slider* sliderThatWasMoved);  
 
     //[/UserMethods]
 

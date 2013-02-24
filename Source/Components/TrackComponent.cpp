@@ -57,6 +57,18 @@ TrackComponent::TrackComponent (Track* track)
     this->addAndMakeVisible(fPostEffects);
     this->addAndMakeVisible(fLoop);
 
+   addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
+   fOutputVolume->setTooltip ("Track volume");
+   fOutputVolume->setRange (-96.0, 0.0, 0);
+   fOutputVolume->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
+   fOutputVolume->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+   fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
+   fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+   fOutputVolume->setPopupDisplayEnabled(true, this);
+   fOutputVolume->setTextValueSuffix("dB");
+   fOutputVolume->addListener(this);   
+
+
     //[/Constructor]
 }
 
@@ -86,7 +98,7 @@ void TrackComponent::paint (Graphics& g)
 #endif
 
     //[UserPaint] Add your own custom painting code here..
-    
+    fOutputVolume->setValue(fTrack->GetOutputVolume());    
 
 
     //[/UserPaint]
@@ -111,6 +123,13 @@ void TrackComponent::resized()
     fPreEffects->setBounds(preX, trackHeight * 0.1, pluginBlockWidth, pluginBlockHeight);
     fLoop->setBounds(loopX, trackHeight * 0.1, loopWidth, pluginBlockHeight);
     fPostEffects->setBounds(postX, trackHeight * 0.1, pluginBlockWidth, pluginBlockHeight);
+
+    // center the volume between the right edge of the post effects and the edge of the component.
+    int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());
+    const int kVolumeWidth = 32;
+    const int kVolumeHeight = 24;
+    fOutputVolume->setBounds(fPostEffects->getRight() + (availableVolumeWidth - kVolumeWidth) / 2,
+      (this->getHeight() - kVolumeHeight) / 2, kVolumeWidth, kVolumeHeight);
 
 
     //[/UserResized]
@@ -192,7 +211,15 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
   if (source == fTrack)
   {
+     this->repaint();
+  }
+}
 
+void TrackComponent::sliderValueChanged (Slider* sliderThatWasMoved)
+{
+  if (fOutputVolume == sliderThatWasMoved)
+  {
+     fTrack->SetOutputVolume(fOutputVolume->getValue());  
   }
 }
 
