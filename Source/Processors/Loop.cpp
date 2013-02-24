@@ -54,6 +54,15 @@ float LoopProcessor::GetFeedback() const
 
 }
 
+
+void LoopProcessor::Reset()
+{
+   ScopedLock sl(fMutex);
+   fLoopBuffer->clear();
+   fLoopPosition = 0;
+   fLoopCount = 0;    // ?
+}
+
 void LoopProcessor::GetLoopInfo(LoopInfo& info) const
 {
    info.fLoopSample = fLoopPosition;

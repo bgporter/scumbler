@@ -9,9 +9,37 @@ LoopComponent::LoopComponent(Track* track)
 :  fTrack(track)
 ,  fLoop(track->GetLoop())
 ,  fFeedback(nullptr)
+,  fWaveform(nullptr)
 {
+
+   fWaveform = new WaveformComponent(track);
+   this->addAndMakeVisible(fWaveform);
+
+   fDuration = new TextButton("Duration");
+   fDuration->setTooltip("Loop duration");
+   fDuration->setButtonText("D");
+   fDuration->addListener(this);
+   fDuration->setColour(TextButton::buttonColourId, Colours::white);
+   this->addAndMakeVisible(fDuration);
+   
+   fMute = new TextButton("Mute");
+   fMute->setTooltip("Mute track");
+   fMute->setButtonText("M");
+   fMute->addListener(this);
+   fMute->setColour(TextButton::buttonColourId, Colours::white);
+   fMute->setClickingTogglesState(true);
+   this->addAndMakeVisible(fMute);
+
+   fSolo = new TextButton("Solo");
+   fSolo->setTooltip("Solo track");
+   fSolo->setButtonText("S");
+   fSolo->addListener(this);
+   fSolo->setColour(TextButton::buttonColourId, Colours::white);
+   fSolo->setClickingTogglesState(true);
+   this->addAndMakeVisible(fSolo);
+
    fFeedback = new Slider("feedback");
-   fFeedback->setTooltip ("Output volume");
+   fFeedback->setTooltip ("Loop feedback");
    fFeedback->setRange (-96.0, 0.0, 0);
    fFeedback->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fFeedback->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
@@ -21,6 +49,8 @@ LoopComponent::LoopComponent(Track* track)
    fFeedback->setTextValueSuffix("dB");
    fFeedback->addListener(this);     
    this->addAndMakeVisible(fFeedback);
+
+
 
 }
 
@@ -44,7 +74,7 @@ void LoopComponent::ConnectToLoop(LoopProcessor* loop)
          fLoop->addChangeListener(this);
       }
    }
-   
+   fWaveform->ConnectToLoop(loop);
 } 
 
 void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
@@ -55,6 +85,22 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
    }
 }
 
+void LoopComponent::buttonClicked (Button* buttonThatWasClicked)
+{
+   if (fDuration == buttonThatWasClicked)
+   {
+
+   }
+   else if (fMute == buttonThatWasClicked)
+   {
+      fTrack->Mute(fMute->getToggleState());
+   }
+   else if (fSolo == buttonThatWasClicked)
+   {
+      fTrack->Solo(fSolo->getToggleState());
+   }
+
+}
 
 void LoopComponent::sliderValueChanged(Slider* slider)
 {
@@ -67,7 +113,24 @@ void LoopComponent::sliderValueChanged(Slider* slider)
 
 void LoopComponent::resized()
 {
-   fFeedback->setBounds(this->getWidth() - 30, (this->getHeight() - 24)/2, 32, 24);
+   const int controlHeight = 24;
+   const int controlRowHeight = 30;
+   const int waveformHeight = this->getHeight() - controlRowHeight;
+   const int controlTop = waveformHeight + (controlRowHeight - controlHeight) / 2;
+   const int controlHSpacing = 30;
+
+   fWaveform->setBounds(0, 0, this->getWidth(), waveformHeight);
+
+   int xPos = this->getWidth() * 0.1;
+   fDuration->setBounds(xPos, controlTop, 24, 24);
+   xPos += controlHSpacing;
+   fMute->setBounds(xPos, controlTop, 24, 24);
+   xPos += controlHSpacing;
+   fSolo->setBounds(xPos, controlTop, 24, 24);
+
+
+
+   fFeedback->setBounds(this->getWidth() * 0.9, controlTop, 32, 24);
 }
 
 void LoopComponent::paint(Graphics& g)
@@ -79,4 +142,6 @@ void LoopComponent::paint(Graphics& g)
 
    float feedback = fLoop->GetFeedback();
    fFeedback->setValue(GainToDb(feedback));
+
+   fDuration->setEnabled(!fTrack->IsPlaying());
 }

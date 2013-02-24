@@ -9,9 +9,12 @@
 
 #include "Loop.h"
 #include "Track.h"
+#include "WaveformComponent.h"
+
 
 class LoopComponent  :  public Component 
                      ,  public ChangeListener
+                     ,  public ButtonListener
                      ,  public Slider::Listener
 {
 public:
@@ -30,6 +33,9 @@ public:
     * @param source [description]
     */
    void changeListenerCallback(ChangeBroadcaster* source);
+
+
+   void buttonClicked (Button* buttonThatWasClicked);
 
    /**
     * Called when the feedback knob is moved.
@@ -53,7 +59,11 @@ public:
 private:
    Track* fTrack;
    LoopProcessor* fLoop;
+   TextButton* fDuration;
+   TextButton* fMute;
+   TextButton* fSolo; 
    Slider*  fFeedback;
+   WaveformComponent* fWaveform;
 
 };
 

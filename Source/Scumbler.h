@@ -250,6 +250,14 @@ public:
      */
     Track* GetSoloTrack() const;
 
+
+    /**
+     * Reset the loop buffers of all tracks that the scumbler owns, clearing them, and 
+     * putting all of their loop pointers at the beginning.
+     * @return success/fail.
+     */
+    tk::Result ResetAllTracks(); 
+
     /**
      * Move an existing track to a different index in the array. 
      * @param  fromIndex The current index of the track that we want to move

@@ -93,6 +93,7 @@ private:
     PluginBlockComponent* fPreEffects;
     PluginBlockComponent* fPostEffects;
     LoopComponent*  fLoop;
+    Slider* fOutputVolume;
     //[/UserVariables]
 
     //==============================================================================

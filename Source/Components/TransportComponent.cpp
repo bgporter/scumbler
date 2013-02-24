@@ -114,7 +114,7 @@ void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
    }
    else if (fResetButton == buttonThatWasClicked)
    {
-      // !!! todo.
+      fScumbler->ResetAllTracks();
    }
 }
 

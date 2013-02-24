@@ -66,6 +66,11 @@ public:
    float GetFeedback() const;
 
    /**
+    * Clear and reset the loop, setting all read/write positions back to zero.
+    */
+   void Reset();
+
+   /**
     * Retrieve useful and current data about the state of our looping so we can 
     * update the UI correctly.
     * @param info LoopInfo struct. Filled on output.

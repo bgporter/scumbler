@@ -16,19 +16,28 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 ,  fPostEffects(nullptr)
 ,  fLoop(nullptr)
 ,  fLoopId(tk::kInvalidNode)
+,  fOutputGain(nullptr)
+,  fVolumeId(tk::kInvalidNode)
+,  fOutputVolume(0.0)
 {
    // we need the input and output nodes that the Scumbler controls.
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
 
+   // create and insert the gain processor.
+   fOutputGain = new GainProcessor(this);
+   fVolumeId = fScumbler->AddProcessor(fOutputGain);
+   fScumbler->InsertBetween(input, fVolumeId, output);
+
    // create & insert the loop processor
    fLoop = new LoopProcessor(this);
    fLoopId = fScumbler->AddProcessor(fLoop);
-   fScumbler->InsertBetween(input, fLoopId, output);
+   fScumbler->InsertBetween(input, fLoopId, fVolumeId);
+
 
    // create the plugin blocks and hook them in.
    fPreEffects = new PluginBlock(fScumbler, input, fLoopId, fPreEffectCount);
-   fPostEffects = new PluginBlock(fScumbler, fLoopId, output, fPostEffectCount);
+   fPostEffects = new PluginBlock(fScumbler, fLoopId, fVolumeId, fPostEffectCount);
 
 
 }
@@ -104,6 +113,35 @@ bool Track::IsMuted() const
    ScopedLock sl(fMutex);
    return fMuted;
 }
+
+
+void Track::ResetLoop()
+{
+   fLoop->Reset();
+}
+
+void Track::SetOutputVolume(float volumeInDb)
+{
+   if (volumeInDb != fOutputVolume)
+   {
+      fOutputVolume = volumeInDb;
+
+      //!!! Send the new gain to the audio processor that actually controls
+      // the output.
+      float gain = DbToFloat(fOutputVolume);
+      fOutputGain->SetGain(gain);
+
+      // update our observers.
+      this->sendChangeMessage();
+   }
+
+}
+
+float Track::GetOutputVolume() const
+{
+   return fOutputVolume;   
+}
+
 
 void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener)
 {

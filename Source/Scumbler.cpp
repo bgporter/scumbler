@@ -54,6 +54,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
    fPlayer.setProcessor(&fGraph);
    fDeviceManager.addAudioCallback(&fPlayer);
    this->Reset();
+   this->SetOutputVolume(fOutputVolume);
 }
 
 Scumbler::~Scumbler()
@@ -111,7 +112,7 @@ void Scumbler::Reset()
    this->Connect(fInputNode, fOutputNode);
 
    // connect a gain processor in the middle:
-   GainProcessor* gain = new GainProcessor(2);
+   GainProcessor* gain = new GainProcessor(nullptr, 2);
    NodeId gainNode = this->AddProcessor(gain);
    if (tk::kSuccess == this->InsertBetween(fInputNode, gainNode, fOutputNode))
    {
@@ -306,6 +307,16 @@ Track* Scumbler::GetSoloTrack() const
    return fSoloTrack;
 }
 
+tk::Result Scumbler::ResetAllTracks()
+{
+   for (int i = 0; i < this->GetNumTracks(); ++i)
+   {
+      Track* t = this->GetTrack(i);
+      t->ResetLoop();
+   }
+   return tk::kSuccess;
+
+}
 
 tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
 {

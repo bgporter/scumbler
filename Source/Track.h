@@ -8,6 +8,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginBlock.h"
+#include "Processors/Gain.h"
 #include "Processors/Loop.h"
 #include "Processors/Passthrough.h"
 #include "Scumbler.h"
@@ -82,6 +83,27 @@ public:
     */
    bool IsMuted() const;
 
+   /**
+    * Reset the contents of the loop. Zero out all samples & return the loop 
+    * read/write position to zero.
+    */
+   void ResetLoop();
+
+    /**
+     * Set the track's output volume. 
+     * @param volumeInDb dB, probably -96..0
+     */
+    void SetOutputVolume(float volumeInDb);
+
+    /**
+     * Get the current track output volume in dB
+     * @return floating point dB value, probably in the range -96.0 .. 0.0
+     */
+    float GetOutputVolume() const;
+
+
+
+
    enum ListenTo
    {
       kPreFx = 0,
@@ -97,11 +119,35 @@ public:
     */
    void UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener);
 
+   /**
+    * Return the number of slots in our block of pre-effects.
+    * @return count of effects.
+    */
    int GetPreEffectCount() const { return fPreEffectCount; };
+
+   /**
+    * Get a pointer to the PluginBlock holding our pre-effects.
+    * @return pointer.
+    */
    PluginBlock* GetPreEffectBlock() const { return fPreEffects; };
+
+   /**
+    * Return the number of slots in our block of post-effects.
+    * @return count of effects.
+    */
    int GetPostEffectCount() const { return fPostEffectCount; };
+
+   /**
+    * Get a pointer to the PluginBlock holding our pre-effects.
+    * @return pointer.
+    */
    PluginBlock* GetPostEffectBlock() const { return fPostEffects; };
 
+
+   /**
+    * Get  pointer to the LoopProcessor for this track.
+    * @return pointer.
+    */
    LoopProcessor* GetLoop() const { return fLoop; };
    
 
@@ -158,6 +204,17 @@ private:
     * node id of the loop.
     */
    NodeId fLoopId;
+
+   /**
+    * A non-owning pointer to the output volume processor for this track.
+    */
+   GainProcessor*   fOutputGain;
+   NodeId fVolumeId;
+
+   /**
+    * output volume in dB
+    */
+   float fOutputVolume;
 
    CriticalSection fMutex;
 
