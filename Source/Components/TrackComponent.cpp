@@ -68,6 +68,23 @@ TrackComponent::TrackComponent (Track* track)
    fOutputVolume->setTextValueSuffix("dB");
    fOutputVolume->addListener(this);   
 
+   fMute = new TextButton("Mute");
+   fMute->setTooltip("Mute track");
+   fMute->setButtonText("M");
+   fMute->addListener(this);
+   fMute->setColour(TextButton::buttonColourId, Colours::white);
+   fMute->setClickingTogglesState(true);
+   this->addAndMakeVisible(fMute);
+
+   fSolo = new TextButton("Solo");
+   fSolo->setTooltip("Solo track");
+   fSolo->setButtonText("S");
+   fSolo->addListener(this);
+   fSolo->setColour(TextButton::buttonColourId, Colours::white);
+   fSolo->setClickingTogglesState(true);
+   this->addAndMakeVisible(fSolo);
+
+
 
     //[/Constructor]
 }
@@ -126,10 +143,17 @@ void TrackComponent::resized()
 
     // center the volume between the right edge of the post effects and the edge of the component.
     int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());
-    const int kVolumeWidth = 32;
+    const int kVolumeWidth = 24;
     const int kVolumeHeight = 24;
-    fOutputVolume->setBounds(fPostEffects->getRight() + (availableVolumeWidth - kVolumeWidth) / 2,
-      (this->getHeight() - kVolumeHeight) / 2, kVolumeWidth, kVolumeHeight);
+    const int kXPos = fPostEffects->getRight() + (availableVolumeWidth - kVolumeWidth) / 2;
+    const int kMargin = 5;
+    int yPos = (this->getHeight() - kVolumeHeight) / 2;
+
+    fMute->setBounds(kXPos, yPos, kVolumeWidth, kVolumeHeight);
+    fOutputVolume->setBounds(kXPos, yPos - kVolumeHeight - kMargin, 
+      kVolumeHeight, kVolumeHeight);
+    fSolo->setBounds(kXPos, yPos + kVolumeHeight + kMargin, kVolumeHeight, kVolumeHeight);
+
 
 
     //[/UserResized]
@@ -213,6 +237,19 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
   {
      this->repaint();
   }
+}
+
+void TrackComponent::buttonClicked (Button* buttonThatWasClicked)
+{
+   if (fMute == buttonThatWasClicked)
+   {
+      fTrack->Mute(fMute->getToggleState());
+   }
+   else if (fSolo == buttonThatWasClicked)
+   {
+      fTrack->Solo(fSolo->getToggleState());
+   }
+
 }
 
 void TrackComponent::sliderValueChanged (Slider* sliderThatWasMoved)

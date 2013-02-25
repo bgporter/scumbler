@@ -60,8 +60,6 @@ private:
    Track* fTrack;
    LoopProcessor* fLoop;
    TextButton* fDuration;
-   TextButton* fMute;
-   TextButton* fSolo; 
    Slider*  fFeedback;
    WaveformComponent* fWaveform;
 

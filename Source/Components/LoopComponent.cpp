@@ -22,21 +22,6 @@ LoopComponent::LoopComponent(Track* track)
    fDuration->setColour(TextButton::buttonColourId, Colours::white);
    this->addAndMakeVisible(fDuration);
    
-   fMute = new TextButton("Mute");
-   fMute->setTooltip("Mute track");
-   fMute->setButtonText("M");
-   fMute->addListener(this);
-   fMute->setColour(TextButton::buttonColourId, Colours::white);
-   fMute->setClickingTogglesState(true);
-   this->addAndMakeVisible(fMute);
-
-   fSolo = new TextButton("Solo");
-   fSolo->setTooltip("Solo track");
-   fSolo->setButtonText("S");
-   fSolo->addListener(this);
-   fSolo->setColour(TextButton::buttonColourId, Colours::white);
-   fSolo->setClickingTogglesState(true);
-   this->addAndMakeVisible(fSolo);
 
    fFeedback = new Slider("feedback");
    fFeedback->setTooltip ("Loop feedback");
@@ -91,15 +76,6 @@ void LoopComponent::buttonClicked (Button* buttonThatWasClicked)
    {
 
    }
-   else if (fMute == buttonThatWasClicked)
-   {
-      fTrack->Mute(fMute->getToggleState());
-   }
-   else if (fSolo == buttonThatWasClicked)
-   {
-      fTrack->Solo(fSolo->getToggleState());
-   }
-
 }
 
 void LoopComponent::sliderValueChanged(Slider* slider)
@@ -117,18 +93,11 @@ void LoopComponent::resized()
    const int controlRowHeight = 30;
    const int waveformHeight = this->getHeight() - controlRowHeight;
    const int controlTop = waveformHeight + (controlRowHeight - controlHeight) / 2;
-   const int controlHSpacing = 30;
 
    fWaveform->setBounds(0, 0, this->getWidth(), waveformHeight);
 
    int xPos = this->getWidth() * 0.1;
    fDuration->setBounds(xPos, controlTop, 24, 24);
-   xPos += controlHSpacing;
-   fMute->setBounds(xPos, controlTop, 24, 24);
-   xPos += controlHSpacing;
-   fSolo->setBounds(xPos, controlTop, 24, 24);
-
-
 
    fFeedback->setBounds(this->getWidth() * 0.9, controlTop, 32, 24);
 }

@@ -42,6 +42,7 @@
 */
 class TrackComponent  : public Component
                       , public ChangeListener
+                      , public ButtonListener
                       , public Slider::Listener
 {
 public:
@@ -81,6 +82,12 @@ public:
      */
     void sliderValueChanged (Slider* sliderThatWasMoved);  
 
+    /**
+     * Called when a button is clicked.
+     * @param buttonThatWasClicked Pointer to a button object.
+     */
+    void buttonClicked (Button* buttonThatWasClicked);
+
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -101,6 +108,8 @@ private:
     PluginBlockComponent* fPostEffects;
     LoopComponent*  fLoop;
     Slider* fOutputVolume;
+    TextButton* fMute;
+    TextButton* fSolo; 
     //[/UserVariables]
 
     //==============================================================================
