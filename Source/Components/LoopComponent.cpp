@@ -74,7 +74,8 @@ void LoopComponent::buttonClicked (Button* buttonThatWasClicked)
 {
    if (fDuration == buttonThatWasClicked)
    {
-
+      int duration = fLoop->GetLoopDuration();
+      fLoop->SetLoopDuration(duration + 500);
    }
 }
 

@@ -11,6 +11,7 @@
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
 :  PassthroughProcessor(channelCount)
 ,  fTrack(track)
+,  fSampleRate(44100.0)
 ,  fLoopDuration(4000)
 ,  fFeedback(0.9f)
 ,  fLoopBuffer(nullptr)
@@ -25,16 +26,41 @@ LoopProcessor::~LoopProcessor()
 
 }
 
-void LoopProcessor::SetLoopDuration(int milliseconds)
+tk::Result LoopProcessor::SetLoopDuration(int milliseconds)
 {
-   // ensure that our duration falls within an accept20able range
-   fLoopDuration = mMax((int)kMinDuration, milliseconds);
-   fLoopDuration = mMin(fLoopDuration,  kMaxDuration);
+   tk::Result retval = tk::kNotWhenPlaying;
+   if (!fTrack->IsPlaying())
+   {
+      // Hey! If this can't be called while we're playing, why are we worried about
+      // thread safety? I'm concerned that it's possible to start playback while the 
+      // buffer reallocation is in progress and BOOM.
+      ScopedLock sl(fMutex);
+      // ensure that our duration falls within an accept20able range
+      fLoopDuration = mMax((int)kMinDuration, milliseconds);
+      fLoopDuration = mMin(fLoopDuration,  kMaxDuration);
 
+      int sampleCount = static_cast<int>(fSampleRate * fLoopDuration / 1000.0);
+
+      if (nullptr == fLoopBuffer)
+      {
+          fLoopBuffer = new AudioSampleBuffer(fChannelCount, sampleCount);
+          this->Reset();
+      }
+      else if (sampleCount != fLoopBuffer->getNumSamples())
+      {
+         // resizing
+         fLoopBuffer->setSize(fChannelCount, sampleCount);
+         this->Reset();
+      }
+      retval = tk::kSuccess;
+
+   }
+   return retval;
 }
 
 int LoopProcessor::GetLoopDuration() const
 {
+   ScopedLock sl(fMutex);
    return fLoopDuration;
 }
 
@@ -61,10 +87,13 @@ void LoopProcessor::Reset()
    fLoopBuffer->clear();
    fLoopPosition = 0;
    fLoopCount = 0;    // ?
+   this->sendChangeMessage();
 }
 
 void LoopProcessor::GetLoopInfo(LoopInfo& info) const
 {
+   ScopedLock sl(fMutex);   
+   info.fSampleRate = fSampleRate;
    info.fLoopSample = fLoopPosition;
    info.fLoopLength = fLoopBuffer->getNumSamples();
    info.fLoopCount = fLoopCount;
@@ -79,19 +108,10 @@ const String LoopProcessor::getName() const
 void LoopProcessor::prepareToPlay(double sampleRate, int estimatedSamplesPerBlock)
 {
    PassthroughProcessor::prepareToPlay(sampleRate, estimatedSamplesPerBlock);
+
+   fSampleRate = sampleRate;
    // we may need to resize our internal buffers.
-   int bufferLength = fLoopDuration * (sampleRate / 1000);
-   if (nullptr == fLoopBuffer)
-   {
-      fLoopBuffer = new AudioSampleBuffer(fChannelCount, bufferLength);
-
-   }
-   else if (bufferLength != fLoopBuffer->getNumSamples())
-   {
-      fLoopBuffer->setSize(fChannelCount, bufferLength);
-      fLoopBuffer->clear();
-
-   }
+   this->SetLoopDuration(fLoopDuration);
 
 }
 

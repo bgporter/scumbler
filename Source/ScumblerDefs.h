@@ -41,10 +41,11 @@ namespace tk
       kAlreadyConnected,    /**< Attempt to connect two nodes already connected. */
       kNoSourceNode,        /**< The specified source node doesn't exist. */
       kNoDestNode,          /**< The specified destination node doesn't exist. */
-      kNoTargetNode,         /**< The node you're trying to manipulate isn't there. */
+      kNoTargetNode,        /**< The node you're trying to manipulate isn't there. */
       kIndexOutOfRange,     /**< The index value was too high or low. */
       kSlotFull,            /**< Attempting to put something into a full slot */  
       kPluginLoadError,     /**< error loading a plugin; check error string */
+      kNotWhenPlaying,      /**< this operation can't happen when we're playing. */
 
    };
 

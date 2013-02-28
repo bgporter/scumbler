@@ -30,10 +30,11 @@ public:
     */
    struct LoopInfo
    {
-      int   fLoopSample;
-      int   fLoopLength;
-      int   fLoopCount;
-      bool  fIsPlaying;   
+      double  fSampleRate;  //**< current sample rate
+      int     fLoopSample;  //**< index of the *next* sample that will be written to 
+      int     fLoopLength;  //**< number of samples in the loop
+      int     fLoopCount;   //**< how many times have we played through the loop?
+      bool    fIsPlaying;   //**< are we currently playing?
    };
 
    LoopProcessor(Track* track, int channelCount = 1);
@@ -45,7 +46,7 @@ public:
     * buffers, and should probably only be permissable if we're not playing.
     * @param milliseconds Duration of the loop in ms.
     */
-   void SetLoopDuration(int milliseconds);
+   tk::Result SetLoopDuration(int milliseconds);
 
    /**
     * Get the current duration of the loop 
@@ -139,6 +140,12 @@ private:
     * Track that we belong to.
     */
    Track* fTrack;
+
+   /**
+    * number of samples per second.
+    */
+   double fSampleRate;
+
 
    /**
     * Loop duration in ms.
