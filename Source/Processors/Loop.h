@@ -67,6 +67,12 @@ public:
    float GetFeedback() const;
 
    /**
+    * Is this loop playing? (true if the track is playing..   .)
+    * @return bool.
+    */
+   bool IsPlaying() const;
+
+   /**
     * Clear and reset the loop, setting all read/write positions back to zero.
     */
    void Reset();

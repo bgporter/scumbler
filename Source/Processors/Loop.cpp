@@ -80,6 +80,15 @@ float LoopProcessor::GetFeedback() const
 
 }
 
+bool LoopProcessor::IsPlaying() const
+{
+   bool retval = false;
+   if (fTrack)
+   {
+      retval = fTrack->IsPlaying();
+   }
+   return retval;
+}
 
 void LoopProcessor::Reset()
 {

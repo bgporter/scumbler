@@ -133,4 +133,6 @@ void LoopComponent::paint(Graphics& g)
    float feedback = fLoop->GetFeedback();
    fFeedback->setValue(GainToDb(feedback));
 
+   fDuration->setEnabled(!fLoop->IsPlaying());
+
 }
