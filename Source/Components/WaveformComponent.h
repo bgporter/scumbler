@@ -15,7 +15,7 @@ class WaveformComponent :  public Component
                         ,  public ChangeListener   
 {
 public:
-   WaveformComponent(Track* track);
+   WaveformComponent(LoopProcessor* loop);
 
    ~WaveformComponent();
 
@@ -47,7 +47,6 @@ public:
 
 
 private:
-   Track* fTrack;
    LoopProcessor* fLoop;
 
 };

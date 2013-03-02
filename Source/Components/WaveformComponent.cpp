@@ -4,13 +4,12 @@
 
 #include "Track.h"
 
-WaveformComponent::WaveformComponent(Track* track)
-:  fTrack(track),
-   fLoop(nullptr)
+WaveformComponent::WaveformComponent(LoopProcessor* loop)
+:  fLoop(nullptr)
 {
-   if (fTrack)
+   if (loop)
    {
-      this->ConnectToLoop(fTrack->GetLoop());
+      this->ConnectToLoop(loop);
    }
 }
 

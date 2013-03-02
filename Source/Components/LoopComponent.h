@@ -8,17 +8,35 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Loop.h"
-#include "Track.h"
 #include "WaveformComponent.h"
 
+
+
+class DragLabel : public Label
+{
+public:
+   DragLabel(const String &componentName=String::empty, const String &labelText=String::empty)
+   :  Label(componentName, labelText)
+   {
+
+   }
+
+
+
+protected:
+   void mouseUp(const MouseEvent& e);
+
+private:
+};
 
 class LoopComponent  :  public Component 
                      ,  public ChangeListener
                      ,  public ButtonListener
+                     ,  public Label::Listener
                      ,  public Slider::Listener
 {
 public:
-   LoopComponent(Track* track);
+   LoopComponent(LoopProcessor* loop);
 
    ~LoopComponent();
 
@@ -36,6 +54,9 @@ public:
 
 
    void buttonClicked (Button* buttonThatWasClicked);
+
+
+   void labelTextChanged(Label* label);
 
    /**
     * Called when the feedback knob is moved.
@@ -57,9 +78,8 @@ public:
 
 
 private:
-   Track* fTrack;
    LoopProcessor* fLoop;
-   TextButton* fDuration;
+   Label* fDuration;
    Slider*  fFeedback;
    WaveformComponent* fWaveform;
 

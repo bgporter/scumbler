@@ -44,7 +44,7 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
                                            "00:00:00"));
    fPlayTime->setFont (Font ("Helvetica", 26.0000f, Font::plain));
    fPlayTime->setJustificationType (Justification::centred);
-   fPlayTime->setEditable (false, false, false);
+   fPlayTime->setEditable (true, false, false);
    fPlayTime->setColour(TextEditor::textColourId, Colours::black);
    fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));
 

@@ -5,23 +5,34 @@
 #include "Scumbler.h"
 
 
-LoopComponent::LoopComponent(Track* track)
-:  fTrack(track)
-,  fLoop(track->GetLoop())
+void DragLabel::mouseUp(const MouseEvent& e)
+{
+   int x = 9;
+   //this->showEditor();
+   Label::mouseUp(e);
+}
+
+LoopComponent::LoopComponent(LoopProcessor* loop)
+:  fLoop(nullptr)
 ,  fFeedback(nullptr)
 ,  fWaveform(nullptr)
 {
 
-   fWaveform = new WaveformComponent(track);
+   fWaveform = new WaveformComponent(nullptr);
    this->addAndMakeVisible(fWaveform);
+    
+   this->ConnectToLoop(loop);
 
-   fDuration = new TextButton("Duration");
+   fDuration = new Label("Duration");
    fDuration->setTooltip("Loop duration");
-   fDuration->setButtonText("D");
+   fDuration->setJustificationType(Justification::centredRight);
+   fDuration->setEditable(true, false, false);
+   fDuration->setBorderSize(1, 1);
+   //fDuration->setColour(Label::outlineColourId, Colours::green);
+   fDuration->setText(String(fLoop->GetLoopDuration()), false);
    fDuration->addListener(this);
-   fDuration->setColour(TextButton::buttonColourId, Colours::white);
    this->addAndMakeVisible(fDuration);
-   
+
 
    fFeedback = new Slider("feedback");
    fFeedback->setTooltip ("Loop feedback");
@@ -66,18 +77,27 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (source == fLoop)
    {
-      this->repaint();
+      fDuration->setText(String(fLoop->GetLoopDuration()), false);
+      //this->repaint();
    }
 }
 
 void LoopComponent::buttonClicked (Button* buttonThatWasClicked)
 {
-   if (fDuration == buttonThatWasClicked)
-   {
-      int duration = fLoop->GetLoopDuration();
-      fLoop->SetLoopDuration(duration + 500);
-   }
 }
+
+
+void LoopComponent::labelTextChanged(Label* label)
+{
+   if (label == fDuration)
+   {
+      Value val = fDuration->getTextValue();
+      int newDuration = static_cast<int>(val.getValue());
+      fLoop->SetLoopDuration(newDuration);
+   }
+
+}
+
 
 void LoopComponent::sliderValueChanged(Slider* slider)
 {
@@ -98,7 +118,7 @@ void LoopComponent::resized()
    fWaveform->setBounds(0, 0, this->getWidth(), waveformHeight);
 
    int xPos = this->getWidth() * 0.1;
-   fDuration->setBounds(xPos, controlTop, 24, 24);
+   fDuration->setBounds(5, waveformHeight + 2, 64, 16);
 
    fFeedback->setBounds(this->getWidth() * 0.9, controlTop, 32, 24);
 }
@@ -113,5 +133,4 @@ void LoopComponent::paint(Graphics& g)
    float feedback = fLoop->GetFeedback();
    fFeedback->setValue(GainToDb(feedback));
 
-   fDuration->setEnabled(!fTrack->IsPlaying());
 }

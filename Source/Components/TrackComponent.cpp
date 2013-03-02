@@ -52,7 +52,7 @@ TrackComponent::TrackComponent (Track* track)
     //[Constructor] You can add your own custom stuff here..
     fPreEffects = new PluginBlockComponent(pre);
     fPostEffects = new PluginBlockComponent(post);
-    fLoop = new LoopComponent(track);
+    fLoop = new LoopComponent(loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
     this->addAndMakeVisible(fLoop);
