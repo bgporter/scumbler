@@ -8,7 +8,12 @@
 void DragLabel::mouseUp(const MouseEvent& e)
 {
    int x = 9;
-   //this->showEditor();
+   this->showEditor();
+   TextEditor* ed = this->getCurrentTextEditor();
+   if (ed)
+   {
+      ed->setInputRestrictions(7, "0123456789");
+   }
    Label::mouseUp(e);
 }
 
@@ -23,7 +28,7 @@ LoopComponent::LoopComponent(LoopProcessor* loop)
     
    this->ConnectToLoop(loop);
 
-   fDuration = new Label("Duration");
+   fDuration = new DragLabel("Duration");
    fDuration->setTooltip("Loop duration");
    fDuration->setJustificationType(Justification::centredRight);
    fDuration->setEditable(true, false, false);
@@ -77,7 +82,7 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (source == fLoop)
    {
-      fDuration->setText(String(fLoop->GetLoopDuration()), false);
+      fDuration->setText(String(fLoop->GetLoopDuration()) + " ms", false);
       //this->repaint();
    }
 }
