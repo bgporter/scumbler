@@ -93,6 +93,15 @@ void WaveformComponent::resized()
    // the center line
    fCenterYPos = this->getHeight() / 2.0;
    fFullScaleHeight = fCenterYPos * 0.9f;
+   LoopProcessor::LoopInfo info;
+   if (fLoop)
+   {
+      fLoop->GetLoopInfo(info);
+      if (info.fLoopLength > 0)
+      {
+         this->Clear();
+      }
+   }
 
 }
 
@@ -108,6 +117,7 @@ void WaveformComponent::Clear()
 {
    // !!! mark the entire display as needing refresh.
    fThumbData->fStart = 0.0f;
+   this->GetThumbnailData();
    this->repaint();
 }
 
