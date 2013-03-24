@@ -27,8 +27,6 @@ PluginListWindow::PluginListWindow(MainAppWindow* owner, AudioPluginFormatManage
    this->setTopLeftPosition(60, 60);
    this->restoreWindowStateFromString(userSettings->getValue("listWindowPos"));
    this->setVisible(true);
-
-
 }
 
 

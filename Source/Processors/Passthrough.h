@@ -38,6 +38,8 @@ public:
     * @return String filled with the name.
     */
    const String getName() const;
+
+   int GetChannelCount() const { return fChannelCount; };
  
    /**
     * Called before playback starts to get things ready.

@@ -4,16 +4,36 @@
 		"selected_items":
 		[
 			[
-				"dB",
-				"dbToFloat"
+				"fLoop",
+				"fLoopCount"
+			],
+			[
+				"pixel",
+				"pixelVal"
+			],
+			[
+				"fSampl",
+				"fSamplesPerPixel"
+			],
+			[
+				"info",
+				"infoObj"
 			],
 			[
 				"Get",
-				"GetPreEffectBlock"
+				"GetLoopDuration"
 			],
 			[
-				"fLoop",
-				"fLoopPosition"
+				"add",
+				"addChangeListener"
+			],
+			[
+				"kIn",
+				"kInvalidNode"
+			],
+			[
+				"dB",
+				"dbToFloat"
 			],
 			[
 				"fLoo",
@@ -100,42 +120,26 @@
 	"buffers":
 	[
 		{
-			"file": "Scumbler.cpp",
+			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 12128,
+				"buffer_size": 4444,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scumbler.h",
+			"file": "Components/WaveformComponent.h",
 			"settings":
 			{
-				"buffer_size": 12752,
+				"buffer_size": 3136,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Track.cpp",
+			"file": "Processors/Loop.cpp",
 			"settings":
 			{
-				"buffer_size": 2886,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Track.h",
-			"settings":
-			{
-				"buffer_size": 3994,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Processors/Passthrough.h",
-			"settings":
-			{
-				"buffer_size": 2404,
+				"buffer_size": 7761,
 				"line_ending": "Unix"
 			}
 		},
@@ -143,33 +147,7 @@
 			"file": "Processors/Loop.h",
 			"settings":
 			{
-				"buffer_size": 3272,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Processors/Gain.h",
-			"settings":
-			{
-				"buffer_size": 1983,
-				"line_ending": "Unix",
-				"name": "// Copyright (c) 2013 Bg Porter"
-			}
-		},
-		{
-			"file": "Processors/Gain.cpp",
-			"settings":
-			{
-				"buffer_size": 644,
-				"line_ending": "Unix",
-				"name": "// Copyright (c) 2013  Bg Porter"
-			}
-		},
-		{
-			"file": "Components/TransportComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 4062,
+				"buffer_size": 7188,
 				"line_ending": "Unix"
 			}
 		}
@@ -177,9 +155,13 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 107.0,
+		"height": 227.0,
 		"selected_items":
 		[
+			[
+				"pac in",
+				"Package Control: Install Package"
+			],
 			[
 				"insta",
 				"Package Control: Install Package"
@@ -250,30 +232,40 @@
 	},
 	"file_history":
 	[
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
-		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoRecordPage.cpp",
-		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoLatencyPage.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/thumbnail.py",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformPixelBuffer.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Loop.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoRecordPage.cpp",
+		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoLatencyPage.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
@@ -283,13 +275,10 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Track.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h",
 		"/Users/bgporter/personal/juce/modules/juce_gui_basics/windows/juce_TooltipWindow.cpp",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Base File.sublime-settings",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Scumbler.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler",
@@ -370,13 +359,7 @@
 		"/Users/bgporter/Documents/Kath/worksheet/worksheet.py",
 		"/Users/bgporter/temp/temp.html",
 		"/Users/bgporter/Documents/Kath/worksheet/test2.html",
-		"/Users/bgporter/Documents/Kath/worksheet/worksheet.css",
-		"/Users/bgporter/Documents/Kath/worksheet/test3.html",
-		"/Users/bgporter/Documents/Kath/worksheet/w2.css",
-		"/Users/bgporter/Documents/Kath/worksheet/q.html",
-		"/Users/bgporter/Documents/Kath/worksheet/test.html",
-		"/Users/bgporter/Documents/Kath/worksheet/test2.html~",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap"
+		"/Users/bgporter/Documents/Kath/worksheet/worksheet.css"
 	],
 	"find":
 	{
@@ -384,7 +367,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
 			""
@@ -395,6 +378,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ViewPlugins",
+			"//",
+			"201",
+			"         \n",
+			".\n",
+			"   \n",
+			"    \n",
+			"()));\n",
+			"();\n",
+			"    \n",
+			"() ",
+			"\n",
+			"ConnectToLoop",
+			"LoopComponent",
 			"getCurrentAudio",
 			"IsPl",
 			"new TrackComponent",
@@ -519,23 +516,22 @@
 	"groups":
 	[
 		{
-			"selected": 8,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Scumbler.cpp",
+					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 12128,
+						"buffer_size": 4444,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								445,
-								445
+								2300,
+								2300
 							]
 						],
 						"settings":
@@ -545,25 +541,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 699.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Scumbler.h",
+					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 12752,
+						"buffer_size": 3136,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								587,
-								587
+								318,
+								318
 							]
 						],
 						"settings":
@@ -573,25 +569,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1087.0,
+						"translation.y": 122.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Track.cpp",
+					"file": "Processors/Loop.cpp",
 					"settings":
 					{
-						"buffer_size": 2886,
+						"buffer_size": 7761,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2188,
-								2188
+								4497,
+								4502
 							]
 						],
 						"settings":
@@ -601,81 +597,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 478.0,
+						"translation.y": 3008.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Track.h",
-					"settings":
-					{
-						"buffer_size": 3994,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1483,
-								1483
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 698.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Processors/Passthrough.h",
-					"settings":
-					{
-						"buffer_size": 2404,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								882,
-								882
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
 					"file": "Processors/Loop.h",
 					"settings":
 					{
-						"buffer_size": 3272,
+						"buffer_size": 7188,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1999,
-								1878
+								0,
+								0
 							]
 						],
 						"settings":
@@ -685,91 +625,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 292.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "Processors/Gain.h",
-					"settings":
-					{
-						"buffer_size": 1983,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								645,
-								645
-							]
-						],
-						"settings":
-						{
-							"auto_name": "// Copyright (c) 2013 Bg Porter",
-							"is_xml": false,
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "Processors/Gain.cpp",
-					"settings":
-					{
-						"buffer_size": 644,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								100,
-								100
-							]
-						],
-						"settings":
-						{
-							"auto_name": "// Copyright (c) 2013  Bg Porter",
-							"is_xml": false,
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "Components/TransportComponent.cpp",
-					"settings":
-					{
-						"buffer_size": 4062,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1748,
-								1748
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 390.0,
+						"translation.y": 719.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -861,6 +717,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 189.0,
+	"side_bar_width": 185.0,
 	"status_bar_visible": true
 }

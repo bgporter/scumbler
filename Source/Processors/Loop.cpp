@@ -2,11 +2,38 @@
 
 #include "Loop.h"
 
+#include <math.h>
+
 #include "Track.h"
+
+
 
 #define mMin(x, y) (x) < (y) ? (x) : (y)
 #define mMax(x, y) (x) < (y) ? (y) : (x)
 
+
+
+LoopProcessor::ThumbnailData::ThumbnailData(int channelCount)
+{
+   fPixelData.resize(channelCount);
+}
+
+void LoopProcessor::ThumbnailData::Resize(int newCapacity)
+{
+   // for (int channel = 0; channel < fPixelData.size(); ++channel)
+   // {
+   //    fPixelData[channel].resize(newCapacity);
+   // }
+   fPixelData.resize(newCapacity);
+}
+
+void LoopProcessor::ThumbnailData::SetPixelValue(int channel, int pixelNum, float val)
+{
+   // DANGER: assuming that all parameters are sane values
+   //fPixelData[channel].set(pixelNum, val);
+   fPixelData.set(pixelNum, val);
+
+}
 
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
 :  PassthroughProcessor(channelCount)
@@ -54,6 +81,7 @@ tk::Result LoopProcessor::SetLoopDuration(int milliseconds)
       }
       retval = tk::kSuccess;
 
+      this->sendChangeMessage();
    }
    return retval;
 }
@@ -90,6 +118,65 @@ bool LoopProcessor::IsPlaying() const
    return retval;
 }
 
+
+void LoopProcessor::GetThumbnailData(ThumbnailData* data)
+{
+   // !!! Note that all of this logic breaks down when samples per pixel 
+   // is < 1.0. It's not clear what we'd want to display in that case anyway
+   // at the current moment -- we'll re-evaluate when we get there (and get
+   // this code working)
+
+   float accum = data->fStart;
+   int startSample = static_cast<int>(accum);
+   int samplesAvailable = fLoopBuffer->getNumSamples() - startSample;
+   int pixelsDesired = data->fMaxThumbnailValues;
+   int pixelsAvailable = 0;
+   int samplesDesired = pixelsDesired * data->fSamplesPerPixel;
+
+   if (samplesAvailable < data->fSamplesPerPixel)
+   {
+      // not enough samples there for us to deal with. This shouldn't happen.
+      data->fPixelsReturned = 0;
+      return;
+   }
+   else if (samplesAvailable < samplesDesired)
+   {
+      // we can only give them some of the data that they'd like.
+      pixelsAvailable = int(samplesAvailable / data->fSamplesPerPixel);
+   }
+   else
+   {
+      // typical case -- we can give them all the data that they want.
+      pixelsAvailable = pixelsDesired;
+   }
+
+   int pixelIndex = 0;
+   // !!! first iteration -- only deal with one channel.
+   float* sampleData = fLoopBuffer->getSampleData(0, startSample);
+   for (; pixelIndex < pixelsAvailable; ++pixelIndex)
+   {
+      accum += data->fSamplesPerPixel;
+      int endSample = static_cast<int>(accum);
+      float pixelVal = 0;
+      for (int i = startSample; i < endSample; ++i, ++sampleData)
+      {
+         // find the max absolute value in the range      
+         pixelVal = mMax(pixelVal, std::abs(*sampleData));
+      }
+      data->SetPixelValue(0, pixelIndex, pixelVal);
+      // get ready for the next pixel.
+      startSample = endSample;
+   }
+   // see if we need to wrap on the next call.
+   if (static_cast<int>(accum + 0.5) >= fLoopBuffer->getNumSamples())
+   {
+      accum = 0.0f;
+   }
+   data->fStart = accum;
+   data->fPixelsReturned = pixelsAvailable;
+}
+
+
 void LoopProcessor::Reset()
 {
    ScopedLock sl(fMutex);
@@ -104,7 +191,14 @@ void LoopProcessor::GetLoopInfo(LoopInfo& info) const
    ScopedLock sl(fMutex);   
    info.fSampleRate = fSampleRate;
    info.fLoopSample = fLoopPosition;
-   info.fLoopLength = fLoopBuffer->getNumSamples();
+   if (fLoopBuffer)
+   {
+      info.fLoopLength = fLoopBuffer->getNumSamples();
+   }
+   else
+   {
+      info.fLoopLength = 0;
+   }
    info.fLoopCount = fLoopCount;
    info.fIsPlaying = fTrack->IsPlaying();
 }
@@ -180,7 +274,9 @@ void LoopProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMess
       if (fLoopPosition >= loopSampleCount)
       {
          fLoopPosition -= loopSampleCount;
+         ++fLoopCount;
       }
+      this->sendChangeMessage();
    }
 }
 

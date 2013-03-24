@@ -8,11 +8,14 @@
 void DragLabel::mouseUp(const MouseEvent& e)
 {
    int x = 9;
+   // By showing the editor here (instead of letting the base class do it 
+   // for us) we can get a pointer to the editor and make sure that users 
+   // can't enter anything except 1..5 digits.
    this->showEditor();
    TextEditor* ed = this->getCurrentTextEditor();
    if (ed)
    {
-      ed->setInputRestrictions(7, "0123456789");
+      ed->setInputRestrictions(5, "0123456789");
    }
    Label::mouseUp(e);
 }
@@ -31,10 +34,10 @@ LoopComponent::LoopComponent(LoopProcessor* loop)
    fDuration = new DragLabel("Duration");
    fDuration->setTooltip("Loop duration");
    fDuration->setJustificationType(Justification::centredRight);
-   fDuration->setEditable(true, false, false);
+   fDuration->setEditable(false, true, false);
    fDuration->setBorderSize(1, 1);
    //fDuration->setColour(Label::outlineColourId, Colours::green);
-   fDuration->setText(String(fLoop->GetLoopDuration()), false);
+   fDuration->setText(String(fLoop->GetLoopDuration()) + " ms", false);
    fDuration->addListener(this);
    this->addAndMakeVisible(fDuration);
 
@@ -82,8 +85,14 @@ void LoopComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (source == fLoop)
    {
-      fDuration->setText(String(fLoop->GetLoopDuration()) + " ms", false);
-      //this->repaint();
+      if (!fLoop->IsPlaying())
+      {
+         // if the loop is playing, changes will be indicating that sections of the waveform 
+         // need to be redrawn. The lopo duration won't change during playback, so 
+         // just ignore these notifications.
+         fDuration->setText(String(fLoop->GetLoopDuration()) + " ms", false);
+         //this->repaint();
+      }
    }
 }
 

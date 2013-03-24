@@ -453,6 +453,8 @@ NodeId Scumbler::LoadPlugin(const PluginDescription& description, String& errorM
    AudioPluginInstance* loaded = fPluginManager.createPluginInstance(description, errorMessage);
    if (loaded)
    {
+      // Add this plugin to the AudioProcessorGraph. It gets connected elsewhere
+      // (in PluginBlockComponent.cpp)
       retval = this->AddProcessor(loaded);
    }
    return retval;

@@ -122,13 +122,21 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
 
       if (this->IsEmpty())
       {
+         // add all of the plugins to the menu
          gKnownPlugins.addToMenu(m, KnownPluginList::defaultOrder);
+         // show the menu. On return, `r` will be the index of the selected item
          const int r = m.show();
+         // get a PluginDescription object for the selected plugin
          int pluginIndex = gKnownPlugins.getIndexChosenByMenu(r);
          PluginDescription* pd = gKnownPlugins.getType(pluginIndex);
          if (pd)
          {
             String errorMsg;
+            // pass this plugin description down toward the Scumbler object, 
+            // which will:
+            // - Load it
+            // - connect its inputs/outputs correctly 
+            // - let us know if that was done successfully.
             if (tk::kSuccess == fPluginBlock->LoadPluginAtIndex(fIndex, *pd, errorMsg))
             {
                this->setTooltip(pd->manufacturerName + ": " + pd->name);
