@@ -54,17 +54,18 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
       if (fLoopInfo != info)
       {
          // compare current loop info to our last known loop info to decide how to proceed.
-         if ((0 == info.fLoopSample) && (0 != fLoopInfo.fLoopSample) &&
+         if (info.fLoopLength != fLoopInfo.fLoopLength)
+         {
+             // size of the loop has changed; we need to recalculate things.
+             this->LoopSizeChanged();
+         }
+         else if ((0 == info.fLoopSample) && (0 != fLoopInfo.fLoopSample) &&
             (0 == info.fLoopCount) && (0 != fLoopInfo.fLoopCount))
          {
             // loop was just reset & cleared..
             this->Clear();
          }
-         else if (info.fLoopLength != fLoopInfo.fLoopLength)
-         {
-            // size of the loop has changed; we need to recalculate things.
-            this->LoopSizeChanged();
-         }
+
          else if (info.fLoopSample != fLoopInfo.fLoopSample)
          {
             // the loop has new samples in it that we need to deal with.
