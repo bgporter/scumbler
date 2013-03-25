@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"Wave",
+				"WaveformPoint"
+			],
+			[
+				"fPixel",
+				"fPixelData"
+			],
+			[
 				"fLoop",
 				"fLoopCount"
 			],
@@ -123,7 +131,7 @@
 			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 4444,
+				"buffer_size": 5034,
 				"line_ending": "Unix"
 			}
 		},
@@ -131,7 +139,7 @@
 			"file": "Components/WaveformComponent.h",
 			"settings":
 			{
-				"buffer_size": 3136,
+				"buffer_size": 3778,
 				"line_ending": "Unix"
 			}
 		},
@@ -139,7 +147,7 @@
 			"file": "Processors/Loop.cpp",
 			"settings":
 			{
-				"buffer_size": 7761,
+				"buffer_size": 7843,
 				"line_ending": "Unix"
 			}
 		},
@@ -147,7 +155,7 @@
 			"file": "Processors/Loop.h",
 			"settings":
 			{
-				"buffer_size": 7188,
+				"buffer_size": 7180,
 				"line_ending": "Unix"
 			}
 		}
@@ -378,6 +386,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"LoopInfo",
+			"fPixelData",
+			"GetThum",
 			"ViewPlugins",
 			"//",
 			"201",
@@ -516,6 +527,7 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -523,15 +535,15 @@
 					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 4444,
+						"buffer_size": 5034,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2300,
-								2300
+								1549,
+								1549
 							]
 						],
 						"settings":
@@ -541,7 +553,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 699.0,
+						"translation.y": 763.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -551,15 +563,15 @@
 					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 3136,
+						"buffer_size": 3778,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								318,
-								318
+								1763,
+								1763
 							]
 						],
 						"settings":
@@ -569,7 +581,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 122.0,
+						"translation.y": 998.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -579,15 +591,15 @@
 					"file": "Processors/Loop.cpp",
 					"settings":
 					{
-						"buffer_size": 7761,
+						"buffer_size": 7843,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4497,
-								4502
+								4264,
+								4264
 							]
 						],
 						"settings":
@@ -597,7 +609,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3008.0,
+						"translation.y": 2211.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -607,15 +619,15 @@
 					"file": "Processors/Loop.h",
 					"settings":
 					{
-						"buffer_size": 7188,
+						"buffer_size": 7180,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								419,
+								419
 							]
 						],
 						"settings":
@@ -625,7 +637,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 719.0,
+						"translation.y": 35.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

@@ -153,6 +153,9 @@ private:
    float fFullScaleHeight;  /**< scale factor for a wave val == 1.0 */
    float fCenterYPos; 
 
+   int fPendingSamples;
+   int fRedrawAfterSampleCount;
+
 
 };
 

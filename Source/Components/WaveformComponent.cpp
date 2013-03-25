@@ -6,6 +6,8 @@
 
 WaveformComponent::WaveformComponent(LoopProcessor* loop)
 :  fLoop(nullptr)
+,  fPendingSamples(0)
+,  fRedrawAfterSampleCount(0)
 {
    if (loop)
    {
@@ -69,13 +71,12 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
          else if (info.fLoopSample != fLoopInfo.fLoopSample)
          {
             // the loop has new samples in it that we need to deal with.
-            //!!! TEMP -- we wait for a full buffer & then let this code run for 
-            //development
-            if (1 == info.fLoopCount)
+            fPendingSamples += (info.fLoopSample - fLoopInfo.fLoopSample);
+            if (fPendingSamples > fRedrawAfterSampleCount)
             {
-               fThumbData->fStart = 0.f;
                this->GetThumbnailData();
                this->repaint();
+               this->fPendingSamples = 0;
             }
          }
          // save this data for the next update.
@@ -110,7 +111,12 @@ void WaveformComponent::CalculateSamplesPerPixel()
 {
    LoopProcessor::LoopInfo info;
    fLoop->GetLoopInfo(info);
-   fThumbData->fSamplesPerPixel = 1.0f * info.fLoopLength / this->getWidth();
+   float spp = 1.0f * info.fLoopLength / this->getWidth();
+   fThumbData->fSamplesPerPixel = spp;
+   // Change how frequently we redraw by changing the constant here.
+   // Yes, this should be bumped out into a named constant or configurable
+   // value.
+   fRedrawAfterSampleCount = static_cast<int>(10 * spp);
 }
 
 
