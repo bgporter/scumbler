@@ -153,8 +153,24 @@ private:
    float fFullScaleHeight;  /**< scale factor for a wave val == 1.0 */
    float fCenterYPos; 
 
+   /**
+    * We're probably going to be notified of new samples more frequently than
+    * we want to redraw the screen. When we draw, we set this to zero. On each 
+    * change notification from the loop when there are new samples, we add the number
+    * of newly arrived samples to this accumulator. When 
+    * fPendingSamples > fRedrawAfterSampleCount, we get thumbnail data for all the 
+    * unprocessed samples and draw the resulting waveform.
+    */
    int fPendingSamples;
    int fRedrawAfterSampleCount;
+
+
+   /**
+    * Index of the first pixel in our buffer that needs to be updated on the screen. 
+    * When we can, we only invalidate the rect with new data to paint more quickly. 
+    */
+   int fDirtyStart;
+   int fDirtyPixels; 
 
 
 };

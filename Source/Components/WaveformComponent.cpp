@@ -8,6 +8,8 @@ WaveformComponent::WaveformComponent(LoopProcessor* loop)
 :  fLoop(nullptr)
 ,  fPendingSamples(0)
 ,  fRedrawAfterSampleCount(0)
+,  fDirtyStart(0)
+,  fDirtyPixels(0)
 {
    if (loop)
    {
@@ -41,6 +43,7 @@ void WaveformComponent::ConnectToLoop(LoopProcessor* loop)
             // it's there.
             fThumbData = new LoopProcessor::ThumbnailData(fLoop->GetChannelCount());
          }
+
          this->CalculateSamplesPerPixel();
       }
    }   
@@ -71,9 +74,19 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
          else if (info.fLoopSample != fLoopInfo.fLoopSample)
          {
             // the loop has new samples in it that we need to deal with.
-            fPendingSamples += (info.fLoopSample - fLoopInfo.fLoopSample);
+            int newSamples = info.fLoopSample - fLoopInfo.fLoopSample;
+
+            if (newSamples < 0)
+            {
+               // we've wrapped in the loop -- calculate the number of samples from 
+               // the old position to the end of the loop and from the beginning of 
+               // the loop to the new position
+               newSamples = (info.fLoopLength - fLoopInfo.fLoopSample) +  info.fLoopSample;
+            }
+            fPendingSamples += newSamples;
             if (fPendingSamples > fRedrawAfterSampleCount)
             {
+               fThumbData->fMaxThumbnailValues = fPendingSamples / fThumbData->fSamplesPerPixel;
                this->GetThumbnailData();
                this->repaint();
                this->fPendingSamples = 0;
@@ -116,7 +129,7 @@ void WaveformComponent::CalculateSamplesPerPixel()
    // Change how frequently we redraw by changing the constant here.
    // Yes, this should be bumped out into a named constant or configurable
    // value.
-   fRedrawAfterSampleCount = static_cast<int>(10 * spp);
+   fRedrawAfterSampleCount = static_cast<int>(1 * spp);
 }
 
 
@@ -125,6 +138,8 @@ void WaveformComponent::Clear()
    // !!! mark the entire display as needing refresh.
    fThumbData->fStart = 0.0f;
    this->GetThumbnailData();
+   fDirtyStart = 0;
+   fDirtyPixels = this->getWidth();
    this->repaint();
 }
 
@@ -169,11 +184,21 @@ void WaveformComponent::paint(Graphics& g)
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
+   int nowPixel = static_cast<int>(fLoopInfo.fLoopSample / fThumbData->fSamplesPerPixel);
+
    // draw a line for every waveform deflection from the zero point.
-   for (int x = 0; x < this->getWidth(); ++x)
+   for (int x = fDirtyStart; x < fDirtyPixels; ++x)
    {
       WaveformPoint p(fPixels[x]);
-      if (p.top > p.bottom)
+      if (x == nowPixel)
+      {
+         g.drawLine(x, 0, x, this->getHeight());
+         g.setColour(Colours::white);
+         g.drawLine(x, p.top, x, p.bottom);
+         g.setColour(Colours::black);
+
+      }
+      else if (p.top > p.bottom)
       {
          g.drawLine(x, p.top, x, p.bottom);
       }

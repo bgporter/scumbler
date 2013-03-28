@@ -131,7 +131,7 @@
 			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 5034,
+				"buffer_size": 5360,
 				"line_ending": "Unix"
 			}
 		},
@@ -139,7 +139,7 @@
 			"file": "Components/WaveformComponent.h",
 			"settings":
 			{
-				"buffer_size": 3778,
+				"buffer_size": 3835,
 				"line_ending": "Unix"
 			}
 		},
@@ -535,15 +535,15 @@
 					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 5034,
+						"buffer_size": 5360,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1549,
-								1549
+								2116,
+								2116
 							]
 						],
 						"settings":
@@ -553,7 +553,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 763.0,
+						"translation.y": 815.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -563,15 +563,15 @@
 					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 3778,
+						"buffer_size": 3835,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1763,
-								1763
+								3822,
+								3822
 							]
 						],
 						"settings":
@@ -581,7 +581,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 998.0,
+						"translation.y": 2182.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
