@@ -172,6 +172,10 @@ private:
    int fDirtyStart;
    int fDirtyPixels; 
 
+   /**
+    * When true, we do a full refresh of the 
+    */
+   bool fRedrawAll;
 
 };
 

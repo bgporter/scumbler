@@ -4,16 +4,32 @@
 		"selected_items":
 		[
 			[
+				"fDi",
+				"fDirtyStart"
+			],
+			[
+				"fPi",
+				"fPixelsReturned"
+			],
+			[
+				"fDir",
+				"fDirtyPixels"
+			],
+			[
+				"fDirty",
+				"fDirtyStart"
+			],
+			[
+				"fLoop",
+				"fLoopSample"
+			],
+			[
 				"Wave",
 				"WaveformPoint"
 			],
 			[
 				"fPixel",
 				"fPixelData"
-			],
-			[
-				"fLoop",
-				"fLoopCount"
 			],
 			[
 				"pixel",
@@ -131,7 +147,7 @@
 			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 5360,
+				"buffer_size": 6607,
 				"line_ending": "Unix"
 			}
 		},
@@ -139,7 +155,7 @@
 			"file": "Components/WaveformComponent.h",
 			"settings":
 			{
-				"buffer_size": 3835,
+				"buffer_size": 4523,
 				"line_ending": "Unix"
 			}
 		},
@@ -535,15 +551,15 @@
 					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 5360,
+						"buffer_size": 6607,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2116,
-								2116
+								4185,
+								4185
 							]
 						],
 						"settings":
@@ -553,7 +569,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 815.0,
+						"translation.y": 2195.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -563,15 +579,15 @@
 					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 3835,
+						"buffer_size": 4523,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3822,
-								3822
+								4283,
+								4283
 							]
 						],
 						"settings":
@@ -581,7 +597,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2182.0,
+						"translation.y": 2347.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -598,8 +614,8 @@
 						"selection":
 						[
 							[
-								4264,
-								4264
+								4864,
+								4874
 							]
 						],
 						"settings":
@@ -609,7 +625,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2211.0,
+						"translation.y": 2721.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -637,7 +653,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 35.0,
+						"translation.y": 4107.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

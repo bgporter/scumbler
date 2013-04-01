@@ -4,12 +4,15 @@
 
 #include "Track.h"
 
+#define kPixelsPerRedraw 5
+
 WaveformComponent::WaveformComponent(LoopProcessor* loop)
 :  fLoop(nullptr)
 ,  fPendingSamples(0)
 ,  fRedrawAfterSampleCount(0)
 ,  fDirtyStart(0)
 ,  fDirtyPixels(0)
+,  fRedrawAll(false)
 {
    if (loop)
    {
@@ -68,6 +71,8 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
             (0 == info.fLoopCount) && (0 != fLoopInfo.fLoopCount))
          {
             // loop was just reset & cleared..
+            fDirtyStart = 0;
+            fDirtyPixels = 0;
             this->Clear();
          }
 
@@ -87,9 +92,13 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
             if (fPendingSamples > fRedrawAfterSampleCount)
             {
                fThumbData->fMaxThumbnailValues = fPendingSamples / fThumbData->fSamplesPerPixel;
+               int startSample = static_cast<int>(fThumbData->fStart);
                this->GetThumbnailData();
+               int endSample = static_cast<int>(fThumbData->fStart);
+               int samplesDrawn = endSample - startSample;
+               //this->repaint(fDirtyStart, 0, fDirtyPixels, this->getHeight());
                this->repaint();
-               this->fPendingSamples = 0;
+               this->fPendingSamples -= samplesDrawn;
             }
          }
          // save this data for the next update.
@@ -129,7 +138,7 @@ void WaveformComponent::CalculateSamplesPerPixel()
    // Change how frequently we redraw by changing the constant here.
    // Yes, this should be bumped out into a named constant or configurable
    // value.
-   fRedrawAfterSampleCount = static_cast<int>(1 * spp);
+   fRedrawAfterSampleCount = static_cast<int>(kPixelsPerRedraw * spp);
 }
 
 
@@ -137,9 +146,9 @@ void WaveformComponent::Clear()
 {
    // !!! mark the entire display as needing refresh.
    fThumbData->fStart = 0.0f;
+   fThumbData->fMaxThumbnailValues = this->getWidth();
    this->GetThumbnailData();
-   fDirtyStart = 0;
-   fDirtyPixels = this->getWidth();
+   fRedrawAll = true;
    this->repaint();
 }
 
@@ -160,7 +169,6 @@ void WaveformComponent::GetThumbnailData()
    // ...and use that sample to know where the returned data is going to need 
    // to go for display.
    int pixelIndex = static_cast<int>(startSample / fThumbData->fSamplesPerPixel);
-   fThumbData->fMaxThumbnailValues = fPixels.size() - pixelIndex;
 
    // get the data
    fLoop->GetThumbnailData(fThumbData);
@@ -175,19 +183,44 @@ void WaveformComponent::GetThumbnailData()
       float deflection  = fFullScaleHeight * pixelVal;
       fPixels.set(pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
    }
+   fDirtyPixels += fThumbData->fPixelsReturned;
 
 }
 
 void WaveformComponent::paint(Graphics& g)
 {
-   g.fillAll (Colours::white);
+   g.fillAll(Colours::white);
+
+   // testing -- higlight the current dirty rect.
+   Random r;
+   g.setFillType(FillType(Colour(r.nextInt())));
+   g.fillRect(fDirtyStart, 0, fDirtyPixels, this->getHeight());
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
    int nowPixel = static_cast<int>(fLoopInfo.fLoopSample / fThumbData->fSamplesPerPixel);
 
+   int startIndex;
+   int endIndex;
+   if (fRedrawAll)
+   {
+      startIndex = 0;
+      endIndex = fPixels.size();
+      fRedrawAll = false;
+
+   }
+   else
+   {
+      startIndex = fDirtyStart;
+      endIndex = fDirtyStart + fDirtyPixels;
+       startIndex = 0;
+       endIndex = fPixels.size();
+   
+   }
+
    // draw a line for every waveform deflection from the zero point.
-   for (int x = fDirtyStart; x < fDirtyPixels; ++x)
+   //for (int x = fDirtyStart, pt=0; pt < fDirtyPixels; ++x, ++pt)
+   for (int x = startIndex;  x < endIndex; ++x)
    {
       WaveformPoint p(fPixels[x]);
       if (x == nowPixel)
@@ -198,9 +231,15 @@ void WaveformComponent::paint(Graphics& g)
          g.setColour(Colours::black);
 
       }
-      else if (p.top > p.bottom)
+      else if (p.top - p.bottom > 1)
       {
          g.drawLine(x, p.top, x, p.bottom);
       }
+   }
+   fDirtyStart += fDirtyPixels;
+   fDirtyPixels = 0;
+   if (fDirtyStart >= this->getWidth())
+   {
+      fDirtyStart = 0;
    }
 }
