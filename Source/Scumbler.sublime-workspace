@@ -4,16 +4,16 @@
 		"selected_items":
 		[
 			[
-				"fDi",
+				"fDir",
 				"fDirtyStart"
+			],
+			[
+				"fDi",
+				"fDirtyPixels"
 			],
 			[
 				"fPi",
 				"fPixelsReturned"
-			],
-			[
-				"fDir",
-				"fDirtyPixels"
 			],
 			[
 				"fDirty",
@@ -147,7 +147,7 @@
 			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 6607,
+				"buffer_size": 7312,
 				"line_ending": "Unix"
 			}
 		},
@@ -155,7 +155,7 @@
 			"file": "Components/WaveformComponent.h",
 			"settings":
 			{
-				"buffer_size": 4523,
+				"buffer_size": 4603,
 				"line_ending": "Unix"
 			}
 		},
@@ -551,15 +551,15 @@
 					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 6607,
+						"buffer_size": 7312,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4185,
-								4185
+								849,
+								849
 							]
 						],
 						"settings":
@@ -569,7 +569,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2195.0,
+						"translation.y": 916.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -579,15 +579,15 @@
 					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 4523,
+						"buffer_size": 4603,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4283,
-								4283
+								4564,
+								4564
 							]
 						],
 						"settings":
@@ -614,8 +614,8 @@
 						"selection":
 						[
 							[
-								4864,
-								4874
+								3352,
+								3352
 							]
 						],
 						"settings":
@@ -625,7 +625,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2721.0,
+						"translation.y": 1797.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

@@ -4,7 +4,7 @@
 
 #include "Track.h"
 
-#define kPixelsPerRedraw 5
+#define kPixelsPerRedraw 15
 
 WaveformComponent::WaveformComponent(LoopProcessor* loop)
 :  fLoop(nullptr)
@@ -92,10 +92,22 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
             if (fPendingSamples > fRedrawAfterSampleCount)
             {
                fThumbData->fMaxThumbnailValues = fPendingSamples / fThumbData->fSamplesPerPixel;
+               // We can find out how many samples' worth of data we got thumbnail data
+               // for by comparing fThumbData->fStart before and after calling 
+               // GetThumbnailData().
                int startSample = static_cast<int>(fThumbData->fStart);
                this->GetThumbnailData();
                int endSample = static_cast<int>(fThumbData->fStart);
                int samplesDrawn = endSample - startSample;
+               if (0 == endSample)
+               {
+                  // we wrapped, so we're only drawing to the end of the loop buffer.
+                  samplesDrawn = info.fLoopLength - startSample;
+               }
+               else
+               {
+                  samplesDrawn = endSample - startSample;
+               }
                //this->repaint(fDirtyStart, 0, fDirtyPixels, this->getHeight());
                this->repaint();
                this->fPendingSamples -= samplesDrawn;
@@ -191,10 +203,11 @@ void WaveformComponent::paint(Graphics& g)
 {
    g.fillAll(Colours::white);
 
-   // testing -- higlight the current dirty rect.
+   // testing... -- higlight the current dirty rect.
    Random r;
    g.setFillType(FillType(Colour(r.nextInt())));
    g.fillRect(fDirtyStart, 0, fDirtyPixels, this->getHeight());
+   // ...testing
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
@@ -215,7 +228,6 @@ void WaveformComponent::paint(Graphics& g)
       endIndex = fDirtyStart + fDirtyPixels;
        startIndex = 0;
        endIndex = fPixels.size();
-   
    }
 
    // draw a line for every waveform deflection from the zero point.
