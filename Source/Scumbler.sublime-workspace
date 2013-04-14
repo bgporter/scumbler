@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"cl",
+				"Clear"
+			],
+			[
+				"fLoop",
+				"fLoopSample"
+			],
+			[
 				"fDir",
 				"fDirtyStart"
 			],
@@ -18,10 +26,6 @@
 			[
 				"fDirty",
 				"fDirtyStart"
-			],
-			[
-				"fLoop",
-				"fLoopSample"
 			],
 			[
 				"Wave",
@@ -147,7 +151,7 @@
 			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 7312,
+				"buffer_size": 8899,
 				"line_ending": "Unix"
 			}
 		},
@@ -163,7 +167,7 @@
 			"file": "Processors/Loop.cpp",
 			"settings":
 			{
-				"buffer_size": 7843,
+				"buffer_size": 8071,
 				"line_ending": "Unix"
 			}
 		},
@@ -171,7 +175,23 @@
 			"file": "Processors/Loop.h",
 			"settings":
 			{
-				"buffer_size": 7180,
+				"buffer_size": 7195,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Processors/Passthrough.h",
+			"settings":
+			{
+				"buffer_size": 2463,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Processors/Passthrough.cpp",
+			"settings":
+			{
+				"buffer_size": 3034,
 				"line_ending": "Unix"
 			}
 		}
@@ -402,6 +422,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"fDirtyStart",
 			"LoopInfo",
 			"fPixelData",
 			"GetThum",
@@ -551,15 +572,15 @@
 					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 7312,
+						"buffer_size": 8899,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								849,
-								849
+								3786,
+								3786
 							]
 						],
 						"settings":
@@ -569,7 +590,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 916.0,
+						"translation.y": 4159.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -607,15 +628,15 @@
 					"file": "Processors/Loop.cpp",
 					"settings":
 					{
-						"buffer_size": 7843,
+						"buffer_size": 8071,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3352,
-								3352
+								5584,
+								5584
 							]
 						],
 						"settings":
@@ -625,7 +646,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1797.0,
+						"translation.y": 3485.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -635,15 +656,15 @@
 					"file": "Processors/Loop.h",
 					"settings":
 					{
-						"buffer_size": 7180,
+						"buffer_size": 7195,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								419,
-								419
+								7070,
+								7070
 							]
 						],
 						"settings":
@@ -653,7 +674,63 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4107.0,
+						"translation.y": 4058.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Processors/Passthrough.h",
+					"settings":
+					{
+						"buffer_size": 2463,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Processors/Passthrough.cpp",
+					"settings":
+					{
+						"buffer_size": 3034,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

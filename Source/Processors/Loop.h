@@ -70,6 +70,7 @@ public:
        * After return, index of the *next* sample to look at on the next call.
        */
       float fStart;
+      
       /**
        * [in] How many thumbnail values should be returned at most.
        */
@@ -265,7 +266,7 @@ private:
    int fLoopPosition;
 
    /**
-    * Number of times we've looped. Updated each time 
+    * Number of times we've looped. Updated each time we wrap around.
     */
    int fLoopCount;
 

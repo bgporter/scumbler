@@ -137,6 +137,8 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
    {
       // not enough samples there for us to deal with. This shouldn't happen.
       data->fPixelsReturned = 0;
+      // set the thumbnail data to restart at the beginning on the next loop.
+      data->fStart = 0;
       return;
    }
    else if (samplesAvailable < samplesDesired)
@@ -150,20 +152,15 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
       pixelsAvailable = pixelsDesired;
    }
 
-   int pixelIndex = 0;
+   
    // !!! first iteration -- only deal with one channel.
-   float* sampleData = fLoopBuffer->getSampleData(0, startSample);
-   for (; pixelIndex < pixelsAvailable; ++pixelIndex)
+   int channel = 0;
+   for (int pixelIndex = 0; pixelIndex < pixelsAvailable; ++pixelIndex)
    {
       accum += data->fSamplesPerPixel;
       int endSample = static_cast<int>(accum);
-      float pixelVal = 0;
-      for (int i = startSample; i < endSample; ++i, ++sampleData)
-      {
-         // find the max absolute value in the range      
-         pixelVal = mMax(pixelVal, std::abs(*sampleData));
-      }
-      data->SetPixelValue(0, pixelIndex, pixelVal);
+      float pixelVal = fLoopBuffer->getMagnitude(channel, startSample, (endSample - startSample));
+      data->SetPixelValue(channel, pixelIndex, pixelVal);
       // get ready for the next pixel.
       startSample = endSample;
    }
@@ -227,45 +224,51 @@ void LoopProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMess
 {
    if (fTrack->IsPlaying())
    {
+      // Lock down all of the protected code sections.
+      ScopedLock sl(fMutex);   
       int sampleCount = buffer.getNumSamples();
       int loopSampleCount = fLoopBuffer->getNumSamples();
       float feedbackGain = fFeedback;
       for (int channel = 0; channel < fChannelCount; ++channel)
       {
-         // this is easy if we don't need to wrap around the loop buffer 
-         // when processing this block
+         // this is easy if we don't need to wrap around the loop 
+         // buffer when processing this block
          if (fLoopPosition + sampleCount < loopSampleCount)
          {
-            // Add samples from 1 loop ago, multiplying them by the feedback gain.
-            buffer.addFrom(channel, 0, *fLoopBuffer, channel, fLoopPosition,
-                           sampleCount, feedbackGain);
-            // ... and copy the mixed samples back into the loop buffer so we can 
-            // play them // back out in one loop's time.
-            fLoopBuffer->copyFrom(channel, fLoopPosition, buffer, channel, 0, sampleCount);
+            // Add samples from 1 loop ago, multiplying them by 
+            // the feedback gain.
+            buffer.addFrom(channel, 0, *fLoopBuffer, channel, 
+               fLoopPosition, sampleCount, feedbackGain);
+            // ... and copy the mixed samples back into the loop buffer 
+            // so we can play them back out in one loop's time.
+            fLoopBuffer->copyFrom(channel, fLoopPosition, buffer, 
+               channel, 0, sampleCount);
 
          }
          else
          {
-            // first, process as many samples as we can fit in at the end of the loop
-            // buffer.
+            // first, process as many samples as we can fit in at the 
+            // end of the loop buffer.
             int roomAtEnd = loopSampleCount - fLoopPosition;
-            // and we need to put this many samples back at the beginning.
+            // and we need to put this many samples back at the 
+            // beginning.
             int wrapped = sampleCount - roomAtEnd;
 
             // add samples from a loop ago, adjusting feedback gain.
             // part 1:
-            buffer.addFrom(channel, 0, *fLoopBuffer, channel, fLoopPosition,
-                            roomAtEnd, feedbackGain);
+            buffer.addFrom(channel, 0, *fLoopBuffer, channel, 
+               fLoopPosition, roomAtEnd, feedbackGain);
             // part 2:
-            buffer.addFrom(channel, roomAtEnd, *fLoopBuffer, channel, 0,
-                            wrapped, feedbackGain);
+            buffer.addFrom(channel, roomAtEnd, *fLoopBuffer, channel, 
+               0, wrapped, feedbackGain);
 
             // and now copy the mixed samples back into the loop buffer:
             // part 1:
-            fLoopBuffer->copyFrom(channel, fLoopPosition, buffer, channel, 0, roomAtEnd);
+            fLoopBuffer->copyFrom(channel, fLoopPosition, buffer, 
+               channel, 0, roomAtEnd);
             // part 2:
-            fLoopBuffer->copyFrom(channel, 0, buffer, channel, roomAtEnd, wrapped);
-
+            fLoopBuffer->copyFrom(channel, 0, buffer, channel, 
+               roomAtEnd, wrapped);
          }
       }
    
@@ -276,6 +279,8 @@ void LoopProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMess
          fLoopPosition -= loopSampleCount;
          ++fLoopCount;
       }
+      // Notify anyone who's observing this processor that we've 
+      // gotten new sample data.
       this->sendChangeMessage();
    }
 }

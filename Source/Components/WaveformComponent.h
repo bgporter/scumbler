@@ -119,6 +119,11 @@ public:
    void CalculateSamplesPerPixel();
 
    /**
+    * Refresh the pixel buffer from the loop and redraw the entire component.
+    */
+   void RedrawAll();
+
+   /**
     * Clear the component -- nuke any cached sample values and redraw the component as empty.
     */
    void Clear();
@@ -141,6 +146,16 @@ public:
     * @param g Graphics object to use to draw.
     */
    void paint(Graphics& g);
+
+
+private:
+  /**
+   * Returns the pixel x-index that corresponds to the passed-in sample. Doesn't do much 
+   * to sanity-check the input parameter, so use with caution.
+   * @param  sampleNum The index of the sample in the loop processor
+   * @return           X-index of the corresponding pixel.
+   */
+  int PixelForSample(int sampleNum);
 
 
 private:
