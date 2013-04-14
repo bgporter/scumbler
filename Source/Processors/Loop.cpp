@@ -138,7 +138,7 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
       // not enough samples there for us to deal with. This shouldn't happen.
       data->fPixelsReturned = 0;
       // set the thumbnail data to restart at the beginning on the next loop.
-      data->fStart = 0;
+      data->fStart = 0;     
       return;
    }
    else if (samplesAvailable < samplesDesired)
@@ -159,7 +159,10 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
    {
       accum += data->fSamplesPerPixel;
       int endSample = static_cast<int>(accum);
-      float pixelVal = fLoopBuffer->getMagnitude(channel, startSample, (endSample - startSample));
+      // Currently: We look for the highest absolute sample value across *all* samples
+      // in the buffer. If we ever want to handle the channels separately, we'd need to 
+      // run this loop inside another loop for each of the channels.
+      float pixelVal = fLoopBuffer->getMagnitude(startSample, (endSample - startSample));
       data->SetPixelValue(channel, pixelIndex, pixelVal);
       // get ready for the next pixel.
       startSample = endSample;

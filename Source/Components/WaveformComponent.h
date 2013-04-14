@@ -188,9 +188,10 @@ private:
    int fDirtyPixels; 
 
    /**
-    * When true, we do a full refresh of the 
+    * current 'now' locator position, set at the time we get thumbnail data.
     */
-   bool fRedrawAll;
+   int fNowIndex;
+
 
 };
 

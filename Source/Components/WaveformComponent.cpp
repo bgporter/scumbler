@@ -4,7 +4,7 @@
 
 #include "Track.h"
 
-#define kPixelsPerRedraw 80
+#define kPixelsPerRedraw 5
 
 WaveformComponent::WaveformComponent(LoopProcessor* loop)
 :  fLoop(nullptr)
@@ -12,8 +12,9 @@ WaveformComponent::WaveformComponent(LoopProcessor* loop)
 ,  fRedrawAfterSampleCount(0)
 ,  fDirtyStart(INT_MAX)
 ,  fDirtyPixels(0)
+,  fNowIndex(0)
 {
-   //this->setBufferedToImage(true);
+   this->setBufferedToImage(true);
    if (loop)
    {
       this->ConnectToLoop(loop);
@@ -74,6 +75,7 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
             // loop was just reset & cleared..
             fDirtyStart = INT_MAX;
             fDirtyPixels = 0;
+            fNowIndex = 0;
             fPendingSamples = 0;
             fThumbData->fStart = 0;
             this->Clear();
@@ -111,7 +113,9 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
                {
                   samplesDrawn = endSample - startSample;
                }
-               this->repaint(fDirtyStart, 0, fDirtyPixels + 2, this->getHeight());
+               fNowIndex = this->PixelForSample(info.fLoopSample);
+               int startIndex = jmax(0, fDirtyStart-2);
+               this->repaint(startIndex, 0, fDirtyPixels + 4, this->getHeight());
                //this->repaint();
                this->fPendingSamples -= samplesDrawn;
             }
@@ -160,22 +164,6 @@ void WaveformComponent::CalculateSamplesPerPixel()
    // value.
    fRedrawAfterSampleCount = static_cast<int>(kPixelsPerRedraw * spp);
 }
-
-#if 0
-void WaveformComponent::RedrawAll()
-{
-   // !!! mark the entire display as needing refresh.
-   Logger::outputDebugString("CLEAR!");
-   fThumbData->fMaxThumbnailValues = this->getWidth();
-   //fDirtyStart = fDirtyPixels = 0;
-   float oldStart = fThumbData->fStart;
-   fThumbData->fStart = 0;
-   this->GetThumbnailData();
-   fThumbData->fStart = oldStart;
-   //fPendingSamples = 0;
-   this->repaint();   
-}
-#endif
 
 void WaveformComponent::Clear()
 {
@@ -253,6 +241,7 @@ void WaveformComponent::paint(Graphics& g)
    String c("  PAINT redrawing ");
    c << clip.getX() << ".." << clip.getX() + clip.getWidth();
    Logger::outputDebugString(c); 
+#if 0
    // testing... -- higlight the current dirty rect.
    Random r;
    g.setFillType(FillType(Colour(r.nextInt())));
@@ -260,34 +249,33 @@ void WaveformComponent::paint(Graphics& g)
    //g.fillRect(fDirtyStart, 0, fDirtyPixels, this->getHeight());
    g.fillRect(clip);
    // ...testing
+#endif
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
-   int nowPixel = this->PixelForSample(fLoopInfo.fLoopSample);
    String s("  PAINT Now = "); 
-   s << nowPixel;
+   s << fNowIndex;;
    Logger::outputDebugString(s);
 
    int startIndex = clip.getX();
    int endIndex = startIndex + clip.getWidth();
 
    // draw a line for every waveform deflection from the zero point.
-   //for (int x = fDirtyStart, pt=0; pt < fDirtyPixels; ++x, ++pt)
    for (int x = startIndex;  x < endIndex; ++x)
    {
       WaveformPoint p(fPixels[x]);
-      if (x == nowPixel)
+      if ( (x == fNowIndex) || (x == (fNowIndex+1)) )
       {
          g.setColour(Colours::red);
-         g.drawLine(x, 0, x, this->getHeight());
+         g.drawVerticalLine(x, 0, this->getHeight());
          g.setColour(Colours::white);
-         g.drawLine(x, p.top, x, p.bottom);
+         g.drawVerticalLine(x, p.top, p.bottom);
          g.setColour(Colours::black);
 
       }
       else if (p.top - p.bottom > 1)
       {
-         g.drawLine(x, p.top, x, p.bottom);
+         g.drawVerticalLine(x, p.top, p.bottom);
       }
    }
    // there's nothing dirty anymore because we've displayed everything. 
