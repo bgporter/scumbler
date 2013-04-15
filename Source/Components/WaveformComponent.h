@@ -180,6 +180,7 @@ private:
    int fRedrawAfterSampleCount;
 
 
+
    /**
     * Index of the first pixel in our buffer that needs to be updated on the screen. 
     * When we can, we only invalidate the rect with new data to paint more quickly. 
@@ -191,6 +192,11 @@ private:
     * current 'now' locator position, set at the time we get thumbnail data.
     */
    int fNowIndex;
+
+   /**
+    * array of pixels where we should draw a tick mark to indicate time on the screen
+    */
+   Array<int> fTicks;
 
 
 };

@@ -163,6 +163,14 @@ void WaveformComponent::CalculateSamplesPerPixel()
    // Yes, this should be bumped out into a named constant or configurable
    // value.
    fRedrawAfterSampleCount = static_cast<int>(kPixelsPerRedraw * spp);
+
+   // recalculate where the tick markers need to go.
+   fTicks.clear();
+   for (int i = 0; i < info.fLoopLength; i += info.fSampleRate)
+   {
+      int pixel = this->PixelForSample(i);
+      fTicks.add(pixel);
+   }
 }
 
 void WaveformComponent::Clear()
@@ -259,6 +267,18 @@ void WaveformComponent::paint(Graphics& g)
 
    int startIndex = clip.getX();
    int endIndex = startIndex + clip.getWidth();
+
+   // draw tick markers.
+   g.setColour(Colours::grey);
+   for (int tick = 0; tick < fTicks.size(); ++tick)
+   {
+      int tickPixel = fTicks.getUnchecked(tick);
+      if (tickPixel >= startIndex && tickPixel <= endIndex)
+      {
+         g.drawVerticalLine(tickPixel, 0, this->getHeight());
+      }
+   }
+   g.setColour(Colours::black);
 
    // draw a line for every waveform deflection from the zero point.
    for (int x = startIndex;  x < endIndex; ++x)
