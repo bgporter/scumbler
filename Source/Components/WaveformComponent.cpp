@@ -171,6 +171,7 @@ void WaveformComponent::CalculateSamplesPerPixel()
       int pixel = this->PixelForSample(i);
       fTicks.add(pixel);
    }
+   fTicks.add(this->getWidth() -1);
 }
 
 void WaveformComponent::Clear()
@@ -267,15 +268,23 @@ void WaveformComponent::paint(Graphics& g)
 
    int startIndex = clip.getX();
    int endIndex = startIndex + clip.getWidth();
+   int height = this->getHeight();
 
    // draw tick markers.
    g.setColour(Colours::grey);
    for (int tick = 0; tick < fTicks.size(); ++tick)
    {
       int tickPixel = fTicks.getUnchecked(tick);
-      if (tickPixel >= startIndex && tickPixel <= endIndex)
+      int tickLeftX = tickPixel - 4;
+      int tickRightX = tickPixel + 4;
+      if ((tickRightX >= startIndex) && tickLeftX <= endIndex)
       {
-         g.drawVerticalLine(tickPixel, 0, this->getHeight());
+         // top tick
+         g.drawLine(tickLeftX, 0, tickRightX, 0, 2);
+         g.drawVerticalLine(tickPixel, 0, 8);
+         // bottom tick
+         g.drawLine(tickLeftX, height, tickRightX, height, 2);
+         g.drawVerticalLine(tickPixel, height-9, height);
       }
    }
    g.setColour(Colours::black);
@@ -287,7 +296,7 @@ void WaveformComponent::paint(Graphics& g)
       if ( (x == fNowIndex) || (x == (fNowIndex+1)) )
       {
          g.setColour(Colours::red);
-         g.drawVerticalLine(x, 0, this->getHeight());
+         g.drawVerticalLine(x, 0, height);
          g.setColour(Colours::white);
          g.drawVerticalLine(x, p.top, p.bottom);
          g.setColour(Colours::black);
