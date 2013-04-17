@@ -197,7 +197,12 @@ void WaveformComponent::LoopSizeChanged()
    Logger::outputDebugString("LoopSizeChanged!");
    // set the scaling factor between the sample buffer and this view
    this->CalculateSamplesPerPixel();
-   // ...and make sure we recalc/redraw everything.
+   // ...and make sure we recalc/redraw everything after a full reset
+   fPendingSamples = 0;
+   fDirtyStart = INT_MAX;
+   fDirtyPixels = 0;
+   fThumbData->fStart = 0;
+   fNowIndex = 0;
    this->Clear();
 }
 

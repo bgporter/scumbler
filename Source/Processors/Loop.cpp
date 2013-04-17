@@ -159,6 +159,7 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
    {
       accum += data->fSamplesPerPixel;
       int endSample = static_cast<int>(accum);
+      endSample = mMin(endSample, fLoopBuffer->getNumSamples());
       // Currently: We look for the highest absolute sample value across *all* samples
       // in the buffer. If we ever want to handle the channels separately, we'd need to 
       // run this loop inside another loop for each of the channels.
