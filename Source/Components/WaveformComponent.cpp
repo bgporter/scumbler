@@ -115,8 +115,8 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
                }
                fNow = info.fLoopSample;
                int startIndex = jmax(0, fDirtyStart-2);
+               // redraw just the region around our newly updated pixels.
                this->repaint(startIndex, 0, fDirtyPixels + 4, this->getHeight());
-               //this->repaint();
                this->fPendingSamples -= samplesDrawn;
             }
          }
@@ -179,13 +179,11 @@ void WaveformComponent::Clear()
    // !!! mark the entire display as needing refresh.
    Logger::outputDebugString("CLEAR!");
    fThumbData->fMaxThumbnailValues = this->getWidth();
-   //fDirtyStart = fDirtyPixels = 0;
    float oldStart = fThumbData->fStart;
    fThumbData->fStart = 0;
    this->GetThumbnailData();
    // the next time we receive samples, they'll come right after the current
    // loop position.
-   //fThumbData->fStart = fLoopInfo.fLoopSample;
    fThumbData->fStart = oldStart;
 
    this->repaint();
@@ -255,15 +253,7 @@ void WaveformComponent::paint(Graphics& g)
    String c("  PAINT redrawing ");
    c << clip.getX() << ".." << clip.getX() + clip.getWidth();
    Logger::outputDebugString(c); 
-#if 0
-   // testing... -- higlight the current dirty rect.
-   Random r;
-   g.setFillType(FillType(Colour(r.nextInt())));
-   //g.setFillType(FillType(Colours::grey));
-   //g.fillRect(fDirtyStart, 0, fDirtyPixels, this->getHeight());
-   g.fillRect(clip);
-   // ...testing
-#endif
+   
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
