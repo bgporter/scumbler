@@ -189,9 +189,9 @@ private:
    int fDirtyPixels; 
 
    /**
-    * current 'now' locator position, set at the time we get thumbnail data.
+    * current 'now' sample
     */
-   int fNowIndex;
+   int fNow;
 
    /**
     * array of pixels where we should draw a tick mark to indicate time on the screen

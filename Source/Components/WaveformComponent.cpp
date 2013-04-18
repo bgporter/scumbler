@@ -12,7 +12,7 @@ WaveformComponent::WaveformComponent(LoopProcessor* loop)
 ,  fRedrawAfterSampleCount(0)
 ,  fDirtyStart(INT_MAX)
 ,  fDirtyPixels(0)
-,  fNowIndex(0)
+,  fNow(0)
 {
    this->setBufferedToImage(true);
    if (loop)
@@ -75,7 +75,7 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
             // loop was just reset & cleared..
             fDirtyStart = INT_MAX;
             fDirtyPixels = 0;
-            fNowIndex = 0;
+            fNow = 0;
             fPendingSamples = 0;
             fThumbData->fStart = 0;
             this->Clear();
@@ -113,7 +113,7 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
                {
                   samplesDrawn = endSample - startSample;
                }
-               fNowIndex = this->PixelForSample(info.fLoopSample);
+               fNow = info.fLoopSample;
                int startIndex = jmax(0, fDirtyStart-2);
                this->repaint(startIndex, 0, fDirtyPixels + 4, this->getHeight());
                //this->repaint();
@@ -202,7 +202,7 @@ void WaveformComponent::LoopSizeChanged()
    fDirtyStart = INT_MAX;
    fDirtyPixels = 0;
    fThumbData->fStart = 0;
-   fNowIndex = 0;
+   fNow = 0;
    this->Clear();
 }
 
@@ -267,8 +267,9 @@ void WaveformComponent::paint(Graphics& g)
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
+   int nowPixel = this->PixelForSample(fNow);
    String s("  PAINT Now = "); 
-   s << fNowIndex;;
+   s << nowPixel;
    Logger::outputDebugString(s);
 
    int startIndex = clip.getX();
@@ -298,7 +299,7 @@ void WaveformComponent::paint(Graphics& g)
    for (int x = startIndex;  x < endIndex; ++x)
    {
       WaveformPoint p(fPixels[x]);
-      if ( (x == fNowIndex) || (x == (fNowIndex+1)) )
+      if ( (x == nowPixel) || (x == (nowPixel + 1)) || (x == nowPixel - 1) )
       {
          g.setColour(Colours::red);
          g.drawVerticalLine(x, 0, height);
