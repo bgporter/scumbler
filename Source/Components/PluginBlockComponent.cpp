@@ -1,6 +1,7 @@
 // Copyright (c) 2013 Bg Porter
 
 #include "PluginBlockComponent.h"
+#include "ComponentDefs.h"
 
 PluginBlockComponent::PluginBlockComponent(PluginBlock* plugins)
 :  fPlugins(nullptr)
@@ -40,7 +41,7 @@ void PluginBlockComponent::SetSlotBounds(int index, PluginSlotComponent* slot)
 {
    int blockWidth = this->getWidth();
    int blockHeight = this->getHeight();
-   float slotHeight = blockHeight * 0.4;
+   float slotHeight = blockHeight * kPluginSlotHeight;
    float elementCount = fSlots.size() + 1.0;
    float slotWidth = blockWidth / elementCount;
    float margin = slotWidth / elementCount;

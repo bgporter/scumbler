@@ -23,6 +23,7 @@
 //[/Headers]
 
 #include "TrackComponent.h"
+#include "ComponentDefs.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
@@ -129,17 +130,17 @@ void TrackComponent::resized()
     //designed/chosen much more carefully.
     int trackWidth = this->getWidth();
     int trackHeight = this->getHeight();
-    int pluginBlockWidth = trackWidth / 4;
-    int pluginBlockHeight = trackHeight * 0.8;
-    int trackMargin = 40;
-    int preX = trackMargin;
-    int postX = trackWidth - trackMargin - pluginBlockWidth;
+    int pluginBlockWidth = this->proportionOfWidth(kPluginBlockWidth);
+    int pluginBlockHeight = this->proportionOfHeight(kPluginBlockHeight);
+    int effectBlockHeight = pluginBlockHeight - kControlRowHeight;
+    int preX = kTrackMargin;
+    int postX = trackWidth - kTrackMargin - pluginBlockWidth;
     int loopX = preX + pluginBlockWidth;
     int loopWidth = postX - (preX + pluginBlockWidth);
     
-    fPreEffects->setBounds(preX, trackHeight * 0.1, pluginBlockWidth, pluginBlockHeight);
+    fPreEffects->setBounds(preX, trackHeight * 0.1, pluginBlockWidth, effectBlockHeight);
     fLoop->setBounds(loopX, trackHeight * 0.1, loopWidth, pluginBlockHeight);
-    fPostEffects->setBounds(postX, trackHeight * 0.1, pluginBlockWidth, pluginBlockHeight);
+    fPostEffects->setBounds(postX, trackHeight * 0.1, pluginBlockWidth, effectBlockHeight);
 
     // center the volume between the right edge of the post effects and the edge of the component.
     int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());

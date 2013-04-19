@@ -1,7 +1,7 @@
 // Copyright (c) 2013 Bg Porter
 
 #include "LoopComponent.h"
-
+#include "ComponentDefs.h"
 #include "Scumbler.h"
 
 
@@ -125,9 +125,8 @@ void LoopComponent::sliderValueChanged(Slider* slider)
 void LoopComponent::resized()
 {
    const int controlHeight = 24;
-   const int controlRowHeight = 30;
-   const int waveformHeight = this->getHeight() - controlRowHeight;
-   const int controlTop = waveformHeight + (controlRowHeight - controlHeight) / 2;
+   const int waveformHeight = this->getHeight() - kControlRowHeight;
+   const int controlTop = waveformHeight + (kControlRowHeight - controlHeight) / 2;
 
    fWaveform->setBounds(0, 0, this->getWidth(), waveformHeight);
 
