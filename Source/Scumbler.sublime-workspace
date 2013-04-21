@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"fDirty",
+				"fDirtyPixels"
+			],
+			[
+				"Colour",
+				"Colours"
+			],
+			[
+				"fDir",
+				"fDirtyPixels"
+			],
+			[
+				"fLoo",
+				"fLoopSample"
+			],
+			[
 				"cl",
 				"Clear"
 			],
@@ -12,20 +28,12 @@
 				"fLoopSample"
 			],
 			[
-				"fDir",
-				"fDirtyStart"
-			],
-			[
 				"fDi",
 				"fDirtyPixels"
 			],
 			[
 				"fPi",
 				"fPixelsReturned"
-			],
-			[
-				"fDirty",
-				"fDirtyStart"
 			],
 			[
 				"Wave",
@@ -62,10 +70,6 @@
 			[
 				"dB",
 				"dbToFloat"
-			],
-			[
-				"fLoo",
-				"fLoopPosition"
 			],
 			[
 				"buffer",
@@ -151,7 +155,7 @@
 			"file": "Components/WaveformComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 8899,
+				"buffer_size": 9906,
 				"line_ending": "Unix"
 			}
 		},
@@ -159,39 +163,63 @@
 			"file": "Components/WaveformComponent.h",
 			"settings":
 			{
-				"buffer_size": 4603,
+				"buffer_size": 5157,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Processors/Loop.cpp",
+			"file": "Components/PluginBlockComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 8071,
+				"buffer_size": 2092,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Processors/Loop.h",
+			"file": "Components/PluginBlockComponent.h",
 			"settings":
 			{
-				"buffer_size": 7195,
+				"buffer_size": 1306,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Processors/Passthrough.h",
+			"file": "Components/LoopComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 2463,
+				"buffer_size": 3876,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Processors/Passthrough.cpp",
+			"file": "ScumblerDefs.h",
 			"settings":
 			{
-				"buffer_size": 3034,
+				"buffer_size": 2054,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scumbler.sublime-project",
+			"settings":
+			{
+				"buffer_size": 133,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/TrackComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 8741,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Components/ComponentDefs.h",
+			"settings":
+			{
+				"buffer_size": 591,
 				"line_ending": "Unix"
 			}
 		}
@@ -276,6 +304,12 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
@@ -283,17 +317,12 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/thumbnail.py",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformPixelBuffer.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
@@ -309,7 +338,6 @@
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoLatencyPage.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
@@ -422,6 +450,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"fNowIndex",
+			"LoopSizeChanged",
+			"SetLoopD",
+			"LoopSizeChanged",
+			"CalculateSamplesPerPixel",
+			"fPendingSamples",
+			"min",
+			".\n",
 			"fDirtyStart",
 			"LoopInfo",
 			"fPixelData",
@@ -541,8 +577,7 @@
 			"like",
 			"false",
 			"input",
-			"border",
-			"tab_s"
+			"border"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -564,7 +599,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -572,15 +607,15 @@
 					"file": "Components/WaveformComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 8899,
+						"buffer_size": 9906,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3786,
-								3786
+								9905,
+								9905
 							]
 						],
 						"settings":
@@ -590,7 +625,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4159.0,
+						"translation.y": 4411.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -600,15 +635,15 @@
 					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 4603,
+						"buffer_size": 5157,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4564,
-								4564
+								5020,
+								5020
 							]
 						],
 						"settings":
@@ -618,25 +653,36 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2347.0,
+						"translation.y": 1346.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Processors/Loop.cpp",
+					"file": "Components/PluginBlockComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 8071,
+						"buffer_size": 2092,
 						"regions":
 						{
+							"bookmark_a":
+							{
+								"flags": 144,
+								"regions":
+								[
+									[
+										800,
+										800
+									]
+								]
+							}
 						},
 						"selection":
 						[
 							[
-								5584,
-								5584
+								945,
+								945
 							]
 						],
 						"settings":
@@ -646,25 +692,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3485.0,
+						"translation.y": 371.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Processors/Loop.h",
+					"file": "Components/PluginBlockComponent.h",
 					"settings":
 					{
-						"buffer_size": 7195,
+						"buffer_size": 1306,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7070,
-								7070
+								0,
+								0
 							]
 						],
 						"settings":
@@ -674,17 +720,17 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4058.0,
+						"translation.y": 113.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "Processors/Passthrough.h",
+					"file": "Components/LoopComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 2463,
+						"buffer_size": 3876,
 						"regions":
 						{
 						},
@@ -692,6 +738,34 @@
 						[
 							[
 								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1833.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "ScumblerDefs.h",
+					"settings":
+					{
+						"buffer_size": 2054,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								95,
 								0
 							]
 						],
@@ -708,11 +782,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "Processors/Passthrough.cpp",
+					"buffer": 6,
+					"file": "Scumbler.sublime-project",
 					"settings":
 					{
-						"buffer_size": 3034,
+						"buffer_size": 133,
 						"regions":
 						{
 						},
@@ -725,9 +799,62 @@
 						],
 						"settings":
 						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Components/TrackComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 8741,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4693,
+								4693
+							]
+						],
+						"settings":
+						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2070.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Components/ComponentDefs.h",
+					"settings":
+					{
+						"buffer_size": 591,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								583,
+								583
+							]
+						],
+						"settings":
+						{
+							"is_xml": false,
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,

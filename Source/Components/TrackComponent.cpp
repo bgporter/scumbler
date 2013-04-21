@@ -32,6 +32,7 @@
 //==============================================================================
 TrackComponent::TrackComponent (Track* track)
     : fTrack(track)
+    , fCenterLineYPos(0)
 {
 
     //[UserPreSize]
@@ -116,6 +117,10 @@ void TrackComponent::paint (Graphics& g)
 #endif
 
     //[UserPaint] Add your own custom painting code here..
+    g.setColour(Colours::black);
+    g.fillRect(0.0, fCenterLineYPos-1.0, this->getWidth(), 3.0);
+    //g.drawLine(0, fCenterLineYPos, this->getWidth(), fCenterLineYPos, 2.0 );
+
     fOutputVolume->setValue(fTrack->GetOutputVolume());    
 
 
@@ -137,10 +142,13 @@ void TrackComponent::resized()
     int postX = trackWidth - kTrackMargin - pluginBlockWidth;
     int loopX = preX + pluginBlockWidth;
     int loopWidth = postX - (preX + pluginBlockWidth);
+    int effectBlockYPos = trackHeight * 0.1;
+    fCenterLineYPos = effectBlockYPos + (effectBlockHeight / 2.0);
+
     
-    fPreEffects->setBounds(preX, trackHeight * 0.1, pluginBlockWidth, effectBlockHeight);
-    fLoop->setBounds(loopX, trackHeight * 0.1, loopWidth, pluginBlockHeight);
-    fPostEffects->setBounds(postX, trackHeight * 0.1, pluginBlockWidth, effectBlockHeight);
+    fPreEffects->setBounds(preX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
+    fLoop->setBounds(loopX, effectBlockYPos, loopWidth, pluginBlockHeight);
+    fPostEffects->setBounds(postX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
 
     // center the volume between the right edge of the post effects and the edge of the component.
     int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());

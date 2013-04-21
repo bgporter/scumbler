@@ -65,6 +65,10 @@ void PluginSlotComponent::ShowEditor(bool display)
    }
 }
 
+int PluginSlotComponent::GetPreferredWidth() const
+{
+   return kNoPreferredWidth;
+}
 
 bool PluginSlotComponent::IsEmpty() const
 {
@@ -81,15 +85,21 @@ void PluginSlotComponent::paint (Graphics& g)
 
    rect.reduce(2.0f, 2.0f);
    const float kCornerSize = this->getHeight() / 2;
-   if (!this->IsEmpty())
+   if (this->IsEmpty())
    {
-      g.setColour(Colours::goldenrod);
-      g.fillRoundedRectangle(rect, kCornerSize);
+      g.setColour(Colours::white);
    }
-   Colour c = Colours::lightgrey;
+   else
+   {
+      g.setColour(Colours::black);
+   }
+
+   g.fillRoundedRectangle(rect, kCornerSize);
+
+   Colour c = Colours::black;
    if (fMouseOver)
    {
-      c = Colours::black;
+      c = Colours::red;
    }
    g.setColour(c);
    g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
@@ -97,7 +107,7 @@ void PluginSlotComponent::paint (Graphics& g)
    PluginInfo info = fPluginBlock->PluginInSlot(fIndex);
    if (String::empty != info.name)
    {
-      g.setColour(Colours::black);
+      g.setColour(Colours::white);
       g.drawText(info.name, 2, 0, 
          this->getWidth() - 2, this->getHeight(), 
          Justification::horizontallyCentred | Justification::verticallyCentred, true);

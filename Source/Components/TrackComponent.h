@@ -110,6 +110,7 @@ private:
     Slider* fOutputVolume;
     TextButton* fMute;
     TextButton* fSolo; 
+    float fCenterLineYPos;
     //[/UserVariables]
 
     //==============================================================================

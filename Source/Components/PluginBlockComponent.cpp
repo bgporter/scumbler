@@ -29,9 +29,12 @@ void PluginBlockComponent::paint (Graphics& g)
 
 void PluginBlockComponent::resized()
 {
+   int totalRequestedWidth = 0;
    for (int i = 0; i < fSlots.size(); ++i)
    {
       PluginSlotComponent* slot = fSlots.getUnchecked(i);
+      int preferredWidth = slot->GetPreferredWidth();
+      totalRequestedWidth += preferredWidth;
       this->SetSlotBounds(i, slot);
    }
 }

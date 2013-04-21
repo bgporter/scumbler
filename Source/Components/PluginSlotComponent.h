@@ -14,6 +14,12 @@ class PluginSlotComponent  : public Component
                            , public SettableTooltipClient
 {
 public:
+   enum 
+   {
+      kNoPreferredWidth = 0   
+   };
+
+
    PluginSlotComponent(PluginBlock* block, int index);
    ~PluginSlotComponent();
 
@@ -44,6 +50,14 @@ public:
     * @param display True to display/restore, False to delete.
     */
    void ShowEditor(bool display = true);
+
+   /**
+    * Ask this slot how many pixels wide it would ideally like to be, 
+    * based on the length of the length of the loaded plugin string. If this
+    * slot is empty, will return kNoPreferredWidth
+    * @return Desired number of pixels wide this slot should be.
+    */
+   int GetPreferredWidth() const;
 
 
    ///@}
