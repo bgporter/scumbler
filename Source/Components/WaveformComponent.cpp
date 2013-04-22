@@ -6,6 +6,9 @@
 
 #define kPixelsPerRedraw 5
 
+// turn on/off log statements in the paint() loop.
+//#define qLogPaint
+
 WaveformComponent::WaveformComponent(LoopProcessor* loop)
 :  fLoop(nullptr)
 ,  fPendingSamples(0)
@@ -14,6 +17,10 @@ WaveformComponent::WaveformComponent(LoopProcessor* loop)
 ,  fDirtyPixels(0)
 ,  fNow(0)
 {
+   // this should make redraws from things like the component being obscured & 
+   // then revealed much faster -- we'll only execute the paint() method when 
+   // an explicit call to repaint() is made.
+   // 
    this->setBufferedToImage(true);
    if (loop)
    {
@@ -71,7 +78,9 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
          else if ((0 == info.fLoopSample) && (0 != fLoopInfo.fLoopSample) &&
             (0 == info.fLoopCount) && (0 != fLoopInfo.fLoopCount))
          {
+#ifdef qLogPaint
             Logger::outputDebugString("LOOP RESET");
+#endif   
             // loop was just reset & cleared..
             fDirtyStart = INT_MAX;
             fDirtyPixels = 0;
@@ -128,9 +137,11 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
 
 void WaveformComponent::resized()
 {
+#ifdef qLogPaint
    String s("RESIZED:");
    s << this->getWidth() << "x" << this->getHeight();
    Logger::outputDebugString(s);
+#endif   
 
    int width = this->getWidth();
    fPixels.resize(width);
@@ -177,7 +188,9 @@ void WaveformComponent::CalculateSamplesPerPixel()
 void WaveformComponent::Clear()
 {
    // !!! mark the entire display as needing refresh.
+#ifdef qLogPaint
    Logger::outputDebugString("CLEAR!");
+#endif   
    fThumbData->fMaxThumbnailValues = this->getWidth();
    float oldStart = fThumbData->fStart;
    fThumbData->fStart = 0;
@@ -192,7 +205,9 @@ void WaveformComponent::Clear()
 
 void WaveformComponent::LoopSizeChanged()
 {
+#ifdef qLogPaint
    Logger::outputDebugString("LoopSizeChanged!");
+#endif   
    // set the scaling factor between the sample buffer and this view
    this->CalculateSamplesPerPixel();
    // ...and make sure we recalc/redraw everything after a full reset
@@ -222,8 +237,10 @@ void WaveformComponent::GetThumbnailData()
    // if this is the lowest-numbered pixel that we've seen since we were last
    // displayed, it's the start of our new dirty region that will need to 
    // be displayed.
+#ifdef qLogPaint
    String s("GTD: fDirtyStart was ");
    s << fDirtyStart;
+#endif   
    fDirtyStart = jmin(fDirtyStart, pixelIndex);
 
    // get the data
@@ -240,8 +257,10 @@ void WaveformComponent::GetThumbnailData()
       fPixels.set(pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
    }
    fDirtyPixels += fThumbData->fPixelsReturned;
+#ifdef qLogPaint
    s << " is now " <<  fDirtyStart << " fDirtyPixels = " << fDirtyPixels; 
    Logger::outputDebugString(s);
+#endif   
 
 }
 
@@ -250,17 +269,20 @@ void WaveformComponent::paint(Graphics& g)
    g.fillAll(Colours::white);
 
    Rectangle<int> clip = g.getClipBounds();
+#ifdef qLogPaint
    String c("  PAINT redrawing ");
    c << clip.getX() << ".." << clip.getX() + clip.getWidth();
    Logger::outputDebugString(c); 
-   
+#endif   
    g.setColour(Colours::black);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
    int nowPixel = this->PixelForSample(fNow);
+#ifdef qLogPaint
    String s("  PAINT Now = "); 
    s << nowPixel;
    Logger::outputDebugString(s);
+#endif   
 
    int startIndex = clip.getX();
    int endIndex = startIndex + clip.getWidth();
