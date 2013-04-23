@@ -117,9 +117,23 @@ void TrackComponent::paint (Graphics& g)
 #endif
 
     //[UserPaint] Add your own custom painting code here..
+
+    // This chunk of code will need revision when we have multiple
+    // tracks:
+    // - the signal line before the waveform for inactive tracks should be gray
+    // - all the black should be gray for muted tracks.
+
     g.setColour(Colours::black);
-    g.fillRect(0.0, fCenterLineYPos-1.0, this->getWidth(), 3.0);
-    //g.drawLine(0, fCenterLineYPos, this->getWidth(), fCenterLineYPos, 2.0 );
+    g.fillRect(0.0, fCenterLineYPos-1.0, fCenterLineStopX, 3.0);
+
+    // draw a bounding circle around the output volume knob.
+    Rectangle<int> box = fOutputVolume->getBounds();
+    box.expand(2, 2);
+    Rectangle<float> floatBox(box.getX(), box.getY(), box.getWidth(), box.getHeight());
+    g.setColour(Colours::white);
+    g.fillRoundedRectangle(floatBox, floatBox.getWidth()/2.0);
+    g.setColour(Colours::black);
+    g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);
 
     fOutputVolume->setValue(fTrack->GetOutputVolume());    
 
@@ -152,16 +166,16 @@ void TrackComponent::resized()
 
     // center the volume between the right edge of the post effects and the edge of the component.
     int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());
-    const int kVolumeWidth = 24;
-    const int kVolumeHeight = 24;
-    const int kXPos = fPostEffects->getRight() + (availableVolumeWidth - kVolumeWidth) / 2;
+    const int kXPos = fPostEffects->getRight() + (availableVolumeWidth - kKnobWidth) / 2;
     const int kMargin = 5;
-    int yPos = (this->getHeight() - kVolumeHeight) / 2;
+    //int yPos = (this->getHeight() - kKnobHeight) / 2;
+    int yPos = fCenterLineYPos - (kKnobHeight/2);
 
-    fMute->setBounds(kXPos, yPos, kVolumeWidth, kVolumeHeight);
-    fOutputVolume->setBounds(kXPos, yPos - kVolumeHeight - kMargin, 
-      kVolumeHeight, kVolumeHeight);
-    fSolo->setBounds(kXPos, yPos + kVolumeHeight + kMargin, kVolumeHeight, kVolumeHeight);
+    Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
+    fOutputVolume->setBounds(outputBounds);
+    fCenterLineStopX = outputBounds.getCentreX();
+    //fMute->setBounds(kXPos, yPos, kVolumeWidth, kVolumeHeight);
+    //fSolo->setBounds(kXPos, yPos + kVolumeHeight + kMargin, kVolumeHeight, kVolumeHeight);
 
 
 

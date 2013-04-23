@@ -111,6 +111,7 @@ private:
     TextButton* fMute;
     TextButton* fSolo; 
     float fCenterLineYPos;
+    int fCenterLineStopX;
     //[/UserVariables]
 
     //==============================================================================

@@ -23,4 +23,8 @@ const int kControlRowHeight = 30;
 
 const float kPluginSlotHeight = 0.6f;
 
+
+// dimensions of the knobs that we use.
+const int kKnobWidth = 24;
+const int kKnobHeight = 24;
 #endif

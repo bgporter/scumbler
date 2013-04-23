@@ -7,7 +7,6 @@
 
 void DragLabel::mouseUp(const MouseEvent& e)
 {
-   int x = 9;
    // By showing the editor here (instead of letting the base class do it 
    // for us) we can get a pointer to the editor and make sure that users 
    // can't enter anything except 1..5 digits.
@@ -130,7 +129,7 @@ void LoopComponent::resized()
 
    fWaveform->setBounds(0, 0, this->getWidth(), waveformHeight);
 
-   int xPos = this->getWidth() * 0.1;
+
    fDuration->setBounds(5, waveformHeight + 2, 64, 16);
 
    fFeedback->setBounds(this->getWidth() * 0.9, controlTop, 32, 24);
