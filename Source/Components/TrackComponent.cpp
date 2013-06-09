@@ -135,7 +135,10 @@ void TrackComponent::paint (Graphics& g)
     g.setColour(Colours::black);
     g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);
 
-    fOutputVolume->setValue(fTrack->GetOutputVolume());    
+    fOutputVolume->setValue(fTrack->GetOutputVolume());
+    
+    g.drawRect(fSolo->getBounds());
+    g.drawRect(fMute->getBounds());
 
 
     //[/UserPaint]
@@ -174,7 +177,16 @@ void TrackComponent::resized()
     Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
     fOutputVolume->setBounds(outputBounds);
     fCenterLineStopX = outputBounds.getCentreX();
+
+    // The mute and solo controls are underneath the block of post plugins, 
+    // with the right edge of the solo button aligned with the right edge of the
+    // post effect block.
+    Rectangle<int> buttonBounds(fPostEffects->getRight()-kKnobHeight, fPostEffects->getBottom()+5,
+      kKnobHeight, kKnobHeight);
+    fMute->setBounds(buttonBounds);
     //fMute->setBounds(kXPos, yPos, kVolumeWidth, kVolumeHeight);
+    Rectangle<int> soloBounds = buttonBounds.translated(fMute->getX() - (30), 0);
+    fSolo->setBounds(soloBounds);
     //fSolo->setBounds(kXPos, yPos + kVolumeHeight + kMargin, kVolumeHeight, kVolumeHeight);
 
 

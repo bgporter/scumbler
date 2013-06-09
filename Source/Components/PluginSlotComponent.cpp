@@ -107,9 +107,19 @@ void PluginSlotComponent::paint (Graphics& g)
    PluginInfo info = fPluginBlock->PluginInSlot(fIndex);
    if (String::empty != info.name)
    {
+      // calculate the largest rectangle we can fit fully inside this
+      // rounded rect -- we use the points at the 45 degree point on each arc
+      // as the vertexes of this rect.
+      const float kSin45 = 0.70710678118654746;
+      float inset = kCornerSize - (kCornerSize * kSin45);
+      rect += Point<float>(inset, inset);
+      inset *= 2;
+      rect.setWidth(rect.getWidth() - inset);
+      rect.setHeight(rect.getHeight() - inset);
+
       g.setColour(Colours::white);
-      g.drawText(info.name, 2, 0, 
-         this->getWidth() - 2, this->getHeight(), 
+      g.drawFittedText(info.name, mRoundInt(rect.getX()), mRoundInt(rect.getY()),
+         mRoundInt(rect.getWidth()), mRoundInt(rect.getHeight()), 
          Justification::horizontallyCentred | Justification::verticallyCentred, true);
    }
 }
