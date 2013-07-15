@@ -29,6 +29,7 @@ void PluginBlockComponent::paint (Graphics& g)
 
 void PluginBlockComponent::resized()
 {
+#if 0
    // each connector line must be at least this many pixels long. 
    const int kMinConnectorSize = 4;
    const int kPluginCount = fPlugins->Size();
@@ -66,7 +67,7 @@ void PluginBlockComponent::resized()
    }
 
 
-   #if 0
+#else
    int totalRequestedWidth = 0;
    for (int i = 0; i < fSlots.size(); ++i)
    {
