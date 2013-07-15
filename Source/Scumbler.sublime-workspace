@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"kPl",
+				"kPluginSlotHeight"
+			],
+			[
 				"wh",
 				"white"
 			],
@@ -168,13 +172,10 @@
 	"buffers":
 	[
 		{
-			"contents": "// Copyright (c) 2013 Bg Porter\n\n#include \"PluginBlockComponent.h\"\n#include \"ComponentDefs.h\"\n\nPluginBlockComponent::PluginBlockComponent(PluginBlock* plugins)\n:  fPlugins(nullptr)\n{\n   if (nullptr != plugins)\n   {\n      this->ConnectToPluginBlock(plugins);\n   }\n\n}\n\nPluginBlockComponent::~PluginBlockComponent()\n{\n\n}\n\nvoid PluginBlockComponent::paint (Graphics& g)\n{\n#ifdef qSketch\n   g.setColour(Colours::lightslategrey);\n   g.drawRect(0, 0, this->getWidth(), this->getHeight());\n#endif\n}\n\n\nvoid PluginBlockComponent::resized()\n{\n   int totalRequestedWidth = 0;\n   for (int i = 0; i < fSlots.size(); ++i)\n   {\n      PluginSlotComponent* slot = fSlots.getUnchecked(i);\n      int preferredWidth = slot->GetPreferredWidth();\n      totalRequestedWidth += preferredWidth;\n      this->SetSlotBounds(i, slot);\n   }\n}\n\n\nvoid PluginBlockComponent::SetSlotBounds(int index, PluginSlotComponent* slot)\n{\n   int blockWidth = this->getWidth();\n   int blockHeight = this->getHeight();\n   float slotHeight = blockHeight * kPluginSlotHeight;\n   float elementCount = fSlots.size() + 1.0;\n   float slotWidth = blockWidth / elementCount;\n   float margin = slotWidth / elementCount;\n\n   int x = (index + 1) * margin + index * slotWidth;\n   int y =  (blockHeight - slotHeight) / 2.0;\n   slot->setBounds(x, y, slotWidth, slotHeight);\n\n\n}\n\nvoid PluginBlockComponent::ConnectToPluginBlock(PluginBlock* plugins)\n{\n   // only do anything if we're changing something.\n   if (plugins != fPlugins)\n   {\n      if (fPlugins)\n      {\n         // disconnect.\n         fPlugins->removeChangeListener(this);\n      }\n   }\n   fPlugins = plugins;\n\n   if (fPlugins)\n   {\n      // connect to our new source of data.\n      fPlugins->addChangeListener(this);\n      if (fPlugins->Size() != fSlots.size())\n      {\n         fSlots.clear();\n         for (int i = 0; i < fPlugins->Size(); ++i)\n         {\n            PluginSlotComponent* slot = new PluginSlotComponent(fPlugins, i);\n            fSlots.add(slot);\n            this->addAndMakeVisible(slot);\n            //this->SetSlotBounds(i, slot);\n         }\n      }\n   }\n}\n\nvoid PluginBlockComponent::changeListenerCallback(ChangeBroadcaster* source)\n{\n   if (source == fPlugins)\n   {\n      this->repaint();\n   }\n\n}",
 			"file": "Components/PluginBlockComponent.cpp",
-			"file_size": 2223,
-			"file_write_time": 1366552399000000,
 			"settings":
 			{
-				"buffer_size": 2223,
+				"buffer_size": 2662,
 				"line_ending": "Unix"
 			}
 		},
@@ -206,18 +207,31 @@
 			"file": "Components/PluginSlotComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 5459,
+				"buffer_size": 6041,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "// Copyright (c) 2013 Brett g Porter\n\n#include \"PluginBlock.h\"\n\nPluginBlock::PluginBlock(PluginConnector* scumbler, NodeId input, NodeId output, size_t size)\n:  fScumbler(scumbler)\n,  fInput(input)\n,  fOutput(output)\n{\n   fPlugins.resize(size);\n   // just in case someday the value of invalid node is something other than zero.\n   for (size_t i = 0; i < size; ++i)\n   {\n      fPlugins.set(i, tk::kInvalidNode);\n   }\n\n   // we don't check the return. If they're already connected, that's cool. \n   // We should really be checking this, though, and throwing an exception\n   // if there's a more serious problem.\n   fScumbler->Connect(input, output);\n}\n\n\n\nPluginBlock::~PluginBlock()\n{\n   for (int i = 0; i < fPlugins.size(); ++i)\n   {\n      PluginInfo currentNode = fPlugins[i];\n      if (tk::kInvalidNode != currentNode.id)\n      {\n         PluginInfo before = this->FindPluginBeforeIndex(i);\n         PluginInfo after = this->FindPluginAfterIndex(i);\n         // remove the current node and delete it. We can probably rewrite this in \n         // terms of our own DeleteNode() method, yet to be written.\n         fScumbler->RemoveBetween(before.id, currentNode.id, after.id, true);\n      }\n   }\n}\n\nint PluginBlock::Size() const\n{\n   return fPlugins.size();\n}\n\ntk::Result PluginBlock::InsertPluginAtIndex(PluginInfo plugin, int index)\n{\n   tk::Result retval = tk::kIndexOutOfRange;\n   if (index >= 0 && index < this->Size())\n   {\n      if (tk::kInvalidNode == this->PluginInSlot(index).id)\n      {\n         // the index is in range, and the slot is empty.\n         // Now, connect everything together:\n         PluginInfo before = this->FindPluginBeforeIndex(index);\n         PluginInfo after = this->FindPluginAfterIndex(index);\n         if (tk::kInvalidNode != before.id && tk::kInvalidNode != after.id)\n         {\n            retval = fScumbler->InsertBetween(before.id, plugin.id, after.id);\n            if (tk::kSuccess == retval)\n            {\n               fPlugins.set(index, plugin); \n               this->sendChangeMessage();\n            }\n         }\n         else\n         {\n            // unknown weird failure.\n            retval = tk::kFailure;\n         }\n      }\n      else\n      {\n         retval = tk::kSlotFull;\n      }\n   }\n   return retval;\n}\n\ntk::Result PluginBlock::RemovePluginAtIndex(int index, bool deleteNode)\n{\n   tk::Result retval = tk::kIndexOutOfRange;\n   if (index >= 0 && index < this->Size())\n   {\n      PluginInfo plugin = this->PluginInSlot(index);\n      if (tk::kInvalidNode != plugin.id)\n      {\n         PluginInfo before = this->FindPluginBeforeIndex(index);\n         PluginInfo after = this->FindPluginAfterIndex(index);\n         if (tk::kInvalidNode != before.id && tk::kInvalidNode != after.id)\n         {\n            retval = fScumbler->RemoveBetween(before.id, plugin.id, after.id, deleteNode);\n            if (tk::kSuccess == retval)\n            {\n               fPlugins.set(index, PluginInfo());\n            }\n            this->sendChangeMessage();\n         }\n         else\n         {\n            // unknown weird failure.\n            retval = tk::kFailure;\n         }\n      }\n      else\n      {\n         // this slot was empty.\n         retval = tk::kNoTargetNode;\n      }\n   }  \n   return retval; \n}\n\nPluginInfo PluginBlock::PluginInSlot(int index) const\n{\n   PluginInfo retval;\n   if (index >= 0 && index < this->Size())\n   {\n      // We'll either return a real node if there's one in place, otherwise invalid node.\n      // \n      retval = fPlugins[index];\n   }\n   return retval;\n}\n\nPluginInfo PluginBlock::LoadPlugin(const PluginDescription& description, String& errorMessage)\n{\n   NodeId newNode = fScumbler->LoadPlugin(description, errorMessage);\n   return PluginInfo(newNode, description.name);\n}\n\n\ntk::Result PluginBlock::LoadPluginAtIndex(int index, const PluginDescription& desc, String& msg)\n{\n   tk::Result retval = tk::kSlotFull;\n   if (tk::kInvalidNode == this->PluginInSlot(index).id)\n   {\n      retval = tk::kPluginLoadError;\n      PluginInfo newPlugin = this->LoadPlugin(desc, msg);\n      if (tk::kInvalidNode != newPlugin.id)\n      {\n         retval = this->InsertPluginAtIndex(newPlugin, index);\n         // that may have failed for weird reasons. If so, we need to delete the plugin \n         // that we just loaded.\n         if (tk::kSuccess != retval)\n         {\n            // we actually ignore the result here; we need to report failure, so \n            // reporting success here would be useless. If this fails, we have other problems.\n            fScumbler->DeleteNode(newPlugin.id);\n         }\n      }\n   }\n   return retval;\n}\n\nAudioProcessorEditor* PluginBlock::GetEditorForIndex(int index, bool useGeneric)\n{\n   AudioProcessorEditor* retval = nullptr;\n\n   PluginInfo plugin = this->PluginInSlot(index);\n   if (tk::kInvalidNode != plugin.id)\n   {\n      retval = fScumbler->GetEditorForNode(plugin.id, useGeneric);\n   }\n   return retval;\n}\n\nPluginInfo PluginBlock::FindPluginBeforeIndex(int i)\n{\n   PluginInfo retval = PluginInfo(fInput, \"Input\");\n   if (i > 0)\n   {\n      for (int j = i-1; j > -1; --j)\n      {\n         if (fPlugins[j].id != tk::kInvalidNode)\n         {\n            retval = fPlugins[j];\n            break;\n         }\n      }\n   }\n   // either we found a valid node & have set retval or the only thing before this \n   // is the input. Return it.\n   return retval;\n}\n\nPluginInfo PluginBlock::FindPluginAfterIndex(int i)\n{\n   PluginInfo retval = PluginInfo(fOutput, \"Output\");\n   int size = fPlugins.size();\n   if (i < (size-1))\n   {\n      for (int j = i+1; j < size; ++j)\n      {\n         if (fPlugins[j].id != tk::kInvalidNode)\n         {\n            retval = fPlugins[j];\n            break;\n         }\n      }   \n   }\n   return retval;\n}\n\n\n/// KEEP THIS SECTION AT THE END OF THE FILE.\n#ifdef qUnitTests\n#include \"Test/test_PluginBlock.cpp\"\n#endif\n",
 			"file": "PluginBlock.cpp",
-			"file_size": 5843,
-			"file_write_time": 1360524333000000,
 			"settings":
 			{
 				"buffer_size": 5843,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "PluginBlock.h",
+			"settings":
+			{
+				"buffer_size": 6552,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ScumblerDefs.h",
+			"settings":
+			{
+				"buffer_size": 2151,
 				"line_ending": "Unix"
 			}
 		}
@@ -302,6 +316,7 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
@@ -323,7 +338,6 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/thumbnail.py",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformPixelBuffer.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.h",
@@ -448,6 +462,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"kPluginSlotHeight",
 			"outputDebugString",
 			"fNowIndex",
 			"LoopSizeChanged",
@@ -574,8 +589,7 @@
 			"print",
 			"HandleReq",
 			"like",
-			"false",
-			"input"
+			"false"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -605,7 +619,7 @@
 					"file": "Components/PluginBlockComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 2223,
+						"buffer_size": 2662,
 						"regions":
 						{
 							"bookmark_a":
@@ -614,8 +628,8 @@
 								"regions":
 								[
 									[
-										931,
-										931
+										1370,
+										1370
 									]
 								]
 							}
@@ -623,8 +637,8 @@
 						"selection":
 						[
 							[
-								803,
-								803
+								801,
+								801
 							]
 						],
 						"settings":
@@ -634,7 +648,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 182.0,
+						"translation.y": 402.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -662,7 +676,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 113.0,
+						"translation.y": 333.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -727,15 +741,15 @@
 					"file": "Components/PluginSlotComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 5459,
+						"buffer_size": 6041,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2393,
-								2393
+								1963,
+								1963
 							]
 						],
 						"settings":
@@ -745,7 +759,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2076.0,
+						"translation.y": 1477.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -762,8 +776,8 @@
 						"selection":
 						[
 							[
-								2019,
-								2025
+								53,
+								53
 							]
 						],
 						"settings":
@@ -773,7 +787,63 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1002.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "PluginBlock.h",
+					"settings":
+					{
+						"buffer_size": 6552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1023.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "ScumblerDefs.h",
+					"settings":
+					{
+						"buffer_size": 2151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								535,
+								535
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 13.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

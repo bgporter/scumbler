@@ -83,6 +83,7 @@ void PluginSlotComponent::paint (Graphics& g)
    g.drawRect(rect);
 #endif
 
+   // we reduce so we're sure that our fat borders are all displayed. 
    rect.reduce(2.0f, 2.0f);
    const float kCornerSize = this->getHeight() / 2;
    if (this->IsEmpty())

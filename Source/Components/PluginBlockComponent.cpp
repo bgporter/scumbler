@@ -29,6 +29,44 @@ void PluginBlockComponent::paint (Graphics& g)
 
 void PluginBlockComponent::resized()
 {
+   // each connector line must be at least this many pixels long. 
+   const int kMinConnectorSize = 4;
+   const int kPluginCount = fPlugins->Size();
+   const int kConnectorCount = kPluginCount + 1;
+
+   const float kSlotHeight = this->getHeight() * kPluginSlotHeight;
+   
+   // The slot bubbles can take at MOST this many pixels.
+   const int kAvailableWidth = this->getWidth() - (kMinConnectorSize * kConnectorCount);
+
+   // Figure out how many total characters we're going to need to display. This 
+   // is all very approximate -- we may end up needing to use the TextLayout
+   // and AttributedString classes to make this work sensibly.
+   const int kMinChars = 5;
+   int totalChars = 0;
+
+   Array<int> nameLengths;
+
+   for (int i = 0; i < fPlugins->Size(); ++i)
+   {
+      int len = kMinChars;
+      PluginInfo pi = fPlugins->PluginInSlot(i);
+      if (pi.name != String::empty)
+      {
+         len = pi.name.length();
+      }
+      nameLengths.add(len);
+      totalChars += len;
+   }
+
+   Array<float> percentages;
+   for (int j = 0; j < fPlugins->Size(); ++j)
+   {
+      percentages.add(nameLengths.getUnchecked(j) /  static_cast<float>(totalChars));
+   }
+
+
+   #if 0
    int totalRequestedWidth = 0;
    for (int i = 0; i < fSlots.size(); ++i)
    {
@@ -37,6 +75,7 @@ void PluginBlockComponent::resized()
       totalRequestedWidth += preferredWidth;
       this->SetSlotBounds(i, slot);
    }
+   #endif
 }
 
 
