@@ -171,7 +171,6 @@ void TrackComponent::resized()
     int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());
     const int kXPos = fPostEffects->getRight() + (availableVolumeWidth - kKnobWidth) / 2;
     const int kMargin = 5;
-    //int yPos = (this->getHeight() - kKnobHeight) / 2;
     int yPos = fCenterLineYPos - (kKnobHeight/2);
 
     Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
@@ -184,10 +183,8 @@ void TrackComponent::resized()
     Rectangle<int> buttonBounds(fPostEffects->getRight()-kKnobHeight, fPostEffects->getBottom()+5,
       kKnobHeight, kKnobHeight);
     fMute->setBounds(buttonBounds);
-    //fMute->setBounds(kXPos, yPos, kVolumeWidth, kVolumeHeight);
-    Rectangle<int> soloBounds = buttonBounds.translated(fMute->getX() - (30), 0);
+    Rectangle<int> soloBounds = buttonBounds.translated(-30, 0);
     fSolo->setBounds(soloBounds);
-    //fSolo->setBounds(kXPos, yPos + kVolumeHeight + kMargin, kVolumeHeight, kVolumeHeight);
 
 
 
