@@ -121,7 +121,7 @@ void PluginSlotComponent::paint (Graphics& g)
       g.setColour(Colours::white);
       g.drawFittedText(info.name, mRoundInt(rect.getX()), mRoundInt(rect.getY()),
          mRoundInt(rect.getWidth()), mRoundInt(rect.getHeight()), 
-         Justification::horizontallyCentred | Justification::verticallyCentred, true);
+         Justification::horizontallyCentred | Justification::verticallyCentred, 2);
    }
 }
 
