@@ -175,7 +175,7 @@
 			"file": "Components/PluginBlockComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 2662,
+				"buffer_size": 3409,
 				"line_ending": "Unix"
 			}
 		},
@@ -231,8 +231,24 @@
 			"file": "ScumblerDefs.h",
 			"settings":
 			{
-				"buffer_size": 2151,
+				"buffer_size": 2153,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/TrackComponent.h",
+			"settings":
+			{
+				"buffer_size": 4077,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Components/TrackComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 9973,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -611,7 +627,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 9,
 			"sheets":
 			[
 				{
@@ -619,26 +635,15 @@
 					"file": "Components/PluginBlockComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 2662,
+						"buffer_size": 3409,
 						"regions":
 						{
-							"bookmark_a":
-							{
-								"flags": 144,
-								"regions":
-								[
-									[
-										1370,
-										1370
-									]
-								]
-							}
 						},
 						"selection":
 						[
 							[
-								801,
-								801
+								0,
+								0
 							]
 						],
 						"settings":
@@ -648,7 +653,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 402.0,
+						"translation.y": 1461.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -787,7 +792,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 288.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -815,7 +820,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1023.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -825,15 +830,15 @@
 					"file": "ScumblerDefs.h",
 					"settings":
 					{
-						"buffer_size": 2151,
+						"buffer_size": 2153,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								535,
-								535
+								334,
+								334
 							]
 						],
 						"settings":
@@ -843,7 +848,63 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 13.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Components/TrackComponent.h",
+					"settings":
+					{
+						"buffer_size": 4077,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 758.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "Components/TrackComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 9973,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2689,
+								2689
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1005.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
