@@ -72,7 +72,7 @@ TrackComponent::TrackComponent (Track* track)
 
    fMute = new TextButton("Mute");
    fMute->setTooltip("Mute track");
-   fMute->setButtonText("M");
+   fMute->setButtonText("m");
    fMute->addListener(this);
    fMute->setColour(TextButton::buttonColourId, Colours::white);
    fMute->setClickingTogglesState(true);
@@ -80,7 +80,7 @@ TrackComponent::TrackComponent (Track* track)
 
    fSolo = new TextButton("Solo");
    fSolo->setTooltip("Solo track");
-   fSolo->setButtonText("S");
+   fSolo->setButtonText("s");
    fSolo->addListener(this);
    fSolo->setColour(TextButton::buttonColourId, Colours::white);
    fSolo->setClickingTogglesState(true);
@@ -137,8 +137,8 @@ void TrackComponent::paint (Graphics& g)
 
     fOutputVolume->setValue(fTrack->GetOutputVolume());
     
-    g.drawRect(fSolo->getBounds());
-    g.drawRect(fMute->getBounds());
+    //g.drawRect(fSolo->getBounds());
+    //g.drawRect(fMute->getBounds());
 
 
     //[/UserPaint]
