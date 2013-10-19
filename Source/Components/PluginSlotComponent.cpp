@@ -144,7 +144,7 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
       if (this->IsEmpty())
       {
          // add all of the plugins to the menu
-         gKnownPlugins.addToMenu(m, KnownPluginList::defaultOrder);
+         gKnownPlugins.addToMenu(m, fPluginBlock->GetPluginSortOrder());
          // show the menu. On return, `r` will be the index of the selected item
          const int r = m.show();
          // get a PluginDescription object for the selected plugin

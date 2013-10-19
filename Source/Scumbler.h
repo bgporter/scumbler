@@ -274,6 +274,23 @@ public:
     Track* GetTrack(int index) const;
 
     ///@}
+
+   /**
+    * Tell this plugin connector object how we'd like to have our list of plugins sorted when
+    * the user displays a popup menu of them. 
+    * @param sort SortMethod enum, one of defaultOrder, sortAlphabetically, sortByCategory,
+    *             sortByManufacturer, sortByFileSystemLocation
+    */
+   void SetPluginSortOrder(KnownPluginList::SortMethod sort);
+
+   /**
+    * Return the enum that indicates how we should be displaying plugins in the menu.
+    * @return desired sort order.
+    */
+   KnownPluginList::SortMethod GetPluginSortOrder() const;
+
+
+
 #ifdef qUnitTests
   /**
    * Get a pointer to the one and only scumbler object. Only used for unit tests.
@@ -360,6 +377,8 @@ private:
     * Are we playing right now?
     */
    bool fPlaying;
+
+   KnownPluginList::SortMethod fPluginSort;
 
    /**
     * node IDs for the input and output processors.

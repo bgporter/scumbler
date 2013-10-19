@@ -202,6 +202,10 @@ PluginInfo PluginBlock::FindPluginAfterIndex(int i)
    return retval;
 }
 
+KnownPluginList::SortMethod PluginBlock::GetPluginSortOrder() const
+{
+   return fScumbler->GetPluginSortOrder();
+}
 
 /// KEEP THIS SECTION AT THE END OF THE FILE.
 #ifdef qUnitTests

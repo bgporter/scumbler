@@ -61,6 +61,10 @@ MainAppWindow::MainAppWindow()
   // create and reset the scumbler object now that the audio system is configured.
   fScumbler = new Scumbler(fDeviceManager, fPluginManager);
   //fScumbler->Reset();
+  
+  // Pass any saved configuration parameters down to the scumbler object.
+  int sortOrder = userSettings->getIntValue("pluginSortOrder", (int) KnownPluginList::defaultOrder);
+  fScumbler->SetPluginSortOrder((KnownPluginList::SortMethod) sortOrder);
 
   // create the scumbler component that owns & operates our user interface.
   ScumblerComponent* c = new ScumblerComponent(fScumbler);
@@ -195,6 +199,22 @@ PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& m
     case 1:   // Options menu
     {
       menu.addCommandItem(gCommandManager, CommandIds::kConfigAudio);
+      // add the submenu to control how we sort the plugins...
+      PopupMenu sortMenu;
+      KnownPluginList::SortMethod order = fScumbler->GetPluginSortOrder();
+      sortMenu.addItem(kDefaultOrder, "List plugins in default order", true, 
+        order == KnownPluginList::defaultOrder);
+      sortMenu.addItem(kAlphaOrder, "List plugins in alphabetical order", true, 
+        order == KnownPluginList::sortAlphabetically);
+      sortMenu.addItem(kCategoryOrder, "List plugins by category", true, 
+        order == KnownPluginList::sortByCategory);
+      sortMenu.addItem(kMfrOrder, "List plugins by manufacturer", true, 
+        order == KnownPluginList::sortByManufacturer);
+      sortMenu.addItem(kDefaultOrder, "List plugins by directory structure", true, 
+        order == KnownPluginList::sortByFileSystemLocation);
+
+      menu.addSubMenu("Plugin Sorting", sortMenu);
+
       menu.addCommandItem(gCommandManager, CommandIds::kPlay);
 #ifdef qUnitTests
       menu.addSeparator();
@@ -218,7 +238,43 @@ PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& m
 
 void MainAppWindow::menuItemSelected (int menuItemID, int topLevelMenuIndex)
 {
-  // @TODO: !!!
+   if (menuItemID >= kDefaultOrder && menuItemID <= kDirectoryOrder)
+   {
+      KnownPluginList::SortMethod sortOrder; 
+
+      switch (menuItemID)
+      {
+         case kAlphaOrder:
+            sortOrder = KnownPluginList::sortAlphabetically;
+            break;
+
+         case kCategoryOrder:
+            sortOrder = KnownPluginList::sortByCategory;
+            break;
+
+         case kMfrOrder:
+            sortOrder = KnownPluginList::sortByManufacturer;
+            break;
+
+         case kDirectoryOrder:
+            sortOrder = KnownPluginList::sortByFileSystemLocation;
+            break;
+
+         case kDefaultOrder:
+         default:
+            sortOrder = KnownPluginList::defaultOrder;
+            break;
+      }
+      fScumbler->SetPluginSortOrder(sortOrder);
+      // save this for next time...
+      PropertiesFile* settings = gAppProperties->getUserSettings();
+      settings->setValue("pluginSortOrder", (int) sortOrder);
+      settings->saveIfNeeded();
+
+      this->menuItemsChanged();
+
+
+   }
 }
 
 

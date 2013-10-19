@@ -40,6 +40,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 : fDeviceManager(deviceManager)
 , fPluginManager(pluginManager)
 , fPlaying(false)
+, fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
 , fOutputNode(tk::kInvalidNode)
 , fGainNode(tk::kInvalidNode)
@@ -63,6 +64,16 @@ Scumbler::~Scumbler()
    fDeviceManager.removeAudioCallback(&fPlayer);
    fPlayer.setProcessor(nullptr);
    fGraph.clear();
+}
+
+void Scumbler::SetPluginSortOrder(KnownPluginList::SortMethod sort)
+{
+   fPluginSort = sort;
+}
+
+KnownPluginList::SortMethod Scumbler::GetPluginSortOrder() const
+{
+   return fPluginSort;
 }
 
 #ifdef qUnitTests 

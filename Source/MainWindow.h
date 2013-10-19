@@ -81,6 +81,20 @@ public:
     */
 
 private:
+    enum MenuId
+    {
+        kDefaultOrder = 200,
+        kAlphaOrder,
+        kCategoryOrder,
+        kMfrOrder,
+        kDirectoryOrder, 
+
+        // keep this one at the end of the list
+        kLastMenuId
+    };
+
+
+private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 
