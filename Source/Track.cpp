@@ -2,33 +2,42 @@
 
 #include "Track.h"
 
-// TODO: replace with the real loop processor.
-#include "Processors/Passthrough.h"
 
 
 
 Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name)
 :  fScumbler(owner)
 ,  fName(name)
+,  fPlaying(true)
+,  fMuted(false)
 ,  fPreEffectCount(preFxCount)
 ,  fPreEffects(nullptr)
-,  fLoop(tk::kInvalidNode)
 ,  fPostEffectCount(postFxCount)
 ,  fPostEffects(nullptr)
+,  fLoop(nullptr)
+,  fLoopId(tk::kInvalidNode)
+,  fOutputGain(nullptr)
+,  fVolumeId(tk::kInvalidNode)
+,  fOutputVolume(0.0)
 {
    // we need the input and output nodes that the Scumbler controls.
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
 
+   // create and insert the gain processor.
+   fOutputGain = new GainProcessor(this);
+   fVolumeId = fScumbler->AddProcessor(fOutputGain);
+   fScumbler->InsertBetween(input, fVolumeId, output);
+
    // create & insert the loop processor
-   // (FOR NOW this is just the passthrough processor.)
-   AudioProcessor* loop = new PassthroughProcessor();
-   fLoop = fScumbler->AddProcessor(loop);
-   fScumbler->InsertBetween(input, fLoop, output);
+   fLoop = new LoopProcessor(this);
+   fLoopId = fScumbler->AddProcessor(fLoop);
+   fScumbler->InsertBetween(input, fLoopId, fVolumeId);
+
 
    // create the plugin blocks and hook them in.
-   fPreEffects = new PluginBlock(fScumbler, input, fLoop, fPreEffectCount);
-   fPostEffects = new PluginBlock(fScumbler, fLoop, output, fPostEffectCount);
+   fPreEffects = new PluginBlock(fScumbler, input, fLoopId, fPreEffectCount);
+   fPostEffects = new PluginBlock(fScumbler, fLoopId, fVolumeId, fPostEffectCount);
 
 
 }
@@ -41,18 +50,96 @@ Track::~Track()
    fPostEffects = nullptr;
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
-   fScumbler->RemoveBetween(input, fLoop, output, true);
+   fScumbler->RemoveBetween(input, fLoopId, output, true);
 }
 
 
 void Track::SetName(const String& name)
 {
    fName = name;
+   this->sendChangeMessage();
 }
 
 String Track::GetName() const
 {
    return fName;
+}
+
+bool Track::IsPlaying() const
+{
+   return fPlaying && fScumbler->IsPlaying();
+}
+
+
+tk::Result Track::Solo(bool soloed)
+{
+   ScopedLock sl(fMutex);
+   Track* track = soloed ? this : nullptr; 
+   return fScumbler->SoloTrack(track);
+   this->sendChangeMessage();
+}
+
+Track::SoloState Track::IsSoloed() const
+{
+   ScopedLock sl(fMutex);
+   Track::SoloState retval = Track::kNoTracksSoloed;
+   Track* soloTrack = fScumbler->GetSoloTrack();
+   if (soloTrack)
+   {
+      if (this == soloTrack)
+      {
+         retval = Track::kThisTrackSoloed;
+      }
+      else
+      {
+         retval = Track::kOtherTrackSoloed;
+      }
+   }
+
+   return retval;
+}
+
+tk::Result Track::Mute(bool muted)
+{
+   ScopedLock sl(fMutex);
+   fMuted = muted;
+   this->sendChangeMessage();
+   return tk::kSuccess;
+
+}
+
+bool Track::IsMuted() const
+{
+   ScopedLock sl(fMutex);
+   return fMuted;
+}
+
+
+void Track::ResetLoop()
+{
+   fLoop->Reset();
+}
+
+void Track::SetOutputVolume(float volumeInDb)
+{
+   if (volumeInDb != fOutputVolume)
+   {
+      fOutputVolume = volumeInDb;
+
+      //!!! Send the new gain to the audio processor that actually controls
+      // the output.
+      float gain = DbToFloat(fOutputVolume);
+      fOutputGain->SetGain(gain);
+
+      // update our observers.
+      this->sendChangeMessage();
+   }
+
+}
+
+float Track::GetOutputVolume() const
+{
+   return fOutputVolume;   
 }
 
 
@@ -66,6 +153,8 @@ void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* lis
       case kTrack: sender = this; break;
 
       case kPostFx: sender = fPostEffects; break;
+
+      case kLoop: sender = fLoop; break;
 
       // assert on an error.
       default: jassert(false); break;

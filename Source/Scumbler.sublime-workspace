@@ -4,8 +4,32 @@
 		"selected_items":
 		[
 			[
-				"S",
-				"Size"
+				"known",
+				"KnownPluginList"
+			],
+			[
+				"de",
+				"defaultOrder"
+			],
+			[
+				"Kn",
+				"KnownPluginList"
+			],
+			[
+				"plugin",
+				"pluginSortOrder"
+			],
+			[
+				"Sort",
+				"SortMethod"
+			],
+			[
+				"menuItems",
+				"menuItemsChanged"
+			],
+			[
+				"fPlugin",
+				"fPluginSort"
 			],
 			[
 				"kPl",
@@ -176,50 +200,26 @@
 	"buffers":
 	[
 		{
-			"file": "Components/PluginBlockComponent.cpp",
+			"file": "MainWindow.cpp",
 			"settings":
 			{
-				"buffer_size": 1959,
-				"line_ending": "Unix"
+				"buffer_size": 9604,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Components/PluginBlockComponent.h",
+			"file": "MainWindow.h",
 			"settings":
 			{
-				"buffer_size": 1306,
-				"line_ending": "Unix"
+				"buffer_size": 3721,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "Components/ComponentDefs.h",
+			"file": "PluginConnector.h",
 			"settings":
 			{
-				"buffer_size": 0,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/PluginSlotComponent.h",
-			"settings":
-			{
-				"buffer_size": 1752,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/PluginSlotComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 4809,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "PluginBlock.cpp",
-			"settings":
-			{
-				"buffer_size": 5843,
+				"buffer_size": 5666,
 				"line_ending": "Unix"
 			}
 		},
@@ -227,15 +227,31 @@
 			"file": "PluginBlock.h",
 			"settings":
 			{
-				"buffer_size": 6552,
+				"buffer_size": 6775,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "ScumblerDefs.h",
+			"file": "Scumbler.h",
 			"settings":
 			{
-				"buffer_size": 1831,
+				"buffer_size": 13717,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Scumbler.cpp",
+			"settings":
+			{
+				"buffer_size": 13110,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/PluginSlotComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 6043,
 				"line_ending": "Unix"
 			}
 		}
@@ -320,12 +336,20 @@
 	},
 	"file_history":
 	[
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ComponentDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
@@ -334,7 +358,6 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
@@ -354,14 +377,8 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoRecordPage.cpp",
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoLatencyPage.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Track.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h",
@@ -446,8 +463,7 @@
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings",
 		"/Users/bgporter/Documents/Kath/worksheet/worksheet.py",
 		"/Users/bgporter/temp/temp.html",
-		"/Users/bgporter/Documents/Kath/worksheet/test2.html",
-		"/Users/bgporter/Documents/Kath/worksheet/worksheet.css"
+		"/Users/bgporter/Documents/Kath/worksheet/test2.html"
 	],
 	"find":
 	{
@@ -466,6 +482,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"      \n",
+			"addCom",
 			"kPluginSlotHeight",
 			"outputDebugString",
 			"fNowIndex",
@@ -591,9 +609,7 @@
 			"print",
 			"HandleRe",
 			"print",
-			"HandleReq",
-			"like",
-			"false"
+			"HandleReq"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -615,109 +631,99 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 6,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Components/PluginBlockComponent.cpp",
+					"file": "MainWindow.cpp",
 					"settings":
 					{
-						"buffer_size": 1959,
+						"buffer_size": 9604,
 						"regions":
 						{
-							"bookmark_a":
-							{
-								"flags": 144,
-								"regions":
-								[
-									[
-										2117,
-										2117
-									]
-								]
-							}
 						},
 						"selection":
 						[
 							[
-								787,
-								787
+								2563,
+								2563
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 432.0,
+						"translation.y": 659.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Components/PluginBlockComponent.h",
+					"file": "MainWindow.h",
 					"settings":
 					{
-						"buffer_size": 1306,
+						"buffer_size": 3721,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2541,
+								2424
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1038.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "Components/ComponentDefs.h",
+					"file": "PluginConnector.h",
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 5666,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4960,
+								4960
 							]
 						],
 						"settings":
 						{
-							"is_xml": false,
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1.0,
+						"translation.y": 1795.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Components/PluginSlotComponent.h",
+					"file": "PluginBlock.h",
 					"settings":
 					{
-						"buffer_size": 1752,
+						"buffer_size": 6775,
 						"regions":
 						{
 						},
@@ -735,53 +741,53 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2170.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "Components/PluginSlotComponent.cpp",
+					"file": "Scumbler.h",
 					"settings":
 					{
-						"buffer_size": 4809,
+						"buffer_size": 13717,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								13065,
+								13065
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1477.0,
+						"translation.y": 6637.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "PluginBlock.cpp",
+					"file": "Scumbler.cpp",
 					"settings":
 					{
-						"buffer_size": 5843,
+						"buffer_size": 13110,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								53,
-								53
+								1592,
+								1592
 							]
 						],
 						"settings":
@@ -791,17 +797,17 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 880.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "PluginBlock.h",
+					"file": "Components/PluginSlotComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 6552,
+						"buffer_size": 6043,
 						"regions":
 						{
 						},
@@ -815,39 +821,11 @@
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
+							"tab_size": 3,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1023.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "ScumblerDefs.h",
-					"settings":
-					{
-						"buffer_size": 1831,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 13.0,
+						"translation.y": 3129.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

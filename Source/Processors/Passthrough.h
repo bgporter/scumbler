@@ -21,7 +21,7 @@ public:
     *  @param inputChannelCount number of desired input channels
     *  @param outputChannelCount number of desired output channels.
     */
-   PassthroughProcessor(int inputChannelCount = 1, int outputChannelCount = 1);
+   PassthroughProcessor(int channelCount = 1);
 
    /**
     * Destructor.
@@ -38,6 +38,8 @@ public:
     * @return String filled with the name.
     */
    const String getName() const;
+
+   int GetChannelCount() const { return fChannelCount; };
  
    /**
     * Called before playback starts to get things ready.
@@ -96,11 +98,11 @@ public:
    ///@}
 
 
+protected:
+    int fChannelCount;
 private:
    //JUCE_DECLARE_NON_COPYABLE(PassthroughProcessor);
 
-   int fInputChannels;
-   int fOutputChannels;
 
 
 };

@@ -2,9 +2,11 @@
 
 #include "Scumbler.h"
 
+#include <math.h>
 
 #include "Commands.h"
 #include "Processors/Passthrough.h"
+#include "Processors/Gain.h"
 #include "Track.h"
 
 
@@ -19,13 +21,31 @@ namespace
 
 #endif
 
+
+
+
+float DbToFloat(float db)
+{
+   return pow(10.0, db/20.0);
+}
+
+float GainToDb(float gain)
+{
+   return 20.0 * log10(gain);
+}
+
+
 Scumbler::Scumbler(AudioDeviceManager& deviceManager, 
                   AudioPluginFormatManager& pluginManager)
 : fDeviceManager(deviceManager)
 , fPluginManager(pluginManager)
 , fPlaying(false)
-, fInputNode(-1)
-, fOutputNode(-1)
+, fPluginSort(KnownPluginList::defaultOrder)
+, fInputNode(tk::kInvalidNode)
+, fOutputNode(tk::kInvalidNode)
+, fGainNode(tk::kInvalidNode)
+, fSoloTrack(nullptr)
+, fOutputVolume(0.0f) 
 {
 #ifdef qUnitTests
    jassert(nullptr == instance);
@@ -35,6 +55,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
    fPlayer.setProcessor(&fGraph);
    fDeviceManager.addAudioCallback(&fPlayer);
    this->Reset();
+   this->SetOutputVolume(fOutputVolume);
 }
 
 Scumbler::~Scumbler()
@@ -43,6 +64,16 @@ Scumbler::~Scumbler()
    fDeviceManager.removeAudioCallback(&fPlayer);
    fPlayer.setProcessor(nullptr);
    fGraph.clear();
+}
+
+void Scumbler::SetPluginSortOrder(KnownPluginList::SortMethod sort)
+{
+   fPluginSort = sort;
+}
+
+KnownPluginList::SortMethod Scumbler::GetPluginSortOrder() const
+{
+   return fPluginSort;
 }
 
 #ifdef qUnitTests 
@@ -91,12 +122,53 @@ void Scumbler::Reset()
 
    this->Connect(fInputNode, fOutputNode);
 
+   // connect a gain processor in the middle:
+   GainProcessor* gain = new GainProcessor(nullptr, 2);
+   NodeId gainNode = this->AddProcessor(gain);
+   if (tk::kSuccess == this->InsertBetween(fInputNode, gainNode, fOutputNode))
+   {
+      fOutputGain = gain;
+      fGainNode = gainNode;
+
+   }
+   else
+   {
+      fOutputGain = nullptr;
+      fGainNode = tk::kInvalidNode;
+   }
+
+
+
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
+   // ... and then add a single track to start out.
+   this->AddTrack();
    // let anyone listening tk::know that we've changed.
    this->sendChangeMessage();
 
 }
+
+void Scumbler::SetOutputVolume(float volumeInDb)
+{
+   if (volumeInDb != fOutputVolume)
+   {
+      fOutputVolume = volumeInDb;
+
+      //!!! Send the new gain to the audio processor that actually controls
+      // the output.
+      float gain = DbToFloat(fOutputVolume);
+      fOutputGain->SetGain(gain);
+
+      // update our observers.
+      this->sendChangeMessage();
+   }
+}
+
+float Scumbler::GetOutputVolume() const
+{
+   return fOutputVolume;
+}
+
 
 
 tk::Result Scumbler::Connect(NodeId source, NodeId dest)
@@ -235,6 +307,27 @@ tk::Result Scumbler::DeleteTrack(int index)
    return retval;
 }
 
+tk::Result Scumbler::SoloTrack(Track* trackToSolo)
+{
+   fSoloTrack = trackToSolo;
+   return tk::kSuccess;
+}
+
+Track* Scumbler::GetSoloTrack() const
+{
+   return fSoloTrack;
+}
+
+tk::Result Scumbler::ResetAllTracks()
+{
+   for (int i = 0; i < this->GetNumTracks(); ++i)
+   {
+      Track* t = this->GetTrack(i);
+      t->ResetLoop();
+   }
+   return tk::kSuccess;
+
+}
 
 tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
 {
@@ -371,6 +464,8 @@ NodeId Scumbler::LoadPlugin(const PluginDescription& description, String& errorM
    AudioPluginInstance* loaded = fPluginManager.createPluginInstance(description, errorMessage);
    if (loaded)
    {
+      // Add this plugin to the AudioProcessorGraph. It gets connected elsewhere
+      // (in PluginBlockComponent.cpp)
       retval = this->AddProcessor(loaded);
    }
    return retval;
@@ -427,7 +522,9 @@ NodeId Scumbler::HandleSpecialNode(NodeId node)
    }
    else if (tk::kOutput == node)
    {
-      retval = fOutputNode;
+      // if we have inserted a gain processor before the output, that should
+      // be treated as the output; everything goes through it.
+      retval = (tk::kInvalidNode == fGainNode)  ? fOutputNode : fGainNode;
    }
 
    return retval;

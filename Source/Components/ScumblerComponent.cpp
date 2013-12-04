@@ -13,7 +13,7 @@
 
   ------------------------------------------------------------------------------
 
-  The Jucer is part of the JUCE library - "Jules' Utility Class Extensions"
+  The Jucer is part of the JUCE library - "Jules' Utility Cla/AddTrss Extensions"
   Copyright 2004-6 by Raw Material Software ltd.
 
   ==============================================================================
@@ -33,24 +33,30 @@ extern ApplicationCommandManager* gCommandManager;
 ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
     : Component ("The Scumbler")
     , fScumbler(scumbler)
-    , fNewTrackButton (0)
+    , fTransport(nullptr)
 {
-    addAndMakeVisible (fNewTrackButton = new TextButton ("new track"));
-    fNewTrackButton->setButtonText ("+");
-    fNewTrackButton->addListener (this);
-    fNewTrackButton->setColour (TextButton::buttonColourId, Colour (0xffcccce2));
-
-    //addAndMakeVisible (fTrackComponent = new TrackComponent(nullptr));
-    //fTrackComponent->setName ("base track");
 
 
     //[UserPreSize]
     //[/UserPreSize]
 
+
+    //[Constructor] You can add your own custom stuff here..
+        // adding track(s)
+    for (int i = 0; i < fScumbler->GetNumTracks(); ++i)
+    {
+      TrackComponent* tc = new TrackComponent(fScumbler->GetTrack(i));
+      fTracks.add(tc);
+      this->addAndMakeVisible(tc);
+    }
+
+    fTransport = new TransportComponent(fScumbler);
+    this->addAndMakeVisible(fTransport);
+
+    
     setSize (600, 400);
 
 
-    //[Constructor] You can add your own custom stuff here..
     // subscribe to change notifications coming from the scumbler object.
     fScumbler->addChangeListener(this);
     //[/Constructor]
@@ -61,8 +67,7 @@ ScumblerComponent::~ScumblerComponent()
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
-    deleteAndZero (fNewTrackButton);
-
+    deleteAndZero(fTransport);
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
@@ -82,7 +87,6 @@ void ScumblerComponent::paint (Graphics& g)
 
 void ScumblerComponent::resized()
 {
-    fNewTrackButton->setBounds (32, 456, 24, 24);
     //[UserResized] Add your own custom resize handling here..
     int trackCount = fTracks.size();
     for (int i = 0; i < trackCount; ++i)
@@ -91,6 +95,7 @@ void ScumblerComponent::resized()
       this->SetTrackBounds(i, tc);
     }
 
+    fTransport->setBounds(0, this->getHeight() - 50, this->getWidth(), 50);
     //[/UserResized]
 }
 
@@ -98,13 +103,6 @@ void ScumblerComponent::buttonClicked (Button* buttonThatWasClicked)
 {
     //[UserbuttonClicked_Pre]
     //[/UserbuttonClicked_Pre]
-
-    if (buttonThatWasClicked == fNewTrackButton)
-    {
-        //[UserButtonCode_fNewTrackButton] -- add your button handler code here..
-        fScumbler->AddTrack();
-        //[/UserButtonCode_fNewTrackButton]
-    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -337,13 +335,15 @@ void ScumblerComponent::SetTrackBounds(int index, TrackComponent* tc)
 {
   int trackCount = fTracks.size();
 
-  int height = this->getHeight();
+  int height = this->getHeight() - fTransport->getHeight();
   int width = this->getWidth();
   int trackHeight = jmin(height/6, height/trackCount);
+  int trackBlockHeight = trackHeight * trackCount;
+  int trackBlockStartingY = (height/2) - (trackBlockHeight / 2);
   int trackLeft = 5;
   int trackWidth = width - (2*trackLeft);
 
-  tc->setBounds(trackLeft, index * trackHeight, trackWidth, trackHeight);
+  tc->setBounds(trackLeft, trackBlockStartingY + index * trackHeight, trackWidth, trackHeight);
 }
 
 

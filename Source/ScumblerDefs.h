@@ -9,11 +9,18 @@
 // builds if we like.
 #define qUnitTests
 
+// If 'qSketch' is defined, our components may draw helpful debugging stuff 
+// (sketching out bounds of a component, etc.)
+//#define qSketch
 
 // A macro to make it easier to calling a member function using a 
 // pointer to member function.
 
 #define mCallMemberFn(object, ptrToMember)   ((object).*(ptrToMember))
+
+// simple macro fn to round a float to an int
+#define mRoundInt(f) static_cast<int>((f) + 0.5)
+
 
 /**
  * @typedef NodeId
@@ -38,10 +45,11 @@ namespace tk
       kAlreadyConnected,    /**< Attempt to connect two nodes already connected. */
       kNoSourceNode,        /**< The specified source node doesn't exist. */
       kNoDestNode,          /**< The specified destination node doesn't exist. */
-      kNoTargetNode,         /**< The node you're trying to manipulate isn't there. */
+      kNoTargetNode,        /**< The node you're trying to manipulate isn't there. */
       kIndexOutOfRange,     /**< The index value was too high or low. */
       kSlotFull,            /**< Attempting to put something into a full slot */  
       kPluginLoadError,     /**< error loading a plugin; check error string */
+      kNotWhenPlaying,      /**< this operation can't happen when we're playing. */
 
    };
 

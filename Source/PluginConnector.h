@@ -118,6 +118,25 @@ public:
     */
    virtual AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric) = 0;
 
+   /**
+    * Tell this plugin connector object how we'd like to have our list of plugins sorted when
+    * the user displays a popup menu of them. 
+    * @param sort SortMethod enum, one of defaultOrder, sortAlphabetically, sortByCategory,
+    *             sortByManufacturer, sortByFileSystemLocation
+    */
+   virtual void SetPluginSortOrder(KnownPluginList::SortMethod sort) {};
+
+   /**
+    * Return the enum that indicates how we should be displaying plugins in the menu.
+    * @return desired sort order.
+    */
+   virtual KnownPluginList::SortMethod GetPluginSortOrder() const
+   {
+      return KnownPluginList::defaultOrder;         
+   }
+
+
+
 };
 
 #endif  // this MUST be the last line in this file.

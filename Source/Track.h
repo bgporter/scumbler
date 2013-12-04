@@ -8,8 +8,10 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginBlock.h"
+#include "Processors/Gain.h"
+#include "Processors/Loop.h"
+#include "Processors/Passthrough.h"
 #include "Scumbler.h"
-
 
 
 class Track : public ChangeBroadcaster
@@ -41,10 +43,72 @@ public:
     */
    String GetName() const;
 
+   /**
+    * Should this track be playing (i.e. looping audio) right now? 
+    * @return [description]
+    */
+   bool IsPlaying() const;
+
+   /**
+    * Set this track as soloed in the Scumbler.
+    * @param soloed -- are we turning the solo on or off? Note that if another
+    *               track get soloed, this happens automatically.
+    * @return success/failure
+    */
+   tk::Result Solo(bool soloed);
+
+   enum SoloState
+   {
+      kNoTracksSoloed = 0,
+      kOtherTrackSoloed,
+      kThisTrackSoloed
+   };
+
+   /**
+    * Is this track currently being soloed?
+    * @return SoloState enum value.
+    */
+   SoloState IsSoloed() const;
+
+   /**
+    * Mute/unmute this track.
+    * @param  muted Should we mute or unmute this channel?
+    * @return       Success/fail.
+    */
+   tk::Result Mute(bool muted);
+
+   /**
+    * Is this track currently muted?
+    * @return bool, current mute state.
+    */
+   bool IsMuted() const;
+
+   /**
+    * Reset the contents of the loop. Zero out all samples & return the loop 
+    * read/write position to zero.
+    */
+   void ResetLoop();
+
+    /**
+     * Set the track's output volume. 
+     * @param volumeInDb dB, probably -96..0
+     */
+    void SetOutputVolume(float volumeInDb);
+
+    /**
+     * Get the current track output volume in dB
+     * @return floating point dB value, probably in the range -96.0 .. 0.0
+     */
+    float GetOutputVolume() const;
+
+
+
+
    enum ListenTo
    {
       kPreFx = 0,
       kTrack,
+      kLoop,
       kPostFx
    };
    /**
@@ -55,10 +119,36 @@ public:
     */
    void UpdateChangeListeners(bool add, ListenTo target, ChangeListener* listener);
 
+   /**
+    * Return the number of slots in our block of pre-effects.
+    * @return count of effects.
+    */
    int GetPreEffectCount() const { return fPreEffectCount; };
+
+   /**
+    * Get a pointer to the PluginBlock holding our pre-effects.
+    * @return pointer.
+    */
    PluginBlock* GetPreEffectBlock() const { return fPreEffects; };
+
+   /**
+    * Return the number of slots in our block of post-effects.
+    * @return count of effects.
+    */
    int GetPostEffectCount() const { return fPostEffectCount; };
+
+   /**
+    * Get a pointer to the PluginBlock holding our pre-effects.
+    * @return pointer.
+    */
    PluginBlock* GetPostEffectBlock() const { return fPostEffects; };
+
+
+   /**
+    * Get  pointer to the LoopProcessor for this track.
+    * @return pointer.
+    */
+   LoopProcessor* GetLoop() const { return fLoop; };
    
 
 
@@ -80,6 +170,16 @@ private:
     */
    String fName;
 
+   /**
+    * Is this track playing (a separate variable here so that eventually we'll
+    * be able to stop individual tracks while others keep playing.)
+    */
+   bool fPlaying;
+
+   /**
+    * Is this track currently muted?
+    */
+   bool fMuted;
 
    /**
     * A block of effects that should be applied before the loop processor.
@@ -87,10 +187,7 @@ private:
    int fPreEffectCount;
    ScopedPointer<PluginBlock>  fPreEffects;
 
-   /**
-    * node id of the loop.
-    */
-   NodeId fLoop;
+
 
    /**
     * A block of effects that should be applied after the loop processor.
@@ -98,6 +195,28 @@ private:
    int fPostEffectCount;
    ScopedPointer<PluginBlock>   fPostEffects;
 
+   /**
+    * A non-owning pointer to the loop processor for this track.
+    */
+   LoopProcessor* fLoop;
+
+   /**
+    * node id of the loop.
+    */
+   NodeId fLoopId;
+
+   /**
+    * A non-owning pointer to the output volume processor for this track.
+    */
+   GainProcessor*   fOutputGain;
+   NodeId fVolumeId;
+
+   /**
+    * output volume in dB
+    */
+   float fOutputVolume;
+
+   CriticalSection fMutex;
 
 
 };

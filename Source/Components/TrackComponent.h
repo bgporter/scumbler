@@ -27,6 +27,7 @@
 
 #include "../Track.h"
 #include "PluginBlockComponent.h"
+#include "LoopComponent.h"
 //[/Headers]
 
 
@@ -41,6 +42,8 @@
 */
 class TrackComponent  : public Component
                       , public ChangeListener
+                      , public ButtonListener
+                      , public Slider::Listener
 {
 public:
     //==============================================================================
@@ -73,6 +76,18 @@ public:
      */
     void changeListenerCallback(ChangeBroadcaster* source);
 
+    /**
+     * Called when the volume knob changes.
+     * @param sliderThatWasMoved [description]
+     */
+    void sliderValueChanged (Slider* sliderThatWasMoved);  
+
+    /**
+     * Called when a button is clicked.
+     * @param buttonThatWasClicked Pointer to a button object.
+     */
+    void buttonClicked (Button* buttonThatWasClicked);
+
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -91,6 +106,12 @@ private:
     Track*  fTrack;
     PluginBlockComponent* fPreEffects;
     PluginBlockComponent* fPostEffects;
+    LoopComponent*  fLoop;
+    Slider* fOutputVolume;
+    TextButton* fMute;
+    TextButton* fSolo; 
+    float fCenterLineYPos;
+    int fCenterLineStopX;
     //[/UserVariables]
 
     //==============================================================================

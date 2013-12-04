@@ -132,6 +132,12 @@ public:
     */
    AudioProcessorEditor* GetEditorForIndex(int index, bool useGeneric);
 
+   /**
+    * Return the order that the user wants plugins sorted in for menu display.
+    * @return SortMethod to use (enum from the KnownPluginList class)
+    */
+   KnownPluginList::SortMethod GetPluginSortOrder() const;
+
 private:
    /**
     * Returns the ID of the previous plugin in the block (which may be the input node.)

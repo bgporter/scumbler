@@ -65,6 +65,10 @@ void PluginSlotComponent::ShowEditor(bool display)
    }
 }
 
+int PluginSlotComponent::GetPreferredWidth() const
+{
+   return kNoPreferredWidth;
+}
 
 bool PluginSlotComponent::IsEmpty() const
 {
@@ -74,17 +78,29 @@ bool PluginSlotComponent::IsEmpty() const
 void PluginSlotComponent::paint (Graphics& g)
 {
    Rectangle<float> rect = Rectangle<float>(0, 0, this->getWidth(), this->getHeight());
+#ifdef qSketch
+   g.setColour(Colours::lightslategrey);
+   g.drawRect(rect);
+#endif
+
+   // we reduce so we're sure that our fat borders are all displayed. 
    rect.reduce(2.0f, 2.0f);
    const float kCornerSize = this->getHeight() / 2;
-   if (!this->IsEmpty())
+   if (this->IsEmpty())
    {
-      g.setColour(Colours::goldenrod);
-      g.fillRoundedRectangle(rect, kCornerSize);
+      g.setColour(Colours::white);
    }
-   Colour c = Colours::lightgrey;
+   else
+   {
+      g.setColour(Colours::black);
+   }
+
+   g.fillRoundedRectangle(rect, kCornerSize);
+
+   Colour c = Colours::black;
    if (fMouseOver)
    {
-      c = Colours::white;
+      c = Colours::red;
    }
    g.setColour(c);
    g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
@@ -92,10 +108,20 @@ void PluginSlotComponent::paint (Graphics& g)
    PluginInfo info = fPluginBlock->PluginInSlot(fIndex);
    if (String::empty != info.name)
    {
-      g.setColour(Colours::black);
-      g.drawText(info.name, 2, 0, 
-         this->getWidth() - 2, this->getHeight(), 
-         Justification::horizontallyCentred | Justification::verticallyCentred, true);
+      // calculate the largest rectangle we can fit fully inside this
+      // rounded rect -- we use the points at the 45 degree point on each arc
+      // as the vertexes of this rect.
+      const float kSin45 = 0.70710678118654746;
+      float inset = kCornerSize - (kCornerSize * kSin45);
+      rect += Point<float>(inset, inset);
+      inset *= 2;
+      rect.setWidth(rect.getWidth() - inset);
+      rect.setHeight(rect.getHeight() - inset);
+
+      g.setColour(Colours::white);
+      g.drawFittedText(info.name, mRoundInt(rect.getX()), mRoundInt(rect.getY()),
+         mRoundInt(rect.getWidth()), mRoundInt(rect.getHeight()), 
+         Justification::horizontallyCentred | Justification::verticallyCentred, 2);
    }
 }
 
@@ -117,13 +143,21 @@ void PluginSlotComponent::mouseDown(const MouseEvent& e)
 
       if (this->IsEmpty())
       {
-         gKnownPlugins.addToMenu(m, KnownPluginList::defaultOrder);
+         // add all of the plugins to the menu
+         gKnownPlugins.addToMenu(m, fPluginBlock->GetPluginSortOrder());
+         // show the menu. On return, `r` will be the index of the selected item
          const int r = m.show();
+         // get a PluginDescription object for the selected plugin
          int pluginIndex = gKnownPlugins.getIndexChosenByMenu(r);
          PluginDescription* pd = gKnownPlugins.getType(pluginIndex);
          if (pd)
          {
             String errorMsg;
+            // pass this plugin description down toward the Scumbler object, 
+            // which will:
+            // - Load it
+            // - connect its inputs/outputs correctly 
+            // - let us know if that was done successfully.
             if (tk::kSuccess == fPluginBlock->LoadPluginAtIndex(fIndex, *pd, errorMsg))
             {
                this->setTooltip(pd->manufacturerName + ": " + pd->name);

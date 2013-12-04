@@ -9,8 +9,23 @@
 
 #include "PluginConnector.h"
 
+class GainProcessor;
 class Track;
 
+
+/**
+ * Convert a decibel value into the equivalent floating-point gain.
+ * @param  db decibels, probably <= 0 (but not necessarily  ) 
+ * @return    the corresponding floating-point amplitude gain value (e.g., -6.0 ~= 0.5)
+ */
+float DbToFloat(float db);
+
+/**
+ * convert a gain value from 0.0 .. 1.0 into the equivalent dB value
+ * @param  gain Gain to convert
+ * @return      decibel value
+ */
+float GainToDb(float gain);
 
 
 /**
@@ -71,6 +86,19 @@ public:
     * Audio device manager is initialized.
     */
     void Reset();
+
+    /**
+     * Set the scumbler's master output volume. 
+     * @param volumeInDb dB, probably -96..0
+     */
+    void SetOutputVolume(float volumeInDb);
+
+    /**
+     * Get the current master output volume in dB
+     * @return floating point dB value, probably in the range -96.0 .. 0.0
+     */
+    float GetOutputVolume() const;
+
 
     /**
      * @name PluginConnector operations
@@ -205,6 +233,32 @@ public:
     tk::Result DeleteTrack(int index);
 
     /**
+     * Set a track as being soloed. Pass in nullptr to have no tracks soloed. Individual 
+     * tracks can process their output by calling scumbler->GetSoloTrack(). If that 
+     * returns nullptr, no tracks are soloed, and they can output normally. If the return 
+     * value is anything other than nullptr, they only output if 
+     * this == scumbler->GetSoloTrack(). **NOTE** that we don't check that the pointer passed 
+     * in is actually a Track object that we own. We assume that calling code is sane.
+     * @param  trackToSolo pointer to the track that should be soloed, or nullptr to clear.
+     * @return             success/failure.
+     */
+    tk::Result SoloTrack(Track* trackToSolo);
+
+    /**
+     * Get a pointer to the track that's currently being soloed (or nullptr)
+     * @return Pointer to a track object.
+     */
+    Track* GetSoloTrack() const;
+
+
+    /**
+     * Reset the loop buffers of all tracks that the scumbler owns, clearing them, and 
+     * putting all of their loop pointers at the beginning.
+     * @return success/fail.
+     */
+    tk::Result ResetAllTracks(); 
+
+    /**
      * Move an existing track to a different index in the array. 
      * @param  fromIndex The current index of the track that we want to move
      * @param  toIndex   The index we want the track to occupy (using an index less 
@@ -220,6 +274,23 @@ public:
     Track* GetTrack(int index) const;
 
     ///@}
+
+   /**
+    * Tell this plugin connector object how we'd like to have our list of plugins sorted when
+    * the user displays a popup menu of them. 
+    * @param sort SortMethod enum, one of defaultOrder, sortAlphabetically, sortByCategory,
+    *             sortByManufacturer, sortByFileSystemLocation
+    */
+   void SetPluginSortOrder(KnownPluginList::SortMethod sort);
+
+   /**
+    * Return the enum that indicates how we should be displaying plugins in the menu.
+    * @return desired sort order.
+    */
+   KnownPluginList::SortMethod GetPluginSortOrder() const;
+
+
+
 #ifdef qUnitTests
   /**
    * Get a pointer to the one and only scumbler object. Only used for unit tests.
@@ -307,17 +378,34 @@ private:
     */
    bool fPlaying;
 
+   KnownPluginList::SortMethod fPluginSort;
+
    /**
     * node IDs for the input and output processors.
     */
    NodeId fInputNode;
    NodeId fOutputNode;
+   NodeId fGainNode;
+
 
    /**
     * Pointers to the track objects that we own. See the docs for OwnedArray 
     * (it takes ownership of the objects and deletes them when necessary.)
     */
-   OwnedArray<Track>  fTracks; 
+   OwnedArray<Track>  fTracks;
+
+   Track* fSoloTrack; 
+
+   /**
+    * Our current output volume in dB (default = 0)
+    */
+   float fOutputVolume;
+
+   /**
+    * A pointer to the gain processor -- we do not own this; it belongs 
+    * to the filter graph.
+    */
+   GainProcessor* fOutputGain;
 
 };
 

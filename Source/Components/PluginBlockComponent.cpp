@@ -1,6 +1,7 @@
 // Copyright (c) 2013 Bg Porter
 
 #include "PluginBlockComponent.h"
+#include "ComponentDefs.h"
 
 PluginBlockComponent::PluginBlockComponent(PluginBlock* plugins)
 :  fPlugins(nullptr)
@@ -19,17 +20,63 @@ PluginBlockComponent::~PluginBlockComponent()
 
 void PluginBlockComponent::paint (Graphics& g)
 {
-   g.fillAll(Colours::blue);
+#ifdef qSketch
+   g.setColour(Colours::lightslategrey);
+   g.drawRect(0, 0, this->getWidth(), this->getHeight());
+#endif
 }
 
 
 void PluginBlockComponent::resized()
 {
+#if 0
+   // each connector line must be at least this many pixels long. 
+   const int kMinConnectorSize = 4;
+   const int kPluginCount = fPlugins->Size();
+   const int kConnectorCount = kPluginCount + 1;
+
+   const float kSlotHeight = this->getHeight() * kPluginSlotHeight;
+   
+   // The slot bubbles can take at MOST this many pixels.
+   const int kAvailableWidth = this->getWidth() - (kMinConnectorSize * kConnectorCount);
+
+   // Figure out how many total characters we're going to need to display. This 
+   // is all very approximate -- we may end up needing to use the TextLayout
+   // and AttributedString classes to make this work sensibly.
+   const int kMinChars = 5;
+   int totalChars = 0;
+
+   Array<int> nameLengths;
+
+   for (int i = 0; i < fPlugins->Size(); ++i)
+   {
+      int len = kMinChars;
+      PluginInfo pi = fPlugins->PluginInSlot(i);
+      if (pi.name != String::empty)
+      {
+         len = pi.name.length();
+      }
+      nameLengths.add(len);
+      totalChars += len;
+   }
+
+   Array<float> percentages;
+   for (int j = 0; j < fPlugins->Size(); ++j)
+   {
+      percentages.add(nameLengths.getUnchecked(j) /  static_cast<float>(totalChars));
+   }
+
+
+#else
+   int totalRequestedWidth = 0;
    for (int i = 0; i < fSlots.size(); ++i)
    {
       PluginSlotComponent* slot = fSlots.getUnchecked(i);
+      int preferredWidth = slot->GetPreferredWidth();
+      totalRequestedWidth += preferredWidth;
       this->SetSlotBounds(i, slot);
    }
+   #endif
 }
 
 
@@ -37,7 +84,7 @@ void PluginBlockComponent::SetSlotBounds(int index, PluginSlotComponent* slot)
 {
    int blockWidth = this->getWidth();
    int blockHeight = this->getHeight();
-   float slotHeight = blockHeight * 0.4;
+   float slotHeight = blockHeight * kPluginSlotHeight;
    float elementCount = fSlots.size() + 1.0;
    float slotWidth = blockWidth / elementCount;
    float margin = slotWidth / elementCount;

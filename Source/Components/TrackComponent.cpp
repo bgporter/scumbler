@@ -23,6 +23,7 @@
 //[/Headers]
 
 #include "TrackComponent.h"
+#include "ComponentDefs.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
@@ -31,6 +32,7 @@
 //==============================================================================
 TrackComponent::TrackComponent (Track* track)
     : fTrack(track)
+    , fCenterLineYPos(0)
 {
 
     //[UserPreSize]
@@ -38,12 +40,53 @@ TrackComponent::TrackComponent (Track* track)
 
     //setSize (600, 80);
 
+    PluginBlock* pre = nullptr;
+    PluginBlock* post = nullptr;
+    LoopProcessor* loop = nullptr;
+
+    if (nullptr != track)
+    {
+       pre = track->GetPreEffectBlock();
+       post = track->GetPostEffectBlock();  
+       loop = track->GetLoop();
+    }
 
     //[Constructor] You can add your own custom stuff here..
-    fPreEffects = new PluginBlockComponent(nullptr);
-    fPostEffects = new PluginBlockComponent(nullptr);
+    fPreEffects = new PluginBlockComponent(pre);
+    fPostEffects = new PluginBlockComponent(post);
+    fLoop = new LoopComponent(loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
+    this->addAndMakeVisible(fLoop);
+
+   addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
+   fOutputVolume->setTooltip ("Track volume");
+   fOutputVolume->setRange (-96.0, 0.0, 0);
+   fOutputVolume->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
+   fOutputVolume->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+   fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
+   fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+   fOutputVolume->setPopupDisplayEnabled(true, this);
+   fOutputVolume->setTextValueSuffix("dB");
+   fOutputVolume->addListener(this);   
+
+   fMute = new TextButton("Mute");
+   fMute->setTooltip("Mute track");
+   fMute->setButtonText("m");
+   fMute->addListener(this);
+   fMute->setColour(TextButton::buttonColourId, Colours::white);
+   fMute->setClickingTogglesState(true);
+   this->addAndMakeVisible(fMute);
+
+   fSolo = new TextButton("Solo");
+   fSolo->setTooltip("Solo track");
+   fSolo->setButtonText("s");
+   fSolo->addListener(this);
+   fSolo->setColour(TextButton::buttonColourId, Colours::white);
+   fSolo->setClickingTogglesState(true);
+   this->addAndMakeVisible(fSolo);
+
+
 
     //[/Constructor]
 }
@@ -68,10 +111,34 @@ void TrackComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffb6b6b6));
+#ifdef qSketch
+   g.setColour(Colours::lightslategrey);
+   g.drawRect(0, 0, this->getWidth(), this->getHeight());
+#endif
 
     //[UserPaint] Add your own custom painting code here..
+
+    // This chunk of code will need revision when we have multiple
+    // tracks:
+    // - the signal line before the waveform for inactive tracks should be gray
+    // - all the black should be gray for muted tracks.
+
+    g.setColour(Colours::black);
+    g.fillRect(0.0, fCenterLineYPos-1.0, fCenterLineStopX, 3.0);
+
+    // draw a bounding circle around the output volume knob.
+    Rectangle<int> box = fOutputVolume->getBounds();
+    box.expand(2, 2);
+    Rectangle<float> floatBox(box.getX(), box.getY(), box.getWidth(), box.getHeight());
+    g.setColour(Colours::white);
+    g.fillRoundedRectangle(floatBox, floatBox.getWidth()/2.0);
+    g.setColour(Colours::black);
+    g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);
+
+    fOutputVolume->setValue(fTrack->GetOutputVolume());
     
+    //g.drawRect(fSolo->getBounds());
+    //g.drawRect(fMute->getBounds());
 
 
     //[/UserPaint]
@@ -85,14 +152,41 @@ void TrackComponent::resized()
     //designed/chosen much more carefully.
     int trackWidth = this->getWidth();
     int trackHeight = this->getHeight();
-    int pluginBlockWidth = trackWidth / 4;
-    int pluginBlockHeight = trackHeight * 0.8;
-    int trackMargin = 40;
-    fPreEffects->setBounds(trackMargin, trackHeight * 0.1, 
-      pluginBlockWidth, pluginBlockHeight);
+    int pluginBlockWidth = this->proportionOfWidth(kPluginBlockWidth);
+    int pluginBlockHeight = this->proportionOfHeight(kPluginBlockHeight);
+    int effectBlockHeight = pluginBlockHeight - kControlRowHeight;
+    int preX = kTrackMargin;
+    int postX = trackWidth - kTrackMargin - pluginBlockWidth;
+    int loopX = preX + pluginBlockWidth;
+    int loopWidth = postX - (preX + pluginBlockWidth);
+    int effectBlockYPos = trackHeight * 0.1;
+    fCenterLineYPos = effectBlockYPos + (effectBlockHeight / 2.0);
 
-    fPostEffects->setBounds((trackWidth  - trackMargin) - pluginBlockWidth, trackHeight * 0.1, 
-      pluginBlockWidth, pluginBlockHeight);
+    
+    fPreEffects->setBounds(preX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
+    fLoop->setBounds(loopX, effectBlockYPos, loopWidth, pluginBlockHeight);
+    fPostEffects->setBounds(postX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
+
+    // center the volume between the right edge of the post effects and the edge of the component.
+    int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());
+    const int kXPos = fPostEffects->getRight() + (availableVolumeWidth - kKnobWidth) / 2;
+    const int kMargin = 5;
+    int yPos = fCenterLineYPos - (kKnobHeight/2);
+
+    Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
+    fOutputVolume->setBounds(outputBounds);
+    fCenterLineStopX = outputBounds.getCentreX();
+
+    // The mute and solo controls are underneath the block of post plugins, 
+    // with the right edge of the solo button aligned with the right edge of the
+    // post effect block.
+    Rectangle<int> buttonBounds(fPostEffects->getRight()-kKnobHeight, fPostEffects->getBottom()+5,
+      kKnobHeight, kKnobHeight);
+    fMute->setBounds(buttonBounds);
+    Rectangle<int> soloBounds = buttonBounds.translated(-30, 0);
+    fSolo->setBounds(soloBounds);
+
+
 
     //[/UserResized]
 }
@@ -149,6 +243,7 @@ void TrackComponent::ConnectToTrack(Track* track)
       fTrack->removeChangeListener(this);
       fPreEffects->ConnectToPluginBlock(nullptr);
       fPostEffects->ConnectToPluginBlock(nullptr);
+      fLoop->ConnectToLoop(nullptr);
     }
     fTrack = track;
     if (fTrack)
@@ -156,6 +251,7 @@ void TrackComponent::ConnectToTrack(Track* track)
       fTrack->addChangeListener(this);
       fPreEffects->ConnectToPluginBlock(fTrack->GetPreEffectBlock());
       fPostEffects->ConnectToPluginBlock(fTrack->GetPostEffectBlock());
+      fLoop->ConnectToLoop(fTrack->GetLoop());
     }
   }
 
@@ -171,7 +267,28 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
   if (source == fTrack)
   {
+     this->repaint();
+  }
+}
 
+void TrackComponent::buttonClicked (Button* buttonThatWasClicked)
+{
+   if (fMute == buttonThatWasClicked)
+   {
+      fTrack->Mute(fMute->getToggleState());
+   }
+   else if (fSolo == buttonThatWasClicked)
+   {
+      fTrack->Solo(fSolo->getToggleState());
+   }
+
+}
+
+void TrackComponent::sliderValueChanged (Slider* sliderThatWasMoved)
+{
+  if (fOutputVolume == sliderThatWasMoved)
+  {
+     fTrack->SetOutputVolume(fOutputVolume->getValue());  
   }
 }
 
