@@ -48,6 +48,8 @@ Track::~Track()
    // the loop processor as we exit.
    fPreEffects = nullptr;
    fPostEffects = nullptr;
+   // !!! is this correct? Don't we need to remove the GainProcessor also
+   // (and the track input processor when that exists?)
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
    fScumbler->RemoveBetween(input, fLoopId, output, true);

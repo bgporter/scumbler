@@ -385,7 +385,6 @@ private:
     */
    NodeId fInputNode;
    NodeId fOutputNode;
-   NodeId fGainNode;
 
 
    /**
@@ -406,6 +405,10 @@ private:
     * to the filter graph.
     */
    GainProcessor* fOutputGain;
+   /**
+    * NodeId of the output GainProcessor.
+    */
+   NodeId fGainNode;
 
 };
 
