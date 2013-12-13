@@ -9,6 +9,7 @@
 
 #include "PluginBlock.h"
 #include "Processors/Gain.h"
+#include "Processors/Input.h"
 #include "Processors/Loop.h"
 #include "Processors/Passthrough.h"
 #include "Scumbler.h"
@@ -82,6 +83,38 @@ public:
     * @return bool, current mute state.
     */
    bool IsMuted() const;
+
+   /**
+    * Activate/deactivate this track. 
+    * NOTE that I'm not sure I've got the atomicity of this action figured out yet;
+    * worried that we'll (e.g.) activate 1 and handle a block of samples before we execute
+    * the instructions to deactivate 0. I'll deal with that later.
+    * @param  isActive is this track supposed to be receiving samples?
+    * @return          Success/fail.
+    */
+   tk::Result SetActive(bool isActive);
+
+   /**
+    * Is this track currently set as active?
+    * @return true/false. If true, the input processor for this track will pass us samples.
+    * 
+    */
+   bool IsActive() const;
+
+   /**
+    * Set the pan value to be applied to the input to this track. 
+    * NOTE that this only has an effect when the input node is a single channel and
+    * the InputProcessor is set to generate a stereo pair.
+    * @param  pan 0.0 = fully left, 1.0 == fully right. Default = 0.5
+    * @return     success/fail.
+    */
+   tk::Result SetInputPan(float pan);
+
+   /**
+    * Get the pan setting applied to the input of this channel (0 <= pan <= 1)
+    * @return float.
+    */
+   float GetInputPan() const;
 
    /**
     * Reset the contents of the loop. Zero out all samples & return the loop 
@@ -180,6 +213,26 @@ private:
     * Is this track currently muted?
     */
    bool fMuted;
+
+   /**
+    * Is this track active (should the inputProcessor be passing samples through?)
+    */
+   bool fInputActive;
+
+   /**
+    * Where should a mono input signal be panned?
+    */
+   float fPan;
+
+   /**
+    * A non-owning pointer to the input processor for this track
+    */
+   InputProcessor* fInputProcessor;
+   
+   /**
+    * the node Id of the input processor
+    */
+   NodeId fInputId;
 
    /**
     * A block of effects that should be applied before the loop processor.

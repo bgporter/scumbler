@@ -172,58 +172,26 @@
 	"buffers":
 	[
 		{
-			"file": "Components/PluginBlockComponent.cpp",
+			"file": "Track.cpp",
 			"settings":
 			{
-				"buffer_size": 3409,
+				"buffer_size": 4607,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Components/PluginBlockComponent.h",
+			"file": "Scumbler.cpp",
 			"settings":
 			{
-				"buffer_size": 1306,
+				"buffer_size": 13922,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Components/ComponentDefs.h",
+			"file": "Scumbler.h",
 			"settings":
 			{
-				"buffer_size": 687,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/PluginSlotComponent.h",
-			"settings":
-			{
-				"buffer_size": 2118,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/PluginSlotComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 6041,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "PluginBlock.cpp",
-			"settings":
-			{
-				"buffer_size": 5843,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "PluginBlock.h",
-			"settings":
-			{
-				"buffer_size": 6552,
+				"buffer_size": 14289,
 				"line_ending": "Unix"
 			}
 		},
@@ -231,12 +199,15 @@
 			"file": "ScumblerDefs.h",
 			"settings":
 			{
-				"buffer_size": 2153,
+				"buffer_size": 2235,
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"contents": "/*\n  ==============================================================================\n\n  This is an automatically generated file created by the Jucer!\n\n  Creation date:  16 Dec 2012 10:49:41am\n\n  Be careful when adding custom code to these files, as only the code within\n  the \"//[xyz]\" and \"//[/xyz]\" sections will be retained when the file is loaded\n  and re-saved.\n\n  Jucer version: 1.12\n\n  ------------------------------------------------------------------------------\n\n  The Jucer is part of the JUCE library - \"Jules' Utility Class Extensions\"\n  Copyright 2004-6 by Raw Material Software ltd.\n\n  ==============================================================================\n*/\n\n#ifndef __JUCER_HEADER_TRACKCOMPONENT_TRACKCOMPONENT_88FA4414__\n#define __JUCER_HEADER_TRACKCOMPONENT_TRACKCOMPONENT_88FA4414__\n\n//[Headers]     -- You can add your own extra header files here --\n#include \"JuceHeader.h\"\n\n#include \"../Track.h\"\n#include \"PluginBlockComponent.h\"\n#include \"LoopComponent.h\"\n//[/Headers]\n\n\n\n//==============================================================================\n/**\n                                                                    //[Comments]\n    An auto-generated component, created by the Jucer.\n\n    Describe your class and how it works here!\n                                                                    //[/Comments]\n*/\nclass TrackComponent  : public Component\n                      , public ChangeListener\n                      , public ButtonListener\n                      , public Slider::Listener\n{\npublic:\n    //==============================================================================\n    TrackComponent (Track* owner=nullptr);\n    ~TrackComponent();\n\n    //==============================================================================\n    //[UserMethods]     -- You can add your own custom methods in this section.\n\n    /**\n     * Set the Track object inside the Scumbler that this component will be representing \n     * on screen. \n     * @param track A pointer to the track object we should use. Passing in a null pointer \n     *              has the effect of disconnecting us from the track we are already connected\n     *              to.\n     */\n    void ConnectToTrack(Track* track);    \n\n    /**\n     * Returns a pointer to the track object within the Scumbler that's being represented \n     * on screen by this component (and its children). Note that this may change at runtime,\n     * so it's important for child components to *not* cache this pointer.       \n     * @return pointer to a Track object.\n     */\n    Track* GetTrack() const;\n\n\n    /**\n     * Called when something we're watching calls us back with a notification.\n     */\n    void changeListenerCallback(ChangeBroadcaster* source);\n\n    /**\n     * Called when the volume knob changes.\n     * @param sliderThatWasMoved [description]\n     */\n    void sliderValueChanged (Slider* sliderThatWasMoved);  \n\n    /**\n     * Called when a button is clicked.\n     * @param buttonThatWasClicked Pointer to a button object.\n     */\n    void buttonClicked (Button* buttonThatWasClicked);\n\n    //[/UserMethods]\n\n    void paint (Graphics& g);\n    void resized();\n    void moved();\n    void parentSizeChanged();\n    void mouseDown (const MouseEvent& e);\n    void mouseDrag (const MouseEvent& e);\n    void focusGained (FocusChangeType cause);\n    void focusLost (FocusChangeType cause);\n\n\n\nprivate:\n    //[UserVariables]   -- You can add your own custom variables in this section.\n    Track*  fTrack;\n    PluginBlockComponent* fPreEffects;\n    PluginBlockComponent* fPostEffects;\n    LoopComponent*  fLoop;\n    Slider* fOutputVolume;\n    TextButton* fMute;\n    TextButton* fSolo; \n    float fCenterLineYPos;\n    int fCenterLineStopX;\n    //[/UserVariables]\n\n    //==============================================================================\n\n\n    //==============================================================================\n    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackComponent);\n};\n\n\n#endif   // __JUCER_HEADER_TRACKCOMPONENT_TRACKCOMPONENT_88FA4414__\n",
 			"file": "Components/TrackComponent.h",
+			"file_size": 4202,
+			"file_write_time": 1382389468000000,
 			"settings":
 			{
 				"buffer_size": 4077,
@@ -248,6 +219,14 @@
 			"settings":
 			{
 				"buffer_size": 9973,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Components/ScumblerComponent.h",
+			"settings":
+			{
+				"buffer_size": 3801,
 				"line_ending": "Windows"
 			}
 		}
@@ -332,33 +311,42 @@
 	},
 	"file_history":
 	[
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Input.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Input.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
+		"/Users/bgporter/AnL/temp/map/ZipData.csv",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ComponentDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/thumbnail.py",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformPixelBuffer.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
@@ -366,14 +354,9 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoRecordPage.cpp",
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoLatencyPage.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Track.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h",
@@ -455,11 +438,7 @@
 		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/util.py",
 		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/wastebokpage.py",
 		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/wastebook.py",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings",
-		"/Users/bgporter/Documents/Kath/worksheet/worksheet.py",
-		"/Users/bgporter/temp/temp.html",
-		"/Users/bgporter/Documents/Kath/worksheet/test2.html",
-		"/Users/bgporter/Documents/Kath/worksheet/worksheet.css"
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings"
 	],
 	"find":
 	{
@@ -478,6 +457,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Ferg",
+			"Thys",
+			"Reset",
+			"   \n",
+			".)",
+			"addChan",
+			"addCha",
+			"fInputNode",
 			"kPluginSlotHeight",
 			"outputDebugString",
 			"fNowIndex",
@@ -597,15 +584,7 @@
 			"deviceManager",
 			"AudioDeviceManager",
 			"key",
-			"midi",
-			"ignored",
-			"Drape",
-			"print",
-			"HandleRe",
-			"print",
-			"HandleReq",
-			"like",
-			"false"
+			"midi"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -627,23 +606,23 @@
 	"groups":
 	[
 		{
-			"selected": 9,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Components/PluginBlockComponent.cpp",
+					"file": "Track.cpp",
 					"settings":
 					{
-						"buffer_size": 3409,
+						"buffer_size": 4607,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								47,
+								47
 							]
 						],
 						"settings":
@@ -653,25 +632,53 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1461.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Components/PluginBlockComponent.h",
+					"file": "Scumbler.cpp",
 					"settings":
 					{
-						"buffer_size": 1306,
+						"buffer_size": 13922,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3163,
+								3163
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1325.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Scumbler.h",
+					"settings":
+					{
+						"buffer_size": 14289,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8588,
+								8588
 							]
 						],
 						"settings":
@@ -681,52 +688,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 333.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Components/ComponentDefs.h",
-					"settings":
-					{
-						"buffer_size": 687,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								680,
-								680
-							]
-						],
-						"settings":
-						{
-							"is_xml": false,
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 4030.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Components/PluginSlotComponent.h",
+					"file": "ScumblerDefs.h",
 					"settings":
 					{
-						"buffer_size": 2118,
+						"buffer_size": 2235,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								368,
-								368
+								332,
+								332
 							]
 						],
 						"settings":
@@ -743,118 +723,6 @@
 				},
 				{
 					"buffer": 4,
-					"file": "Components/PluginSlotComponent.cpp",
-					"settings":
-					{
-						"buffer_size": 6041,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1963,
-								1963
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1477.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "PluginBlock.cpp",
-					"settings":
-					{
-						"buffer_size": 5843,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								53,
-								53
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 288.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "PluginBlock.h",
-					"settings":
-					{
-						"buffer_size": 6552,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "ScumblerDefs.h",
-					"settings":
-					{
-						"buffer_size": 2153,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								334,
-								334
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
 					"file": "Components/TrackComponent.h",
 					"settings":
 					{
@@ -865,24 +733,22 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								3636,
+								3636
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 758.0,
+						"translation.y": 1617.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 5,
 					"file": "Components/TrackComponent.cpp",
 					"settings":
 					{
@@ -893,18 +759,42 @@
 						"selection":
 						[
 							[
-								2689,
-								2689
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1005.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Components/ScumblerComponent.h",
+					"settings":
+					{
+						"buffer_size": 3801,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

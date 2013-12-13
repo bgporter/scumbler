@@ -43,8 +43,9 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
 , fOutputNode(tk::kInvalidNode)
-, fGainNode(tk::kInvalidNode)
 , fSoloTrack(nullptr)
+, fActiveTrackIndex(-1)
+, fGainNode(tk::kInvalidNode)
 , fOutputVolume(0.0f) 
 {
 #ifdef qUnitTests
@@ -143,6 +144,8 @@ void Scumbler::Reset()
    fTracks.clear();
    // ... and then add a single track to start out.
    this->AddTrack();
+   // (and make sure it's active so it receives input!)
+   this->ActivateTrack(0);
    // let anyone listening tk::know that we've changed.
    this->sendChangeMessage();
 
@@ -306,6 +309,36 @@ tk::Result Scumbler::DeleteTrack(int index)
    }
    return retval;
 }
+
+
+tk::Result Scumbler::ActivateTrack(int index)
+{
+   tk::Result retval = tk::kFailure;
+   if (index < this->GetNumTracks())
+   {
+      retval = tk::kSuccess;
+      if (index != fActiveTrackIndex)
+      {
+         Track* newActive = this->GetTrack(index);
+         // Deactivate the old track (if there was one...)
+         Track* oldActive = this->GetTrack(fActiveTrackIndex);
+         if (nullptr != oldActive)
+         {
+            oldActive->SetActive(false);
+         }
+         // ...and then activate this new one.
+         newActive->SetActive(true);
+         this->sendChangeMessage();
+      }
+   }
+   return retval;
+}
+
+int Scumbler::GetActiveTrackIndex() const
+{
+   return fActiveTrackIndex;
+}
+
 
 tk::Result Scumbler::SoloTrack(Track* trackToSolo)
 {

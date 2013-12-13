@@ -7,10 +7,10 @@
 #include "Track.h"
 
 
-
+#if 0
 #define mMin(x, y) (x) < (y) ? (x) : (y)
 #define mMax(x, y) (x) < (y) ? (y) : (x)
-
+#endif
 
 
 LoopProcessor::ThumbnailData::ThumbnailData(int channelCount)
@@ -36,7 +36,7 @@ void LoopProcessor::ThumbnailData::SetPixelValue(int channel, int pixelNum, floa
 }
 
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
-:  PassthroughProcessor(channelCount)
+:  PassthroughProcessor(channelCount, channelCount)
 ,  fTrack(track)
 ,  fSampleRate(44100.0)
 ,  fLoopDuration(4000)
@@ -70,13 +70,13 @@ tk::Result LoopProcessor::SetLoopDuration(int milliseconds)
 
       if (nullptr == fLoopBuffer)
       {
-          fLoopBuffer = new AudioSampleBuffer(fChannelCount, sampleCount);
+          fLoopBuffer = new AudioSampleBuffer(fInputChannelCount, sampleCount);
           this->Reset();
       }
       else if (sampleCount != fLoopBuffer->getNumSamples())
       {
          // resizing
-         fLoopBuffer->setSize(fChannelCount, sampleCount);
+         fLoopBuffer->setSize(fInputChannelCount, sampleCount);
          this->Reset();
       }
       retval = tk::kSuccess;
@@ -233,7 +233,7 @@ void LoopProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMess
       int sampleCount = buffer.getNumSamples();
       int loopSampleCount = fLoopBuffer->getNumSamples();
       float feedbackGain = fFeedback;
-      for (int channel = 0; channel < fChannelCount; ++channel)
+      for (int channel = 0; channel < fInputChannelCount; ++channel)
       {
          // this is easy if we don't need to wrap around the loop 
          // buffer when processing this block

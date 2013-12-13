@@ -233,6 +233,22 @@ public:
     tk::Result DeleteTrack(int index);
 
     /**
+     * Set the track at the specified index as active, deactivating whicever track had
+     * been active before that.
+     * @param  index Index of the track to activate
+     * @return       Success/fail status.
+     */
+    tk::Result ActivateTrack(int index);
+
+    /**
+     * Return the index of the currently active track, or -1 if there's no
+     * track currently active (shouldn't happen)
+     * @return zero-based track index.
+     */
+    int GetActiveTrackIndex() const;
+
+
+    /**
      * Set a track as being soloed. Pass in nullptr to have no tracks soloed. Individual 
      * tracks can process their output by calling scumbler->GetSoloTrack(). If that 
      * returns nullptr, no tracks are soloed, and they can output normally. If the return 
@@ -394,6 +410,8 @@ private:
    OwnedArray<Track>  fTracks;
 
    Track* fSoloTrack; 
+
+   int fActiveTrackIndex;
 
    /**
     * Our current output volume in dB (default = 0)

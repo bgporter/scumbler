@@ -29,6 +29,7 @@
 		44ABE52C16702D650045030E /* Passthrough.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE52B16702D650045030E /* Passthrough.cpp */; };
 		44ABE535167419B70045030E /* ScumblerComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE533167419B70045030E /* ScumblerComponent.cpp */; };
 		44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44B8599416A2FAC90028785C /* PluginBlock.cpp */; };
+		44CA10131852AD5D00BB53B4 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44CA10111852AD5D00BB53B4 /* Input.cpp */; };
 		44FFF83C16D5AE5600E53F1F /* Gain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44FFF83A16D5AE5600E53F1F /* Gain.cpp */; };
 		465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 969C40A1B4F980BFB51FD60B /* juce_audio_basics.mm */; };
 		469C39A90EA46A522ABF5DAB /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A92514B6C73E39D6596966 /* DiscRecording.framework */; };
@@ -312,6 +313,8 @@
 		44B8599416A2FAC90028785C /* PluginBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginBlock.cpp; path = ../../Source/PluginBlock.cpp; sourceTree = "<group>"; };
 		44B8599516A2FAC90028785C /* PluginBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginBlock.h; path = ../../Source/PluginBlock.h; sourceTree = "<group>"; };
 		44B8599616A2FAC90028785C /* PluginConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginConnector.h; path = ../../Source/PluginConnector.h; sourceTree = "<group>"; };
+		44CA10111852AD5D00BB53B4 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Input.cpp; path = ../../Source/Processors/Input.cpp; sourceTree = "<group>"; };
+		44CA10121852AD5D00BB53B4 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Input.h; path = ../../Source/Processors/Input.h; sourceTree = "<group>"; };
 		44D5556AA04C6895D8DF32EF /* juce_HyperlinkButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_HyperlinkButton.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_HyperlinkButton.h; sourceTree = SOURCE_ROOT; };
 		44FFF83A16D5AE5600E53F1F /* Gain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gain.cpp; path = ../../Source/Processors/Gain.cpp; sourceTree = "<group>"; };
 		44FFF83B16D5AE5600E53F1F /* Gain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gain.h; path = ../../Source/Processors/Gain.h; sourceTree = "<group>"; };
@@ -1277,6 +1280,8 @@
 		44ABE52916702D330045030E /* Processors */ = {
 			isa = PBXGroup;
 			children = (
+				44CA10111852AD5D00BB53B4 /* Input.cpp */,
+				44CA10121852AD5D00BB53B4 /* Input.h */,
 				44FFF83A16D5AE5600E53F1F /* Gain.cpp */,
 				44FFF83B16D5AE5600E53F1F /* Gain.h */,
 				44A7179A16C8871D00E187F9 /* Loop.cpp */,
@@ -2645,7 +2650,7 @@
 		CC832EE779ED10F8E88A0F19 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 91ED6F5AD0D9D83ED363F746 /* Build configuration list for PBXProject "Scumbler" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2682,6 +2687,7 @@
 				8A9502C9D27E245B83041F4A /* Main.cpp in Sources */,
 				465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */,
 				00AB4A52443D7E78B563DE6E /* juce_audio_devices.mm in Sources */,
+				44CA10131852AD5D00BB53B4 /* Input.cpp in Sources */,
 				0451CBD8127DBC5A364B28D5 /* juce_audio_formats.mm in Sources */,
 				0C574F6793807CBD0AE2B912 /* juce_audio_processors.mm in Sources */,
 				33EC4A5A827ED3B097CD7C7E /* juce_audio_utils.mm in Sources */,
@@ -2729,6 +2735,7 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				"HEADER_SEARCH_PATHS[arch=*]" = ../../../../vst2.x/vstsdk2.4/;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Scumbler;
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;

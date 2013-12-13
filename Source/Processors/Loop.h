@@ -119,6 +119,12 @@ public:
 
    };
 
+   /**
+    * Create the loop processor.
+    * @param track non-owning pointer to the track that owns us. 
+    * @param channelCount number of input and output channels for this loop.
+    * 
+    */
    LoopProcessor(Track* track, int channelCount = 1);
 
    ~LoopProcessor();

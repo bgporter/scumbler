@@ -11,7 +11,7 @@
 
 // If 'qSketch' is defined, our components may draw helpful debugging stuff 
 // (sketching out bounds of a component, etc.)
-//#define qSketch
+#define qSketch
 
 // A macro to make it easier to calling a member function using a 
 // pointer to member function.
@@ -20,6 +20,10 @@
 
 // simple macro fn to round a float to an int
 #define mRoundInt(f) static_cast<int>((f) + 0.5)
+
+#define mMin(x, y) (x) < (y) ? (x) : (y)
+#define mMax(x, y) (x) < (y) ? (y) : (x)
+
 
 
 /**

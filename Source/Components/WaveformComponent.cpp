@@ -48,11 +48,11 @@ void WaveformComponent::ConnectToLoop(LoopProcessor* loop)
          // if we don't have a struct to hold thumbnail data yet, or we do, but 
          // it's got the wrong number of channels for this loop processor, create
          // one that's right.
-         if (!fThumbData || (fThumbData->fChannelCount != fLoop->GetChannelCount()))
+         if (!fThumbData || (fThumbData->fChannelCount != fLoop->GetInputChannelCount()))
          {
             // we're using a scoped pointer, so this will delete an old one if 
             // it's there.
-            fThumbData = new LoopProcessor::ThumbnailData(fLoop->GetChannelCount());
+            fThumbData = new LoopProcessor::ThumbnailData(fLoop->GetInputChannelCount());
          }
 
          this->CalculateSamplesPerPixel();

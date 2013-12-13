@@ -10,6 +10,8 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 ,  fName(name)
 ,  fPlaying(true)
 ,  fMuted(false)
+,  fInputActive(false)
+,  fPan(0.5)
 ,  fPreEffectCount(preFxCount)
 ,  fPreEffects(nullptr)
 ,  fPostEffectCount(postFxCount)
@@ -24,19 +26,26 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
 
+   // create an insert the input processor 
+   fInputProcessor = new InputProcessor(this);
+   this->SetInputPan(fPan);
+   fInputId = fScumbler->AddProcessor(fInputProcessor);
+   fScumbler->InsertBetween(input, fInputId, output);
+
+
    // create and insert the gain processor.
    fOutputGain = new GainProcessor(this);
    fVolumeId = fScumbler->AddProcessor(fOutputGain);
-   fScumbler->InsertBetween(input, fVolumeId, output);
+   fScumbler->InsertBetween(fInputId, fVolumeId, output);
 
    // create & insert the loop processor
    fLoop = new LoopProcessor(this);
    fLoopId = fScumbler->AddProcessor(fLoop);
-   fScumbler->InsertBetween(input, fLoopId, fVolumeId);
+   fScumbler->InsertBetween(fInputId, fLoopId, fVolumeId);
 
 
    // create the plugin blocks and hook them in.
-   fPreEffects = new PluginBlock(fScumbler, input, fLoopId, fPreEffectCount);
+   fPreEffects = new PluginBlock(fScumbler, fInputId, fLoopId, fPreEffectCount);
    fPostEffects = new PluginBlock(fScumbler, fLoopId, fVolumeId, fPostEffectCount);
 
 
@@ -48,11 +57,17 @@ Track::~Track()
    // the loop processor as we exit.
    fPreEffects = nullptr;
    fPostEffects = nullptr;
-   // !!! is this correct? Don't we need to remove the GainProcessor also
-   // (and the track input processor when that exists?)
    NodeId input = fScumbler->HandleSpecialNode(tk::kInput);
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
-   fScumbler->RemoveBetween(input, fLoopId, output, true);
+
+   
+
+   // remove the loop & delete it
+   fScumbler->RemoveBetween(fInputId, fLoopId, fVolumeId, true);
+   // remove the output gain node & delete it.
+   fScumbler->RemoveBetween(fInputId, fVolumeId, output, true);
+   // remove the input processor & delete it.
+   fScumbler->RemoveBetween(input, fInputId, output, true);
 }
 
 
@@ -116,6 +131,31 @@ bool Track::IsMuted() const
    return fMuted;
 }
 
+tk::Result Track::SetActive(bool isActive)
+{
+   fInputProcessor->SetActive(isActive);
+   this->sendChangeMessage();
+   return tk::kSuccess;
+}
+
+bool Track::IsActive() const
+{
+   return fInputProcessor->IsActive();
+}
+
+tk::Result Track::SetInputPan(float pan)
+{
+   fInputProcessor->SetPan(pan);
+   fPan = pan;
+   this->sendChangeMessage();
+   return tk::kSuccess;
+
+}
+
+float Track::GetInputPan() const
+{
+   return fPan;
+}
 
 void Track::ResetLoop()
 {
@@ -128,8 +168,6 @@ void Track::SetOutputVolume(float volumeInDb)
    {
       fOutputVolume = volumeInDb;
 
-      //!!! Send the new gain to the audio processor that actually controls
-      // the output.
       float gain = DbToFloat(fOutputVolume);
       fOutputGain->SetGain(gain);
 

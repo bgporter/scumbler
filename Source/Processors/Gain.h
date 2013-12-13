@@ -20,7 +20,7 @@ public:
     *              of the track to possibly set the gain value to 
     *              zero as approriate.
     */
-   GainProcessor(Track* track=nullptr, int channelCount=1);
+   GainProcessor(Track* track=nullptr, int inputChannelCount=1, int outputChannelCount=0);
 
    ~GainProcessor();
 
@@ -53,7 +53,7 @@ public:
    float GetGain() const;
 
 
-private:
+protected:
 
    /**
     * our (optional) track object. We don't own it, so don't delete it.

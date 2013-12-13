@@ -3,9 +3,20 @@
 
 #include "Passthrough.h"
 
-PassthroughProcessor::PassthroughProcessor(int channelCount)
-:  fChannelCount(channelCount)
+PassthroughProcessor::PassthroughProcessor(int inputChannelCount, int outputChannelCount)
+:  fInputChannelCount(inputChannelCount)
+,  fOutputChannelCount(outputChannelCount)
 {
+   jassert(inputChannelCount >= 1);
+   jassert(inputChannelCount <= 2);
+   jassert(outputChannelCount >= 0);
+   jassert(outputChannelCount <= 2);
+
+   if (0 == fOutputChannelCount)
+   {
+      fOutputChannelCount = fInputChannelCount;
+   }
+
    this->setLatencySamples(0);
    // if this was a plug-in, the plug-in wrapper code in JUCE would query us
    // for our channel configuration and call the setPlayConfigDetails() method
@@ -13,7 +24,7 @@ PassthroughProcessor::PassthroughProcessor(int channelCount)
    // object (which are always initialized as zero in, zero out). The sample rate
    // and blockSize values will get sent to us again when our prepareToPlay() 
    // method is called before playback begins.
-   this->setPlayConfigDetails(fChannelCount, fChannelCount, 0, 0);
+   this->setPlayConfigDetails(fInputChannelCount, fOutputChannelCount, 0, 0);
 }
 
 PassthroughProcessor::~PassthroughProcessor()
@@ -28,7 +39,7 @@ const String PassthroughProcessor::getName() const
 
 void PassthroughProcessor::prepareToPlay(double sampleRate, int estimatedSamplesPerBlock)
 {
-   this->setPlayConfigDetails(fChannelCount, fChannelCount, sampleRate, 
+   this->setPlayConfigDetails(fInputChannelCount, fOutputChannelCount, sampleRate, 
       estimatedSamplesPerBlock);
 
 }
@@ -55,12 +66,12 @@ const String PassthroughProcessor::getOutputChannelName(int channelIndex) const
 
 bool PassthroughProcessor::isInputChannelStereoPair(int index) const
 {
-   return (2 == fChannelCount);
+   return (2 == fInputChannelCount);
 }
 
 bool PassthroughProcessor::isOutputChannelStereoPair(int index) const
 {
-   return (2 == fChannelCount);
+   return (2 == fOutputChannelCount);
 }
 
 bool PassthroughProcessor::silenceInProducesSilenceOut() const
