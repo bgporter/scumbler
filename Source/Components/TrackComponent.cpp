@@ -70,11 +70,21 @@ TrackComponent::TrackComponent (Track* track)
    fOutputVolume->setTextValueSuffix("dB");
    fOutputVolume->addListener(this);   
 
+   fActive = new TextButton("Active");
+   fActive->setTooltip("Activate track");
+   fActive->setButtonText("");
+   fActive->addListener(this);
+   fActive->setColour(TextButton::buttonColourId, Colours::white);
+   fActive->setColour(TextButton::buttonOnColourId, Colours::green);
+   fActive->setClickingTogglesState(true);
+   this->addAndMakeVisible(fActive);
+
    fMute = new TextButton("Mute");
    fMute->setTooltip("Mute track");
    fMute->setButtonText("m");
    fMute->addListener(this);
    fMute->setColour(TextButton::buttonColourId, Colours::white);
+   fMute->setColour(TextButton::buttonOnColourId, Colours::green);
    fMute->setClickingTogglesState(true);
    this->addAndMakeVisible(fMute);
 
@@ -83,6 +93,7 @@ TrackComponent::TrackComponent (Track* track)
    fSolo->setButtonText("s");
    fSolo->addListener(this);
    fSolo->setColour(TextButton::buttonColourId, Colours::white);
+   fSolo->setColour(TextButton::buttonOnColourId, Colours::red);
    fSolo->setClickingTogglesState(true);
    this->addAndMakeVisible(fSolo);
 
@@ -176,6 +187,10 @@ void TrackComponent::resized()
     Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
     fOutputVolume->setBounds(outputBounds);
     fCenterLineStopX = outputBounds.getCentreX();
+
+    // The activate track button is directly underneath the pre plugin block.
+    fActive->setBounds(fPreEffects->getX(), fPreEffects->getBottom()+5, 
+      kKnobHeight, kKnobHeight);
 
     // The mute and solo controls are underneath the block of post plugins, 
     // with the right edge of the solo button aligned with the right edge of the
@@ -280,6 +295,10 @@ void TrackComponent::buttonClicked (Button* buttonThatWasClicked)
    else if (fSolo == buttonThatWasClicked)
    {
       fTrack->Solo(fSolo->getToggleState());
+   }
+   else if (fActive == buttonThatWasClicked)
+   {
+      fTrack->SetActive(fActive->getToggleState());
    }
 
 }

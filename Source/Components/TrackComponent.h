@@ -108,6 +108,7 @@ private:
     PluginBlockComponent* fPostEffects;
     LoopComponent*  fLoop;
     Slider* fOutputVolume;
+    TextButton* fActive;
     TextButton* fMute;
     TextButton* fSolo; 
     float fCenterLineYPos;
