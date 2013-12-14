@@ -320,17 +320,25 @@ tk::Result Scumbler::ActivateTrack(int index)
       if (index != fActiveTrackIndex)
       {
          Track* newActive = this->GetTrack(index);
-         // Deactivate the old track (if there was one...)
-         Track* oldActive = this->GetTrack(fActiveTrackIndex);
-         if (nullptr != oldActive)
-         {
-            oldActive->SetActive(false);
-         }
-         // ...and then activate this new one.
          newActive->SetActive(true);
          this->sendChangeMessage();
       }
    }
+   return retval;
+}
+
+tk::Result Scumbler::TrackIsActivating(Track* trackBeingActivated)
+{
+   tk::Result retval = tk::kSuccess;
+
+   // get a pointer to the currently active track (this may return nullptr)
+   Track* currentActiveTrack = this->GetTrack(fActiveTrackIndex);
+   if (nullptr != currentActiveTrack && currentActiveTrack != trackBeingActivated)
+   {
+      currentActiveTrack->SetActive(false);
+   }
+   fActiveTrackIndex = fTracks.indexOf(trackBeingActivated);
+
    return retval;
 }
 

@@ -135,6 +135,10 @@ tk::Result Track::SetActive(bool isActive)
 {
    fInputProcessor->SetActive(isActive);
    this->sendChangeMessage();
+   if (isActive)
+   {
+      fScumbler->TrackIsActivating(this);
+   }
    return tk::kSuccess;
 }
 

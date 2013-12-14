@@ -241,6 +241,16 @@ public:
     tk::Result ActivateTrack(int index);
 
     /**
+     * Called from inside the Track::SetActive() implementation. The track object that's 
+     * being activated lets the Scumbler know that this is happening. The Scumbler 
+     * then looks for the current active track and deactivates it, updating the index of 
+     * the currently active track
+     * @param  trackBeingActivated Pointer to the track that's being activated.
+     * @return                     success/fail.
+     */
+    tk::Result TrackIsActivating(Track* trackBeingActivated);
+
+    /**
      * Return the index of the currently active track, or -1 if there's no
      * track currently active (shouldn't happen)
      * @return zero-based track index.

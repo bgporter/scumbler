@@ -78,6 +78,8 @@ TrackComponent::TrackComponent (Track* track)
    fActive->setColour(TextButton::buttonOnColourId, Colours::green);
    fActive->setClickingTogglesState(true);
    this->addAndMakeVisible(fActive);
+   fActive->setToggleState(fTrack->IsActive(), NotificationType::dontSendNotification); 
+   
 
    fMute = new TextButton("Mute");
    fMute->setTooltip("Mute track");
@@ -282,6 +284,8 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
   if (source == fTrack)
   {
+     fActive->setToggleState(fTrack->IsActive(), NotificationType::dontSendNotification); 
+
      this->repaint();
   }
 }
