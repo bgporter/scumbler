@@ -175,7 +175,7 @@
 			"file": "Track.cpp",
 			"settings":
 			{
-				"buffer_size": 4607,
+				"buffer_size": 4676,
 				"line_ending": "Unix"
 			}
 		},
@@ -183,7 +183,7 @@
 			"file": "Scumbler.cpp",
 			"settings":
 			{
-				"buffer_size": 13922,
+				"buffer_size": 14124,
 				"line_ending": "Unix"
 			}
 		},
@@ -191,7 +191,7 @@
 			"file": "Scumbler.h",
 			"settings":
 			{
-				"buffer_size": 14289,
+				"buffer_size": 14795,
 				"line_ending": "Unix"
 			}
 		},
@@ -204,13 +204,10 @@
 			}
 		},
 		{
-			"contents": "/*\n  ==============================================================================\n\n  This is an automatically generated file created by the Jucer!\n\n  Creation date:  16 Dec 2012 10:49:41am\n\n  Be careful when adding custom code to these files, as only the code within\n  the \"//[xyz]\" and \"//[/xyz]\" sections will be retained when the file is loaded\n  and re-saved.\n\n  Jucer version: 1.12\n\n  ------------------------------------------------------------------------------\n\n  The Jucer is part of the JUCE library - \"Jules' Utility Class Extensions\"\n  Copyright 2004-6 by Raw Material Software ltd.\n\n  ==============================================================================\n*/\n\n#ifndef __JUCER_HEADER_TRACKCOMPONENT_TRACKCOMPONENT_88FA4414__\n#define __JUCER_HEADER_TRACKCOMPONENT_TRACKCOMPONENT_88FA4414__\n\n//[Headers]     -- You can add your own extra header files here --\n#include \"JuceHeader.h\"\n\n#include \"../Track.h\"\n#include \"PluginBlockComponent.h\"\n#include \"LoopComponent.h\"\n//[/Headers]\n\n\n\n//==============================================================================\n/**\n                                                                    //[Comments]\n    An auto-generated component, created by the Jucer.\n\n    Describe your class and how it works here!\n                                                                    //[/Comments]\n*/\nclass TrackComponent  : public Component\n                      , public ChangeListener\n                      , public ButtonListener\n                      , public Slider::Listener\n{\npublic:\n    //==============================================================================\n    TrackComponent (Track* owner=nullptr);\n    ~TrackComponent();\n\n    //==============================================================================\n    //[UserMethods]     -- You can add your own custom methods in this section.\n\n    /**\n     * Set the Track object inside the Scumbler that this component will be representing \n     * on screen. \n     * @param track A pointer to the track object we should use. Passing in a null pointer \n     *              has the effect of disconnecting us from the track we are already connected\n     *              to.\n     */\n    void ConnectToTrack(Track* track);    \n\n    /**\n     * Returns a pointer to the track object within the Scumbler that's being represented \n     * on screen by this component (and its children). Note that this may change at runtime,\n     * so it's important for child components to *not* cache this pointer.       \n     * @return pointer to a Track object.\n     */\n    Track* GetTrack() const;\n\n\n    /**\n     * Called when something we're watching calls us back with a notification.\n     */\n    void changeListenerCallback(ChangeBroadcaster* source);\n\n    /**\n     * Called when the volume knob changes.\n     * @param sliderThatWasMoved [description]\n     */\n    void sliderValueChanged (Slider* sliderThatWasMoved);  \n\n    /**\n     * Called when a button is clicked.\n     * @param buttonThatWasClicked Pointer to a button object.\n     */\n    void buttonClicked (Button* buttonThatWasClicked);\n\n    //[/UserMethods]\n\n    void paint (Graphics& g);\n    void resized();\n    void moved();\n    void parentSizeChanged();\n    void mouseDown (const MouseEvent& e);\n    void mouseDrag (const MouseEvent& e);\n    void focusGained (FocusChangeType cause);\n    void focusLost (FocusChangeType cause);\n\n\n\nprivate:\n    //[UserVariables]   -- You can add your own custom variables in this section.\n    Track*  fTrack;\n    PluginBlockComponent* fPreEffects;\n    PluginBlockComponent* fPostEffects;\n    LoopComponent*  fLoop;\n    Slider* fOutputVolume;\n    TextButton* fMute;\n    TextButton* fSolo; \n    float fCenterLineYPos;\n    int fCenterLineStopX;\n    //[/UserVariables]\n\n    //==============================================================================\n\n\n    //==============================================================================\n    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TrackComponent);\n};\n\n\n#endif   // __JUCER_HEADER_TRACKCOMPONENT_TRACKCOMPONENT_88FA4414__\n",
 			"file": "Components/TrackComponent.h",
-			"file_size": 4202,
-			"file_write_time": 1382389468000000,
 			"settings":
 			{
-				"buffer_size": 4077,
+				"buffer_size": 4102,
 				"line_ending": "Windows"
 			}
 		},
@@ -218,7 +215,7 @@
 			"file": "Components/TrackComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 9973,
+				"buffer_size": 10942,
 				"line_ending": "Windows"
 			}
 		},
@@ -228,6 +225,48 @@
 			{
 				"buffer_size": 3801,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Track.h",
+			"settings":
+			{
+				"buffer_size": 6812,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/PluginBlockComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 3409,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/LoopComponent.h",
+			"settings":
+			{
+				"buffer_size": 1782,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "MainWindow.cpp",
+			"settings":
+			{
+				"buffer_size": 9604,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 47 files for \"ViewPlugins\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h:\n   19      static const CommandID kToggleRecord = 0x3008;\n   20      static const CommandID kAddTrack     = 0x3009;\n   21:     static const CommandID kViewPlugins  = 0x300A;\n   22  \n   23  \n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp:\n   56    if (nullptr == pluginList)\n   57    {\n   58:     this->ViewPlugins();\n   59    }\n   60  \n   ..\n   90     // if the list of plugins is being displayed, make sure it gets cleaned up\n   91     gKnownPlugins.removeChangeListener(this);\n   92:    this->ViewPlugins(false);\n   93     // destroy the UI components\n   94     this->clearContentComponent();\n   ..\n  156  \n  157  \n  158: void MainAppWindow::ViewPlugins(bool display)\n  159  {\n  160    if (display)\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h:\n   49       * @param display Passing `true` will display the plugin window, `false` will delete it. \n   50       */\n   51:     void ViewPlugins(bool display=true);\n   52  \n   53      /**\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp:\n   43  {\n   44     // delete this window.\n   45:    fOwner->ViewPlugins(false);\n   46  }\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h:\n   16      * Create the plugin list window. Should only be instantiated/owned by the\n   17      * MainAppWindow and have its lifecycle controlled using that class' \n   18:     * `ViewPlugins()` method.\n   19      */\n   20     PluginListWindow(MainAppWindow* owner, AudioPluginFormatManager& formatManager);\n\n7 matches across 5 files\n\n\nSearching 47 files for \"kViewPlugins\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h:\n   19      static const CommandID kToggleRecord = 0x3008;\n   20      static const CommandID kAddTrack     = 0x3009;\n   21:     static const CommandID kViewPlugins  = 0x300A;\n   22  \n   23  \n\n1 match in 1 file\n\n\nSearching 47 files for \"ViewPlugins\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h:\n   19      static const CommandID kToggleRecord = 0x3008;\n   20      static const CommandID kAddTrack     = 0x3009;\n   21:     static const CommandID kViewPlugins  = 0x300A;\n   22  \n   23  \n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp:\n   56    if (nullptr == pluginList)\n   57    {\n   58:     this->ViewPlugins();\n   59    }\n   60  \n   ..\n   90     // if the list of plugins is being displayed, make sure it gets cleaned up\n   91     gKnownPlugins.removeChangeListener(this);\n   92:    this->ViewPlugins(false);\n   93     // destroy the UI components\n   94     this->clearContentComponent();\n   ..\n  156  \n  157  \n  158: void MainAppWindow::ViewPlugins(bool display)\n  159  {\n  160    if (display)\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h:\n   49       * @param display Passing `true` will display the plugin window, `false` will delete it. \n   50       */\n   51:     void ViewPlugins(bool display=true);\n   52  \n   53      /**\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp:\n   43  {\n   44     // delete this window.\n   45:    fOwner->ViewPlugins(false);\n   46  }\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h:\n   16      * Create the plugin list window. Should only be instantiated/owned by the\n   17      * MainAppWindow and have its lifecycle controlled using that class' \n   18:     * `ViewPlugins()` method.\n   19      */\n   20     PluginListWindow(MainAppWindow* owner, AudioPluginFormatManager& formatManager);\n\n7 matches across 5 files\n",
+			"settings":
+			{
+				"buffer_size": 3601,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
 			}
 		}
 	],
@@ -311,6 +350,15 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/temp/fields.py",
+		"/Users/bgporter/temp/10things.txt",
+		"/Users/bgporter/AnL/Trantor/ApiClient/Trantor.py",
+		"/Users/bgporter/AnL/blog/test_Trantor.py",
+		"/Users/bgporter/AnL/blog/MoveBudget.py",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/bgporter/AnL/blog/2KGames.email",
+		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Gain.cpp",
@@ -341,10 +389,8 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/thumbnail.py",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformPixelBuffer.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.h",
@@ -367,7 +413,6 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler",
 		"/Users/bgporter/personal/juce/extras/Introjucer/Source/Project/jucer_ProjectContentComponent.h",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Alignment/Base File.sublime-settings",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
 		"/Users/bgporter/temp/lister.py",
 		"/Users/bgporter/AnL/svn/TrantorClient/Marketing/20121126.txt",
 		"/Users/bgporter/personal/tetrakite/scumbler/JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.mm",
@@ -432,13 +477,7 @@
 		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/page.py",
 		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/project.py",
 		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/pymarkdown.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/settings.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/tag.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/task.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/util.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/wastebokpage.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/wastebook.py",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Global.sublime-settings"
+		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/settings.py"
 	],
 	"find":
 	{
@@ -457,6 +496,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ViewPlugins",
+			"kViewPlugins",
+			"ViewPlugins",
+			"IsActive",
+			"ViewPlugins",
+			"Listen",
+			"changeLis",
+			".\n",
+			"ActivateTr",
+			"setColour",
+			"ignore",
 			"Ferg",
 			"Thys",
 			"Reset",
@@ -573,18 +623,7 @@
 			"saveD",
 			"Audio",
 			"ignored",
-			"PluginListCom",
-			"knownP",
-			"knownPluginList",
-			"PluginListWin",
-			"showPluginList",
-			"PluginDirectory",
-			"addFil",
-			"createNewPl",
-			"deviceManager",
-			"AudioDeviceManager",
-			"key",
-			"midi"
+			"PluginListCom"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -606,7 +645,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 11,
 			"sheets":
 			[
 				{
@@ -614,15 +653,15 @@
 					"file": "Track.cpp",
 					"settings":
 					{
-						"buffer_size": 4607,
+						"buffer_size": 4676,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								47,
-								47
+								3341,
+								3341
 							]
 						],
 						"settings":
@@ -632,7 +671,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 709.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -642,15 +681,15 @@
 					"file": "Scumbler.cpp",
 					"settings":
 					{
-						"buffer_size": 13922,
+						"buffer_size": 14124,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3163,
-								3163
+								7253,
+								7253
 							]
 						],
 						"settings":
@@ -660,7 +699,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1325.0,
+						"translation.y": 5581.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -670,15 +709,15 @@
 					"file": "Scumbler.h",
 					"settings":
 					{
-						"buffer_size": 14289,
+						"buffer_size": 14795,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8588,
-								8588
+								8852,
+								8852
 							]
 						],
 						"settings":
@@ -688,7 +727,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4030.0,
+						"translation.y": 5593.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -726,33 +765,7 @@
 					"file": "Components/TrackComponent.h",
 					"settings":
 					{
-						"buffer_size": 4077,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3636,
-								3636
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1617.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "Components/TrackComponent.cpp",
-					"settings":
-					{
-						"buffer_size": 9973,
+						"buffer_size": 4102,
 						"regions":
 						{
 						},
@@ -765,10 +778,40 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1026.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Components/TrackComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 10942,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1470,
+								1470
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 767.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -791,10 +834,224 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 774.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Track.h",
+					"settings":
+					{
+						"buffer_size": 6812,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1699.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Components/PluginBlockComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 3409,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2863,
+								2863
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "Components/LoopComponent.h",
+					"settings":
+					{
+						"buffer_size": 1782,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 414.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "MainWindow.cpp",
+					"settings":
+					{
+						"buffer_size": 9604,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2082,
+								2082
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 545.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"settings":
+					{
+						"buffer_size": 3601,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										252,
+										263
+									],
+									[
+										423,
+										434
+									],
+									[
+										616,
+										627
+									],
+									[
+										765,
+										776
+									],
+									[
+										1020,
+										1031
+									],
+									[
+										1209,
+										1220
+									],
+									[
+										1489,
+										1500
+									],
+									[
+										1897,
+										1909
+									],
+									[
+										2210,
+										2221
+									],
+									[
+										2381,
+										2392
+									],
+									[
+										2574,
+										2585
+									],
+									[
+										2723,
+										2734
+									],
+									[
+										2978,
+										2989
+									],
+									[
+										3167,
+										3178
+									],
+									[
+										3447,
+										3458
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								1958,
+								1958
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 3,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 459.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -886,6 +1143,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 185.0,
+	"side_bar_width": 270.0,
 	"status_bar_visible": true
 }

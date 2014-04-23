@@ -199,6 +199,7 @@ PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex, const String& m
     case 1:   // Options menu
     {
       menu.addCommandItem(gCommandManager, CommandIds::kConfigAudio);
+      menu.addCommandItem(gCommandManager, CommandIds::kViewPlugins);
       // add the submenu to control how we sort the plugins...
       PopupMenu sortMenu;
       KnownPluginList::SortMethod order = fScumbler->GetPluginSortOrder();
@@ -292,6 +293,7 @@ void MainAppWindow::getAllCommands(Array<CommandID>& commands)
     //CommandIds::kSave,
     //CommandIds::kSaveAs,
     CommandIds::kConfigAudio,
+    CommandIds::kViewPlugins,
     //CommandIds::kPlay,
     //CommandIds::kPause,
     //CommandIds::kRewind,
@@ -304,7 +306,7 @@ void MainAppWindow::getAllCommands(Array<CommandID>& commands)
 
 void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& result)
 {
-  const String category("General");
+  const String category("Audio");
 
 
   switch (commandID)
@@ -316,6 +318,11 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
     break;
 
 
+    case CommandIds::kViewPlugins:
+    {
+      result.setInfo("View plugins...", String::empty, category, 0);
+    }
+    break;
 
     
   }
@@ -330,6 +337,13 @@ bool MainAppWindow::perform(const InvocationInfo& info)
     case CommandIds::kConfigAudio:
     {
       this->ConfigureAudio();
+    }
+    break;
+
+    case CommandIds::kViewPlugins:
+    {
+      this->ViewPlugins();
+
     }
     break;
 
