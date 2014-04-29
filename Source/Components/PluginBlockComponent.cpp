@@ -3,8 +3,9 @@
 #include "PluginBlockComponent.h"
 #include "ComponentDefs.h"
 
-PluginBlockComponent::PluginBlockComponent(PluginBlock* plugins)
-:  fPlugins(nullptr)
+PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors* colors ,PluginBlock* plugins)
+:  fColors(colors)
+,  fPlugins(nullptr)
 {
    if (nullptr != plugins)
    {

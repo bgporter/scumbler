@@ -9,12 +9,13 @@
 
 #include "PluginBlock.h"
 #include "PluginSlotComponent.h"
+#include "TrackComponent.h"
 
 class PluginBlockComponent : public Component 
                            , public ChangeListener
 {
 public:
-   PluginBlockComponent(PluginBlock* plugins=nullptr);
+   PluginBlockComponent(TrackComponent::PluginColors* colors, PluginBlock* plugins=nullptr);
    ~PluginBlockComponent();
 
    void paint (Graphics& g);
@@ -42,6 +43,7 @@ public:
 
 
 private:
+   TrackComponent::PluginColors* fColors;
    PluginBlock* fPlugins;
    OwnedArray<PluginSlotComponent>  fSlots;
    

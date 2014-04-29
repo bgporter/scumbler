@@ -19,8 +19,9 @@ void DragLabel::mouseUp(const MouseEvent& e)
    Label::mouseUp(e);
 }
 
-LoopComponent::LoopComponent(LoopProcessor* loop)
+LoopComponent::LoopComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop)
 :  fLoop(nullptr)
+,  fColors(colors)
 ,  fFeedback(nullptr)
 ,  fWaveform(nullptr)
 {

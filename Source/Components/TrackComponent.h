@@ -26,8 +26,15 @@
 #include "JuceHeader.h"
 
 #include "../Track.h"
-#include "PluginBlockComponent.h"
-#include "LoopComponent.h"
+
+
+// forward defs...
+class PluginBlockComponent;
+class LoopComponent;
+
+
+
+
 //[/Headers]
 
 
@@ -53,6 +60,50 @@ public:
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
 
+
+    /**
+     * \struct PluginColors
+     * The TrackComponent maintains an instance of this struct for each of
+     * the plugin blocks it owns. This lets us hide the color selection 
+     * logic in a single place when e.g. the track solo/mute/etc. state
+     * changes (or when we get loadable palettes...)
+     */
+    struct PluginColors
+    {
+        /**
+         * A ctor to make sure we have defaults set somewhat sensibly.
+         */
+        PluginColors();
+
+        Colour bg;
+        Colour fg;
+        Colour fullSlotBg;
+        Colour fullSlotFg;
+        Colour mouseOver;
+
+    };
+
+    /**
+     * \struct LoopColors
+     * The TrackComponent maintains an instance of this to control what colors the 
+     * LoopComponent uses to paint itself with.
+     */
+    struct LoopColors
+    {
+        /**
+         * A ctor to make sure we have defaults set somewhat sensibly.
+         */
+        LoopColors();
+
+        Colour bg;
+        Colour fg;
+        Colour monoWave;
+        Colour leftWave;
+        Colour rightWave;
+        Colour tick;
+
+    };
+
     /**
      * Set the Track object inside the Scumbler that this component will be representing 
      * on screen. 
@@ -69,6 +120,11 @@ public:
      * @return pointer to a Track object.
      */
     Track* GetTrack() const;
+
+    /**
+     * Update the colors used to draw this track component (and its children)
+     */
+    void UpdateColors();
 
 
     /**
@@ -104,15 +160,27 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Track*  fTrack;
+    
+    // color structs
+    PluginColors  fPreColors;
+    PluginColors  fPostColors;
+    LoopColors fLoopColors;
+
+    //Child components (complex)
     PluginBlockComponent* fPreEffects;
     PluginBlockComponent* fPostEffects;
     LoopComponent*  fLoop;
+    
+    // Child components (buttons, etc.)
     Slider* fOutputVolume;
     TextButton* fActive;
     TextButton* fMute;
     TextButton* fSolo; 
+    
     float fCenterLineYPos;
+    float fCenterLineStartX;
     int fCenterLineStopX;
+
     //[/UserVariables]
 
     //==============================================================================

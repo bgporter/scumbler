@@ -23,6 +23,9 @@
 //[/Headers]
 
 #include "TrackComponent.h"
+#include "PluginBlockComponent.h"
+#include "LoopComponent.h"
+
 #include "ComponentDefs.h"
 
 
@@ -52,9 +55,9 @@ TrackComponent::TrackComponent (Track* track)
     }
 
     //[Constructor] You can add your own custom stuff here..
-    fPreEffects = new PluginBlockComponent(pre);
-    fPostEffects = new PluginBlockComponent(post);
-    fLoop = new LoopComponent(loop);
+    fPreEffects = new PluginBlockComponent(&fPreColors, pre);
+    fPostEffects = new PluginBlockComponent(&fPostColors, post);
+    fLoop = new LoopComponent(&fLoopColors, loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
     this->addAndMakeVisible(fLoop);
@@ -135,9 +138,18 @@ void TrackComponent::paint (Graphics& g)
     // tracks:
     // - the signal line before the waveform for inactive tracks should be gray
     // - all the black should be gray for muted tracks.
+    
 
-    g.setColour(Colours::black);
-    g.fillRect(0.0, fCenterLineYPos-1.0, fCenterLineStopX, 3.0);
+    float halfWidth = this->getWidth() / 2.0;
+
+    // first, draw the signal line underneath the pre-effects:
+    Colour preColor = fPreColors.fg;
+    Colour postColor = fPostColors.fg;
+    g.setColour(preColor);
+    g.fillRect(fCenterLineStartX, fCenterLineYPos-1.0, halfWidth, 3.0);
+    // draw the post line...
+    g.setColour(postColor);
+    g.fillRect(halfWidth, fCenterLineYPos-1.0, halfWidth, 3.0);
 
     // draw a bounding circle around the output volume knob.
     Rectangle<int> box = fOutputVolume->getBounds();
@@ -145,11 +157,12 @@ void TrackComponent::paint (Graphics& g)
     Rectangle<float> floatBox(box.getX(), box.getY(), box.getWidth(), box.getHeight());
     g.setColour(Colours::white);
     g.fillRoundedRectangle(floatBox, floatBox.getWidth()/2.0);
-    g.setColour(Colours::black);
+    g.setColour(postColor);
     g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);
 
     fOutputVolume->setValue(fTrack->GetOutputVolume());
-    
+    fOutputVolume->setColour (Slider::thumbColourId, postColor);
+    fOutputVolume->setColour (Slider::rotarySliderFillColourId, postColor);    
     //g.drawRect(fSolo->getBounds());
     //g.drawRect(fMute->getBounds());
 
@@ -189,6 +202,9 @@ void TrackComponent::resized()
     Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
     fOutputVolume->setBounds(outputBounds);
     fCenterLineStopX = outputBounds.getCentreX();
+
+    // temp until we have a control for the input gain/pan
+    fCenterLineStartX = 0.f;
 
     // The activate track button is directly underneath the pre plugin block.
     fActive->setBounds(fPreEffects->getX(), fPreEffects->getBottom()+5, 
@@ -249,6 +265,27 @@ void TrackComponent::focusLost (FocusChangeType cause)
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 
 
+TrackComponent::PluginColors::PluginColors()
+{
+  bg = Colours::white;
+  fg = Colours::black;
+  fullSlotBg = Colours::grey;
+  fullSlotFg = Colours::white;
+  mouseOver = Colours::red;
+}
+
+
+TrackComponent::LoopColors::LoopColors()
+{
+
+  bg = Colours::white;
+  fg = Colours::black;
+  monoWave = Colours::black;
+  leftWave = Colours::red;
+  rightWave = Colours::blue;
+  tick = Colours::grey;
+
+}
 void TrackComponent::ConnectToTrack(Track* track)
 {
   // if we are already listening to this track, there's nothing to do. Carry on.
@@ -280,11 +317,23 @@ Track* TrackComponent::GetTrack() const
    return fTrack;  
 }
 
+void TrackComponent::UpdateColors()
+{
+   // !!! Respond to the current track settings!
+   if (fTrack->IsMuted())
+   {
+      fPostColors.fg = Colours::grey;
+      fPostColors.fullSlotFg = Colours::black;
+      fPostColors.fullSlotBg = Colours::lightgrey;
+      fPostColors.mouseOver = Colours::pink;
+   }
+}
 void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
   if (source == fTrack)
   {
      fActive->setToggleState(fTrack->IsActive(), NotificationType::dontSendNotification); 
+     this->UpdateColors();
 
      this->repaint();
   }

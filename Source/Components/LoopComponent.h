@@ -8,6 +8,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Loop.h"
+#include "TrackComponent.h"
 #include "WaveformComponent.h"
 
 
@@ -36,7 +37,7 @@ class LoopComponent  :  public Component
                      ,  public Slider::Listener
 {
 public:
-   LoopComponent(LoopProcessor* loop);
+   LoopComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop);
 
    ~LoopComponent();
 
@@ -79,6 +80,7 @@ public:
 
 private:
    LoopProcessor* fLoop;
+   TrackComponent::LoopColors* fColors;
    Label* fDuration;
    Slider*  fFeedback;
    WaveformComponent* fWaveform;
