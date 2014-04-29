@@ -34,7 +34,7 @@
 
 //==============================================================================
 TrackComponent::TrackComponent (Track* track)
-    : fTrack(track)
+    : fTrack(nullptr)
     , fCenterLineYPos(0)
 {
 
@@ -61,6 +61,9 @@ TrackComponent::TrackComponent (Track* track)
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
     this->addAndMakeVisible(fLoop);
+
+
+   this->ConnectToTrack(track);
 
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Track volume");
@@ -101,6 +104,7 @@ TrackComponent::TrackComponent (Track* track)
    fSolo->setColour(TextButton::buttonOnColourId, Colours::red);
    fSolo->setClickingTogglesState(true);
    this->addAndMakeVisible(fSolo);
+
 
 
 
