@@ -324,7 +324,16 @@ Track* TrackComponent::GetTrack() const
 void TrackComponent::UpdateColors()
 {
    // !!! Respond to the current track settings!
-   if (fTrack->IsMuted())
+   bool preActive = true;
+   bool postActive = ! fTrack->IsMuted();
+   if (postActive)
+   {
+      fPostColors.fg = Colours::black;
+      fPostColors.fullSlotFg = Colours::white;
+      fPostColors.fullSlotBg = Colours::black;
+      fPostColors.mouseOver = Colours::red;
+   }
+   else
    {
       fPostColors.fg = Colours::grey;
       fPostColors.fullSlotFg = Colours::black;
