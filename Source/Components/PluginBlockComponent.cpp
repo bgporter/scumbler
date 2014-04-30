@@ -119,7 +119,7 @@ void PluginBlockComponent::ConnectToPluginBlock(PluginBlock* plugins)
          fSlots.clear();
          for (int i = 0; i < fPlugins->Size(); ++i)
          {
-            PluginSlotComponent* slot = new PluginSlotComponent(fPlugins, i);
+            PluginSlotComponent* slot = new PluginSlotComponent(fColors, fPlugins, i);
             fSlots.add(slot);
             this->addAndMakeVisible(slot);
             //this->SetSlotBounds(i, slot);
