@@ -55,8 +55,8 @@ TrackComponent::TrackComponent (Track* track)
     }
 
     //[Constructor] You can add your own custom stuff here..
-    fPreEffects = new PluginBlockComponent(fPluginColors[0], pre);
-    fPostEffects = new PluginBlockComponent(fPluginColors[1], post);
+    fPreEffects = new PluginBlockComponent(fPluginColors[kPreBlock], pre);
+    fPostEffects = new PluginBlockComponent(fPluginColors[kPostBlock], post);
     fLoop = new LoopComponent(&fLoopColors, loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
@@ -147,8 +147,8 @@ void TrackComponent::paint (Graphics& g)
     float halfWidth = this->getWidth() / 2.0;
 
     // first, draw the signal line underneath the pre-effects:
-    Colour preColor = fPluginColors[0].fg;
-    Colour postColor = fPluginColors[1].fg;
+    Colour preColor = fPluginColors[kPreBlock].fg;
+    Colour postColor = fPluginColors[kPostBlock].fg;
     g.setColour(preColor);
     g.fillRect(fCenterLineStartX, fCenterLineYPos-1.0, halfWidth, 3.0);
     // draw the post line...
@@ -159,7 +159,7 @@ void TrackComponent::paint (Graphics& g)
     Rectangle<int> box = fOutputVolume->getBounds();
     box.expand(2, 2);
     Rectangle<float> floatBox(box.getX(), box.getY(), box.getWidth(), box.getHeight());
-    g.setColour(Colours::white);
+    g.setColour(fPluginColors[kPreBlock].bg);
     g.fillRoundedRectangle(floatBox, floatBox.getWidth()/2.0);
     g.setColour(postColor);
     g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);
@@ -324,11 +324,11 @@ Track* TrackComponent::GetTrack() const
 void TrackComponent::UpdateColors()
 {
    // !!! Respond to the current track settings!
-   bool pluginsActive[2];
-   pluginsActive[0] = fTrack->IsActive();
-   pluginsActive[1] = ! fTrack->IsMuted();
+   bool pluginsActive[kPluginBlockCount];
+   pluginsActive[kPreBlock] = fTrack->IsActive();
+   pluginsActive[kPostBlock] = ! fTrack->IsMuted();
 
-   for (int i = 0; i < 2; ++i)
+   for (int i = 0; i < kPluginBlockCount; ++i)
    {
      if (pluginsActive[i])
      {

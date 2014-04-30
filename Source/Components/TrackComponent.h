@@ -162,7 +162,13 @@ private:
     Track*  fTrack;
     
     // color structs
-    PluginColors  fPluginColors[2];
+    enum PluginBlockIndex
+    {
+        kPreBlock = 0,
+        kPostBlock = 1,
+        kPluginBlockCount
+    };
+    PluginColors  fPluginColors[kPluginBlockCount];
     LoopColors fLoopColors;
 
     //Child components (complex)
