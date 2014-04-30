@@ -55,8 +55,8 @@ TrackComponent::TrackComponent (Track* track)
     }
 
     //[Constructor] You can add your own custom stuff here..
-    fPreEffects = new PluginBlockComponent(fPreColors, pre);
-    fPostEffects = new PluginBlockComponent(fPostColors, post);
+    fPreEffects = new PluginBlockComponent(fPluginColors[0], pre);
+    fPostEffects = new PluginBlockComponent(fPluginColors[1], post);
     fLoop = new LoopComponent(&fLoopColors, loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
@@ -147,8 +147,8 @@ void TrackComponent::paint (Graphics& g)
     float halfWidth = this->getWidth() / 2.0;
 
     // first, draw the signal line underneath the pre-effects:
-    Colour preColor = fPreColors.fg;
-    Colour postColor = fPostColors.fg;
+    Colour preColor = fPluginColors[0].fg;
+    Colour postColor = fPluginColors[1].fg;
     g.setColour(preColor);
     g.fillRect(fCenterLineStartX, fCenterLineYPos-1.0, halfWidth, 3.0);
     // draw the post line...
@@ -324,21 +324,26 @@ Track* TrackComponent::GetTrack() const
 void TrackComponent::UpdateColors()
 {
    // !!! Respond to the current track settings!
-   bool preActive = true;
-   bool postActive = ! fTrack->IsMuted();
-   if (postActive)
+   bool pluginsActive[2];
+   pluginsActive[0] = fTrack->IsActive();
+   pluginsActive[1] = ! fTrack->IsMuted();
+
+   for (int i = 0; i < 2; ++i)
    {
-      fPostColors.fg = Colours::black;
-      fPostColors.fullSlotFg = Colours::white;
-      fPostColors.fullSlotBg = Colours::black;
-      fPostColors.mouseOver = Colours::red;
-   }
-   else
-   {
-      fPostColors.fg = Colours::grey;
-      fPostColors.fullSlotFg = Colours::black;
-      fPostColors.fullSlotBg = Colours::lightgrey;
-      fPostColors.mouseOver = Colours::pink;
+     if (pluginsActive[i])
+     {
+        fPluginColors[i].fg = Colours::black;
+        fPluginColors[i].fullSlotFg = Colours::white;
+        fPluginColors[i].fullSlotBg = Colours::black;
+        fPluginColors[i].mouseOver = Colours::red;
+     }
+     else
+     {
+        fPluginColors[i].fg = Colours::grey;
+        fPluginColors[i].fullSlotFg = Colours::black;
+        fPluginColors[i].fullSlotBg = Colours::lightgrey;
+        fPluginColors[i].mouseOver = Colours::pink;
+     }
    }
 }
 void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)

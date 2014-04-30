@@ -162,8 +162,7 @@ private:
     Track*  fTrack;
     
     // color structs
-    PluginColors  fPreColors;
-    PluginColors  fPostColors;
+    PluginColors  fPluginColors[2];
     LoopColors fLoopColors;
 
     //Child components (complex)
