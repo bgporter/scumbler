@@ -15,7 +15,7 @@ class PluginBlockComponent : public Component
                            , public ChangeListener
 {
 public:
-   PluginBlockComponent(TrackComponent::PluginColors* colors, PluginBlock* plugins=nullptr);
+   PluginBlockComponent(TrackComponent::PluginColors const& colors, PluginBlock* plugins=nullptr);
    ~PluginBlockComponent();
 
    void paint (Graphics& g);
@@ -43,7 +43,7 @@ public:
 
 
 private:
-   TrackComponent::PluginColors* fColors;
+   TrackComponent::PluginColors const&  fColors;
    PluginBlock* fPlugins;
    OwnedArray<PluginSlotComponent>  fSlots;
    

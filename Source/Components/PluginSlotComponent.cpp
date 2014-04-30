@@ -5,7 +5,7 @@
 
 extern KnownPluginList gKnownPlugins;
 
-PluginSlotComponent::PluginSlotComponent(TrackComponent::PluginColors* colors, PluginBlock* block, int index)
+PluginSlotComponent::PluginSlotComponent(TrackComponent::PluginColors const& colors, PluginBlock* block, int index)
 :  fColors(colors)
 ,  fPluginBlock(block)
 ,  fIndex(index)
@@ -89,19 +89,19 @@ void PluginSlotComponent::paint (Graphics& g)
    const float kCornerSize = this->getHeight() / 2;
    if (this->IsEmpty())
    {
-      g.setColour(fColors->bg);
+      g.setColour(fColors.bg);
    }
    else
    {
-      g.setColour(fColors->fullSlotBg);
+      g.setColour(fColors.fullSlotBg);
    }
 
    g.fillRoundedRectangle(rect, kCornerSize);
 
-   Colour c = fColors->fg;
+   Colour c = fColors.fg;
    if (fMouseOver)
    {
-      c = fColors->mouseOver;
+      c = fColors.mouseOver;
    }
    g.setColour(c);
    g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
@@ -119,7 +119,7 @@ void PluginSlotComponent::paint (Graphics& g)
       rect.setWidth(rect.getWidth() - inset);
       rect.setHeight(rect.getHeight() - inset);
 
-      g.setColour(fColors->fullSlotFg);
+      g.setColour(fColors.fullSlotFg);
       g.drawFittedText(info.name, mRoundInt(rect.getX()), mRoundInt(rect.getY()),
          mRoundInt(rect.getWidth()), mRoundInt(rect.getHeight()), 
          Justification::horizontallyCentred | Justification::verticallyCentred, 2);

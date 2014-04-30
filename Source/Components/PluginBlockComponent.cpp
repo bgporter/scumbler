@@ -3,7 +3,7 @@
 #include "PluginBlockComponent.h"
 #include "ComponentDefs.h"
 
-PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors* colors ,PluginBlock* plugins)
+PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors const& colors ,PluginBlock* plugins)
 :  fColors(colors)
 ,  fPlugins(nullptr)
 {

@@ -21,7 +21,7 @@ public:
    };
 
 
-   PluginSlotComponent(TrackComponent::PluginColors* colors, PluginBlock* block, int index);
+   PluginSlotComponent(TrackComponent::PluginColors const& colors, PluginBlock* block, int index);
    ~PluginSlotComponent();
 
    bool IsEmpty() const;
@@ -74,7 +74,7 @@ public:
    ///@}
 
 private:
-   TrackComponent::PluginColors* fColors;
+   TrackComponent::PluginColors const& fColors;
    PluginBlock*   fPluginBlock;
    int            fIndex;
    bool           fMouseOver;
