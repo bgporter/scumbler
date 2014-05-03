@@ -27,14 +27,14 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
    NodeId output = fScumbler->HandleSpecialNode(tk::kOutput);
 
    // create an insert the input processor 
-   fInputProcessor = new InputProcessor(this);
+   fInputProcessor = new InputProcessor(this, 2);
    this->SetInputPan(fPan);
    fInputId = fScumbler->AddProcessor(fInputProcessor);
    fScumbler->InsertBetween(input, fInputId, output);
 
 
    // create and insert the gain processor.
-   fOutputGain = new GainProcessor(this);
+   fOutputGain = new GainProcessor(this, 2);
    fVolumeId = fScumbler->AddProcessor(fOutputGain);
    fScumbler->InsertBetween(fInputId, fVolumeId, output);
 
