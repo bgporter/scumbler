@@ -9,16 +9,22 @@ class InputProcessor : public GainProcessor
 {
 public:
 
+   enum ChannelEnable
+   {
+      kLeftChannel = 0x01,
+      kRightChannel = 0x02,
+      kStereo = 0x03
+   };
+
    /**
     * Create the input processor object, passing in a pointer to the track that 
     * owns it. If we have more outputs than inputs we also support panning. If
     * inputChannelCount == outputChannelCount, we pass through as is.
     *
     * @param track non-owning pointer to the track object that owns us. 
-    * @param inputChannelCount number of channels we accept as input (default 1)
-    * @param outputChannelCount number of channels we generate as output (default 2)
+    * @param channelCount number of input/output channels (default 1)
     */
-   InputProcessor(Track* track, int inputChannelCount=1, int outputChannelCount=2);
+   InputProcessor(Track* track, int channelCount=1);
 
    /**
     * Destroy the input processor.

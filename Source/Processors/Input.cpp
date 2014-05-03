@@ -4,8 +4,8 @@
 
 const float kPiOver2 = (2 * atan(1));
 
-InputProcessor::InputProcessor(Track* track, int inputChannelCount, int outputChannelCount)
-:  GainProcessor(track, inputChannelCount, outputChannelCount)
+InputProcessor::InputProcessor(Track* track, int channelCount)
+:  GainProcessor(track, channelCount)
 ,  fIsActive(false)
 ,  fActiveState(kInactive)
 {
@@ -87,7 +87,10 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
    else
    {
       buffer.applyGainRamp(0, 0, sampleCount, pan[0], panEnd[0]);
-      buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
+      if (fOutputChannelCount > 1)
+      {
+         buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
+      }
    }
 }
 
