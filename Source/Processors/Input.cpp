@@ -87,7 +87,7 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
    else
    {
       buffer.applyGainRamp(0, 0, sampleCount, pan[0], panEnd[0]);
-      if (fOutputChannelCount > 1)
+      if (fOutputChannelCount == 2)
       {
          buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
       }

@@ -102,6 +102,19 @@ public:
    bool IsActive() const;
 
    /**
+    * Set the input gain to be applied to this track before going into the pre-effects
+    * block. default = 0.0.
+    * @param gainInDb gain in dB, probably -96..+6 (?)
+    */
+   void SetInputGain(float gainInDb);
+
+   /**
+    * Return the current gain in dB applied to the input of this track
+    * @return Gain value.
+    */
+   float GetInputGain() const;
+
+   /**
     * Set the pan value to be applied to the input to this track. 
     * NOTE that this only has an effect when the input node is a single channel and
     * the InputProcessor is set to generate a stereo pair.
@@ -218,6 +231,12 @@ private:
     * Is this track active (should the inputProcessor be passing samples through?)
     */
    bool fInputActive;
+
+   /**
+    * dB of gain to apply to the input to this track.
+    */
+   float fInputGain;
+
 
    /**
     * Where should a mono input signal be panned?

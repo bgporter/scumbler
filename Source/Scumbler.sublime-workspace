@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"full",
+				"fullSlotBg"
+			],
+			[
+				"fPost",
+				"fPostColors"
+			],
+			[
+				"fPre",
+				"fPreColors"
+			],
+			[
 				"kPl",
 				"kPluginSlotHeight"
 			],
@@ -128,10 +140,6 @@
 				"fTrackCount"
 			],
 			[
-				"fPre",
-				"fPreEffectCount"
-			],
-			[
 				"remo",
 				"removeNode"
 			],
@@ -175,98 +183,88 @@
 			"file": "Track.cpp",
 			"settings":
 			{
-				"buffer_size": 4676,
+				"buffer_size": 4682,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scumbler.cpp",
+			"file": "Processors/Input.h",
 			"settings":
 			{
-				"buffer_size": 14124,
+				"buffer_size": 2549,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Scumbler.h",
+			"file": "Processors/Input.cpp",
 			"settings":
 			{
-				"buffer_size": 14795,
+				"buffer_size": 3295,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "ScumblerDefs.h",
+			"file": "Processors/Gain.cpp",
 			"settings":
 			{
-				"buffer_size": 2235,
+				"buffer_size": 830,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Components/TrackComponent.h",
+			"file": "Processors/Gain.h",
 			"settings":
 			{
-				"buffer_size": 4102,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Components/TrackComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 10942,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Components/ScumblerComponent.h",
-			"settings":
-			{
-				"buffer_size": 3801,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Track.h",
-			"settings":
-			{
-				"buffer_size": 6812,
+				"buffer_size": 2113,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Components/PluginBlockComponent.cpp",
+			"file": "Processors/Passthrough.h",
 			"settings":
 			{
-				"buffer_size": 3409,
+				"buffer_size": 2701,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Components/LoopComponent.h",
+			"file": "Processors/Loop.cpp",
 			"settings":
 			{
-				"buffer_size": 1782,
+				"buffer_size": 8350,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "MainWindow.cpp",
+			"file": "Processors/Loop.h",
 			"settings":
 			{
-				"buffer_size": 9604,
-				"line_ending": "Windows"
+				"buffer_size": 7399,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "Searching 47 files for \"ViewPlugins\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h:\n   19      static const CommandID kToggleRecord = 0x3008;\n   20      static const CommandID kAddTrack     = 0x3009;\n   21:     static const CommandID kViewPlugins  = 0x300A;\n   22  \n   23  \n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp:\n   56    if (nullptr == pluginList)\n   57    {\n   58:     this->ViewPlugins();\n   59    }\n   60  \n   ..\n   90     // if the list of plugins is being displayed, make sure it gets cleaned up\n   91     gKnownPlugins.removeChangeListener(this);\n   92:    this->ViewPlugins(false);\n   93     // destroy the UI components\n   94     this->clearContentComponent();\n   ..\n  156  \n  157  \n  158: void MainAppWindow::ViewPlugins(bool display)\n  159  {\n  160    if (display)\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h:\n   49       * @param display Passing `true` will display the plugin window, `false` will delete it. \n   50       */\n   51:     void ViewPlugins(bool display=true);\n   52  \n   53      /**\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp:\n   43  {\n   44     // delete this window.\n   45:    fOwner->ViewPlugins(false);\n   46  }\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h:\n   16      * Create the plugin list window. Should only be instantiated/owned by the\n   17      * MainAppWindow and have its lifecycle controlled using that class' \n   18:     * `ViewPlugins()` method.\n   19      */\n   20     PluginListWindow(MainAppWindow* owner, AudioPluginFormatManager& formatManager);\n\n7 matches across 5 files\n\n\nSearching 47 files for \"kViewPlugins\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h:\n   19      static const CommandID kToggleRecord = 0x3008;\n   20      static const CommandID kAddTrack     = 0x3009;\n   21:     static const CommandID kViewPlugins  = 0x300A;\n   22  \n   23  \n\n1 match in 1 file\n\n\nSearching 47 files for \"ViewPlugins\"\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h:\n   19      static const CommandID kToggleRecord = 0x3008;\n   20      static const CommandID kAddTrack     = 0x3009;\n   21:     static const CommandID kViewPlugins  = 0x300A;\n   22  \n   23  \n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp:\n   56    if (nullptr == pluginList)\n   57    {\n   58:     this->ViewPlugins();\n   59    }\n   60  \n   ..\n   90     // if the list of plugins is being displayed, make sure it gets cleaned up\n   91     gKnownPlugins.removeChangeListener(this);\n   92:    this->ViewPlugins(false);\n   93     // destroy the UI components\n   94     this->clearContentComponent();\n   ..\n  156  \n  157  \n  158: void MainAppWindow::ViewPlugins(bool display)\n  159  {\n  160    if (display)\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h:\n   49       * @param display Passing `true` will display the plugin window, `false` will delete it. \n   50       */\n   51:     void ViewPlugins(bool display=true);\n   52  \n   53      /**\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp:\n   43  {\n   44     // delete this window.\n   45:    fOwner->ViewPlugins(false);\n   46  }\n\n/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h:\n   16      * Create the plugin list window. Should only be instantiated/owned by the\n   17      * MainAppWindow and have its lifecycle controlled using that class' \n   18:     * `ViewPlugins()` method.\n   19      */\n   20     PluginListWindow(MainAppWindow* owner, AudioPluginFormatManager& formatManager);\n\n7 matches across 5 files\n",
+			"file": "Components/LoopComponent.cpp",
 			"settings":
 			{
-				"buffer_size": 3601,
-				"line_ending": "Unix",
-				"name": "Find Results",
-				"scratch": true
+				"buffer_size": 3880,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/WaveformComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 10411,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/WaveformComponent.h",
+			"settings":
+			{
+				"buffer_size": 5175,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -350,12 +348,33 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ComponentDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Loop.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
 		"/Users/bgporter/temp/fields.py",
 		"/Users/bgporter/temp/10things.txt",
 		"/Users/bgporter/AnL/Trantor/ApiClient/Trantor.py",
 		"/Users/bgporter/AnL/blog/test_Trantor.py",
 		"/Users/bgporter/AnL/blog/MoveBudget.py",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/AnL/blog/2KGames.email",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
@@ -369,42 +388,21 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
 		"/Users/bgporter/AnL/temp/map/ZipData.csv",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ComponentDefs.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/thumbnail.py",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformPixelBuffer.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Loop.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoRecordPage.cpp",
 		"/Users/bgporter/personal/juce/extras/JuceDemo/Source/demos/AudioDemoLatencyPage.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginEditorWindow.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_Track.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginListWindow.h",
 		"/Users/bgporter/personal/juce/modules/juce_gui_basics/windows/juce_TooltipWindow.cpp",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
@@ -485,7 +483,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 			""
@@ -496,6 +494,22 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Point",
+			"InputPro",
+			"\"\n",
+			"ConnectTo",
+			"ConnectToTrack",
+			"Change",
+			"  \n",
+			"PluginBlockComponent",
+			"Change",
+			"Mute(",
+			"fCenterLineStartX",
+			"fCenterLineStopX",
+			"GetTr",
+			"fSlots",
+			"ViewPlugins",
+			"CommandIds::",
 			"ViewPlugins",
 			"kViewPlugins",
 			"ViewPlugins",
@@ -607,23 +621,7 @@
 			"2px",
 			"td",
 			"\n",
-			"addFil",
-			"createNewPlugin",
-			"createNewPl",
-			"commandManager",
-			"player",
-			"getGraph",
-			"graphPlater",
-			"setProcessor",
-			"player",
-			"addFilter",
-			"Player",
-			"createNodeXml",
-			"restoreFromXml",
-			"saveD",
-			"Audio",
-			"ignored",
-			"PluginListCom"
+			"addFil"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -645,7 +643,7 @@
 	"groups":
 	[
 		{
-			"selected": 11,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -653,15 +651,15 @@
 					"file": "Track.cpp",
 					"settings":
 					{
-						"buffer_size": 4676,
+						"buffer_size": 4682,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3341,
-								3341
+								996,
+								996
 							]
 						],
 						"settings":
@@ -671,25 +669,53 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 709.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Scumbler.cpp",
+					"file": "Processors/Input.h",
 					"settings":
 					{
-						"buffer_size": 14124,
+						"buffer_size": 2549,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7253,
-								7253
+								713,
+								713
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 217.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Processors/Input.cpp",
+					"settings":
+					{
+						"buffer_size": 3295,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2745,
+								2745
 							]
 						],
 						"settings":
@@ -699,59 +725,31 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5581.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Scumbler.h",
-					"settings":
-					{
-						"buffer_size": 14795,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								8852,
-								8852
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5593.0,
+						"translation.y": 1295.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "ScumblerDefs.h",
+					"file": "Processors/Gain.cpp",
 					"settings":
 					{
-						"buffer_size": 2235,
+						"buffer_size": 830,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								332,
-								332
+								167,
+								167
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
+							"tab_size": 3,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -762,46 +760,46 @@
 				},
 				{
 					"buffer": 4,
-					"file": "Components/TrackComponent.h",
+					"file": "Processors/Gain.h",
 					"settings":
 					{
-						"buffer_size": 4102,
+						"buffer_size": 2113,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								724,
+								724
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1026.0,
+						"translation.y": 104.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "Components/TrackComponent.cpp",
+					"file": "Processors/Passthrough.h",
 					"settings":
 					{
-						"buffer_size": 10942,
+						"buffer_size": 2701,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1470,
-								1470
+								0,
+								0
 							]
 						],
 						"settings":
@@ -811,81 +809,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 767.0,
+						"translation.y": 1389.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "Components/ScumblerComponent.h",
+					"file": "Processors/Loop.cpp",
 					"settings":
 					{
-						"buffer_size": 3801,
+						"buffer_size": 8350,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 774.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "Track.h",
-					"settings":
-					{
-						"buffer_size": 6812,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1699.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "Components/PluginBlockComponent.cpp",
-					"settings":
-					{
-						"buffer_size": 3409,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2863,
-								2863
+								2827,
+								2827
 							]
 						],
 						"settings":
@@ -895,17 +837,17 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2236.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 9,
-					"file": "Components/LoopComponent.h",
+					"buffer": 7,
+					"file": "Processors/Loop.h",
 					"settings":
 					{
-						"buffer_size": 1782,
+						"buffer_size": 7399,
 						"regions":
 						{
 						},
@@ -923,135 +865,92 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 414.0,
+						"translation.y": 1274.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Components/LoopComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 3880,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1987.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "Components/WaveformComponent.cpp",
+					"settings":
+					{
+						"buffer_size": 10411,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8210,
+								8215
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3528.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 10,
-					"file": "MainWindow.cpp",
+					"file": "Components/WaveformComponent.h",
 					"settings":
 					{
-						"buffer_size": 9604,
+						"buffer_size": 5175,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2082,
-								2082
+								525,
+								525
 							]
 						],
 						"settings":
 						{
+							"is_xml": false,
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 545.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"settings":
-					{
-						"buffer_size": 3601,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										252,
-										263
-									],
-									[
-										423,
-										434
-									],
-									[
-										616,
-										627
-									],
-									[
-										765,
-										776
-									],
-									[
-										1020,
-										1031
-									],
-									[
-										1209,
-										1220
-									],
-									[
-										1489,
-										1500
-									],
-									[
-										1897,
-										1909
-									],
-									[
-										2210,
-										2221
-									],
-									[
-										2381,
-										2392
-									],
-									[
-										2574,
-										2585
-									],
-									[
-										2723,
-										2734
-									],
-									[
-										2978,
-										2989
-									],
-									[
-										3167,
-										3178
-									],
-									[
-										3447,
-										3458
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								1958,
-								1958
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"output_tag": 3,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 459.0,
+						"translation.y": 979.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

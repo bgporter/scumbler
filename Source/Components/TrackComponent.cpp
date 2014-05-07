@@ -65,6 +65,18 @@ TrackComponent::TrackComponent (Track* track)
 
    this->ConnectToTrack(track);
 
+
+   addAndMakeVisible (fInputGain = new Slider ("Input gain"));
+   fInputGain->setTooltip ("Input gain");
+   fInputGain->setRange (-96.0, 0.0, 0);
+   fInputGain->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
+   fInputGain->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+   fInputGain->setColour (Slider::thumbColourId, Colours::black);
+   fInputGain->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+   fInputGain->setPopupDisplayEnabled(true, this);
+   fInputGain->setTextValueSuffix(" dB");
+   fInputGain->addListener(this);  
+
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Track volume");
    fOutputVolume->setRange (-96.0, 0.0, 0);
@@ -73,7 +85,7 @@ TrackComponent::TrackComponent (Track* track)
    fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
    fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
    fOutputVolume->setPopupDisplayEnabled(true, this);
-   fOutputVolume->setTextValueSuffix("dB");
+   fOutputVolume->setTextValueSuffix(" dB");
    fOutputVolume->addListener(this);   
 
    fActive = new TextButton("Active");
@@ -155,23 +167,38 @@ void TrackComponent::paint (Graphics& g)
     g.setColour(postColor);
     g.fillRect(halfWidth, fCenterLineYPos-1.0, halfWidth, 3.0);
 
-    // draw a bounding circle around the output volume knob.
-    Rectangle<int> box = fOutputVolume->getBounds();
-    box.expand(2, 2);
-    Rectangle<float> floatBox(box.getX(), box.getY(), box.getWidth(), box.getHeight());
-    g.setColour(fPluginColors[kPreBlock].bg);
-    g.fillRoundedRectangle(floatBox, floatBox.getWidth()/2.0);
-    g.setColour(postColor);
-    g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);
+    // draw a bounding circle around the input/output volume knobs
+    // and update their values/colors
 
+    this->OutlineKnob(g, fInputGain);
+    fInputGain->setValue(fTrack->GetInputGain());
+    fInputGain->setColour(Slider::thumbColourId, postColor);
+    fInputGain->setColour(Slider::rotarySliderFillColourId, postColor);   
+
+    this->OutlineKnob(g, fOutputVolume);
     fOutputVolume->setValue(fTrack->GetOutputVolume());
-    fOutputVolume->setColour (Slider::thumbColourId, postColor);
-    fOutputVolume->setColour (Slider::rotarySliderFillColourId, postColor);    
+    fOutputVolume->setColour(Slider::thumbColourId, postColor);
+    fOutputVolume->setColour(Slider::rotarySliderFillColourId, postColor);   
+
+
+
     //g.drawRect(fSolo->getBounds());
     //g.drawRect(fMute->getBounds());
 
 
     //[/UserPaint]
+}
+
+
+void TrackComponent::OutlineKnob(Graphics& g, Slider* knob)
+{
+    Rectangle<int> box = knob->getBounds();
+    box.expand(2, 2);
+    Rectangle<float> floatBox(box.getX(), box.getY(), box.getWidth(), box.getHeight());
+    g.setColour(fPluginColors[kPreBlock].bg);
+    g.fillRoundedRectangle(floatBox, floatBox.getWidth()/2.0);
+    g.setColour(fPluginColors[kPostBlock].fg);
+    g.drawRoundedRectangle(floatBox, floatBox.getWidth()/2.0, 3.0);  
 }
 
 void TrackComponent::resized()
@@ -197,13 +224,20 @@ void TrackComponent::resized()
     fLoop->setBounds(loopX, effectBlockYPos, loopWidth, pluginBlockHeight);
     fPostEffects->setBounds(postX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
 
+    // center the gain between the left edge and the start of the pre-effect block.
+    int availableGainWidth = fPreEffects->getX();
+    int gainXPos = (availableGainWidth - kKnobWidth) / 2;
+
     // center the volume between the right edge of the post effects and the edge of the component.
     int availableVolumeWidth = (this->getWidth() - fPostEffects->getRight());
-    const int kXPos = fPostEffects->getRight() + (availableVolumeWidth - kKnobWidth) / 2;
+    const int kOutputXPos = fPostEffects->getRight() + (availableVolumeWidth - kKnobWidth) / 2;
     const int kMargin = 5;
     int yPos = fCenterLineYPos - (kKnobHeight/2);
 
-    Rectangle<int> outputBounds(kXPos, yPos, kKnobHeight, kKnobHeight);
+    Rectangle<int> inputBounds(gainXPos, yPos, kKnobHeight, kKnobHeight);
+    fInputGain->setBounds(inputBounds);
+
+    Rectangle<int> outputBounds(kOutputXPos, yPos, kKnobHeight, kKnobHeight);
     fOutputVolume->setBounds(outputBounds);
     fCenterLineStopX = outputBounds.getCentreX();
 
@@ -379,6 +413,10 @@ void TrackComponent::sliderValueChanged (Slider* sliderThatWasMoved)
   if (fOutputVolume == sliderThatWasMoved)
   {
      fTrack->SetOutputVolume(fOutputVolume->getValue());  
+  }
+  else if (fInputGain == sliderThatWasMoved)
+  {
+     fTrack->SetInputGain(fInputGain->getValue());
   }
 }
 

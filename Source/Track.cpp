@@ -11,6 +11,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 ,  fPlaying(true)
 ,  fMuted(false)
 ,  fInputActive(false)
+,  fInputGain(0.f)
 ,  fPan(0.5)
 ,  fPreEffectCount(preFxCount)
 ,  fPreEffects(nullptr)
@@ -28,6 +29,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
 
    // create an insert the input processor 
    fInputProcessor = new InputProcessor(this, 2);
+   this->SetInputGain(fInputGain);
    this->SetInputPan(fPan);
    fInputId = fScumbler->AddProcessor(fInputProcessor);
    fScumbler->InsertBetween(input, fInputId, output);
@@ -39,7 +41,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
    fScumbler->InsertBetween(fInputId, fVolumeId, output);
 
    // create & insert the loop processor
-   fLoop = new LoopProcessor(this);
+   fLoop = new LoopProcessor(this, 2);
    fLoopId = fScumbler->AddProcessor(fLoop);
    fScumbler->InsertBetween(fInputId, fLoopId, fVolumeId);
 
@@ -145,6 +147,25 @@ tk::Result Track::SetActive(bool isActive)
 bool Track::IsActive() const
 {
    return fInputProcessor->IsActive();
+}
+
+void Track::SetInputGain(float gainInDb)
+{
+   if (gainInDb != fInputGain)
+   {
+      fInputGain = gainInDb;
+
+      float gain = DbToFloat(fInputGain);
+      fInputProcessor->SetGain(gain);
+
+      // update our observers.
+      this->sendChangeMessage();
+   }
+}
+
+float Track::GetInputGain() const
+{
+   return fInputGain;
 }
 
 tk::Result Track::SetInputPan(float pan)

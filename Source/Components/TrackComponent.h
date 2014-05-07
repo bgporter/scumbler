@@ -158,6 +158,13 @@ public:
 
 
 private:
+    /**
+     * Draw a filled circle underneath a rotary knob in the right Colours
+     * @param knob pointer to the Slider object we're outlining.
+     */
+    void OutlineKnob(Graphics& g, Slider* knob);
+
+private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Track*  fTrack;
     
@@ -177,6 +184,7 @@ private:
     LoopComponent*  fLoop;
     
     // Child components (buttons, etc.)
+    Slider* fInputGain;
     Slider* fOutputVolume;
     TextButton* fActive;
     TextButton* fMute;
