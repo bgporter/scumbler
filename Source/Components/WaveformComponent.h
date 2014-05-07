@@ -18,8 +18,10 @@ class Track;
  * The Waveform component keeps an array of these structures to cache the 
  * high/low points (y-values) to be drawn at that pixel location, so our draw loop
  * will look something like:
+ * <pre>
  * for xPos in range(0, width):
- *    drawLine(xPos, wavePoints[xPos].top, xPos, wavePoints[xPos].bottom) 
+ *    drawLine(xPos, wavePoints[xPos].top, xPos, wavePoints[xPos].bottom)
+ * </pre>
  *
  * ...obviously there's a lot more logic in there for invalidating regions, 
  * calculating the values, etc. We use the compiler's copy ctor, op=, etc.
