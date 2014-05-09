@@ -92,6 +92,18 @@ private:
     */
    float fPanGain[2];
 
+   /**
+    * Enum indicating whether we're taking input from the left, right, or 
+    * both input channels. We only apply pan when we're processing a single
+    * input channel and generating stereo output.
+    */
+   ChannelEnable fEnabledChannels;
+
+   /**
+    * Do we need to pan the audio or pass it straight through?
+    */
+   bool fPanRequired;
+
 
 
 };

@@ -186,6 +186,7 @@ private:
     // Child components (buttons, etc.)
     Slider* fInputGain;
     Slider* fOutputVolume;
+    Slider* fPan;
     TextButton* fActive;
     TextButton* fMute;
     TextButton* fSolo; 

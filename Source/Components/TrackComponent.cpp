@@ -77,6 +77,21 @@ TrackComponent::TrackComponent (Track* track)
    fInputGain->setTextValueSuffix(" dB");
    fInputGain->addListener(this);  
 
+
+
+   addAndMakeVisible(fPan = new Slider("Pan"));
+   fPan->setTooltip("Pan");
+   fPan->setRange(0.f, 1.0f, 0);
+   fPan->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+   fPan->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
+   fPan->setColour (Slider::thumbColourId, Colours::black);
+   fPan->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+   /*
+   fPan->setPopupDisplayEnabled(true, this);
+   fPan->setTextValueSuffix("");
+   */
+   fPan->addListener(this);  
+
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Track volume");
    fOutputVolume->setRange (-96.0, 0.0, 0);
@@ -167,6 +182,13 @@ void TrackComponent::paint (Graphics& g)
     g.setColour(postColor);
     g.fillRect(halfWidth, fCenterLineYPos-1.0, halfWidth, 3.0);
 
+
+    // update the pan setting/color
+    fPan->setValue(fTrack->GetInputPan());
+    fPan->setColour(Slider::thumbColourId, postColor);
+    fPan->setColour(Slider::rotarySliderFillColourId, postColor);   
+  
+
     // draw a bounding circle around the input/output volume knobs
     // and update their values/colors
 
@@ -245,8 +267,13 @@ void TrackComponent::resized()
     fCenterLineStartX = 0.f;
 
     // The activate track button is directly underneath the pre plugin block.
-    fActive->setBounds(fPreEffects->getX(), fPreEffects->getBottom()+5, 
+    Rectangle<int> activeBounds(fPreEffects->getX(), fPreEffects->getBottom()+5, 
       kKnobHeight, kKnobHeight);
+    fActive->setBounds(activeBounds);
+    activeBounds.translate(kKnobHeight * 2, 0);
+    fPan->setBounds(activeBounds);
+
+
 
     // The mute and solo controls are underneath the block of post plugins, 
     // with the right edge of the solo button aligned with the right edge of the
@@ -417,6 +444,10 @@ void TrackComponent::sliderValueChanged (Slider* sliderThatWasMoved)
   else if (fInputGain == sliderThatWasMoved)
   {
      fTrack->SetInputGain(fInputGain->getValue());
+  }
+  else if (fPan == sliderThatWasMoved)
+  {
+     fTrack->SetInputPan(fPan->getValue());
   }
 }
 
