@@ -92,6 +92,16 @@ TrackComponent::TrackComponent (Track* track)
    */
    fPan->addListener(this);  
 
+   addAndMakeVisible(fLeftEnabled = new ToggleButton("Left"));
+   fLeftEnabled->setButtonText("L");
+   fLeftEnabled->addListener(this);
+
+   addAndMakeVisible(fRightEnabled = new ToggleButton("Right"));
+   fRightEnabled->setButtonText("R");
+   fRightEnabled->addListener(this);
+
+
+
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Track volume");
    fOutputVolume->setRange (-96.0, 0.0, 0);
@@ -187,7 +197,11 @@ void TrackComponent::paint (Graphics& g)
     fPan->setValue(fTrack->GetInputPan());
     fPan->setColour(Slider::thumbColourId, postColor);
     fPan->setColour(Slider::rotarySliderFillColourId, postColor);   
-  
+ 
+    // update the channel selection buttons
+    tk::ChannelEnable chan = fTrack->GetEnabledChannels();
+    fLeftEnabled->setToggleState(tk::kLeftChannel & chan, dontSendNotification);
+    fRightEnabled->setToggleState(tk::kRightChannel & chan, dontSendNotification);
 
     // draw a bounding circle around the input/output volume knobs
     // and update their values/colors
@@ -272,7 +286,11 @@ void TrackComponent::resized()
     fActive->setBounds(activeBounds);
     activeBounds.translate(kKnobHeight * 2, 0);
     fPan->setBounds(activeBounds);
-
+    activeBounds.translate(kKnobHeight * 2, 0);
+    activeBounds.setHeight(kKnobHeight / 2);
+    fLeftEnabled->setBounds(activeBounds);
+    activeBounds.translate(0, kKnobHeight / 2);
+    fRightEnabled->setBounds(activeBounds);
 
 
     // The mute and solo controls are underneath the block of post plugins, 
@@ -431,6 +449,22 @@ void TrackComponent::buttonClicked (Button* buttonThatWasClicked)
    else if (fActive == buttonThatWasClicked)
    {
       fTrack->SetActive(fActive->getToggleState());
+   }
+   else if ((fLeftEnabled == buttonThatWasClicked) || (fRightEnabled == buttonThatWasClicked))
+   {
+      // handle these buttons together
+      tk::ChannelEnable currentEnable = fTrack->GetEnabledChannels();
+
+      int newEnable = fLeftEnabled->getToggleState() ? tk::kLeftChannel : 0;
+      newEnable |= fRightEnabled->getToggleState() ? tk::kRightChannel : 0;
+
+      if (0 == newEnable)
+      {
+         // we can't have zero channels enabled, so attempting to do that actually
+         // just enables the other channel.
+         newEnable = ((int) tk::kStereo)^ currentEnable;     
+      }
+      fTrack->SetEnabledChannels((tk::ChannelEnable) newEnable);
    }
 
 }

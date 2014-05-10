@@ -8,14 +8,6 @@
 class InputProcessor : public GainProcessor
 {
 public:
-
-   enum ChannelEnable
-   {
-      kLeftChannel = 0x01,
-      kRightChannel = 0x02,
-      kStereo = 0x03
-   };
-
    /**
     * Create the input processor object, passing in a pointer to the track that 
     * owns it. If we have more outputs than inputs we also support panning. If
@@ -58,6 +50,19 @@ public:
     */
    void SetPan(float pan);
 
+   /**
+    * Control whether we're looking at left, right, or both inputs.
+    * @param channels Enum indicating what this input should be listening to.
+    */
+   void SetEnabledChannels(tk::ChannelEnable channels);
+
+   /**
+    * Get the currently enabled channel(s)
+    * @return Enum with the channel settings.
+    */
+   tk::ChannelEnable GetEnabledChannels() const;
+
+
 private:
    enum ActiveState
    {
@@ -73,6 +78,7 @@ private:
     * to prevent pops.
     */
    ActiveState GetActiveState() const;
+
 
 private:
    /**
@@ -97,7 +103,7 @@ private:
     * both input channels. We only apply pan when we're processing a single
     * input channel and generating stereo output.
     */
-   ChannelEnable fEnabledChannels;
+    tk::ChannelEnable fEnabledChannels;
 
    /**
     * Do we need to pan the audio or pass it straight through?

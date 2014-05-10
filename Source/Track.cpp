@@ -182,6 +182,19 @@ float Track::GetInputPan() const
    return fPan;
 }
 
+void Track::SetEnabledChannels(tk::ChannelEnable channels)
+{
+   fInputProcessor->SetEnabledChannels(channels);
+   this->sendChangeMessage();
+}
+
+tk::ChannelEnable Track::GetEnabledChannels() const
+{
+   return fInputProcessor->GetEnabledChannels();
+}
+
+
+
 void Track::ResetLoop()
 {
    fLoop->Reset();

@@ -8,7 +8,7 @@ InputProcessor::InputProcessor(Track* track, int channelCount)
 :  GainProcessor(track, channelCount)
 ,  fIsActive(false)
 ,  fActiveState(kInactive)
-,  fEnabledChannels(kRightChannel)
+,  fEnabledChannels(tk::kStereo)
 {
    // default to center pan.
    this->SetPan(0.5f);
@@ -81,14 +81,24 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
    {
       // if there's one input channel, it's zero and we pan to the other output
       int sourceChannel = 0;
+      int destChannel = 1;
       if (2 == fInputChannelCount)
       {
-         if (kRightChannel == fEnabledChannels)
+         if (tk::kRightChannel == fEnabledChannels)
          {
             sourceChannel = 1;
+            destChannel = 0;
          }
       }
 
+      // 1. Copy the source input data to the destination channel, applying the pan/gain
+      buffer.copyFromWithRamp(destChannel, 0, buffer.getSampleData(sourceChannel), 
+         sampleCount, pan[destChannel], panEnd[destChannel]);
+      // 2. Apply the pan/gain to the first channel.
+      buffer.applyGainRamp(sourceChannel, 0, sampleCount, pan[sourceChannel], panEnd[sourceChannel]);
+
+
+/*
       if (0 == sourceChannel)
       {
          // 1. Copy the input data to the other channel, applying the pan/gain
@@ -104,7 +114,7 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
          buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
 
       }
-
+*/
    }
    else
    {
@@ -155,7 +165,7 @@ void InputProcessor::SetPan(float pan)
    }
    else // 2 input channels.
    {
-      if ((2 == fOutputChannelCount) && (fEnabledChannels < kStereo))
+      if ((2 == fOutputChannelCount) && (fEnabledChannels < tk::kStereo))
       {
          fPanRequired = true;
       }
@@ -183,3 +193,18 @@ void InputProcessor::SetPan(float pan)
 
 
 }
+
+
+void InputProcessor::SetEnabledChannels(tk::ChannelEnable channels)
+{
+   const ScopedLock sl(fMutex);
+   fEnabledChannels = channels;
+
+}
+
+tk::ChannelEnable InputProcessor::GetEnabledChannels() const
+{
+   const ScopedLock sl(fMutex);
+   return fEnabledChannels;
+}
+

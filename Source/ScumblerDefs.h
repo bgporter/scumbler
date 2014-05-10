@@ -67,6 +67,18 @@ namespace tk
        kOutput      = 0xfffffffe   /**< our output node. */
    }; 
 
+
+   /**
+    * @enum Specify left/right/both.
+    */
+   enum ChannelEnable
+   {
+      kNoChannel = 0x00,
+      kLeftChannel = 0x01,
+      kRightChannel = 0x02,
+      kStereo = 0x03
+   };
+
 };
 
 

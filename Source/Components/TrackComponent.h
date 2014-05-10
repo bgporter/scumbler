@@ -187,6 +187,8 @@ private:
     Slider* fInputGain;
     Slider* fOutputVolume;
     Slider* fPan;
+    ToggleButton* fLeftEnabled;
+    ToggleButton* fRightEnabled;
     TextButton* fActive;
     TextButton* fMute;
     TextButton* fSolo; 

@@ -129,6 +129,22 @@ public:
     */
    float GetInputPan() const;
 
+
+
+
+   /**
+    * Control whether we're looking at left, right, or both inputs.
+    * @param channels Enum indicating what this input should be listening to.
+    */
+   void SetEnabledChannels(tk::ChannelEnable channels);
+
+   /**
+    * Get the currently enabled channel(s)
+    * @return Enum with the channel settings.
+    */
+   tk::ChannelEnable GetEnabledChannels() const;
+
+
    /**
     * Reset the contents of the loop. Zero out all samples & return the loop 
     * read/write position to zero.
