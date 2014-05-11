@@ -23,6 +23,7 @@ InputProcessor::~InputProcessor()
 void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
    ActiveState fadeState;
+   bool panRequired;
    float pan[2];
    
    if (1)
@@ -31,6 +32,7 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
       // and then release the lock.
       const ScopedLock sl(fMutex);
       fadeState = fActiveState;
+      panRequired = fPanRequired;
       
       float gain = fGain * (fadeState == kInactive ? 0.f : 1.f);
       pan[0] = fPanGain[0] * gain;
@@ -77,7 +79,7 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
 
    int sampleCount = buffer.getNumSamples();
    // do we need to copy data to go from mono->stereo?
-   if (fPanRequired)
+   if (panRequired)
    {
       // if there's one input channel, it's zero and we pan to the other output
       int sourceChannel = 0;
@@ -92,36 +94,47 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
       }
 
       // 1. Copy the source input data to the destination channel, applying the pan/gain
-      buffer.copyFromWithRamp(destChannel, 0, buffer.getSampleData(sourceChannel), 
-         sampleCount, pan[destChannel], panEnd[destChannel]);
-      // 2. Apply the pan/gain to the first channel.
-      buffer.applyGainRamp(sourceChannel, 0, sampleCount, pan[sourceChannel], panEnd[sourceChannel]);
-
-
-/*
-      if (0 == sourceChannel)
+      if (pan[destChannel] == panEnd[destChannel])
       {
-         // 1. Copy the input data to the other channel, applying the pan/gain
-         buffer.copyFromWithRamp(1, 0, buffer.getSampleData(sourceChannel), sampleCount, pan[1], panEnd[1]);
-         // 2. Apply the pan/gain to the first channel.
-         buffer.applyGainRamp(0, 0, sampleCount, pan[0], panEnd[0]);
+         buffer.copyFrom(destChannel, 0, buffer.getSampleData(sourceChannel), 
+            sampleCount, pan[destChannel]);
       }
       else
       {
-         // 1. Copy the input data to the other channel, applying the pan/gain
-         buffer.copyFromWithRamp(0, 0, buffer.getSampleData(sourceChannel), sampleCount, pan[0], panEnd[0]);
-         // 2. Apply the pan/gain to the first channel.
-         buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
-
+         buffer.copyFromWithRamp(destChannel, 0, buffer.getSampleData(sourceChannel), 
+            sampleCount, pan[destChannel], panEnd[destChannel]);
       }
-*/
+      // 2. Apply the pan/gain to the first channel.
+      if (pan[sourceChannel] == panEnd[sourceChannel])
+      {
+         buffer.applyGain(sourceChannel, 0, sampleCount, pan[sourceChannel]);
+      }
+      else 
+      {
+         buffer.applyGainRamp(sourceChannel, 0, sampleCount, pan[sourceChannel], panEnd[sourceChannel]);
+      }
+      
    }
    else
    {
-      buffer.applyGainRamp(0, 0, sampleCount, pan[0], panEnd[0]);
+      if (pan[0] == panEnd[0])
+      {
+         buffer.applyGain(0, 0, sampleCount, pan[0]);
+      }
+      else
+      {
+         buffer.applyGainRamp(0, 0, sampleCount, pan[0], panEnd[0]);
+      }
       if (fOutputChannelCount == 2)
       {
-         buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
+         if (pan[1] == panEnd[1])
+         {
+            buffer.applyGain(1, 0, sampleCount, pan[1]);
+         }
+         else
+         {
+            buffer.applyGainRamp(1, 0, sampleCount, pan[1], panEnd[1]);
+         }
       }
    }
 }
@@ -154,25 +167,26 @@ InputProcessor::ActiveState InputProcessor::GetActiveState() const
 void InputProcessor::SetPan(float pan)
 {
 
-   fPanRequired = false;
+   bool panRequired = false;
+    
 
    if (1 == fInputChannelCount)
    {
       if (2 == fOutputChannelCount)
       {
-         fPanRequired = true;
+         panRequired = true;
       }
    }
    else // 2 input channels.
    {
       if ((2 == fOutputChannelCount) && (fEnabledChannels < tk::kStereo))
       {
-         fPanRequired = true;
+         panRequired = true;
       }
    }
 
 
-   if (fPanRequired)
+   if (panRequired)
    {
       // we get this pan definition from the MIDI 'Default Pan formula'
       // http://www.midi.org/techspecs/rp36.php
@@ -181,17 +195,19 @@ void InputProcessor::SetPan(float pan)
       pan = mMax(0, mMin(pan, 1.0));
       pan *= kPiOver2;
       const ScopedLock sl(fMutex);  
+      fPanRequired = panRequired;
       fPanGain[0] = cos(pan);
       fPanGain[1] = sin(pan);
+       
+       
    }
    else
    {
-       // pass through with no panning.
-       const ScopedLock sl(fMutex);  
-       fPanGain[0] = fPanGain[1] = 1.0f;      
+      // pass through with no panning.
+      const ScopedLock sl(fMutex);  
+      fPanRequired = panRequired;
+      fPanGain[0] = fPanGain[1] = 1.0f;      
    }
-
-
 }
 
 
