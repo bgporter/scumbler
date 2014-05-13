@@ -166,8 +166,31 @@ InputProcessor::ActiveState InputProcessor::GetActiveState() const
 
 void InputProcessor::SetPan(float pan)
 {
+   const ScopedLock sl(fMutex);
+   fPan = pan;
+   this->CalculateGains();
+}
+
+
+void InputProcessor::SetEnabledChannels(tk::ChannelEnable channels)
+{
+   const ScopedLock sl(fMutex);
+   fEnabledChannels = channels;
+   this->CalculateGains();
+
+}
+
+tk::ChannelEnable InputProcessor::GetEnabledChannels() const
+{
+   const ScopedLock sl(fMutex);
+   return fEnabledChannels;
+}
+
+void InputProcessor::CalculateGains()
+{
 
    bool panRequired = false;
+   float pan = fPan;
     
 
    if (1 == fInputChannelCount)
@@ -194,7 +217,7 @@ void InputProcessor::SetPan(float pan)
       // hard pan position.
       pan = mMax(0, mMin(pan, 1.0));
       pan *= kPiOver2;
-      const ScopedLock sl(fMutex);  
+      //const ScopedLock sl(fMutex);  
       fPanRequired = panRequired;
       fPanGain[0] = cos(pan);
       fPanGain[1] = sin(pan);
@@ -204,23 +227,10 @@ void InputProcessor::SetPan(float pan)
    else
    {
       // pass through with no panning.
-      const ScopedLock sl(fMutex);  
+      //const ScopedLock sl(fMutex);  
       fPanRequired = panRequired;
       fPanGain[0] = fPanGain[1] = 1.0f;      
    }
 }
 
-
-void InputProcessor::SetEnabledChannels(tk::ChannelEnable channels)
-{
-   const ScopedLock sl(fMutex);
-   fEnabledChannels = channels;
-
-}
-
-tk::ChannelEnable InputProcessor::GetEnabledChannels() const
-{
-   const ScopedLock sl(fMutex);
-   return fEnabledChannels;
-}
 

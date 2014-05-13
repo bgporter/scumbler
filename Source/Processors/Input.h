@@ -79,6 +79,16 @@ private:
     */
    ActiveState GetActiveState() const;
 
+   /**
+    * Recalculate the per-channel gain settings whenever any of 
+    * - pan position
+    * - channel enable
+    *
+    * changes. This function assumes that the calling code is holding the 
+    * mutex for this object. 
+    */
+   void CalculateGains();
+
 
 private:
    /**
@@ -90,6 +100,11 @@ private:
     * save the activity state for the audio processing code.
     */
    ActiveState fActiveState;
+
+   /**
+    * Save the pan position (0 == hard left, 1 == hard right)
+    */
+   float fPan;
 
    /**
     * When we get a new pan value (0..1) passed to us, we calculate the corresponding
