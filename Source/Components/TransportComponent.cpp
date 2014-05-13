@@ -19,7 +19,7 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
    fAddTrackButton->setButtonText("+");
    fAddTrackButton->addListener(this);
    fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
-   fAddTrackButton->setEnabled(false);
+   fAddTrackButton->setEnabled(true);
    this->addAndMakeVisible(fAddTrackButton);
 
    fResetButton = new TextButton("reset button");

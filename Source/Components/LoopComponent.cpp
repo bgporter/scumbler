@@ -37,7 +37,12 @@ LoopComponent::LoopComponent(TrackComponent::LoopColors* colors, LoopProcessor* 
    fDuration->setEditable(false, true, false);
    fDuration->setBorderSize(1, 1);
    //fDuration->setColour(Label::outlineColourId, Colours::green);
-   fDuration->setText(String(fLoop->GetLoopDuration()) + " ms", false);
+   String dur = "----";
+   if (fLoop)
+   {
+      dur = String(fLoop->GetLoopDuration());
+   }
+   fDuration->setText(dur + " ms", false);
    fDuration->addListener(this);
    this->addAndMakeVisible(fDuration);
 
