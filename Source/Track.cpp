@@ -1,4 +1,4 @@
-6// Copyright (c) 2012 Bg Porter
+// Copyright (c) 2012 Bg Porter
 
 #include "Track.h"
 
