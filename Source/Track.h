@@ -306,7 +306,13 @@ private:
 
    CriticalSection fMutex;
 
-
+   /**
+    * The first track to be created and the last one to be deleted need to 
+    * be handled differently (so we disconnect input & output when we create the first
+    * track, but not the others, and in reverse we only reconnect in/out when we are deleting
+    * the final track.)
+    */
+   static int sTrackCount;
 };
 
 
