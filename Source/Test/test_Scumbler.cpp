@@ -98,10 +98,10 @@ public:
       this->expect(4 == fScumbler->fGraph.getNumNodes());
 
       this->beginTest("Disconncections");
-      r = fScumbler->RemoveBetween(tk::kInput, node2, tk::kOutput);
+      r = fScumbler->RemoveBetween(tk::kInput, node2, tk::kOutput, false);
       this->expect(tk::kNotConnected == r);
 
-      r = fScumbler->RemoveBetween(tk::kInput, node, node2);
+      r = fScumbler->RemoveBetween(tk::kInput, node, node2, false);
       this->expect(tk::kSuccess == r);
       this->expect(4 == fScumbler->fGraph.getNumNodes());
 

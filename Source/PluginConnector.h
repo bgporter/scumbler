@@ -58,7 +58,8 @@ public:
      *                 newNode to the Scumbler's output.
      * @return         tk::Result
      */
-    virtual tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after) = 0;
+    virtual tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after, 
+      bool disconnect=true) = 0;
 
     /**
      * Disconnect the node `nodetoRemove` that's connected between `before` and 
@@ -75,7 +76,8 @@ public:
      *                      disconnected?
      * @return              tk::Result
      */
-    virtual tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false) = 0;
+    virtual tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode, 
+      bool reconnect=true) = 0;
 
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 

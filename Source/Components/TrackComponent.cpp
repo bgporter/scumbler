@@ -121,12 +121,12 @@ TrackComponent::TrackComponent (Track* track)
    fActive->setColour(TextButton::buttonOnColourId, Colours::green);
    fActive->setClickingTogglesState(true);
    this->addAndMakeVisible(fActive);
-   bool trackActive = false;
+   bool active = false;
    if (fTrack)
    {
-       trackActive = fTrack->IsActive();
+      active = fTrack->IsActive();
    }
-   fActive->setToggleState(trackActive, NotificationType::dontSendNotification);
+   fActive->setToggleState(active, NotificationType::dontSendNotification); 
    
 
    fMute = new TextButton("Mute");

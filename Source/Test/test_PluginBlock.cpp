@@ -41,7 +41,7 @@ public:
       return retval;
    };
 
-   tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after)
+   tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after, bool disconnect)
    {
       tk::Result retval = tk::kFailure;
 
@@ -57,7 +57,7 @@ public:
       return retval;
    };
 
-   tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode)
+   tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode, bool reconnect)
    {
       tk::Result retval = this->Disconnect(before, nodeToRemove);
       if (tk::kSuccess == retval)

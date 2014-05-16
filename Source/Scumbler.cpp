@@ -185,17 +185,20 @@ tk::Result Scumbler::Disconnect(NodeId source, NodeId dest)
 }
 
 
-tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
+tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after, bool disconnect)
 {
    tk::Result retval = tk::kFailure;
 
    before = this->HandleSpecialNode(before);
    after = this->HandleSpecialNode(after);
 
-   // 1: we can't succeed of before and after aren't connected.
-   if (!fGraph.isConnected(before, after))
+   if (disconnect)
    {
-      return tk::kNotConnected;
+      // 1: we can't succeed of before and after aren't connected.
+      if (!fGraph.isConnected(before, after))
+      {
+         return tk::kNotConnected;
+      }
    }
    // the new connections both need to be legal before we start messing with things. 
    if (!fGraph.canConnect(before, 0, newNode, 0) || 
@@ -204,7 +207,7 @@ tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
       return tk::kIllegalConnection;
    }
    //  first, disconnect the two nodes that are already being connected.
-   retval = this->Disconnect(before, after);
+   retval = disconnect ? this->Disconnect(before, after) : tk::kSuccess;
    if (tk::kSuccess == retval)
    {
       retval = this->Connect(before, newNode);
@@ -220,7 +223,7 @@ tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
 
 
 tk::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, 
-   NodeId after, bool deleteNode)
+   NodeId after, bool deleteNode, bool reconnect)
 {
    tk::Result retval = tk::kFailure;
 
@@ -252,9 +255,12 @@ tk::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove,
       retval = this->Disconnect(nodeToRemove, after);
       if (tk::kSuccess == retval)
       {
-         // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
-         // never been there.
-         retval = this->Connect(before, after);
+         if (reconnect)
+         {
+            // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
+            // never been there.
+            retval = this->Connect(before, after);
+         }
          if (deleteNode)
          {
             fGraph.removeNode(nodeToRemove);

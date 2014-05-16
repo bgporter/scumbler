@@ -34,7 +34,9 @@ void InputProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMes
       fadeState = fActiveState;
       panRequired = fPanRequired;
       
-      float gain = fGain * (fadeState == kInactive ? 0.f : 1.f);
+      //float gain = fGain * (fadeState == kInactive ? 0.f : 1.f);
+      // testing multiple tracks.
+      float gain = fGain * (fadeState == kInactive ? 0.f : 0.5f);
       pan[0] = fPanGain[0] * gain;
       pan[1] = fPanGain[1] * gain;
       // set up for the next buffer if we're fading in or out...

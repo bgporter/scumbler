@@ -32,7 +32,7 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
    this->SetInputGain(fInputGain);
    this->SetInputPan(fPan);
    fInputId = fScumbler->AddProcessor(fInputProcessor);
-   fScumbler->InsertBetween(input, fInputId, output);
+   fScumbler->InsertBetween(input, fInputId, output, false);
 
 
    // create and insert the gain processor.
@@ -69,7 +69,7 @@ Track::~Track()
    // remove the output gain node & delete it.
    fScumbler->RemoveBetween(fInputId, fVolumeId, output, true);
    // remove the input processor & delete it.
-   fScumbler->RemoveBetween(input, fInputId, output, true);
+   fScumbler->RemoveBetween(input, fInputId, output, true, false);
 }
 
 

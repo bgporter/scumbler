@@ -124,7 +124,7 @@ public:
     tk::Result Disconnect(NodeId source, NodeId dest);
 
     /**
-     * Insert 'newNode' in the graph inbetween 'before' and 'after'.
+     * Insert 'newNode' in the graph in between 'before' and 'after'.
      * @param  before  The node that 'newNode' should be inserted after. The 
      *                 special value Scumbler::kInput can be used to connect 
      *                 newNode to the input node.
@@ -133,9 +133,13 @@ public:
      * @param  after   The node that 'newNode' should be inserted before. The 
      *                 special value Scumbler::kOutput can be used to connect the 
      *                 newNode to the Scumbler's output.
+     * @param disconnect Do we need to disconnect before+after before inserting newNode?
+     *                   This is useful when we're adding a track -- the input and output nodes
+     *                   are no longer directly connected, so there's no reason to disconnect
+     *                   them from each other first. 
      * @return         tk::Result
      */
-    tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after);
+    tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after, bool disconnect=true);
 
     /**
      * Disconnect the node `nodetoRemove` that's connected between `before` and 
@@ -150,9 +154,16 @@ public:
      *                      be connected to `after`.
      * @param  deleteNode   Should the node be deleted from the graph after it's 
      *                      disconnected?
+     * @param  reconnect    Should `before` and `after` be reconnected to each other after 
+     *                      we disconnect `nodeToRemove`? (Useful when deleting a track -- we 
+     *                      don't want the input and output to be directly connected again.)
      * @return              tk::Result
      */
-    tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false);
+    tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode, 
+      bool reconnect=true);
+
+
+
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
      * graph.  The Scumbler takes ownership of the object, and it should 
