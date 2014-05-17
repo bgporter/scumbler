@@ -45,8 +45,8 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fOutputNode(tk::kInvalidNode)
 , fSoloTrack(nullptr)
 , fActiveTrackIndex(-1)
-, fGainNode(tk::kInvalidNode)
 , fOutputVolume(0.0f) 
+, fGainNode(tk::kInvalidNode)
 {
 #ifdef qUnitTests
    jassert(nullptr == instance);
@@ -331,6 +331,45 @@ tk::Result Scumbler::ActivateTrack(int index)
       }
    }
    return retval;
+}
+
+tk::Result Scumbler::ActivateNextTrack()
+{
+   tk::Result retval = tk::kFailure;
+   int trackCount = this->GetNumTracks();
+   if (trackCount > 1)
+   {
+      int currentActiveTrack = this->GetActiveTrackIndex();
+      if (currentActiveTrack >= 0)
+      {
+         if (++currentActiveTrack >= trackCount)
+         {
+            currentActiveTrack = 0;
+         }
+         retval = this->ActivateTrack(currentActiveTrack);
+      }
+   }
+   return retval;
+}
+
+
+tk::Result Scumbler::ActivatePreviousTrack()
+{
+   tk::Result retval = tk::kFailure;
+   int trackCount = this->GetNumTracks();
+   if (trackCount > 1)
+   {
+      int currentActiveTrack = this->GetActiveTrackIndex();
+      if (currentActiveTrack >= 0)
+      {
+         if (--currentActiveTrack < 0)
+         {
+            currentActiveTrack = trackCount - 1;
+         }
+         retval = this->ActivateTrack(currentActiveTrack);
+      }
+   }
+   return retval;   
 }
 
 tk::Result Scumbler::TrackIsActivating(Track* trackBeingActivated)

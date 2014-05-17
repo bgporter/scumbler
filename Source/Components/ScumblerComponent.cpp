@@ -59,6 +59,9 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
 
     // subscribe to change notifications coming from the scumbler object.
     fScumbler->addChangeListener(this);
+
+    this->setWantsKeyboardFocus(true);
+    this->grabKeyboardFocus();
     //[/Constructor]
 }
 
@@ -330,6 +333,28 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
 
 }
 
+bool ScumblerComponent::keyPressed(const KeyPress& key)
+{
+   bool retval = false;
+   if (key.isKeyCode(KeyPress::tabKey))
+   {
+      ModifierKeys mod = key.getModifiers();
+      if (mod.isShiftDown())
+      {
+         fScumbler->ActivatePreviousTrack();
+      }
+      else
+      {
+         fScumbler->ActivateNextTrack();
+      }
+      retval = true;
+   } 
+   else
+   {
+      retval = false;
+   }
+   return retval;
+}
 
 void ScumblerComponent::SetTrackBounds(int index, TrackComponent* tc)
 {

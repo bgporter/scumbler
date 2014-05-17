@@ -93,6 +93,8 @@ public:
      */
     void changeListenerCallback(ChangeBroadcaster* source);
 
+    bool keyPressed(const KeyPress& key);
+
     //[/UserMethods]
 
     void paint (Graphics& g);

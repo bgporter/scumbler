@@ -244,12 +244,26 @@ public:
     tk::Result DeleteTrack(int index);
 
     /**
-     * Set the track at the specified index as active, deactivating whicever track had
+     * Set the track at the specified index as active, deactivating whichever track had
      * been active before that.
      * @param  index Index of the track to activate
      * @return       Success/fail status.
      */
     tk::Result ActivateTrack(int index);
+
+
+    /**
+     * Activate the next track in the list, wrapping around at the end. Doesn't
+     * do anything if there aren't at least 2 tracks.
+     * @return success/fail status
+     */
+    tk::Result ActivateNextTrack();
+
+    /**
+     * Activate the previous track, wrapping around. 
+     * @return success/fail
+     */
+    tk::Result ActivatePreviousTrack();
 
     /**
      * Called from inside the Track::SetActive() implementation. The track object that's 
