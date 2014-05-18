@@ -222,7 +222,18 @@ public:
     */
    bool WantsToBeDeleted() const { return fDeleteMe; };
 
+   /**
+    * Sets the track into a state where the Scumbler can tell that 
+    * it should be deleted.
+    */
    void AskToBeDeleted();
+
+   /**
+    * Returns true if there's more than one track in the scumbler, otherwise
+    * false.
+    * @return bool.
+    */
+   bool CanBeDeleted() const;
 
 private:
    // !!! NOTE that at some point I expect Tracks to be copyable, either with 

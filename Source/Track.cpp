@@ -265,6 +265,12 @@ void Track::AskToBeDeleted()
 }
 
 
+bool Track::CanBeDeleted() const
+{
+   return fScumbler->GetNumTracks() > 1;
+}
+
+
 /// KEEP THIS SECTION AT THE END OF THE FILE.
 #ifdef qUnitTests
 #include "Test/test_Track.cpp"

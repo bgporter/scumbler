@@ -226,7 +226,16 @@ void TrackComponent::paint (Graphics& g)
     fOutputVolume->setColour(Slider::thumbColourId, postColor);
     fOutputVolume->setColour(Slider::rotarySliderFillColourId, postColor);   
 
-
+    if (fTrack->CanBeDeleted())
+    {
+        fDelete->setVisible(true);
+        bool deleteEnabled = ! fTrack->IsPlaying();
+        fDelete->setEnabled(deleteEnabled);
+    }
+    else
+    {
+        fDelete->setVisible(false);
+    }
 
     //g.drawRect(fSolo->getBounds());
     //g.drawRect(fMute->getBounds());
