@@ -67,6 +67,24 @@ Scumbler::~Scumbler()
    fGraph.clear();
 }
 
+void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
+{
+   // for now, assume that we're being notified that a track wants us to delete it.
+   // look through the list & delete any tracks that want to be deleted.
+   // We go through the list in reverse so that we don't skip items if there are 
+   // more than one that want to be deleted.
+   
+   for (int i = (fTracks.size() - 1); i >= 0; --i)
+   {
+      Track* t = fTracks[i];
+      if (t->WantsToBeDeleted())
+      {
+         this->DeleteTrack(i);
+      }
+   }
+}
+
+
 void Scumbler::SetPluginSortOrder(KnownPluginList::SortMethod sort)
 {
    fPluginSort = sort;

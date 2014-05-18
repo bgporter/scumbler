@@ -39,6 +39,7 @@ float GainToDb(float gain);
  * - writing output to file, etc.
  */
 class Scumbler  : public ChangeBroadcaster
+                , public ChangeListener
                 , public PluginConnector
 {
 public:
@@ -63,6 +64,13 @@ public:
     */
    ~Scumbler();
 
+   /**
+    * Called when something needs to notify us of a change. Initially, 
+    * this is only used when Track objects need to tell us that they
+    * want to be deleted.
+    * @param source object that's notifying us.
+    */
+   void changeListenerCallback(ChangeBroadcaster* source);
 
    /**
     * \name TogglePlay

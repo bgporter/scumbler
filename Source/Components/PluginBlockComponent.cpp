@@ -16,7 +16,6 @@ PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors const& c
 
 PluginBlockComponent::~PluginBlockComponent()
 {
-
 }
 
 void PluginBlockComponent::paint (Graphics& g)

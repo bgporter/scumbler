@@ -7,6 +7,7 @@ int Track::sTrackCount = 0;
 
 Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name)
 :  fScumbler(owner)
+,  fDeleteMe(false)
 ,  fName(name)
 ,  fPlaying(true)
 ,  fMuted(false)
@@ -52,6 +53,8 @@ Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& nam
    // create the plugin blocks and hook them in.
    fPreEffects = new PluginBlock(fScumbler, fInputId, fLoopId, fPreEffectCount);
    fPostEffects = new PluginBlock(fScumbler, fLoopId, fVolumeId, fPostEffectCount);
+
+   this->addChangeListener(fScumbler);
 
 
 }
@@ -252,6 +255,13 @@ void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* lis
    {
       sender->removeChangeListener(listener);
    }
+}
+
+
+void Track::AskToBeDeleted()
+{
+   fDeleteMe = true;
+   this->sendChangeMessage();
 }
 
 

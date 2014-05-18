@@ -147,7 +147,12 @@ TrackComponent::TrackComponent (Track* track)
    fSolo->setClickingTogglesState(true);
    this->addAndMakeVisible(fSolo);
 
-
+   fDelete = new TextButton("Delete");
+   fDelete->setTooltip("Delete track");
+   fDelete->setButtonText("x");
+   fDelete->addListener(this);
+   // !!!TODO: Set button colors.
+   this->addAndMakeVisible(fDelete);
 
 
     //[/Constructor]
@@ -307,6 +312,10 @@ void TrackComponent::resized()
     Rectangle<int> soloBounds = buttonBounds.translated(-30, 0);
     fSolo->setBounds(soloBounds);
 
+    // the delete button is at the upper right of each track.
+    Rectangle<int> deleteBounds(0, 0, kKnobHeight/2, kKnobHeight/2);
+    fDelete->setBounds(deleteBounds);
+
 
 
     //[/UserResized]
@@ -434,10 +443,18 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
   if (source == fTrack)
   {
-     fActive->setToggleState(fTrack->IsActive(), NotificationType::dontSendNotification); 
-     this->UpdateColors();
+     if (fTrack->WantsToBeDeleted())
+     {
+        // the track is being deleted -- disconnect from it. 
+        this->ConnectToTrack(nullptr);
+     }
+     else
+     {
+       fActive->setToggleState(fTrack->IsActive(), NotificationType::dontSendNotification); 
+       this->UpdateColors();
 
-     this->repaint();
+       this->repaint();
+     }
   }
 }
 
@@ -470,6 +487,13 @@ void TrackComponent::buttonClicked (Button* buttonThatWasClicked)
          newEnable = ((int) tk::kStereo)^ currentEnable;     
       }
       fTrack->SetEnabledChannels((tk::ChannelEnable) newEnable);
+   }
+   else if (fDelete == buttonThatWasClicked)
+   {
+     if (!fTrack->IsPlaying())
+     {
+        fTrack->AskToBeDeleted();
+     }
    }
 
 }

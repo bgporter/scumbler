@@ -192,6 +192,7 @@ private:
     TextButton* fActive;
     TextButton* fMute;
     TextButton* fSolo; 
+    TextButton* fDelete;
     
     float fCenterLineYPos;
     float fCenterLineStartX;

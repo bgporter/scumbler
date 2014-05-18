@@ -213,6 +213,16 @@ public:
    LoopProcessor* GetLoop() const { return fLoop; };
    
 
+   /**
+    * When the user deletes a track with the UI, we need to tell the 
+    * Scumbler that owns us asynchronously to delete us. When we notify
+    * it that we want to be deleted, it checks each track to see which 
+    * one wants to go away and deletes it.
+    * @return Does this track want to be deleted?
+    */
+   bool WantsToBeDeleted() const { return fDeleteMe; };
+
+   void AskToBeDeleted();
 
 private:
    // !!! NOTE that at some point I expect Tracks to be copyable, either with 
@@ -226,6 +236,11 @@ private:
     * don't delete it.
     */
    Scumbler* fScumbler;
+
+   /**
+    * Set to true when this track wants the Scumbler to delete it.
+    */
+   bool fDeleteMe;
 
    /**
     * We can give each track a name for display in the UI.
