@@ -79,6 +79,10 @@ void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
       Track* t = fTracks[i];
       if (t->WantsToBeDeleted())
       {
+         if (i == this->GetActiveTrackIndex())
+         {
+            this->ActivatePreviousTrack();
+         }
          this->DeleteTrack(i);
       }
    }

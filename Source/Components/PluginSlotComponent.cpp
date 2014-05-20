@@ -7,11 +7,10 @@ extern KnownPluginList gKnownPlugins;
 
 PluginSlotComponent::PluginSlotComponent(TrackComponent::PluginColors const& colors, PluginBlock* block, int index)
 :  fColors(colors)
-,  fPluginBlock(block)
-,  fIndex(index)
 ,  fMouseOver(false)
 ,  fPluginName(String::empty)
 {
+   this->SetData(block, index);
    this->setTooltip("(empty)");
    Random r;
    this->SetEditorPosition(r.nextInt(200), r.nextInt(200));
@@ -21,6 +20,12 @@ PluginSlotComponent::PluginSlotComponent(TrackComponent::PluginColors const& col
 PluginSlotComponent::~PluginSlotComponent()
 {
 
+}
+
+void PluginSlotComponent::SetData(PluginBlock* block, int index)
+{
+   fPluginBlock = block;
+   fIndex = index;
 }
 
 void PluginSlotComponent::SetEditorPosition(int x, int y)

@@ -27,6 +27,13 @@ public:
    bool IsEmpty() const;
 
    /**
+    * Set the plugin block and index that this slot gets its data from.
+    * @param block Pointer to the PluginBlock
+    * @param index Index in the PLuginBlock.
+    */
+   void SetData(PluginBlock* block, int index);
+
+   /**
      * @name PluginEditorWindow operations.
      */
    ///@{   

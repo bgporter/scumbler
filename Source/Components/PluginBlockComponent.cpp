@@ -3,7 +3,7 @@
 #include "PluginBlockComponent.h"
 #include "ComponentDefs.h"
 
-PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors const& colors ,PluginBlock* plugins)
+PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors const& colors, PluginBlock* plugins)
 :  fColors(colors)
 ,  fPlugins(nullptr)
 {
@@ -113,16 +113,19 @@ void PluginBlockComponent::ConnectToPluginBlock(PluginBlock* plugins)
    {
       // connect to our new source of data.
       fPlugins->addChangeListener(this);
-      if (fPlugins->Size() != fSlots.size())
+      // on first run, we need to create the slot components to use.
+      int needToCreate = fPlugins->Size() - fSlots.size();
+      for (int i = 0; i < needToCreate; ++i)
       {
-         fSlots.clear();
-         for (int i = 0; i < fPlugins->Size(); ++i)
-         {
-            PluginSlotComponent* slot = new PluginSlotComponent(fColors, fPlugins, i);
-            fSlots.add(slot);
-            this->addAndMakeVisible(slot);
-            //this->SetSlotBounds(i, slot);
-         }
+         PluginSlotComponent* slot = new PluginSlotComponent(fColors, fPlugins, i);
+         fSlots.add(slot);
+         this->addAndMakeVisible(slot);
+      }
+    
+      // ...and now, we need to actually set the slot component data correctly.
+      for (int i = 0; i < fPlugins->Size(); ++i)
+      {
+         fSlots[i]->SetData(fPlugins, i);
       }
    }
 }
