@@ -27,7 +27,7 @@ public:
     * Return the number of samples that we've 'played' since we were last reset.
     * @return ount of samples.
     */
-   unsigned long GetSampleCount() const;
+   uint64 GetSampleCount() const;
 
    /**
     * Reset the sample count back to zero.
@@ -53,19 +53,27 @@ public:
 
 
 private:
+   /**
+    * The Scumbler object that owns us. We don't own it, so don't delete it when 
+    * we go away.
+    */
    Scumbler* fScumbler;
 
    /**
     * How many samples have we seen so far?
     */
-   unsigned long fSamples;
+   uint64 fSamples;
 
+   /**
+    * How many new samples must arrive before we notify listeners that 
+    * there are more samples?
+    */
    unsigned int fNotifyCount;
 
    /** When fSamples >= fNextNotify, we send a change message to listeners and set
        fNextNotify += fNotifyCount.
    */
-   unsigned long fNextNotify;
+   uint64 fNextNotify;
 
    /**
     * Protect our data. 

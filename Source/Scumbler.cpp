@@ -5,8 +5,9 @@
 #include <math.h>
 
 #include "Commands.h"
-#include "Processors/Passthrough.h"
 #include "Processors/Gain.h"
+#include "Processors/Passthrough.h"
+#include "Processors/SampleCounter.h"
 #include "Track.h"
 
 
@@ -43,6 +44,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
 , fOutputNode(tk::kInvalidNode)
+, fSampleCount(nullptr)
 , fSoloTrack(nullptr)
 , fActiveTrackIndex(-1)
 , fOutputVolume(0.0f) 
@@ -69,21 +71,29 @@ Scumbler::~Scumbler()
 
 void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
 {
-   // for now, assume that we're being notified that a track wants us to delete it.
-   // look through the list & delete any tracks that want to be deleted.
-   // We go through the list in reverse so that we don't skip items if there are 
-   // more than one that want to be deleted.
-   
-   for (int i = (fTracks.size() - 1); i >= 0; --i)
+   if (source == fSampleCount)
    {
-      Track* t = fTracks[i];
-      if (t->WantsToBeDeleted())
+      // just notify that we've changed so the time readout can change.
+      this->sendChangeMessage();
+   }
+   else
+   {
+      // for now, assume that we're being notified that a track wants us to delete it.
+      // look through the list & delete any tracks that want to be deleted.
+      // We go through the list in reverse so that we don't skip items if there are 
+      // more than one that want to be deleted.
+      
+      for (int i = (fTracks.size() - 1); i >= 0; --i)
       {
-         if (i == this->GetActiveTrackIndex())
+         Track* t = fTracks[i];
+         if (t->WantsToBeDeleted())
          {
-            this->ActivatePreviousTrack();
+            if (i == this->GetActiveTrackIndex())
+            {
+               this->ActivatePreviousTrack();
+            }
+            this->DeleteTrack(i);
          }
-         this->DeleteTrack(i);
       }
    }
 }
@@ -160,6 +170,11 @@ void Scumbler::Reset()
       fGainNode = tk::kInvalidNode;
    }
 
+   // Add the processor that counts samples for us
+   fSampleCount = new SampleCounterProcessor(this, 5000);
+   fSampleCount->addChangeListener(this);
+   fSampleCountNode = this->AddProcessor(fSampleCount);
+   this->Connect(fInputNode, fSampleCountNode);
 
 
    // Delete any tracks that we have, returning to zero tracks.
@@ -194,7 +209,10 @@ float Scumbler::GetOutputVolume() const
    return fOutputVolume;
 }
 
-
+uint64 Scumbler::GetSampleCount() const
+{
+   return fSampleCount->GetSampleCount();
+}
 
 tk::Result Scumbler::Connect(NodeId source, NodeId dest)
 {
@@ -433,6 +451,8 @@ tk::Result Scumbler::ResetAllTracks()
       Track* t = this->GetTrack(i);
       t->ResetLoop();
    }
+   // set the sample count back to zero.
+   fSampleCount->Reset();
    return tk::kSuccess;
 
 }

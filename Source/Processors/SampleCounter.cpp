@@ -19,9 +19,10 @@ SampleCounterProcessor::~SampleCounterProcessor()
 
 }
 
-unsigned long SampleCounterProcessor::GetSampleCount() const
+uint64 SampleCounterProcessor::GetSampleCount() const
 {
    const ScopedLock sl(fMutex);
+   return fSamples;
 }
 
 void SampleCounterProcessor::Reset()

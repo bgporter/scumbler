@@ -61,6 +61,8 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
 
    this->setSize(600, 50);
 
+   fScumbler->addChangeListener(this);
+
 }
 
 TransportComponent::~TransportComponent()
@@ -79,6 +81,19 @@ void TransportComponent::paint (Graphics& g)
    fResetButton->setEnabled(!playing);
    fStopButton->setEnabled(playing);
    fOutputVolume->setValue(fScumbler->GetOutputVolume());
+
+   uint64 samples = fScumbler->GetSampleCount();
+   uint64 seconds = samples / 44100;
+   uint64 hours = seconds / (60 * 60);
+   seconds -= hours * (60*60);
+   uint64 minutes = seconds / 60;
+   seconds -= minutes * 60;
+
+   String h(hours);
+   String m(minutes);
+   String s(seconds);
+   String time = h.paddedLeft('0', 2) + ":" + m.paddedLeft('0', 2) + ":" + s.paddedLeft('0', 2);
+   fPlayTime->setText(time, NotificationType::dontSendNotification);
 }
 
 void TransportComponent::resized()

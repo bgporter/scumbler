@@ -10,6 +10,7 @@
 #include "PluginConnector.h"
 
 class GainProcessor;
+class SampleCounterProcessor;
 class Track;
 
 
@@ -106,6 +107,12 @@ public:
      * @return floating point dB value, probably in the range -96.0 .. 0.0
      */
     float GetOutputVolume() const;
+
+    /**
+     * Get the number of samples that we've processed while in play mode.
+     * @return # of samples, as an unsigned long. 
+     */
+    uint64 GetSampleCount() const;
 
 
     /**
@@ -444,6 +451,9 @@ private:
     */
    NodeId fInputNode;
    NodeId fOutputNode;
+
+   SampleCounterProcessor* fSampleCount;
+   NodeId fSampleCountNode;
 
 
    /**

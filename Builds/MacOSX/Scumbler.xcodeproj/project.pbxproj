@@ -16,6 +16,7 @@
 		33EC4A5A827ED3B097CD7C7E /* juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7C33D5966FFDBBC65A4AB3C7 /* juce_audio_utils.mm */; };
 		3B7507D4F5DCB16F9912BDE5 /* juce_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = E4202B2BED2BDBBDB448D187 /* juce_core.mm */; };
 		4407EAA716B596D70024F3D7 /* PluginSlotComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4407EAA516B596D70024F3D7 /* PluginSlotComponent.cpp */; };
+		4408D272192D8136004819E9 /* SampleCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4408D270192D8136004819E9 /* SampleCounter.cpp */; };
 		440C787D167A9660004648C3 /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787B167A9660004648C3 /* Track.cpp */; };
 		440C7881167E26C7004648C3 /* TrackComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787F167E26C6004648C3 /* TrackComponent.cpp */; };
 		443D1E3516572573004E645C /* Scumbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D1E3316572573004E645C /* Scumbler.cpp */; };
@@ -284,6 +285,8 @@
 		43E606A339C8571253E2BCD5 /* juce_Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Memory.h; path = ../../JuceLibraryCode/modules/juce_core/memory/juce_Memory.h; sourceTree = SOURCE_ROOT; };
 		4407EAA516B596D70024F3D7 /* PluginSlotComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginSlotComponent.cpp; path = ../../Source/Components/PluginSlotComponent.cpp; sourceTree = "<group>"; };
 		4407EAA616B596D70024F3D7 /* PluginSlotComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginSlotComponent.h; path = ../../Source/Components/PluginSlotComponent.h; sourceTree = "<group>"; };
+		4408D270192D8136004819E9 /* SampleCounter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SampleCounter.cpp; path = ../../Source/Processors/SampleCounter.cpp; sourceTree = "<group>"; };
+		4408D271192D8136004819E9 /* SampleCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SampleCounter.h; path = ../../Source/Processors/SampleCounter.h; sourceTree = "<group>"; };
 		440C787B167A9660004648C3 /* Track.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Track.cpp; path = ../../Source/Track.cpp; sourceTree = "<group>"; };
 		440C787C167A9660004648C3 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Track.h; path = ../../Source/Track.h; sourceTree = "<group>"; };
 		440C787F167E26C6004648C3 /* TrackComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TrackComponent.cpp; path = ../../Source/Components/TrackComponent.cpp; sourceTree = "<group>"; };
@@ -1280,6 +1283,8 @@
 		44ABE52916702D330045030E /* Processors */ = {
 			isa = PBXGroup;
 			children = (
+				4408D270192D8136004819E9 /* SampleCounter.cpp */,
+				4408D271192D8136004819E9 /* SampleCounter.h */,
 				44CA10111852AD5D00BB53B4 /* Input.cpp */,
 				44CA10121852AD5D00BB53B4 /* Input.h */,
 				44FFF83A16D5AE5600E53F1F /* Gain.cpp */,
@@ -2687,6 +2692,7 @@
 				8A9502C9D27E245B83041F4A /* Main.cpp in Sources */,
 				465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */,
 				00AB4A52443D7E78B563DE6E /* juce_audio_devices.mm in Sources */,
+				4408D272192D8136004819E9 /* SampleCounter.cpp in Sources */,
 				44CA10131852AD5D00BB53B4 /* Input.cpp in Sources */,
 				0451CBD8127DBC5A364B28D5 /* juce_audio_formats.mm in Sources */,
 				0C574F6793807CBD0AE2B912 /* juce_audio_processors.mm in Sources */,
