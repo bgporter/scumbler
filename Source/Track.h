@@ -151,6 +151,13 @@ public:
     */
    void ResetLoop();
 
+   /**
+    * Set the loop pointer to the specified sample position inside the loop. 
+    * If loopPos < 0 or > loopLength, we clamp the new position to those legal bounds.
+    * @param loopPos sample # (0..loopLength);
+    */
+   void SeekAbsolute(int loopPos = 0);
+
     /**
      * Set the track's output volume. 
      * @param volumeInDb dB, probably -96..0

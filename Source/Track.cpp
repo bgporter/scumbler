@@ -209,6 +209,18 @@ void Track::ResetLoop()
    fLoop->Reset();
 }
 
+
+void Track::SeekAbsolute(int loopPos)
+{
+   if (fLoop)
+   {
+      fLoop->SeekAbsolute(loopPos);
+   }
+
+}
+
+
+
 void Track::SetOutputVolume(float volumeInDb)
 {
    if (volumeInDb != fOutputVolume)

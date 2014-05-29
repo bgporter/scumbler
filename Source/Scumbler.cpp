@@ -457,6 +457,18 @@ tk::Result Scumbler::ResetAllTracks()
 
 }
 
+tk::Result Scumbler::SeekAllTracksAbsolute(int loopPos)
+{
+   for (int i = 0; i < this->GetNumTracks(); ++i)
+   {
+      Track* t = this->GetTrack(i);
+      t->SeekAbsolute(loopPos);
+   }
+
+   return tk::kSuccess;
+
+}
+
 tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
 {
    tk::Result retval = tk::kFailure;

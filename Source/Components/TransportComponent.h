@@ -32,7 +32,6 @@ private:
    Scumbler* fScumbler;
 
    TextButton* fAddTrackButton;
-   TextButton* fStopButton;
    TextButton* fPlayButton;
    Label* fPlayTime;
    Slider* fOutputVolume;

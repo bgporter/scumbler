@@ -175,6 +175,14 @@ public:
    void Reset();
 
    /**
+    * Set the loop pointer to the specified sample position inside the loop. 
+    * If loopPos < 0 or > loopLength, we clamp the new position to those legal bounds.
+    * @param loopPos sample # (0..loopLength);
+    */
+   void SeekAbsolute(int loopPos = 0);
+   
+
+   /**
     * Retrieve useful and current data about the state of our looping so we can 
     * update the UI correctly.
     * @param info LoopInfo struct. Filled on output.

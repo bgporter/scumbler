@@ -9,7 +9,6 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
 :  Component("TransportComponent")
 ,  fScumbler(scumbler)
 ,  fAddTrackButton(nullptr)
-,  fStopButton(nullptr)
 ,  fPlayButton(nullptr)
 ,  fPlayTime(nullptr)
 ,  fOutputVolume(nullptr)
@@ -27,12 +26,6 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
    fResetButton->addListener(this);
    fResetButton->setColour(TextButton::buttonColourId, Colours::white);
    this->addAndMakeVisible(fResetButton);
-
-   fStopButton = new TextButton("stop button");
-   fStopButton->setButtonText("stop");
-   fStopButton->addListener(this);
-   fStopButton->setColour(TextButton::buttonColourId, Colours::white);
-   this->addAndMakeVisible(fStopButton);
 
    fPlayButton = new TextButton("play button");
    fPlayButton->setButtonText("play");
@@ -77,12 +70,12 @@ void TransportComponent::paint (Graphics& g)
    g.drawRect(0, 0, this->getWidth(), this->getHeight());
 #endif  
    bool playing = fScumbler->IsPlaying();
-   fPlayButton->setEnabled(!playing);
+   fPlayButton->setButtonText(playing ? "pause" : "play");
    fResetButton->setEnabled(!playing);
-   fStopButton->setEnabled(playing);
    fOutputVolume->setValue(fScumbler->GetOutputVolume());
 
    uint64 samples = fScumbler->GetSampleCount();
+   // !!! This should change to reflect the actual saampling rate !!!
    uint64 seconds = samples / 44100;
    uint64 hours = seconds / (60 * 60);
    seconds -= hours * (60*60);
@@ -100,7 +93,6 @@ void TransportComponent::resized()
 {
    int parentHeight = this->getHeight();
    fAddTrackButton->setBounds (40, (parentHeight-24)/2, 24, 24);
-   fStopButton->setBounds (240, (parentHeight-24)/2, 47, 24);
    fPlayButton->setBounds (296, (parentHeight-24)/2, 47, 24);
    fPlayTime->setBounds (480, (parentHeight-24)/2, 150, 24);
    fOutputVolume->setBounds (920, (parentHeight-24)/2, 32, 24);
@@ -113,23 +105,14 @@ void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
    {
       fScumbler->AddTrack();
    }
-   else if (fStopButton == buttonThatWasClicked)
-   {
-      if (fScumbler->IsPlaying())
-      {
-         fScumbler->TogglePlay();
-      }
-   }
    else if (fPlayButton == buttonThatWasClicked)
    {
-      if (!fScumbler->IsPlaying())
-      {
-         fScumbler->TogglePlay();
-      }
+      fScumbler->TogglePlay();
    }
    else if (fResetButton == buttonThatWasClicked)
    {
-      fScumbler->ResetAllTracks();
+      //fScumbler->ResetAllTracks();
+      fScumbler->SeekAllTracksAbsolute(0);
    }
 }
 

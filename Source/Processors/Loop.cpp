@@ -187,6 +187,27 @@ void LoopProcessor::Reset()
    this->sendChangeMessage();
 }
 
+void LoopProcessor::SeekAbsolute(int loopPos)
+{
+   if (fLoopBuffer)
+   {
+      if ((loopPos < 0) || (loopPos >= fLoopBuffer->getNumSamples()) )
+      {
+         loopPos = 0;
+      }
+   }
+   else
+   {
+      loopPos = 0;
+   }
+
+   ScopedLock sl(fMutex);
+   fLoopPosition = loopPos;
+
+   this->sendChangeMessage();
+
+}
+
 void LoopProcessor::GetLoopInfo(LoopInfo& info) const
 {
    ScopedLock sl(fMutex);   

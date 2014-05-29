@@ -325,6 +325,14 @@ public:
     tk::Result ResetAllTracks(); 
 
     /**
+     * Reset the loop pointers of all tracks to the specified position (default = 
+     * beginning), but *don't* do anything to the loop contents   .
+     * @param  loopPos Sample#     
+     * @return         success/fail.
+     */
+    tk::Result SeekAllTracksAbsolute(int loopPos=0);
+
+    /**
      * Move an existing track to a different index in the array. 
      * @param  fromIndex The current index of the track that we want to move
      * @param  toIndex   The index we want the track to occupy (using an index less 
