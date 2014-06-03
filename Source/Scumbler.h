@@ -8,6 +8,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginConnector.h"
+#include "XmlPersistent.h"
+
 
 class GainProcessor;
 class SampleCounterProcessor;
@@ -42,6 +44,7 @@ float GainToDb(float gain);
 class Scumbler  : public ChangeBroadcaster
                 , public ChangeListener
                 , public PluginConnector
+                , public XmlPersistent
 {
 public:
 #ifdef qUnitTests
@@ -64,6 +67,23 @@ public:
     * dtor.
     */
    ~Scumbler();
+
+
+   /**
+    * Load this object from the provided XmlElement object. If this object owns 
+    * objects of classes that are also XmlPersistent, call those recursively.
+    * @param e      XmlElement object with our data to restore .
+    * @param errors If we encounter errors, we add strings describing those errors
+    *               to this array. 
+    */
+   void LoadXml(XmlElement* e, StringArray& errors);
+
+   /**
+    * Create a new XmlElement object and fill it with our contents (and recursively
+    * our children if appropriate)
+    * @return The XmlElement to write to disk.
+    */
+   XmlElement* DumpXml() const;
 
    /**
     * Called when something needs to notify us of a change. Initially, 
@@ -88,13 +108,15 @@ public:
    /**
     * \name Reset
     * \brief Do a complete reset on the processor graph. 
+    * @param addFirstTrack Should we add a single empty track to the scumbler so 
+    *                      it can start working right away? 
     *
     * After removing (and therefore deleting) all of the processor nodes that 
     * were added to the graph, creates new input & output processors and adds them.
     * **NOTE** that the Scumbler object should be reset after creation, after the 
     * Audio device manager is initialized.
     */
-    void Reset();
+    void Reset(bool addFirstTrack=true);
 
     /**
      * Set the scumbler's master output volume. 

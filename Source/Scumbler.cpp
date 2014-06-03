@@ -69,6 +69,17 @@ Scumbler::~Scumbler()
    fGraph.clear();
 }
 
+void Scumbler::LoadXml(XmlElement* e, StringArray& errors)
+{
+
+}
+
+
+XmlElement* Scumbler::DumpXml() const
+{
+   return nullptr;
+}
+
 void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
 {
    if (source == fSampleCount)
@@ -135,7 +146,7 @@ bool Scumbler::IsPlaying() const
    return fPlaying;
 }
 
-void Scumbler::Reset()
+void Scumbler::Reset(bool addFirstTrack)
 {
    this->Pause();
 
@@ -179,10 +190,14 @@ void Scumbler::Reset()
 
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
-   // ... and then add a single track to start out.
-   this->AddTrack();
-   // (and make sure it's active so it receives input!)
-   this->ActivateTrack(0);
+
+   if (addFirstTrack)
+   {
+      // ... and then add a single track to start out.
+      this->AddTrack();
+      // (and make sure it's active so it receives input!)
+      this->ActivateTrack(0);
+   }
    // let anyone listening tk::know that we've changed.
    this->sendChangeMessage();
 
@@ -360,7 +375,7 @@ tk::Result Scumbler::DeleteTrack(int index)
 tk::Result Scumbler::ActivateTrack(int index)
 {
    tk::Result retval = tk::kFailure;
-   if (index < this->GetNumTracks())
+   if ((index >= 0) && (index < this->GetNumTracks()) )
    {
       retval = tk::kSuccess;
       if (index != fActiveTrackIndex)
