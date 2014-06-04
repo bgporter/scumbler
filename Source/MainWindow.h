@@ -50,6 +50,30 @@ public:
      */
     void ViewPlugins(bool display=true);
 
+
+    /**
+     * Clear the scumbler and create a new, empty workspace for us. If the scumbler is
+     * currently dirty, we should make sure to give the user an option to save the
+     * current contents before nuking them.
+     */
+    void New();
+
+    /**
+     * Open a Scumbler file from disk. If the current scumbler needs to be saved first, 
+     * we should make sure that can happen.
+     */
+    void Open();
+    /**
+     * Save the current Scumbler to the current file. If there isn't a file open, 
+     * do SaveAs() instead.
+     */
+    void Save();
+
+    /**
+     * Save the current Scumbler into a new file.
+     */
+    void SaveAs();
+
     /**
      * @name MenuBarModel overrides.
      */

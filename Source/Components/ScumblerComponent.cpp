@@ -124,10 +124,10 @@ ApplicationCommandTarget* ScumblerComponent::getNextCommandTarget()
 void ScumblerComponent::getAllCommands(Array<CommandID>& commands)
 {
   const CommandID ids[] = {
-    CommandIds::kNew,
-    CommandIds::kOpen,
-    CommandIds::kSave,
-    CommandIds::kSaveAs,
+    //CommandIds::kNew,
+    //CommandIds::kOpen,
+    //CommandIds::kSave,
+    //CommandIds::kSaveAs,
     CommandIds::kPlay,
     //CommandIds::kPause,
     //CommandIds::kRewind,
@@ -147,6 +147,7 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
   String category = "General";
   switch (commandID)
   {
+#if 0
     case CommandIds::kNew:
     {
       result.setInfo("New",
@@ -184,7 +185,7 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
           ModifierKeys::shiftModifier | ModifierKeys::commandModifier, 0));
     }
     break;
-
+#endif
     case CommandIds::kPlay:
     {
       if (fScumbler->IsPlaying())

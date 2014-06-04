@@ -174,6 +174,30 @@ void MainAppWindow::ViewPlugins(bool display)
 
 }
 
+
+void MainAppWindow::New()
+{
+
+}
+
+void MainAppWindow::Open()
+{
+
+}
+
+void MainAppWindow::Save()
+{
+   XmlElement* contents = fScumbler->DumpXml(0);
+   //String cwd = File::getCurrentWorkingDirectory().getFullPathName();
+   File temp("/Users/bgporter/desktop/testing.xml");
+   contents->writeToFile(temp, String::empty);
+}
+
+void MainAppWindow::SaveAs()
+{
+
+}
+
 StringArray MainAppWindow::getMenuBarNames()
 {
     const char* const names[] = { "File", "Options", "Help", nullptr };
@@ -288,10 +312,10 @@ ApplicationCommandTarget* MainAppWindow::getNextCommandTarget()
 void MainAppWindow::getAllCommands(Array<CommandID>& commands)
 {
   const CommandID ids[] = {
-    //CommandIds::kNew,
-    //CommandIds::kOpen,
-    //CommandIds::kSave,
-    //CommandIds::kSaveAs,
+    CommandIds::kNew,
+    CommandIds::kOpen,
+    CommandIds::kSave,
+    CommandIds::kSaveAs,
     CommandIds::kConfigAudio,
     CommandIds::kViewPlugins,
     //CommandIds::kPlay,
@@ -307,10 +331,49 @@ void MainAppWindow::getAllCommands(Array<CommandID>& commands)
 void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& result)
 {
   const String category("Audio");
+  const String fileCategory("File");
 
 
   switch (commandID)
   {
+    case CommandIds::kNew:
+    {
+      result.setInfo("New",
+        "Create a new (empty) Scumbler file", category, 0);
+      result.defaultKeypresses.add(KeyPress('n', ModifierKeys::commandModifier, 0));
+
+    }
+    break;
+
+    case CommandIds::kOpen:
+    {
+      result.setInfo("Open...",
+        "Open a Scumbler file",
+        category, 0);
+        result.defaultKeypresses.add (KeyPress('o', ModifierKeys::commandModifier, 0));
+
+    }
+    break;
+
+    case CommandIds::kSave:
+    {
+      result.setInfo("Save",
+        "Save the current Scumbler setup to a file",
+        category, 0);
+        result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
+    }
+    break;
+
+    case CommandIds::kSaveAs:
+    {
+      result.setInfo("Save As...",
+        "Save a copy of the current Scumbler setup to a file",
+        category, 0);
+        result.defaultKeypresses.add(KeyPress('s',
+          ModifierKeys::shiftModifier | ModifierKeys::commandModifier, 0));
+    }
+    break;
+
     case CommandIds::kConfigAudio:
     {
       result.setInfo("Configure Audio...", String::empty, category, 0);
@@ -333,6 +396,24 @@ bool MainAppWindow::perform(const InvocationInfo& info)
   bool retval = true;
   switch (info.commandID)
   {
+
+    case CommandIds::kOpen:
+    {
+      this->Open();
+    }
+    break;
+
+    case CommandIds::kSave:
+    {
+      this->Save();
+    }
+    break;
+
+    case CommandIds::kSaveAs:
+    {
+      this->SaveAs();
+    }
+    break;
 
     case CommandIds::kConfigAudio:
     {

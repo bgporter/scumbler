@@ -403,14 +403,12 @@ public:
 
 protected:
   /**
-    * \name Play
-    * \brief Start audio through our processor graph.
+    * Start audio through our processor graph.
     */
   void Play();
 
   /**
-   * \name Pause
-   * \brief Stop audio playback.
+   * Stop audio playback (but keep the loop pointers where they are)
    */
   void Pause();
 
