@@ -121,6 +121,24 @@ public:
    virtual AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric) = 0;
 
    /**
+    * Fill a memory block with the current state of the requested node.
+    * @param  node id of the node we're interested in
+    * @param  m    Memory block to fill
+    * @return      success/fail.
+    */
+   virtual tk::Result GetStateInformationForNode(NodeId node, MemoryBlock& m) = 0;
+
+   /**
+    * Fill in a PluginDescription object for the specified node. We use this when 
+    * saving a Scumbler to disk.
+    * @param  node The NodeId of the plugin we're interested in.
+    * @param  desc Empty PluginDescription object to be filled in.   
+    * @return      Success or Failure
+    */
+   virtual tk::Result GetPluginDescriptionForNode(NodeId node, PluginDescription& desc) = 0;  
+
+
+   /**
     * Tell this plugin connector object how we'd like to have our list of plugins sorted when
     * the user displays a popup menu of them. 
     * @param sort SortMethod enum, one of defaultOrder, sortAlphabetically, sortByCategory,

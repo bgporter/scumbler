@@ -76,14 +76,14 @@ public:
     * @param errors If we encounter errors, we add strings describing those errors
     *               to this array. 
     */
-   void LoadXml(XmlElement* e, StringArray& errors);
+   void LoadXml(XmlElement* e, StringArray& errors, int formatVersion);
 
    /**
     * Create a new XmlElement object and fill it with our contents (and recursively
     * our children if appropriate)
     * @return The XmlElement to write to disk.
     */
-   XmlElement* DumpXml() const;
+   XmlElement* DumpXml(int formatVersion) const;
 
    /**
     * Called when something needs to notify us of a change. Initially, 
@@ -94,20 +94,17 @@ public:
    void changeListenerCallback(ChangeBroadcaster* source);
 
    /**
-    * \name TogglePlay
-    * \brief Switches the scumbler object between the play and pause states.
+    * Switches the scumbler object between the play and pause states.
     */
     void TogglePlay();
    /**
-    * \name IsPlaying
-    * \brief returns bool indicating whether the Scumbler is processing 
+    *  returns bool indicating whether the Scumbler is processing 
     *   audio right now.
     */
    bool IsPlaying() const;
 
    /**
-    * \name Reset
-    * \brief Do a complete reset on the processor graph. 
+    * Do a complete reset on the processor graph. 
     * @param addFirstTrack Should we add a single empty track to the scumbler so 
     *                      it can start working right away? 
     *
@@ -143,8 +140,7 @@ public:
     ///@{
 
    /**
-     * \name Connect
-     * \brief Connect a source node to a destination node in the graph.
+     * Connect a source node to a destination node in the graph.
      * @return tk::Result code indicating success or the reason for failure.
      */
     virtual tk::Result Connect(NodeId source, NodeId dest);
@@ -242,6 +238,15 @@ public:
     *                    for cleaning this up.
     */
    AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric);
+
+
+   /**
+    * Fill a memory block with the current state of the requested node.
+    * @param  node id of the node we're interested in
+    * @param  m    Memory block to fill
+    * @return      success/fail.
+    */
+   tk::Result GetStateInformationForNode(NodeId node, MemoryBlock& m);
 
    /**
     * Fill in a PluginDescription object for the specified node. We use this when 
@@ -494,6 +499,9 @@ private:
 
    Track* fSoloTrack; 
 
+   /**
+    * Index of the currently active track. PERSISTED
+    */
    int fActiveTrackIndex;
 
    /**

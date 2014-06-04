@@ -81,6 +81,31 @@ Track::~Track()
    fScumbler->RemoveBetween(input, fInputId, output, true, reconnectInputAndOutput);
 }
 
+void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
+{
+
+
+}
+
+
+XmlElement* Track::DumpXml(int formatVersion) const
+{
+   XmlElement* node = new XmlElement("track");
+   node->setAttribute("fileFormat", formatVersion);
+   node->setAttribute("name", fName);
+   node->setAttribute("muted", fMuted);
+   node->setAttribute("active", fInputActive);
+   node->setAttribute("inputGain", fInputGain);
+   node->setAttribute("pan", fPan);
+   node->setAttribute("outputVolume", fOutputVolume);
+
+   // store the pre-loop plugins
+   XmlElement* preNode = node->createNewChildElement("pre");
+   preNode->addChildElement(fPreEffects->DumpXml(formatVersion));
+
+
+   return node;
+}
 
 void Track::SetName(const String& name)
 {

@@ -38,6 +38,37 @@ PluginBlock::~PluginBlock()
    }
 }
 
+void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
+{
+
+
+}
+
+
+XmlElement* PluginBlock::DumpXml(int formatVersion) const
+{
+   XmlElement* node = new XmlElement("slots");
+   for (int i = 0; i < this->Size(); ++i)
+   {
+      XmlElement* slotNode = node->createNewChildElement("slot");
+      PluginInfo slotInfo = this->PluginInSlot(i);
+      if (tk::kInvalidNode != slotInfo.id)
+      {
+         // there's a real plugin here -- store its description and state.
+         PluginDescription pd;
+         tk::Result result = fScumbler->GetPluginDescriptionForNode(slotInfo.id, pd);
+         if (tk::kSuccess == result)
+         {
+            slotNode->addChildElement(pd.createXml());
+         }
+      }
+
+   }
+
+
+   return node;
+}
+
 int PluginBlock::Size() const
 {
    return fPlugins.size();

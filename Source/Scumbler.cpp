@@ -69,15 +69,27 @@ Scumbler::~Scumbler()
    fGraph.clear();
 }
 
-void Scumbler::LoadXml(XmlElement* e, StringArray& errors)
+void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
 
 }
 
 
-XmlElement* Scumbler::DumpXml() const
+XmlElement* Scumbler::DumpXml(int formatVersion) const
 {
-   return nullptr;
+   XmlElement* node = new XmlElement("scumbler");
+   node->setAttribute("fileFormat", formatVersion);
+   node->setAttribute("activeTrackIndex", fActiveTrackIndex);
+   node->setAttribute("outputVolume", fOutputVolume);
+   XmlElement* trackContainer = node->createNewChildElement("tracks");
+   for (int i = 0; i < this->GetNumTracks(); ++i)
+   {
+      Track* t = this->GetTrack(i);
+      XmlElement* trackData = t->DumpXml(formatVersion);
+       trackContainer->addChildElement(trackData);
+   }
+
+   return node;
 }
 
 void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
@@ -650,6 +662,13 @@ AudioProcessorEditor* Scumbler::GetEditorForNode(NodeId node, bool useGeneric)
    }
    return retval;
 }
+
+
+tk::Result Scumbler::GetStateInformationForNode(NodeId node, MemoryBlock& m)
+{
+   return tk::kFailure;
+}
+
 
 tk::Result Scumbler::GetPluginDescriptionForNode(NodeId nodeId, PluginDescription& desc)
 {

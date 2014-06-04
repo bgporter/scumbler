@@ -100,6 +100,30 @@ public:
       return nullptr;
    }
 
+   /**
+    * Fill a memory block with the current state of the requested node.
+    * @param  node id of the node we're interested in
+    * @param  m    Memory block to fill
+    * @return      success/fail.
+    */
+   tk::Result GetStateInformationForNode(NodeId node, MemoryBlock& m)
+   {
+      return tk::kFailure;
+   }
+
+   /**
+    * Fill in a PluginDescription object for the specified node. We use this when 
+    * saving a Scumbler to disk.
+    * @param  node The NodeId of the plugin we're interested in.
+    * @param  desc Empty PluginDescription object to be filled in.   
+    * @return      Success or Failure
+    */
+   tk::Result GetPluginDescriptionForNode(NodeId node, PluginDescription& desc)
+   {
+      return tk::kFailure;
+   }
+
+
 
    bool AreConnected(NodeId source, NodeId dest)
    {

@@ -13,9 +13,11 @@
 #include "Processors/Loop.h"
 #include "Processors/Passthrough.h"
 #include "Scumbler.h"
+#include "XmlPersistent.h"
 
 
 class Track : public ChangeBroadcaster
+            , public XmlPersistent
 {
 public:
    /**
@@ -31,6 +33,24 @@ public:
     * \brief destructor. 
     */
    ~Track();
+
+
+   /**
+    * Load this object from the provided XmlElement object. If this object owns 
+    * objects of classes that are also XmlPersistent, call those recursively.
+    * @param e      XmlElement object with our data to restore .
+    * @param errors If we encounter errors, we add strings describing those errors
+    *               to this array. 
+    */
+   void LoadXml(XmlElement* e, StringArray& errors, int formatVersion);
+
+   /**
+    * Create a new XmlElement object and fill it with our contents (and recursively
+    * our children if appropriate)
+    * @return The XmlElement to write to disk.
+    */
+   XmlElement* DumpXml(int formatVersion) const;
+
 
    /**
     * Change the name of this track.

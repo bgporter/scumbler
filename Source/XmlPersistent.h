@@ -25,14 +25,14 @@ public:
     * @param errors If we encounter errors, we add strings describing those errors
     *               to this array. 
     */
-   virtual void LoadXml(XmlElement* e, StringArray& errors) = 0;
+   virtual void LoadXml(XmlElement* e, StringArray& errors, int formatVersion=0) = 0;
 
    /**
     * Create a new XmlElement object and fill it with our contents (and recursively
     * our children if appropriate)
     * @return The XmlElement to write to disk.
     */
-   virtual XmlElement* DumpXml() const = 0;
+   virtual XmlElement* DumpXml(int formatVersion=0) const = 0;
 
 };
 
