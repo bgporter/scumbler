@@ -664,9 +664,20 @@ AudioProcessorEditor* Scumbler::GetEditorForNode(NodeId node, bool useGeneric)
 }
 
 
-tk::Result Scumbler::GetStateInformationForNode(NodeId node, MemoryBlock& m)
+tk::Result Scumbler::GetStateInformationForNode(NodeId nodeId, MemoryBlock& m)
 {
-   return tk::kFailure;
+   tk::Result retval = tk::kFailure;
+   AudioProcessorGraph::Node* node = fGraph.getNodeForId(nodeId);
+   if (nullptr != node)
+   {
+      // get the actual processor object behind this node, and have 
+      // it stuff its state data into the memory block that we've been passed.
+      AudioProcessor* processor = node->getProcessor();
+      processor->getStateInformation(m);
+      retval = tk::kSuccess;
+   }
+
+   return retval;
 }
 
 
