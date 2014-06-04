@@ -94,7 +94,7 @@ XmlElement* Track::DumpXml(int formatVersion) const
    node->setAttribute("fileFormat", formatVersion);
    node->setAttribute("name", fName);
    node->setAttribute("muted", fMuted);
-   node->setAttribute("active", fInputActive);
+   node->setAttribute("active", this->IsActive());
    node->setAttribute("inputGain", fInputGain);
    node->setAttribute("pan", fPan);
    node->setAttribute("outputVolume", fOutputVolume);
@@ -102,6 +102,12 @@ XmlElement* Track::DumpXml(int formatVersion) const
    // store the pre-loop plugins
    XmlElement* preNode = node->createNewChildElement("pre");
    preNode->addChildElement(fPreEffects->DumpXml(formatVersion));
+
+   // !!! store the loop info
+   // 
+   
+   XmlElement* postNode = node->createNewChildElement("post");
+   postNode->addChildElement(fPostEffects->DumpXml(formatVersion));
 
 
    return node;
