@@ -187,7 +187,7 @@ void MainAppWindow::Open()
 
 void MainAppWindow::Save()
 {
-   XmlElement* contents = fScumbler->DumpXml(0);
+   ScopedPointer<XmlElement> contents(fScumbler->DumpXml(0));
    //String cwd = File::getCurrentWorkingDirectory().getFullPathName();
    File temp("/Users/bgporter/desktop/testing.xml");
    contents->writeToFile(temp, String::empty);
