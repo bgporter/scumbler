@@ -61,10 +61,16 @@ XmlElement* PluginBlock::DumpXml(int formatVersion) const
          {
             slotNode->addChildElement(pd.createXml());
          }
+
+         MemoryBlock m;
+         result = fScumbler->GetStateInformationForNode(slotInfo.id, m);
+         if (tk::kSuccess == result)
+         {
+            XmlElement* state = slotNode->createNewChildElement("state");
+            state->addTextElement(m.toBase64Encoding());
+         }
       }
-
    }
-
 
    return node;
 }
