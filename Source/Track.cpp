@@ -104,7 +104,12 @@ XmlElement* Track::DumpXml(int formatVersion) const
    preNode->addChildElement(fPreEffects->DumpXml(formatVersion));
 
    // !!! store the loop info
-   // 
+   XmlElement* loopNode = node->createNewChildElement("loop");
+   loopNode->setAttribute("duration", fLoop->GetLoopDuration());
+   loopNode->setAttribute("feedback", fLoop->GetFeedback());
+   LoopProcessor::LoopInfo info;
+   fLoop->GetLoopInfo(info);
+   loopNode->setAttribute("loopPosition", info.fLoopSample);
    
    XmlElement* postNode = node->createNewChildElement("post");
    postNode->addChildElement(fPostEffects->DumpXml(formatVersion));
