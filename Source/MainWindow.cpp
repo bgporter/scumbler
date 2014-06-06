@@ -192,11 +192,16 @@ void MainAppWindow::Open()
 {
    File xmlFile("/Users/bgporter/Desktop/testing.xml");
    XmlDocument doc(xmlFile);
-   StringArray errors;
 
    ScopedPointer<XmlElement> xml(doc.getDocumentElement());
 
-   fScumbler->LoadXml(xml, errors, 0);
+   if (xml)
+   {
+      this->CreateNewScumblerAndComponent(false);
+      StringArray errors;
+      fScumbler->LoadXml(xml, errors, 0);
+      // !!! display any errors that occurred.
+   }
 }
 
 void MainAppWindow::Save()
@@ -242,6 +247,7 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
    gCommandManager->registerAllCommandsForTarget(c);
    // set that component as this window's content (and take ownership of the pointer)
    this->setContentOwned(c, true);
+   //this->setSize(1024, 768);
 
 }
 

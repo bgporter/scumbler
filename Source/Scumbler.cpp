@@ -52,7 +52,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fGainNode(tk::kInvalidNode)
 {
 #ifdef qUnitTests
-   jassert(nullptr == instance);
+   //jassert(nullptr == instance);
    // save the pointer to this scumbler instance as 'the' scumbler instance.
    instance = this;
 #endif
@@ -107,7 +107,6 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
    if (e->hasTagName("scumbler"))
    {
       this->Reset(false);
-      #if 0
       // retrieve the scumbler values, but don't do anything with them yet.
       int formatVersion = e->getIntAttribute("fileFormat");
       int activeTrackIndex = e->getIntAttribute("activeTrackIndex");
@@ -122,7 +121,6 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
          Track* t = this->GetTrack(trackIndex++);
          t->LoadXml(track, errors, formatVersion);
       }
-      #endif
    }
    else
    {
