@@ -40,6 +40,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
                   AudioPluginFormatManager& pluginManager)
 : fDeviceManager(deviceManager)
 , fPluginManager(pluginManager)
+, fProcessing(false)
 , fPlaying(false)
 , fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
@@ -55,8 +56,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
    // save the pointer to this scumbler instance as 'the' scumbler instance.
    instance = this;
 #endif
-   fPlayer.setProcessor(&fGraph);
-   fDeviceManager.addAudioCallback(&fPlayer);
+   this->StartProcessing();
    this->Reset();
    this->SetOutputVolume(fOutputVolume);
 }
@@ -64,13 +64,70 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 Scumbler::~Scumbler()
 {
    this->removeAllChangeListeners();
-   fDeviceManager.removeAudioCallback(&fPlayer);
-   fPlayer.setProcessor(nullptr);
+   if (fProcessing)
+   {
+      this->StopProcessing();
+   }
    fGraph.clear();
 }
 
+
+tk::Result Scumbler::StartProcessing()
+{
+   tk::Result retval = tk::kAlreadyStarted;
+   if (!fProcessing)
+   {
+      fPlayer.setProcessor(&fGraph);
+      fDeviceManager.addAudioCallback(&fPlayer);
+      fProcessing = true;
+   }
+   return retval;
+
+}
+
+
+tk::Result Scumbler::StopProcessing()
+{
+   tk::Result retval = tk::kAlreadyStopped;
+   if (fProcessing)
+   {
+      fDeviceManager.removeAudioCallback(&fPlayer);
+      fPlayer.setProcessor(nullptr);
+      fProcessing = false;
+      retval = tk::kSuccess;
+   }
+   return retval;
+}
+
+
+
 void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
+   if (e->hasTagName("scumbler"))
+   {
+      this->Reset(false);
+      #if 0
+      // retrieve the scumbler values, but don't do anything with them yet.
+      int formatVersion = e->getIntAttribute("fileFormat");
+      int activeTrackIndex = e->getIntAttribute("activeTrackIndex");
+      float outputvolume = e->getDoubleAttribute("outputVolume");
+
+      // get the 'tracks' tag that contains all of the track data.
+      XmlElement* tracks = e->getChildByName("tracks");
+      int trackIndex = 0;
+      forEachXmlChildElement(*tracks, track)
+      {
+         this->AddTrack();
+         Track* t = this->GetTrack(trackIndex++);
+         t->LoadXml(track, errors, formatVersion);
+      }
+      #endif
+   }
+   else
+   {
+      // !!! add an error string to the error message list
+      // 
+   }
 
 }
 
@@ -94,6 +151,7 @@ XmlElement* Scumbler::DumpXml(int formatVersion) const
 
 void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
 {
+   std::cout << "Scumbler::changeListenerCallback()" << std::endl;
    if (source == fSampleCount)
    {
       // just notify that we've changed so the time readout can change.
@@ -149,6 +207,7 @@ void Scumbler::TogglePlay()
    {
       this->Play();
    }
+   std::cout << "Scumbler::TogglePlay->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 
 }
@@ -211,6 +270,7 @@ void Scumbler::Reset(bool addFirstTrack)
       this->ActivateTrack(0);
    }
    // let anyone listening tk::know that we've changed.
+   std::cout << "Scumbler::Reset->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 
 }
@@ -227,6 +287,7 @@ void Scumbler::SetOutputVolume(float volumeInDb)
       fOutputGain->SetGain(gain);
 
       // update our observers.
+      std::cout << "Scumbler::SetOutputVolume->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
 }
@@ -366,6 +427,7 @@ int Scumbler::GetNumTracks() const
 tk::Result Scumbler::AddTrack(const String& name)
 {
    fTracks.add(new Track(this, kPreEffects, kPostEffects, name));
+   std::cout << "Scumbler::AddTrack->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
    return tk::kSuccess;
 }
@@ -378,6 +440,7 @@ tk::Result Scumbler::DeleteTrack(int index)
    {
       fTracks.remove(index);
       retval = tk::kSuccess;
+   std::cout << "Scumbler::DeleteTrack->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
    return retval;
@@ -394,6 +457,7 @@ tk::Result Scumbler::ActivateTrack(int index)
       {
          Track* newActive = this->GetTrack(index);
          newActive->SetActive(true);
+   std::cout << "Scumbler::ActivateTrack->sendChangeMessage" << std::endl;
          this->sendChangeMessage();
       }
    }
@@ -511,6 +575,7 @@ tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
       }
       fTracks.move(fromIndex, toIndex);
       retval = tk::kSuccess;
+   std::cout << "Scumbler::MoveTrack->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
    return retval;

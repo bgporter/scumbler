@@ -451,6 +451,7 @@ void TrackComponent::UpdateColors()
 }
 void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+  std::cout << "TrackComponent::changeListenerCallback" << std::endl;
   if (source == fTrack)
   {
      if (fTrack->WantsToBeDeleted())

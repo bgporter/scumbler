@@ -69,6 +69,19 @@ public:
    ~Scumbler();
 
 
+
+   /**
+    * Connect this scumbler to the playback mechanism and start handling audio.
+    * @return kSuccess or kAlreadyStarted.
+    */
+   tk::Result StartProcessing();
+
+   /**
+    * Disconnect this scumbler from the audio playback mechanism and stop processing audio.
+    * @return kSuccess or kAlreadyStopped.
+    */
+   tk::Result StopProcessing();
+
    /**
     * Load this object from the provided XmlElement object. If this object owns 
     * objects of classes that are also XmlPersistent, call those recursively.
@@ -472,6 +485,12 @@ private:
 
    AudioPluginFormatManager& fPluginManager;
 
+
+   /**
+    * Are we processing audio right now?
+    */
+   
+   bool fProcessing;
    /**
     * Are we playing right now?
     */

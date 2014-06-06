@@ -121,6 +121,7 @@ XmlElement* Track::DumpXml(int formatVersion) const
 void Track::SetName(const String& name)
 {
    fName = name;
+   std::cout << "Track::SetName->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 
@@ -140,6 +141,7 @@ tk::Result Track::Solo(bool soloed)
    ScopedLock sl(fMutex);
    Track* track = soloed ? this : nullptr; 
    return fScumbler->SoloTrack(track);
+   std::cout << "Track::Solo->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 
@@ -167,6 +169,7 @@ tk::Result Track::Mute(bool muted)
 {
    ScopedLock sl(fMutex);
    fMuted = muted;
+   std::cout << "Track::Mute->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
    return tk::kSuccess;
 
@@ -181,6 +184,7 @@ bool Track::IsMuted() const
 tk::Result Track::SetActive(bool isActive)
 {
    fInputProcessor->SetActive(isActive);
+   std::cout << "Track::SetActive->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
    if (isActive)
    {
@@ -204,6 +208,7 @@ void Track::SetInputGain(float gainInDb)
       fInputProcessor->SetGain(gain);
 
       // update our observers.
+   std::cout << "Track::SetInputGain->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
 }
@@ -217,6 +222,7 @@ tk::Result Track::SetInputPan(float pan)
 {
    fInputProcessor->SetPan(pan);
    fPan = pan;
+   std::cout << "Track::SetInputPan->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
    return tk::kSuccess;
 
@@ -230,6 +236,7 @@ float Track::GetInputPan() const
 void Track::SetEnabledChannels(tk::ChannelEnable channels)
 {
    fInputProcessor->SetEnabledChannels(channels);
+   std::cout << "Track::SetEnabledChannels->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 
@@ -267,6 +274,7 @@ void Track::SetOutputVolume(float volumeInDb)
       fOutputGain->SetGain(gain);
 
       // update our observers.
+   std::cout << "Track::SetOutputVolume->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
 
@@ -309,6 +317,7 @@ void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* lis
 void Track::AskToBeDeleted()
 {
    fDeleteMe = true;
+   std::cout << "Track::AskToBeDeleted->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 

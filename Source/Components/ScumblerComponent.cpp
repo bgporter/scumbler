@@ -282,6 +282,7 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
 
 void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+  std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
   if (source == fScumbler)
   {
     // if the number of tracks has changed, we need to refresh things.
@@ -306,6 +307,10 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
       {
         // deleting track(s)
         trackDelta *= -1;
+        std::cout << "there are " << fTracks.size() << " trackComponents, and we are deleting " <<
+        trackDelta << std::endl;
+
+          
         for (int i = 0; i < trackDelta; ++i)
         {
           // remove the last trackComponent from the list and delete it.

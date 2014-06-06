@@ -97,6 +97,7 @@ tk::Result PluginBlock::InsertPluginAtIndex(PluginInfo plugin, int index)
             if (tk::kSuccess == retval)
             {
                fPlugins.set(index, plugin); 
+   std::cout << "PluginBlock::InsertPluginAtIndex->sendChangeMessage" << std::endl;
                this->sendChangeMessage();
             }
          }
@@ -131,6 +132,7 @@ tk::Result PluginBlock::RemovePluginAtIndex(int index, bool deleteNode)
             {
                fPlugins.set(index, PluginInfo());
             }
+   std::cout << "PLuginBlock::RemovePluginAtIndex->sendChangeMessage" << std::endl;
             this->sendChangeMessage();
          }
          else

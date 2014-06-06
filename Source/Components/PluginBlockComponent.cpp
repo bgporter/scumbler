@@ -132,6 +132,7 @@ void PluginBlockComponent::ConnectToPluginBlock(PluginBlock* plugins)
 
 void PluginBlockComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+  std::cout << "PluginBlockComponent::changeListenerCallback" << std::endl;
    if (source == fPlugins)
    {
       this->repaint();

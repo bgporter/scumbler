@@ -54,6 +54,8 @@ namespace tk
       kSlotFull,            /**< Attempting to put something into a full slot */  
       kPluginLoadError,     /**< error loading a plugin; check error string */
       kNotWhenPlaying,      /**< this operation can't happen when we're playing. */
+      kAlreadyStarted,      /**< trying to start something that's already started*/
+      kAlreadyStopped,      /**< trying to stop something that's already stopped. */
 
    };
 

@@ -66,7 +66,9 @@ MainAppWindow::MainAppWindow()
   int sortOrder = userSettings->getIntValue("pluginSortOrder", (int) KnownPluginList::defaultOrder);
   fScumbler->SetPluginSortOrder((KnownPluginList::SortMethod) sortOrder);
 
-  // create the scumbler component that owns & operates our user interface.
+  // create the scumbler component that owns & operates our user interface.NOTE 
+  // that because we're about to call 'setContentOwned()' we don't need to retain a pointer 
+  // to the component here. This window object will take care of its lifespan.
   ScumblerComponent* c = new ScumblerComponent(fScumbler);
   gCommandManager->registerAllCommandsForTarget(c);
   // set that component as this window's content (and take ownership of the pointer)
@@ -178,11 +180,19 @@ void MainAppWindow::ViewPlugins(bool display)
 void MainAppWindow::New()
 {
 
+   
+
 }
 
 void MainAppWindow::Open()
 {
+   File xmlFile("/Users/bgporter/Desktop/testing.xml");
+   XmlDocument doc(xmlFile);
+   StringArray errors;
 
+   ScopedPointer<XmlElement> xml(doc.getDocumentElement());
+
+   fScumbler->LoadXml(xml, errors, 0);
 }
 
 void MainAppWindow::Save()
