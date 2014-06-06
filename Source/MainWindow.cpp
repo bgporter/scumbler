@@ -58,6 +58,7 @@ MainAppWindow::MainAppWindow()
     this->ViewPlugins();
   }
 
+#if 0
   // create and reset the scumbler object now that the audio system is configured.
   fScumbler = new Scumbler(fDeviceManager, fPluginManager);
   //fScumbler->Reset();
@@ -73,6 +74,10 @@ MainAppWindow::MainAppWindow()
   gCommandManager->registerAllCommandsForTarget(c);
   // set that component as this window's content (and take ownership of the pointer)
   this->setContentOwned(c, true);
+#else
+    this->CreateNewScumblerAndComponent(true);
+#endif
+    
   this->setResizable(true, true);
   this->centreWithSize (1024, 768);
   this->setVisible (true);
@@ -179,9 +184,8 @@ void MainAppWindow::ViewPlugins(bool display)
 
 void MainAppWindow::New()
 {
-
-   
-
+   // !!! Check existing scumbler dirty state first!
+   this->CreateNewScumblerAndComponent(true);
 }
 
 void MainAppWindow::Open()
@@ -207,6 +211,40 @@ void MainAppWindow::SaveAs()
 {
 
 }
+
+
+void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
+{
+   if (fScumbler)
+   {
+      // if there's already a scumbler object in existence, tell it to stop processing
+      // so we can get the new one we're about to create connected correctly.
+      fScumbler->StopProcessing();
+   }  
+   fScumbler = new Scumbler(fDeviceManager, fPluginManager);
+   // Pass any saved configuration parameters down to the scumbler object.
+   PropertiesFile* userSettings = gAppProperties->getUserSettings();
+   int sortOrder = userSettings->getIntValue("pluginSortOrder", (int) KnownPluginList::defaultOrder);
+   fScumbler->SetPluginSortOrder((KnownPluginList::SortMethod) sortOrder);
+
+   if (addFirstTrack)
+   {
+      // Add a track to the scumbler and make it active.
+      fScumbler->AddTrack();    
+      fScumbler->ActivateTrack(0);
+   }
+
+
+   // create the scumbler component that owns & operates our user interface.NOTE 
+   // that because we're about to call 'setContentOwned()' we don't need to retain a pointer 
+   // to the component here. This window object will take care of its lifespan.
+   ScumblerComponent* c = new ScumblerComponent(fScumbler);
+   gCommandManager->registerAllCommandsForTarget(c);
+   // set that component as this window's content (and take ownership of the pointer)
+   this->setContentOwned(c, true);
+
+}
+
 
 StringArray MainAppWindow::getMenuBarNames()
 {
@@ -406,6 +444,12 @@ bool MainAppWindow::perform(const InvocationInfo& info)
   bool retval = true;
   switch (info.commandID)
   {
+
+    case CommandIds::kNew:
+    {
+       this->New();
+    }
+    break;
 
     case CommandIds::kOpen:
     {

@@ -69,6 +69,7 @@ Scumbler::~Scumbler()
       this->StopProcessing();
    }
    fGraph.clear();
+   std::cout << "Exiting Scumbler dtor" << std::endl;
 }
 
 

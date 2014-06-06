@@ -126,7 +126,7 @@ public:
     * **NOTE** that the Scumbler object should be reset after creation, after the 
     * Audio device manager is initialized.
     */
-    void Reset(bool addFirstTrack=true);
+    void Reset(bool addFirstTrack=false);
 
     /**
      * Set the scumbler's master output volume. 

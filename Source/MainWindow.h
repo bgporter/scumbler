@@ -75,6 +75,13 @@ public:
     void SaveAs();
 
     /**
+     * Create a new Scumbler for us to use. If there was already one in place, this new
+     * one will completely replace it and it will be deleted automatically  .
+     * @param addFirstTrack If true, creates a new empty track.
+     */
+    void CreateNewScumblerAndComponent(bool addFirstTrack);
+
+    /**
      * @name MenuBarModel overrides.
      */
     ///@{
