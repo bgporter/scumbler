@@ -86,11 +86,16 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
    if (e->hasTagName("track"))
    {
       this->SetName(e->getStringAttribute("name", ""));
-      this->Mute(e->getBoolAttribute("muted", false));
+      this->Mute(e->getBoolAttribute("muted"));
       this->SetActive(e->getBoolAttribute("active", false));
       this->SetInputGain(e->getDoubleAttribute("inputGain", 0));
       this->SetInputPan(e->getDoubleAttribute("pan", 0.5));
       this->SetOutputVolume(e->getDoubleAttribute("outputVolume", 0));
+      bool isSoloed = e->getBoolAttribute("soloed", false);
+      if (isSoloed)
+      {
+         fScumbler->SoloTrack(this);
+      }
 
       // handle the pre-effect block.
       XmlElement* pre = e->getChildByName("pre");
@@ -102,6 +107,21 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       {
          // !!! report the missing pre block.
       }
+
+      // restore the loop parameters
+      XmlElement* loop = e->getChildByName("loop");
+      if (loop)
+      {
+         fLoop->SetLoopDuration(loop->getIntAttribute("duration", 4000));
+         fLoop->SetFeedback(loop->getDoubleAttribute("feedback", 0.9));
+         fLoop->SeekAbsolute(loop->getIntAttribute("loopPosition", 0));
+
+      }
+      else
+      {
+         // !!! report the error
+      }
+
 
       // handle the post-effect block
       XmlElement* post = e->getChildByName("post");
@@ -129,10 +149,12 @@ XmlElement* Track::DumpXml(int formatVersion) const
    node->setAttribute("fileFormat", formatVersion);
    node->setAttribute("name", fName);
    node->setAttribute("muted", fMuted);
+   node->setAttribute("soloed", (this == fScumbler->GetSoloTrack()));
    node->setAttribute("active", this->IsActive());
    node->setAttribute("inputGain", fInputGain);
    node->setAttribute("pan", fPan);
    node->setAttribute("outputVolume", fOutputVolume);
+   node->setAttribute("channels", static_cast<int>(this->GetEnabledChannels()));
 
    // store the pre-loop plugins
    XmlElement* preNode = node->createNewChildElement("pre");
