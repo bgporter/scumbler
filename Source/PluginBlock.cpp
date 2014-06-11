@@ -40,6 +40,64 @@ PluginBlock::~PluginBlock()
 
 void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
+   XmlElement* slots = e->getChildByName("slots");
+   if (slots)
+   {
+      int slotIndex = 0;
+      forEachXmlChildElement(*slots, slot)
+      {
+         XmlElement* plugin = slot->getChildByName("PLUGIN");
+         if (plugin)
+         {
+            PluginDescription pd;
+            if (pd.loadFromXml(*plugin))
+            {
+               String msg;
+               tk::Result result = this->LoadPluginAtIndex(slotIndex, pd, msg);
+               if (tk::kSuccess == result)
+               {
+                  // the plugin is loaded in the right place; now we need to restore its 
+                  // state as we last left it.
+                  PluginInfo info = this->PluginInSlot(slotIndex);
+                  XmlElement* state = slot->getChildByName("STATE");
+                  if (state)
+                  {
+                     MemoryBlock m;
+                     m.fromBase64Encoding(state->getAllSubText());
+                     result = fScumbler->SetStateInformationForNode(info.id, m);
+                     if (tk::kSuccess != result)
+                     {
+                        // report error.
+                     }
+
+                  }
+                  else
+                  {
+                     // !!! report error.
+                  }
+
+
+               }
+               else
+               {
+                  // !!! report error msg
+               }
+
+            }
+            else
+            {
+               // !!! report the error
+            }
+
+         }
+         ++slotIndex;
+      }
+
+   }
+   else 
+   {
+      // !!! report missing slots element.
+   }
 
 
 }

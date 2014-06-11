@@ -245,9 +245,18 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
    // to the component here. This window object will take care of its lifespan.
    ScumblerComponent* c = new ScumblerComponent(fScumbler);
    gCommandManager->registerAllCommandsForTarget(c);
+   int w = this->getWidth();
+   int h = this->getHeight();
    // set that component as this window's content (and take ownership of the pointer)
    this->setContentOwned(c, true);
-   //this->setSize(1024, 768);
+   // why 128? When JUCE is creating the main window component, it starts out 
+   // for some reason at 128x128 dimensions. If we've already been sized explicitly, 
+   // restore those dimensions after replacing the ScumblerComponent. !!! At 
+   // some point, a more deeply considered solution to this problem should be developed.
+   if ((w != 128) && (h != 128))
+   {
+      this->setSize(w, h);
+   }
 
 }
 
@@ -395,6 +404,7 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
       result.setInfo("New",
         "Create a new (empty) Scumbler file", category, 0);
       result.defaultKeypresses.add(KeyPress('n', ModifierKeys::commandModifier, 0));
+      result.setActive(!fScumbler->IsPlaying());
 
     }
     break;
@@ -404,8 +414,8 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
       result.setInfo("Open...",
         "Open a Scumbler file",
         category, 0);
-        result.defaultKeypresses.add (KeyPress('o', ModifierKeys::commandModifier, 0));
-
+      result.defaultKeypresses.add (KeyPress('o', ModifierKeys::commandModifier, 0));
+      result.setActive(!fScumbler->IsPlaying());
     }
     break;
 
@@ -414,7 +424,8 @@ void MainAppWindow::getCommandInfo(CommandID commandID, ApplicationCommandInfo& 
       result.setInfo("Save",
         "Save the current Scumbler setup to a file",
         category, 0);
-        result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
+      result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
+      result.setActive(!fScumbler->IsPlaying());
     }
     break;
 

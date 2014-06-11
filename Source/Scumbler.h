@@ -261,6 +261,8 @@ public:
     */
    tk::Result GetStateInformationForNode(NodeId node, MemoryBlock& m);
 
+   tk::Result SetStateInformationForNode(NodeId node, MemoryBlock& m);
+
    /**
     * Fill in a PluginDescription object for the specified node. We use this when 
     * saving a Scumbler to disk.

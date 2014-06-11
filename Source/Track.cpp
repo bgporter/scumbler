@@ -83,6 +83,41 @@ Track::~Track()
 
 void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
+   if (e->hasTagName("track"))
+   {
+      this->SetName(e->getStringAttribute("name", ""));
+      this->Mute(e->getBoolAttribute("muted", false));
+      this->SetActive(e->getBoolAttribute("active", false));
+      this->SetInputGain(e->getDoubleAttribute("inputGain", 0));
+      this->SetInputPan(e->getDoubleAttribute("pan", 0.5));
+      this->SetOutputVolume(e->getDoubleAttribute("outputVolume", 0));
+
+      // handle the pre-effect block.
+      XmlElement* pre = e->getChildByName("pre");
+      if (pre)
+      {
+         fPreEffects->LoadXml(pre, errors, formatVersion);
+      }
+      else
+      {
+         // !!! report the missing pre block.
+      }
+
+      // handle the post-effect block
+      XmlElement* post = e->getChildByName("post");
+      if (post)
+      {
+         fPostEffects->LoadXml(post, errors, formatVersion);
+      }
+      else
+      {
+         // !!! report the error
+      }
+   }
+   else
+   {
+      // !!! report the invalid file error.
+   }
 
 
 }

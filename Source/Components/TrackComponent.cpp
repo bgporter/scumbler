@@ -162,7 +162,7 @@ TrackComponent::~TrackComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     // Preven us (and our children!) from receiving any new change notifications
-    this->ConnectToTrack(nullptr);
+    //this->ConnectToTrack(nullptr);
     //[/Destructor_pre]
 
 

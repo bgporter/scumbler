@@ -129,6 +129,15 @@ public:
    virtual tk::Result GetStateInformationForNode(NodeId node, MemoryBlock& m) = 0;
 
    /**
+    * Given a Memoryblock filled with state information for the node at the specified
+    * id, restore the plugin state.
+    * @param  node id of the node to set
+    * @param  m    MemoryBlock object filled with state data
+    * @return      success/fail.
+    */
+   virtual tk::Result SetStateInformationForNode(NodeId node, MemoryBlock& m) = 0;
+
+   /**
     * Fill in a PluginDescription object for the specified node. We use this when 
     * saving a Scumbler to disk.
     * @param  node The NodeId of the plugin we're interested in.

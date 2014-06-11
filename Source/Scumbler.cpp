@@ -64,10 +64,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 Scumbler::~Scumbler()
 {
    this->removeAllChangeListeners();
-   if (fProcessing)
-   {
-      this->StopProcessing();
-   }
+   this->StopProcessing();
    fGraph.clear();
    std::cout << "Exiting Scumbler dtor" << std::endl;
 }
@@ -109,8 +106,8 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       this->Reset(false);
       // retrieve the scumbler values, but don't do anything with them yet.
       int formatVersion = e->getIntAttribute("fileFormat");
-      int activeTrackIndex = e->getIntAttribute("activeTrackIndex");
-      float outputvolume = e->getDoubleAttribute("outputVolume");
+      int activeTrackIndex = e->getIntAttribute("activeTrackIndex", 0);
+      float outputvolume = e->getDoubleAttribute("outputVolume", 0);
 
       // get the 'tracks' tag that contains all of the track data.
       XmlElement* tracks = e->getChildByName("tracks");
@@ -742,6 +739,22 @@ tk::Result Scumbler::GetStateInformationForNode(NodeId nodeId, MemoryBlock& m)
    }
 
    return retval;
+}
+
+tk::Result Scumbler::SetStateInformationForNode(NodeId nodeId, MemoryBlock& m)
+{
+   tk::Result retval = tk::kFailure;
+   AudioProcessorGraph::Node* node = fGraph.getNodeForId(nodeId);
+   if (nullptr != node)
+   {
+      // get the actual processor object behind this node, and have 
+      // it restore its state from the passed in memory block.
+      AudioProcessor* processor = node->getProcessor();
+      processor->setStateInformation(m.getData(), (int) m.getSize());
+      retval = tk::kSuccess;
+   }
+
+   return retval;   
 }
 
 

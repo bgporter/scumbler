@@ -111,6 +111,12 @@ public:
       return tk::kFailure;
    }
 
+    tk::Result SetStateInformationForNode(NodeId node, MemoryBlock& m)
+    {
+        return tk::kFailure;
+    }
+    
+    
    /**
     * Fill in a PluginDescription object for the specified node. We use this when 
     * saving a Scumbler to disk.
