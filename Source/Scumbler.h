@@ -308,6 +308,13 @@ public:
      */
     tk::Result ActivateTrack(int index);
 
+    /**
+     * Activate the track pointed to.
+     * @param  track Pointer to the track to activate (must exist and be present in 
+     *               our list of tracks)
+     * @return       success/fail
+     */
+    tk::Result ActivateTrack(Track* track);
 
     /**
      * Activate the next track in the list, wrapping around at the end. Doesn't

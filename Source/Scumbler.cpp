@@ -107,7 +107,7 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       // retrieve the scumbler values, but don't do anything with them yet.
       int formatVersion = e->getIntAttribute("fileFormat");
       int activeTrackIndex = e->getIntAttribute("activeTrackIndex", 0);
-      float outputvolume = e->getDoubleAttribute("outputVolume", 0);
+      float outputVolume = e->getDoubleAttribute("outputVolume", 0);
 
       // get the 'tracks' tag that contains all of the track data.
       XmlElement* tracks = e->getChildByName("tracks");
@@ -118,6 +118,9 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
          Track* t = this->GetTrack(trackIndex++);
          t->LoadXml(track, errors, formatVersion);
       }
+      // now that all the tracks are loaded, we can activate one and set the volume.
+      this->ActivateTrack(activeTrackIndex);
+      this->SetOutputVolume(outputVolume);
    }
    else
    {
@@ -457,6 +460,13 @@ tk::Result Scumbler::ActivateTrack(int index)
          this->sendChangeMessage();
       }
    }
+   return retval;
+}
+
+tk::Result Scumbler::ActivateTrack(Track* track)
+{
+   tk::Result retval = tk::kFailure;
+
    return retval;
 }
 

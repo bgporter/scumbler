@@ -96,6 +96,8 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       {
          fScumbler->SoloTrack(this);
       }
+      int channels = e->getIntAttribute("channels", tk::kStereo);
+
 
       // handle the pre-effect block.
       XmlElement* pre = e->getChildByName("pre");
@@ -114,7 +116,7 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       {
          fLoop->SetLoopDuration(loop->getIntAttribute("duration", 4000));
          fLoop->SetFeedback(loop->getDoubleAttribute("feedback", 0.9));
-         fLoop->SeekAbsolute(loop->getIntAttribute("loopPosition", 0));
+         //fLoop->SeekAbsolute(loop->getIntAttribute("loopPosition", 0));
 
       }
       else
@@ -150,7 +152,7 @@ XmlElement* Track::DumpXml(int formatVersion) const
    node->setAttribute("name", fName);
    node->setAttribute("muted", fMuted);
    node->setAttribute("soloed", (this == fScumbler->GetSoloTrack()));
-   node->setAttribute("active", this->IsActive());
+   //node->setAttribute("active", this->IsActive());
    node->setAttribute("inputGain", fInputGain);
    node->setAttribute("pan", fPan);
    node->setAttribute("outputVolume", fOutputVolume);
