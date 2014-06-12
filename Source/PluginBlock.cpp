@@ -59,7 +59,7 @@ void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
                   // the plugin is loaded in the right place; now we need to restore its 
                   // state as we last left it.
                   PluginInfo info = this->PluginInSlot(slotIndex);
-                  XmlElement* state = slot->getChildByName("STATE");
+                  XmlElement* state = slot->getChildByName("state");
                   if (state)
                   {
                      MemoryBlock m;
@@ -69,20 +69,16 @@ void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
                      {
                         // report error.
                      }
-
                   }
                   else
                   {
                      // !!! report error.
                   }
-
-
                }
                else
                {
                   // !!! report error msg
                }
-
             }
             else
             {
