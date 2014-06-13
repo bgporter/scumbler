@@ -40,13 +40,13 @@ PluginBlock::~PluginBlock()
 
 void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
-   XmlElement* slots = e->getChildByName("slots");
+   XmlElement* slots = e->getChildByName(tag::kSlots);
    if (slots)
    {
       int slotIndex = 0;
       forEachXmlChildElement(*slots, slot)
       {
-         XmlElement* plugin = slot->getChildByName("PLUGIN");
+         XmlElement* plugin = slot->getChildByName(tag::kPlugin);
          if (plugin)
          {
             PluginDescription pd;
@@ -59,7 +59,7 @@ void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
                   // the plugin is loaded in the right place; now we need to restore its 
                   // state as we last left it.
                   PluginInfo info = this->PluginInSlot(slotIndex);
-                  XmlElement* state = slot->getChildByName("state");
+                  XmlElement* state = slot->getChildByName(tag::kState);
                   if (state)
                   {
                      MemoryBlock m;
@@ -101,10 +101,10 @@ void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 
 XmlElement* PluginBlock::DumpXml(int formatVersion) const
 {
-   XmlElement* node = new XmlElement("slots");
+   XmlElement* node = new XmlElement(tag::kSlots);
    for (int i = 0; i < this->Size(); ++i)
    {
-      XmlElement* slotNode = node->createNewChildElement("slot");
+      XmlElement* slotNode = node->createNewChildElement(tag::kSlot);
       PluginInfo slotInfo = this->PluginInSlot(i);
       if (tk::kInvalidNode != slotInfo.id)
       {
@@ -120,7 +120,7 @@ XmlElement* PluginBlock::DumpXml(int formatVersion) const
          result = fScumbler->GetStateInformationForNode(slotInfo.id, m);
          if (tk::kSuccess == result)
          {
-            XmlElement* state = slotNode->createNewChildElement("state");
+            XmlElement* state = slotNode->createNewChildElement(tag::kState);
             state->addTextElement(m.toBase64Encoding());
          }
       }

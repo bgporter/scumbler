@@ -5,6 +5,16 @@
 int Track::sTrackCount = 0;
 
 
+namespace 
+{
+   const String kTAGtrack("track");
+   const String kTAGname("name");
+   const String kTAGmuted("muted");
+   const String kTAGsoloed("soloed");
+
+};
+
+
 Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name)
 :  fScumbler(owner)
 ,  fDeleteMe(false)
@@ -83,24 +93,24 @@ Track::~Track()
 
 void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
-   if (e->hasTagName("track"))
+   if (e->hasTagName(tag::kTrack))
    {
-      this->SetName(e->getStringAttribute("name", ""));
-      this->Mute(e->getBoolAttribute("muted"));
-      this->SetActive(e->getBoolAttribute("active", false));
-      this->SetInputGain(e->getDoubleAttribute("inputGain", 0));
-      this->SetInputPan(e->getDoubleAttribute("pan", 0.5));
+      this->SetName(e->getStringAttribute(tag::kName, ""));
+      this->Mute(e->getBoolAttribute(tag::kMuted));
+      this->SetActive(e->getBoolAttribute(tag::kActive, false));
+      this->SetInputGain(e->getDoubleAttribute(tag::kInputGain, 0));
+      this->SetInputPan(e->getDoubleAttribute(tag::kPan, 0.5));
       this->SetOutputVolume(e->getDoubleAttribute("outputVolume", 0));
-      bool isSoloed = e->getBoolAttribute("soloed", false);
+      bool isSoloed = e->getBoolAttribute(tag::kSoloed, false);
       if (isSoloed)
       {
          fScumbler->SoloTrack(this);
       }
-      int channels = e->getIntAttribute("channels", tk::kStereo);
+      int channels = e->getIntAttribute(tag::kChannels, tk::kStereo);
 
 
       // handle the pre-effect block.
-      XmlElement* pre = e->getChildByName("pre");
+      XmlElement* pre = e->getChildByName(tag::kPreBlock);
       if (pre)
       {
          fPreEffects->LoadXml(pre, errors, formatVersion);
@@ -111,12 +121,12 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       }
 
       // restore the loop parameters
-      XmlElement* loop = e->getChildByName("loop");
+      XmlElement* loop = e->getChildByName(tag::kLoop);
       if (loop)
       {
-         fLoop->SetLoopDuration(loop->getIntAttribute("duration", 4000));
-         fLoop->SetFeedback(loop->getDoubleAttribute("feedback", 0.9));
-         //fLoop->SeekAbsolute(loop->getIntAttribute("loopPosition", 0));
+         fLoop->SetLoopDuration(loop->getIntAttribute(tag::kLoopDuration, 4000));
+         fLoop->SetFeedback(loop->getDoubleAttribute(tag::kLoopFeedback, 0.9));
+         //fLoop->SeekAbsolute(loop->getIntAttribute(tag::kLoopPosition, 0));
 
       }
       else
@@ -126,7 +136,7 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 
 
       // handle the post-effect block
-      XmlElement* post = e->getChildByName("post");
+      XmlElement* post = e->getChildByName(tag::kPostBlock);
       if (post)
       {
          fPostEffects->LoadXml(post, errors, formatVersion);
@@ -147,30 +157,30 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 
 XmlElement* Track::DumpXml(int formatVersion) const
 {
-   XmlElement* node = new XmlElement("track");
-   node->setAttribute("fileFormat", formatVersion);
-   node->setAttribute("name", fName);
-   node->setAttribute("muted", fMuted);
-   node->setAttribute("soloed", (this == fScumbler->GetSoloTrack()));
+   XmlElement* node = new XmlElement(tag::kTrack);
+   node->setAttribute(tag::kFileFormat, formatVersion);
+   node->setAttribute(tag::kName, fName);
+   node->setAttribute(tag::kMuted, fMuted);
+   node->setAttribute(tag::kSoloed, (this == fScumbler->GetSoloTrack()));
    //node->setAttribute("active", this->IsActive());
-   node->setAttribute("inputGain", fInputGain);
-   node->setAttribute("pan", fPan);
-   node->setAttribute("outputVolume", fOutputVolume);
-   node->setAttribute("channels", static_cast<int>(this->GetEnabledChannels()));
+   node->setAttribute(tag::kInputGain, fInputGain);
+   node->setAttribute(tag::kPan, fPan);
+   node->setAttribute(tag::kOutputVolume, fOutputVolume);
+   node->setAttribute(tag::kChannels, static_cast<int>(this->GetEnabledChannels()));
 
    // store the pre-loop plugins
-   XmlElement* preNode = node->createNewChildElement("pre");
+   XmlElement* preNode = node->createNewChildElement(tag::kPreBlock);
    preNode->addChildElement(fPreEffects->DumpXml(formatVersion));
 
    // !!! store the loop info
-   XmlElement* loopNode = node->createNewChildElement("loop");
-   loopNode->setAttribute("duration", fLoop->GetLoopDuration());
-   loopNode->setAttribute("feedback", fLoop->GetFeedback());
+   XmlElement* loopNode = node->createNewChildElement(tag::kLoop);
+   loopNode->setAttribute(tag::kLoopDuration, fLoop->GetLoopDuration());
+   loopNode->setAttribute(tag::kLoopFeedback, fLoop->GetFeedback());
    LoopProcessor::LoopInfo info;
    fLoop->GetLoopInfo(info);
-   loopNode->setAttribute("loopPosition", info.fLoopSample);
+   loopNode->setAttribute(tag::kLoopPosition, info.fLoopSample);
    
-   XmlElement* postNode = node->createNewChildElement("post");
+   XmlElement* postNode = node->createNewChildElement(tag::kPostBlock);
    postNode->addChildElement(fPostEffects->DumpXml(formatVersion));
 
 

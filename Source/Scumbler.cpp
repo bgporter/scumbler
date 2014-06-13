@@ -101,16 +101,16 @@ tk::Result Scumbler::StopProcessing()
 
 void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 {
-   if (e->hasTagName("scumbler"))
+   if (e->hasTagName(tag::kScumbler))
    {
       this->Reset(false);
       // retrieve the scumbler values, but don't do anything with them yet.
-      int formatVersion = e->getIntAttribute("fileFormat");
-      int activeTrackIndex = e->getIntAttribute("activeTrackIndex", 0);
-      float outputVolume = e->getDoubleAttribute("outputVolume", 0);
+      int formatVersion = e->getIntAttribute(tag::kFileFormat);
+      int activeTrackIndex = e->getIntAttribute(tag::kActiveTrackIndex, 0);
+      float outputVolume = e->getDoubleAttribute(tag::kOutputVolume, 0);
 
       // get the 'tracks' tag that contains all of the track data.
-      XmlElement* tracks = e->getChildByName("tracks");
+      XmlElement* tracks = e->getChildByName(tag::kTracks);
       int trackIndex = 0;
       forEachXmlChildElement(*tracks, track)
       {
@@ -133,11 +133,11 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
 
 XmlElement* Scumbler::DumpXml(int formatVersion) const
 {
-   XmlElement* node = new XmlElement("scumbler");
-   node->setAttribute("fileFormat", formatVersion);
-   node->setAttribute("activeTrackIndex", fActiveTrackIndex);
-   node->setAttribute("outputVolume", fOutputVolume);
-   XmlElement* trackContainer = node->createNewChildElement("tracks");
+   XmlElement* node = new XmlElement(tag::kScumbler);
+   node->setAttribute(tag::kFileFormat, formatVersion);
+   node->setAttribute(tag::kActiveTrackIndex, fActiveTrackIndex);
+   node->setAttribute(tag::kOutputVolume, fOutputVolume);
+   XmlElement* trackContainer = node->createNewChildElement(tag::kTracks);
    for (int i = 0; i < this->GetNumTracks(); ++i)
    {
       Track* t = this->GetTrack(i);

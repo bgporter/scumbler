@@ -83,6 +83,37 @@ namespace tk
 
 };
 
+/**
+ * \
+ */
+namespace tag
+{
 
+   const String kActive("active");
+   const String kActiveTrackIndex("activeTrackIndex");
+   const String kChannels("channels");
+   const String kFileFormat("format");
+   const String kInputGain("inputGain");
+   const String kLoop("loop");
+   const String kLoopDuration("duration");
+   const String kLoopFeedback("feedback");
+   const String kLoopPosition("loopPosition");
+   const String kMuted("muted");
+   const String kName("name");
+   const String kOutputVolume("outputVolume");
+   const String kPan("pan");
+   const String kPlugin("PLUGIN"); // all caps because JUCE does this one.
+   const String kPostBlock("post");
+   const String kPreBlock("pre");
+   const String kScumbler("scumbler");
+   const String kSlot("slot");
+   const String kSlots("slots");
+   const String kSoloed("soloed");
+   const String kState("state");
+   const String kTrack("track");
+   const String kTracks("tracks");
+
+
+};
 
 #endif // this must be the last line in this file.
