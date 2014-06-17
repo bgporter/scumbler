@@ -15,11 +15,18 @@
 #include "PluginListWindow.h"
 
 
+namespace
+{
+   const String kFileExtension(".scumbler");
+
+};
+
 //==============================================================================
 MainAppWindow::MainAppWindow()
     : DocumentWindow (JUCEApplication::getInstance()->getApplicationName() , Colours::lightgrey
       , DocumentWindow::allButtons)
     , fScumbler(nullptr)
+    , fFilePath(String::empty)
 {
 
   // make sure that the plugin format manager knows to look for AU/VST formats.
@@ -186,6 +193,8 @@ void MainAppWindow::New()
 {
    // !!! Check existing scumbler dirty state first!
    this->CreateNewScumblerAndComponent(true);
+   // reset the file path..
+    fFilePath = String::empty;
 }
 
 void MainAppWindow::Open()
@@ -206,14 +215,34 @@ void MainAppWindow::Open()
 
 void MainAppWindow::Save()
 {
-   ScopedPointer<XmlElement> contents(fScumbler->DumpXml(0));
-   //String cwd = File::getCurrentWorkingDirectory().getFullPathName();
-   File temp("/Users/bgporter/desktop/testing.xml");
-   contents->writeToFile(temp, String::empty);
+   if (!fFilePath.isEmpty())
+   {
+     ScopedPointer<XmlElement> contents(fScumbler->DumpXml(0));
+     File temp(fFilePath);
+     contents->writeToFile(temp, String::empty);
+   }
+   else
+   {
+      // there's no saved file yet, so execute SaveAs...
+      this->SaveAs();  
+   }
 }
 
 void MainAppWindow::SaveAs()
 {
+   FileChooser fc("Specify path & file to save to",
+      File::getSpecialLocation(File::userDocumentsDirectory),
+      kFileExtension, true);
+   if (fc.browseForFileToSave(true))
+   {
+       File chosenFile = fc.getResult();
+       fFilePath = chosenFile.getFullPathName();
+       if (! fFilePath.endsWith(kFileExtension))
+       {
+          fFilePath += kFileExtension; 
+       }
+       this->Save(); 
+   }  
 
 }
 

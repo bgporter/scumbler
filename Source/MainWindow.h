@@ -154,6 +154,11 @@ private:
      * A pointer to the window that lists/scans for plugins.
      */
     ScopedPointer<PluginListWindow>  fPluginWindow;
+
+    /**
+     * Path to the currently open file (if any)
+     */
+    String fFilePath;
 };
 
 
