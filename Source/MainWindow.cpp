@@ -199,17 +199,23 @@ void MainAppWindow::New()
 
 void MainAppWindow::Open()
 {
-   File xmlFile("/Users/bgporter/Desktop/testing.xml");
-   XmlDocument doc(xmlFile);
-
-   ScopedPointer<XmlElement> xml(doc.getDocumentElement());
-
-   if (xml)
+   FileChooser fc("Open a scumbler file", 
+     File::getSpecialLocation(File::userDocumentsDirectory), "*" + kFileExtension);
+   if (fc.browseForFileToOpen())
    {
-      this->CreateNewScumblerAndComponent(false);
-      StringArray errors;
-      fScumbler->LoadXml(xml, errors, 0);
-      // !!! display any errors that occurred.
+     File xmlFile(fc.getResult());
+     XmlDocument doc(xmlFile);
+     fFilePath = xmlFile.getFullPathName();
+
+     ScopedPointer<XmlElement> xml(doc.getDocumentElement());
+
+     if (xml)
+     {
+        this->CreateNewScumblerAndComponent(false);
+        StringArray errors;
+        fScumbler->LoadXml(xml, errors, 0);
+        // !!! display any errors that occurred.
+     }
    }
 }
 
