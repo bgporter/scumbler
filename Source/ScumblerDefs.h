@@ -33,6 +33,11 @@
  */
 typedef uint32  NodeId;
 
+
+/**
+ * Namespace to hold constant values and enums that need to be available across
+ * the entire project.
+ */
 namespace tk
 {
   /**
@@ -84,7 +89,8 @@ namespace tk
 };
 
 /**
- * \
+ * Namespace to hold the string literals that we use when serializing Scumbler
+ * objects to XML. 
  */
 namespace tag
 {
@@ -110,6 +116,7 @@ namespace tag
    const String kSlots("slots");
    const String kSoloed("soloed");
    const String kState("state");
+   const String kTitle("title");
    const String kTrack("track");
    const String kTracks("tracks");
 
