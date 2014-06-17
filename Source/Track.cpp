@@ -117,7 +117,7 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       }
       else
       {
-         // !!! report the missing pre block.
+         errors.add("File format error -- missing <pre> effects block.");
       }
 
       // restore the loop parameters
@@ -131,7 +131,7 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       }
       else
       {
-         // !!! report the error
+         errors.add("File format error -- missing <loop> information");
       }
 
 
@@ -143,12 +143,12 @@ void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       }
       else
       {
-         // !!! report the error
+         errors.add("File format error -- missing <post> effects block");
       }
    }
    else
    {
-      // !!! report the invalid file error.
+      errors.add("File format error -- missing <track> data");
    }
 
 

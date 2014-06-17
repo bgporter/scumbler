@@ -67,22 +67,22 @@ void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
                      result = fScumbler->SetStateInformationForNode(info.id, m);
                      if (tk::kSuccess != result)
                      {
-                        // report error.
+                        errors.add("Unable to restore plugin state for " + pd.name);
                      }
                   }
                   else
                   {
-                     // !!! report error.
+                     errors.add("State information for " + pd.name + " missing from file.");
                   }
                }
                else
                {
-                  // !!! report error msg
+                  errors.add("Unable to load " + pd.name);
                }
             }
             else
             {
-               // !!! report the error
+               errors.add("Error getting plugin info.");
             }
 
          }
@@ -92,10 +92,8 @@ void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
    }
    else 
    {
-      // !!! report missing slots element.
+      errors.add("File format error -- missing <slots>");
    }
-
-
 }
 
 
