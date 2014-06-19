@@ -219,6 +219,25 @@ void MainAppWindow::New()
 
 void MainAppWindow::Open()
 {
+   if (fScumbler->IsDirty())
+   {
+      int result = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+        "Save current configuration?",
+        "Save changes to the Scumbler before opening another one?",
+        "Save", "Discard", "Cancel", 
+        nullptr, nullptr);
+      if (0 == result)
+      {
+          //cancel
+          return;  
+      }
+      else if (1 == result)
+      {
+          // save first
+          this->Save();
+      }
+      // else it's 2 and we don't do anything to discard except keep going     
+   }
    FileChooser fc("Open a scumbler file", 
      File::getSpecialLocation(File::userDocumentsDirectory), "*" + kFileExtension);
    if (fc.browseForFileToOpen())
