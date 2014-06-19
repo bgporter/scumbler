@@ -5,14 +5,6 @@
 int Track::sTrackCount = 0;
 
 
-namespace 
-{
-   const String kTAGtrack("track");
-   const String kTAGname("name");
-   const String kTAGmuted("muted");
-   const String kTAGsoloed("soloed");
-
-};
 
 
 Track::Track(Scumbler* owner, int preFxCount, int postFxCount, const String& name)
