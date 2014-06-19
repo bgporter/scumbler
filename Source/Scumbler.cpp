@@ -42,6 +42,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fPluginManager(pluginManager)
 , fProcessing(false)
 , fPlaying(false)
+, fDirty(false)
 , fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
 , fOutputNode(tk::kInvalidNode)
@@ -59,6 +60,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
    this->StartProcessing();
    this->Reset();
    this->SetOutputVolume(fOutputVolume);
+   fDirty = false;
 }
 
 Scumbler::~Scumbler()
@@ -127,6 +129,9 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       // !!! add an error string to the error message list
       // 
    }
+
+   // by definition, right after we've reloaded from disk, we're not dirty.
+   fDirty = false;
 
 }
 
@@ -216,6 +221,17 @@ bool Scumbler::IsPlaying() const
    return fPlaying;
 }
 
+void Scumbler::SetDirty(bool isDirty)
+{
+   fDirty = isDirty;
+   this->sendChangeMessage();
+}
+
+bool Scumbler::IsDirty() const
+{
+   return fDirty;
+}
+
 void Scumbler::Reset(bool addFirstTrack)
 {
    this->Pause();
@@ -287,7 +303,7 @@ void Scumbler::SetOutputVolume(float volumeInDb)
 
       // update our observers.
       std::cout << "Scumbler::SetOutputVolume->sendChangeMessage" << std::endl;
-      this->sendChangeMessage();
+      this->SetDirty();
    }
 }
 
@@ -427,7 +443,7 @@ tk::Result Scumbler::AddTrack(const String& name)
 {
    fTracks.add(new Track(this, kPreEffects, kPostEffects, name));
    std::cout << "Scumbler::AddTrack->sendChangeMessage" << std::endl;
-   this->sendChangeMessage();
+   this->SetDirty();
    return tk::kSuccess;
 }
 
@@ -440,7 +456,7 @@ tk::Result Scumbler::DeleteTrack(int index)
       fTracks.remove(index);
       retval = tk::kSuccess;
    std::cout << "Scumbler::DeleteTrack->sendChangeMessage" << std::endl;
-      this->sendChangeMessage();
+      this->SetDirty();
    }
    return retval;
 }
@@ -457,7 +473,7 @@ tk::Result Scumbler::ActivateTrack(int index)
          Track* newActive = this->GetTrack(index);
          newActive->SetActive(true);
    std::cout << "Scumbler::ActivateTrack->sendChangeMessage" << std::endl;
-         this->sendChangeMessage();
+         this->SetDirty();
       }
    }
    return retval;
@@ -582,7 +598,7 @@ tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
       fTracks.move(fromIndex, toIndex);
       retval = tk::kSuccess;
    std::cout << "Scumbler::MoveTrack->sendChangeMessage" << std::endl;
-      this->sendChangeMessage();
+      this->SetDirty();
    }
    return retval;
 }

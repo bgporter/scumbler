@@ -192,9 +192,29 @@ void MainAppWindow::ViewPlugins(bool display)
 void MainAppWindow::New()
 {
    // !!! Check existing scumbler dirty state first!
+   if (fScumbler->IsDirty())
+   {
+      int result = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+        "Save current configuration?",
+        "Save changes to the Scumbler before creating a new one?",
+        "Save", "Discard", "Cancel", 
+        nullptr, nullptr);
+      if (0 == result)
+      {
+          //cancel
+          return;  
+      }
+      else if (1 == result)
+      {
+          // save first
+          this->Save();
+      }
+      // else it's 2 and we don't do anything to discard except keep going.
+
+   }
    this->CreateNewScumblerAndComponent(true);
    // reset the file path..
-    fFilePath = String::empty;
+   fFilePath = String::empty;
 }
 
 void MainAppWindow::Open()
@@ -274,6 +294,7 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
       fScumbler->ActivateTrack(0);
    }
 
+   fScumbler->SetDirty(false);
 
    // create the scumbler component that owns & operates our user interface.NOTE 
    // that because we're about to call 'setContentOwned()' we don't need to retain a pointer 

@@ -117,6 +117,19 @@ public:
    bool IsPlaying() const;
 
    /**
+    * Mark this scumbler object as being changed since the last time it was saved. 
+    */
+   void SetDirty(bool isDirty=true);
+
+
+   /**
+    * Returns true if the scumbler has been changed since the last time it was
+    * saved.
+    * @return true/false.
+    */
+   bool IsDirty() const;
+
+   /**
     * Do a complete reset on the processor graph. 
     * @param addFirstTrack Should we add a single empty track to the scumbler so 
     *                      it can start working right away? 
@@ -504,6 +517,11 @@ private:
     * Are we playing right now?
     */
    bool fPlaying;
+
+   /**
+    * Do changes need to be saved?
+    */
+   bool fDirty;
 
    KnownPluginList::SortMethod fPluginSort;
 
