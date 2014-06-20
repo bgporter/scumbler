@@ -284,6 +284,7 @@ tk::Result Track::SetInputPan(float pan)
    fInputProcessor->SetPan(pan);
    fPan = pan;
    std::cout << "Track::SetInputPan->sendChangeMessage" << std::endl;
+   fScumbler->SetDirty();
    this->sendChangeMessage();
    return tk::kSuccess;
 
@@ -296,9 +297,13 @@ float Track::GetInputPan() const
 
 void Track::SetEnabledChannels(tk::ChannelEnable channels)
 {
-   fInputProcessor->SetEnabledChannels(channels);
-   std::cout << "Track::SetEnabledChannels->sendChangeMessage" << std::endl;
-   this->sendChangeMessage();
+   if (this->GetEnabledChannels() != channels)
+   {
+      fInputProcessor->SetEnabledChannels(channels);
+      std::cout << "Track::SetEnabledChannels->sendChangeMessage" << std::endl;
+      fScumbler->SetDirty();
+      this->sendChangeMessage();
+   }
 }
 
 tk::ChannelEnable Track::GetEnabledChannels() const
@@ -335,7 +340,8 @@ void Track::SetOutputVolume(float volumeInDb)
       fOutputGain->SetGain(gain);
 
       // update our observers.
-   std::cout << "Track::SetOutputVolume->sendChangeMessage" << std::endl;
+      //std::cout << "Track::SetOutputVolume->sendChangeMessage" << std::endl;
+      fScumbler->SetDirty();
       this->sendChangeMessage();
    }
 

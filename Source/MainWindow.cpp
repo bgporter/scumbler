@@ -118,19 +118,31 @@ void MainAppWindow::closeButtonPressed()
     JUCEApplication::getInstance()->systemRequestedQuit();
 }
 
-void MainAppWindow::changeListenerCallback(ChangeBroadcaster*)
+void MainAppWindow::changeListenerCallback(ChangeBroadcaster* source)
 {
   this->menuItemsChanged();
-  // re-save the plug-in list as it changes so we have at least a partial inventory
-  // in the event of a crash.
-  ScopedPointer<XmlElement> savedPluginList(gKnownPlugins.createXml());
-
-  if (nullptr != savedPluginList)
+  if (source == &gKnownPlugins)
   {
-    PropertiesFile* userSettings = gAppProperties->getUserSettings();
-    userSettings->setValue("pluginList", savedPluginList);
-    gAppProperties->saveIfNeeded();
+    // re-save the plug-in list as it changes so we have at least a partial inventory
+    // in the event of a crash.
+    ScopedPointer<XmlElement> savedPluginList(gKnownPlugins.createXml());
+
+    if (nullptr != savedPluginList)
+    {
+      PropertiesFile* userSettings = gAppProperties->getUserSettings();
+      userSettings->setValue("pluginList", savedPluginList);
+      gAppProperties->saveIfNeeded();
+    }
   } 
+  else if (source == fScumbler)
+  {
+     String title = fScumbler->GetTitle();
+     if (fScumbler->IsDirty())
+     {
+        title += "*";
+     }    
+     this->setName(title);
+  }
 }
 
 
@@ -265,6 +277,7 @@ void MainAppWindow::Save()
      ScopedPointer<XmlElement> contents(fScumbler->DumpXml(0));
      File temp(fFilePath);
      contents->writeToFile(temp, String::empty);
+     fScumbler->SetDirty(false);
    }
    else
    {
@@ -299,6 +312,7 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
       // if there's already a scumbler object in existence, tell it to stop processing
       // so we can get the new one we're about to create connected correctly.
       fScumbler->StopProcessing();
+      fScumbler->removeChangeListener(this);
    }  
    fScumbler = new Scumbler(fDeviceManager, fPluginManager);
    // Pass any saved configuration parameters down to the scumbler object.
@@ -314,16 +328,17 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
    }
 
    fScumbler->SetDirty(false);
+   fScumbler->addChangeListener(this);
 
    // create the scumbler component that owns & operates our user interface.NOTE 
    // that because we're about to call 'setContentOwned()' we don't need to retain a pointer 
    // to the component here. This window object will take care of its lifespan.
    ScumblerComponent* c = new ScumblerComponent(fScumbler);
    gCommandManager->registerAllCommandsForTarget(c);
-   int w = this->getWidth();
-   int h = this->getHeight();
    // set that component as this window's content (and take ownership of the pointer)
    this->setContentOwned(c, true);
+   int w = this->getWidth();
+   int h = this->getHeight();
    // why 128? When JUCE is creating the main window component, it starts out 
    // for some reason at 128x128 dimensions. If we've already been sized explicitly, 
    // restore those dimensions after replacing the ScumblerComponent. !!! At 

@@ -40,6 +40,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
                   AudioPluginFormatManager& pluginManager)
 : fDeviceManager(deviceManager)
 , fPluginManager(pluginManager)
+, fTitle("Untitled")
 , fProcessing(false)
 , fPlaying(false)
 , fDirty(false)
@@ -99,6 +100,16 @@ tk::Result Scumbler::StopProcessing()
    return retval;
 }
 
+String Scumbler::GetTitle() const
+{
+   return fTitle;
+}
+
+tk::Result Scumbler::SetTitle(String title)
+{
+   fTitle = title; 
+   return tk::kSuccess;
+}
 
 
 void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
@@ -131,7 +142,7 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
    }
 
    // by definition, right after we've reloaded from disk, we're not dirty.
-   fDirty = false;
+   this->SetDirty(false);
 
 }
 

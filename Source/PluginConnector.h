@@ -165,6 +165,11 @@ public:
    }
 
 
+   /**
+    * Set (or clear) the dirty state of this object.
+    * @param isDirty Should we set or clear (default = set).
+    */
+   virtual void SetDirty(bool isDirty=true) {};
 
 };
 

@@ -82,6 +82,19 @@ public:
     */
    tk::Result StopProcessing();
 
+
+   /**
+    * Get the title of this scumbler object.
+    * @return the title/name.
+    */
+   String GetTitle() const; 
+
+   /**
+    * Change the title of this scumbler object.
+    * @return success/fail
+    */
+   tk::Result SetTitle(String title);
+
    /**
     * Load this object from the provided XmlElement object. If this object owns 
     * objects of classes that are also XmlPersistent, call those recursively.
@@ -117,7 +130,8 @@ public:
    bool IsPlaying() const;
 
    /**
-    * Mark this scumbler object as being changed since the last time it was saved. 
+    * Set (or clear) the dirty state of this object.
+    * @param isDirty Should we set or clear (default = set).
     */
    void SetDirty(bool isDirty=true);
 
@@ -507,6 +521,9 @@ private:
 
    AudioPluginFormatManager& fPluginManager;
 
+
+
+   String fTitle;
 
    /**
     * Are we processing audio right now?
