@@ -327,8 +327,8 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
       fScumbler->ActivateTrack(0);
    }
 
-   fScumbler->SetDirty(false);
    fScumbler->addChangeListener(this);
+   fScumbler->SetDirty(false);
 
    // create the scumbler component that owns & operates our user interface.NOTE 
    // that because we're about to call 'setContentOwned()' we don't need to retain a pointer 

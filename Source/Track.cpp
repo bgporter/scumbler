@@ -229,9 +229,12 @@ Track::SoloState Track::IsSoloed() const
 tk::Result Track::Mute(bool muted)
 {
    ScopedLock sl(fMutex);
-   fMuted = muted;
-   std::cout << "Track::Mute->sendChangeMessage" << std::endl;
-   this->sendChangeMessage();
+   if (muted != fMuted)
+   {
+      fMuted = muted;
+      std::cout << "Track::Mute->sendChangeMessage" << std::endl;
+      this->sendChangeMessage();
+   }
    return tk::kSuccess;
 
 }
@@ -281,11 +284,14 @@ float Track::GetInputGain() const
 
 tk::Result Track::SetInputPan(float pan)
 {
-   fInputProcessor->SetPan(pan);
-   fPan = pan;
-   std::cout << "Track::SetInputPan->sendChangeMessage" << std::endl;
-   fScumbler->SetDirty();
-   this->sendChangeMessage();
+   if (fPan != pan)
+   {
+      fInputProcessor->SetPan(pan);
+      fPan = pan;
+      std::cout << "Track::SetInputPan->sendChangeMessage" << std::endl;
+      fScumbler->SetDirty();
+      this->sendChangeMessage();
+   }
    return tk::kSuccess;
 
 }

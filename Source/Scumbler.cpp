@@ -235,6 +235,7 @@ bool Scumbler::IsPlaying() const
 void Scumbler::SetDirty(bool isDirty)
 {
    fDirty = isDirty;
+   std::cout << "Scumbler::SetDirty(" << isDirty << ");" << std::endl;
    this->sendChangeMessage();
 }
 
