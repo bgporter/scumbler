@@ -111,8 +111,15 @@ void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
    }
    else if (fResetButton == buttonThatWasClicked)
    {
-      //fScumbler->ResetAllTracks();
-      fScumbler->SeekAllTracksAbsolute(0);
+      ModifierKeys mk = ModifierKeys::getCurrentModifiers();
+      if (mk.isShiftDown())
+      {
+         fScumbler->ResetAllTracks();
+      }
+      else
+      {
+         fScumbler->SeekAllTracksAbsolute(0);
+      }
    }
 }
 
