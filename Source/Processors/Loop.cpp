@@ -44,6 +44,7 @@ LoopProcessor::LoopProcessor(Track* track, int channelCount)
 ,  fLoopBuffer(nullptr)
 ,  fLoopPosition(0)
 ,  fLoopCount(0)
+,  fWasReset(false)
 {
 
 }
@@ -184,6 +185,7 @@ void LoopProcessor::Reset()
    fLoopBuffer->clear();
    fLoopPosition = 0;
    fLoopCount = 0;    // ?
+   fWasReset = true;
    this->sendChangeMessage();
 }
 
@@ -203,12 +205,13 @@ void LoopProcessor::SeekAbsolute(int loopPos)
 
    ScopedLock sl(fMutex);
    fLoopPosition = loopPos;
+   fWasReset = true;
 
    this->sendChangeMessage();
 
 }
 
-void LoopProcessor::GetLoopInfo(LoopInfo& info) const
+void LoopProcessor::GetLoopInfo(LoopInfo& info)
 {
    ScopedLock sl(fMutex);   
    info.fSampleRate = fSampleRate;
@@ -223,6 +226,8 @@ void LoopProcessor::GetLoopInfo(LoopInfo& info) const
    }
    info.fLoopCount = fLoopCount;
    info.fIsPlaying = fTrack->IsPlaying();
+   info.fWasReset = fWasReset;
+   fWasReset = false;
 }
 
 const String LoopProcessor::getName() const

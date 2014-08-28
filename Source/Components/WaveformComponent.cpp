@@ -75,6 +75,13 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
              // size of the loop has changed; we need to recalculate things.
              this->LoopSizeChanged();
          }
+         else if (info.fWasReset)
+         {
+            // no the loop size didn't really change, but calling
+            // LoopSizeChanged() does everything that we want it to do w/r/t
+            // resetting the now pointer to the beginning of the buffer.
+            this->LoopSizeChanged();
+         }
          else if ((0 == info.fLoopSample) && (0 != fLoopInfo.fLoopSample) &&
             (0 == info.fLoopCount) && (0 != fLoopInfo.fLoopCount))
          {

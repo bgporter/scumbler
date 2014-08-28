@@ -35,6 +35,7 @@ public:
       int     fLoopLength;  //**< number of samples in the loop
       int     fLoopCount;   //**< how many times have we played through the loop?
       bool    fIsPlaying;   //**< are we currently playing?
+      bool    fWasReset;    //**< was the buffer reset since the last time we looked at it?
 
       /**
        * We need to provide our own op= -- this is used in the waveform component to 
@@ -46,7 +47,8 @@ public:
                (fLoopSample == rhs.fLoopSample) &&
                (fLoopLength == rhs.fLoopLength) &&
                (fLoopCount == rhs.fLoopCount) &&
-               (fIsPlaying == rhs.fIsPlaying));
+               (fIsPlaying == rhs.fIsPlaying) &&
+               (fWasReset == rhs.fWasReset));
       };
       bool operator!=(const LoopInfo& rhs) const { return !operator==(rhs); };
    };
@@ -187,7 +189,7 @@ public:
     * update the UI correctly.
     * @param info LoopInfo struct. Filled on output.
     */
-   void GetLoopInfo(LoopInfo& info) const;
+   void GetLoopInfo(LoopInfo& info);
    /**
      * @name required overrides of pure virtual functions.
      */
@@ -283,6 +285,11 @@ private:
     * Number of times we've looped. Updated each time we wrap around.
     */
    int fLoopCount;
+
+   /**
+    * Were we fully reset since the last time the display code looked at us?
+    */
+   bool fWasReset;
 
    /**
     * Make access to variables threadsafe.
