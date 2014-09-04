@@ -260,7 +260,7 @@ void WaveformComponent::GetThumbnailData()
       // each value in the fPixelData array is absolute value 0..1 of the 
       // max sample in the pertinent chunk. We need to convert that into a pair
       // of pixel y-values that are symmetrical about the vertical center of this component.
-      float pixelVal = fThumbData->fPixelData[i];
+      float pixelVal = fThumbData->GetPixelValue(0, i);
       float deflection  = fFullScaleHeight * pixelVal;
       fPixels.set(pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
    }
