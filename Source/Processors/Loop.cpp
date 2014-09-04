@@ -14,26 +14,30 @@
 
 
 LoopProcessor::ThumbnailData::ThumbnailData(int channelCount)
+:  fChannelCount(channelCount)
 {
-   fPixelData.resize(channelCount);
 }
 
 void LoopProcessor::ThumbnailData::Resize(int newCapacity)
 {
-   // for (int channel = 0; channel < fPixelData.size(); ++channel)
-   // {
-   //    fPixelData[channel].resize(newCapacity);
-   // }
-   fPixelData.resize(newCapacity);
+   fPixelData.resize(newCapacity * fChannelCount);
 }
 
 void LoopProcessor::ThumbnailData::SetPixelValue(int channel, int pixelNum, float val)
 {
    // DANGER: assuming that all parameters are sane values
-   //fPixelData[channel].set(pixelNum, val);
-   fPixelData.set(pixelNum, val);
+   assert(channel <= fChannelCount);
+
+   // we are manually stuffing 
+   fPixelData.set(pixelNum * fChannelCount + channel, val);
 
 }
+
+float LoopProcessor::ThumbnailData::GetPixelValue(int channel, int pixelNum)
+{
+   return fPixelData[pixelNum * fChannelCount + channel];
+}
+
 
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
 :  PassthroughProcessor(channelCount, channelCount)

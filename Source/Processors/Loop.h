@@ -117,6 +117,14 @@ public:
        */
       void SetPixelValue(int channel, int pixelNum, float val);
 
+      /**
+       * Return the pixel value for the specified (channel, pixelNum) tuple.
+       * @param  channel  Channel# (0..channelCount-1)
+       * @param  pixelNum pixel num being addressed (0..currentWidth)
+       * @return          value from 0..1
+       */
+      float GetPixelValue(int channel, int pixelNum);
+
 
 
    };
