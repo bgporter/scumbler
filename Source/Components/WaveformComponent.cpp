@@ -9,8 +9,9 @@
 // turn on/off log statements in the paint() loop.
 //#define qLogPaint
 
-WaveformComponent::WaveformComponent(LoopProcessor* loop)
-:  fLoop(nullptr)
+WaveformComponent::WaveformComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop)
+:  fColors(colors)
+,  fLoop(nullptr)
 ,  fPendingSamples(0)
 ,  fRedrawAfterSampleCount(0)
 ,  fDirtyStart(INT_MAX)

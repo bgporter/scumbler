@@ -9,6 +9,7 @@
 
 
 #include "Loop.h"
+#include "TrackComponent.h"
 
 class Track;
 
@@ -90,7 +91,7 @@ class WaveformComponent :  public Component
                         ,  public ChangeListener   
 {
 public:
-   WaveformComponent(LoopProcessor* loop);
+   WaveformComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop);
 
    ~WaveformComponent();
 
@@ -161,6 +162,7 @@ private:
 
 
 private:
+   TrackComponent::LoopColors* fColors;
    LoopProcessor* fLoop;
    LoopProcessor::LoopInfo  fLoopInfo;
    ScopedPointer<LoopProcessor::ThumbnailData> fThumbData;

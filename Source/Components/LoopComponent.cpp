@@ -26,7 +26,7 @@ LoopComponent::LoopComponent(TrackComponent::LoopColors* colors, LoopProcessor* 
 ,  fWaveform(nullptr)
 {
 
-   fWaveform = new WaveformComponent(nullptr);
+   fWaveform = new WaveformComponent(fColors, nullptr);
    this->addAndMakeVisible(fWaveform);
     
    this->ConnectToLoop(loop);
