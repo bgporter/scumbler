@@ -101,6 +101,7 @@ public:
         Colour leftWave;
         Colour rightWave;
         Colour tick;
+        Colour now;
 
     };
 

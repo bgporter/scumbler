@@ -390,6 +390,7 @@ TrackComponent::LoopColors::LoopColors()
   leftWave = Colours::red;
   rightWave = Colours::blue;
   tick = Colours::grey;
+  now = Colours::red;
 
 }
 void TrackComponent::ConnectToTrack(Track* track)

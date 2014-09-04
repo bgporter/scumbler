@@ -274,7 +274,7 @@ void WaveformComponent::GetThumbnailData()
 
 void WaveformComponent::paint(Graphics& g)
 {
-   g.fillAll(Colours::white);
+   g.fillAll(fColors->bg);
 
    Rectangle<int> clip = g.getClipBounds();
 #ifdef qLogPaint
@@ -282,7 +282,7 @@ void WaveformComponent::paint(Graphics& g)
    c << clip.getX() << ".." << clip.getX() + clip.getWidth();
    Logger::outputDebugString(c); 
 #endif   
-   g.setColour(Colours::black);
+   g.setColour(fColors->fg);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
    int nowPixel = this->PixelForSample(fNow);
@@ -297,7 +297,7 @@ void WaveformComponent::paint(Graphics& g)
    int height = this->getHeight();
 
    // draw tick markers.
-   g.setColour(Colours::grey);
+   g.setColour(fColors->tick);
    for (int tick = 0; tick < fTicks.size(); ++tick)
    {
       int tickPixel = fTicks.getUnchecked(tick);
@@ -313,7 +313,7 @@ void WaveformComponent::paint(Graphics& g)
          g.drawVerticalLine(tickPixel, height-9, height);
       }
    }
-   g.setColour(Colours::black);
+   g.setColour(fColors->monoWave);
 
    // draw a line for every waveform deflection from the zero point.
    for (int x = startIndex;  x < endIndex; ++x)
@@ -321,11 +321,11 @@ void WaveformComponent::paint(Graphics& g)
       WaveformPoint p(fPixels[x]);
       if ( (x == nowPixel) || (x == (nowPixel + 1)) || (x == nowPixel - 1) )
       {
-         g.setColour(Colours::red);
+         g.setColour(fColors->now);
          g.drawVerticalLine(x, 0, height);
-         g.setColour(Colours::white);
+         g.setColour(fColors->bg);
          g.drawVerticalLine(x, p.top, p.bottom);
-         g.setColour(Colours::black);
+         g.setColour(fColors->monoWave);
 
       }
       else if (p.top - p.bottom > 1)
