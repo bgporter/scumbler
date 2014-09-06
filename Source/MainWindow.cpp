@@ -304,6 +304,10 @@ void MainAppWindow::SaveAs()
 
 }
 
+bool MainAppWindow::IsDirty() const
+{
+   return fScumbler->IsDirty();  
+}
 
 void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
 {
