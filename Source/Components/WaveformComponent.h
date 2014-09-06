@@ -87,6 +87,52 @@ public:
 
 };
 
+
+class WaveformPointArray
+{
+public:
+   /**
+    * Create an empty array of points.
+    */
+   WaveformPointArray(int channels);
+
+   ~WaveformPointArray();
+
+   /**
+    * Resize the array to hold (fChannels * width) WaveformPoints.
+    * @param width Number of points to hold.
+    */
+   void Resize(int width);
+
+   /**
+    * Set a new value for the point at (channel, pixel)
+    * @param channel Channel num
+    * @param pixel   Pixel index
+    * @param point   Ref to a waveform point.
+    */
+   void SetPoint(int channel, int pixel, WaveformPoint const& point);
+
+   /**
+    * Get the waveform point data for the specified (channel, pixel)
+    * @param  channel hannel num
+    * @param  pixel   pixel index
+    * @return         WaveFormPoint object.
+    */
+   WaveformPoint GetPoint(int channel, int pixel) const;
+
+   /**
+    * Get the number of channels to draw.
+    * @return the number of channels (0..1)
+    */
+   int ChannelCount() const { return fChannelCount;};
+
+
+private:
+   int fChannelCount;
+   Array<WaveformPoint> fPoints;
+
+};
+
 class WaveformComponent :  public Component
                         ,  public ChangeListener   
 {
@@ -166,8 +212,7 @@ private:
    LoopProcessor* fLoop;
    LoopProcessor::LoopInfo  fLoopInfo;
    ScopedPointer<LoopProcessor::ThumbnailData> fThumbData;
-   // for the moment, a single array; not one per channel.
-   Array<WaveformPoint> fPixels;
+   WaveformPointArray fPixels;
 
    float fFullScaleHeight;  /**< scale factor for a wave val == 1.0 */
    float fCenterYPos; 

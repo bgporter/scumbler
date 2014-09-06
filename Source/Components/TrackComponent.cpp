@@ -387,8 +387,8 @@ TrackComponent::LoopColors::LoopColors()
   bg = Colours::white;
   fg = Colours::black;
   monoWave = Colours::black;
-  leftWave = Colours::red;
-  rightWave = Colours::blue;
+  leftWave = Colour((uint8) 0xff,(uint8)  0, (uint8) 0, (uint8) 0x80);
+  rightWave = Colour((uint8) 0, (uint8) 0xC4, (uint8) 0x80, (uint8) 0x80);
   tick = Colours::grey;
   now = Colours::red;
 

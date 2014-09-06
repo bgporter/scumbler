@@ -9,9 +9,37 @@
 // turn on/off log statements in the paint() loop.
 //#define qLogPaint
 
+
+WaveformPointArray::WaveformPointArray(int channels)
+:  fChannelCount(channels)
+{
+   // empty
+}
+
+WaveformPointArray::~WaveformPointArray()
+{
+   // empty
+}
+
+void WaveformPointArray::Resize(int width)
+{
+   fPoints.resize(width * fChannelCount);
+}
+
+void WaveformPointArray::SetPoint(int channel, int pixel, WaveformPoint const& point)
+{
+   fPoints.set(pixel*fChannelCount + channel, point);
+}
+
+WaveformPoint WaveformPointArray::GetPoint(int channel, int pixel) const
+{
+   return fPoints[pixel*fChannelCount + channel];
+}
+
 WaveformComponent::WaveformComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop)
 :  fColors(colors)
 ,  fLoop(nullptr)
+,  fPixels(2)
 ,  fPendingSamples(0)
 ,  fRedrawAfterSampleCount(0)
 ,  fDirtyStart(INT_MAX)
@@ -152,7 +180,7 @@ void WaveformComponent::resized()
 #endif   
 
    int width = this->getWidth();
-   fPixels.resize(width);
+   fPixels.Resize(width);
 
    // if we resize, we need to repaint everything.
    this->CalculateSamplesPerPixel();
@@ -260,9 +288,14 @@ void WaveformComponent::GetThumbnailData()
       // each value in the fPixelData array is absolute value 0..1 of the 
       // max sample in the pertinent chunk. We need to convert that into a pair
       // of pixel y-values that are symmetrical about the vertical center of this component.
+      // Left channel first, 
       float pixelVal = fThumbData->GetPixelValue(0, i);
       float deflection  = fFullScaleHeight * pixelVal;
-      fPixels.set(pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
+      fPixels.SetPoint(0, pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
+      // ...then right channel.
+      pixelVal = fThumbData->GetPixelValue(1, i);
+      deflection  = fFullScaleHeight * pixelVal;
+      fPixels.SetPoint(1, pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
    }
    fDirtyPixels += fThumbData->fPixelsReturned;
 #ifdef qLogPaint
@@ -313,24 +346,35 @@ void WaveformComponent::paint(Graphics& g)
          g.drawVerticalLine(tickPixel, height-9, height);
       }
    }
-   g.setColour(fColors->monoWave);
+   // !!! Missing logic to handle a mono loop.
 
    // draw a line for every waveform deflection from the zero point.
    for (int x = startIndex;  x < endIndex; ++x)
    {
-      WaveformPoint p(fPixels[x]);
+      WaveformPoint left = fPixels.GetPoint(0, x);
+      WaveformPoint right = fPixels.GetPoint(1, x);
+
       if ( (x == nowPixel) || (x == (nowPixel + 1)) || (x == nowPixel - 1) )
       {
          g.setColour(fColors->now);
          g.drawVerticalLine(x, 0, height);
          g.setColour(fColors->bg);
-         g.drawVerticalLine(x, p.top, p.bottom);
+         g.drawVerticalLine(x, jmax(left.top, right.top), jmin(left.bottom, right.bottom));
          g.setColour(fColors->monoWave);
 
       }
-      else if (p.top - p.bottom > 1)
-      {
-         g.drawVerticalLine(x, p.top, p.bottom);
+      else
+      { 
+         if (left.top - left.bottom > 1)
+         {
+            g.setColour(fColors->leftWave);
+            g.drawVerticalLine(x, left.top, left.bottom);
+         }
+         if (right.top - right.bottom > 1)
+         {  
+            g.setColour(fColors->rightWave);
+            g.drawVerticalLine(x, right.top, right.bottom);
+         }
       }
    }
    // there's nothing dirty anymore because we've displayed everything. 

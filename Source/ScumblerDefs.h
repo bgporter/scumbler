@@ -86,6 +86,8 @@ namespace tk
       kStereo = 0x03
    };
 
+
+
 };
 
 /**
