@@ -34,6 +34,7 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
     : Component ("The Scumbler")
     , fScumbler(scumbler)
     , fTransport(nullptr)
+    , fFontName("")
 {
 
 
@@ -42,6 +43,39 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
 
 
     //[Constructor] You can add your own custom stuff here..
+    
+    const char* const fontNames[] = {"Helvetica Neue", "Helvetica", "Arial", nullptr};
+    //const char* const fontNames[] = {"foo", "banana", "whelp", nullptr};
+    StringArray desiredFonts(fontNames);
+    StringArray availableFonts(Font::findAllTypefaceNames());
+    
+    // loop through the desired font names and find the first one that is present on the system.
+    for (int i = 0; i < desiredFonts.size(); ++i)
+    {
+        String fontName = desiredFonts[i];
+        if (availableFonts.contains(fontName))
+        {
+           fFontName = fontName;
+           break;
+        }
+    }
+    if (String("") == fFontName)
+    {
+        // none of the
+        fFontName = Font::getDefaultSansSerifFontName();
+    }
+
+
+    fTitle = new Label("title", fScumbler->GetTitle());
+    this->addAndMakeVisible(fTitle);
+    fTitle->setFont (Font (fFontName, 32.00f, Font::bold));
+    fTitle->setJustificationType (Justification::centredLeft);
+    fTitle->setEditable (false, true, false);
+    fTitle->setColour (TextEditor::textColourId, Colours::black);
+    fTitle->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+    fTitle->addListener(this);
+
+
         // adding track(s)
     for (int i = 0; i < fScumbler->GetNumTracks(); ++i)
     {
@@ -91,6 +125,7 @@ void ScumblerComponent::paint (Graphics& g)
 void ScumblerComponent::resized()
 {
     //[UserResized] Add your own custom resize handling here..
+    fTitle->setBounds(0, 0, this->getWidth(), 32);
     int trackCount = fTracks.size();
     for (int i = 0; i < trackCount; ++i)
     {
@@ -360,6 +395,16 @@ bool ScumblerComponent::keyPressed(const KeyPress& key)
       retval = false;
    }
    return retval;
+}
+
+
+void ScumblerComponent::labelTextChanged(Label* source)
+{
+  if (fTitle == source)
+  {
+    fScumbler->SetTitle(source->getText());
+  }
+
 }
 
 void ScumblerComponent::SetTrackBounds(int index, TrackComponent* tc)

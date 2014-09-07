@@ -48,7 +48,8 @@
 class ScumblerComponent  : public Component,
                            public ApplicationCommandTarget,
                            public ChangeListener,
-                           public ButtonListener
+                           public ButtonListener,
+                           public LabelListener
 {
 public:
     //==============================================================================
@@ -93,8 +94,11 @@ public:
      */
     void changeListenerCallback(ChangeBroadcaster* source);
 
+    void labelTextChanged(Label* source);
+
     bool keyPressed(const KeyPress& key);
 
+    String GetFontName() const {return fFontName; };
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -109,6 +113,8 @@ private:
     OwnedArray<TrackComponent>  fTracks;
     TransportComponent* fTransport;
     TooltipWindow fTooltipWindow;
+    String fFontName;
+    ScopedPointer<Label> fTitle;
     //[/UserVariables]
 
     //==============================================================================
