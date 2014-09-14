@@ -20,6 +20,7 @@ extern ApplicationProperties* gAppProperties;
 extern KnownPluginList  gKnownPlugins;
 
 class PluginListWindow;
+class UiStyle;
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
@@ -49,6 +50,11 @@ public:
      * @param display Passing `true` will display the plugin window, `false` will delete it. 
      */
     void ViewPlugins(bool display=true);
+
+    /**
+     * Get the UiStyle used by the application set up. 
+     */
+    void InitializeStyle();
 
 
     /**
@@ -155,6 +161,8 @@ private:
      * app closes.
      */
     ScopedPointer<Scumbler> fScumbler;
+
+    ScopedPointer<UiStyle>  fStyle;
 
     /**
      * A pointer to the window that lists/scans for plugins.

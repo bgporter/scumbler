@@ -12,6 +12,8 @@
 
 #include "Commands.h"
 #include "Components/ScumblerComponent.h"
+#include "Components/UiStyle.h"
+#include "Components/Palette.h"
 #include "PluginListWindow.h"
 
 
@@ -28,6 +30,8 @@ MainAppWindow::MainAppWindow()
     , fScumbler(nullptr)
     , fFilePath(String::empty)
 {
+
+  this->InitializeStyle();
 
   // make sure that the plugin format manager knows to look for AU/VST formats.
   fPluginManager.addDefaultFormats();
@@ -180,6 +184,37 @@ void MainAppWindow::ConfigureAudio()
 
 }
 
+
+void MainAppWindow::InitializeStyle()
+{    
+    const char* const fontNames[] = {"Helvetica Neue", "Helvetica", "Arial", nullptr};
+    //const char* const fontNames[] = {"foo", "banana", "whelp", nullptr};
+    StringArray desiredFonts(fontNames);
+    StringArray availableFonts(Font::findAllTypefaceNames());
+
+    String uiFont("");
+    
+    // loop through the desired font names and find the first one that is present on the system.
+    for (int i = 0; i < desiredFonts.size(); ++i)
+    {
+        String fontName = desiredFonts[i];
+        if (availableFonts.contains(fontName))
+        {
+           uiFont = fontName;
+           break;
+        }
+    }
+    if (String("") == uiFont)
+    {
+        // none of the
+        uiFont = Font::getDefaultSansSerifFontName();
+    }
+
+    Palette* palette = new Palette(true);
+
+    fStyle = new UiStyle(uiFont, palette);
+
+}
 
 void MainAppWindow::ViewPlugins(bool display)
 {
@@ -337,7 +372,7 @@ void MainAppWindow::CreateNewScumblerAndComponent(bool addFirstTrack)
    // create the scumbler component that owns & operates our user interface.NOTE 
    // that because we're about to call 'setContentOwned()' we don't need to retain a pointer 
    // to the component here. This window object will take care of its lifespan.
-   ScumblerComponent* c = new ScumblerComponent(fScumbler);
+   ScumblerComponent* c = new ScumblerComponent(fStyle, fScumbler);
    gCommandManager->registerAllCommandsForTarget(c);
    // set that component as this window's content (and take ownership of the pointer)
    this->setContentOwned(c, true);

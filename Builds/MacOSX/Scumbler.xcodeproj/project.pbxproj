@@ -25,6 +25,9 @@
 		446DF52B16BD4FF9001FB962 /* PluginListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 446DF52916BD4FF9001FB962 /* PluginListWindow.cpp */; };
 		4471332516CC75A800ED5338 /* LoopComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4471332316CC75A800ED5338 /* LoopComponent.cpp */; };
 		4471332816CD8FF600ED5338 /* TransportComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4471332616CD8FF500ED5338 /* TransportComponent.cpp */; };
+		447369AC19C5DC8300DE9359 /* StyledComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447369A719C5DC8300DE9359 /* StyledComponent.cpp */; };
+		447369AD19C5DC8300DE9359 /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447369AA19C5DC8300DE9359 /* Palette.cpp */; };
+		447369B019C5DF2200DE9359 /* UiStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447369AE19C5DF2200DE9359 /* UiStyle.cpp */; };
 		44A7179916C7F64300E187F9 /* PluginEditorWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */; };
 		44A7179C16C8871D00E187F9 /* Loop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44A7179A16C8871D00E187F9 /* Loop.cpp */; };
 		44ABE52C16702D650045030E /* Passthrough.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE52B16702D650045030E /* Passthrough.cpp */; };
@@ -305,6 +308,12 @@
 		4471332416CC75A800ED5338 /* LoopComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoopComponent.h; path = ../../Source/Components/LoopComponent.h; sourceTree = "<group>"; };
 		4471332616CD8FF500ED5338 /* TransportComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TransportComponent.cpp; path = ../../Source/Components/TransportComponent.cpp; sourceTree = "<group>"; };
 		4471332716CD8FF500ED5338 /* TransportComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransportComponent.h; path = ../../Source/Components/TransportComponent.h; sourceTree = "<group>"; };
+		447369A519C5DC8300DE9359 /* Palette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Palette.h; path = ../../Source/Components/Palette.h; sourceTree = "<group>"; };
+		447369A719C5DC8300DE9359 /* StyledComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StyledComponent.cpp; path = ../../Source/Components/StyledComponent.cpp; sourceTree = "<group>"; };
+		447369A819C5DC8300DE9359 /* StyledComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyledComponent.h; path = ../../Source/Components/StyledComponent.h; sourceTree = "<group>"; };
+		447369AA19C5DC8300DE9359 /* Palette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Palette.cpp; path = ../../Source/Components/Palette.cpp; sourceTree = "<group>"; };
+		447369AE19C5DF2200DE9359 /* UiStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UiStyle.cpp; path = ../../Source/Components/UiStyle.cpp; sourceTree = "<group>"; };
+		447369AF19C5DF2200DE9359 /* UiStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UiStyle.h; path = ../../Source/Components/UiStyle.h; sourceTree = "<group>"; };
 		44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditorWindow.cpp; path = ../../Source/PluginEditorWindow.cpp; sourceTree = "<group>"; };
 		44A7179816C7F64300E187F9 /* PluginEditorWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginEditorWindow.h; path = ../../Source/PluginEditorWindow.h; sourceTree = "<group>"; };
 		44A7179A16C8871D00E187F9 /* Loop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Loop.cpp; path = ../../Source/Processors/Loop.cpp; sourceTree = "<group>"; };
@@ -1300,6 +1309,12 @@
 		44ABE5321674199D0045030E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				447369AE19C5DF2200DE9359 /* UiStyle.cpp */,
+				447369AF19C5DF2200DE9359 /* UiStyle.h */,
+				447369A519C5DC8300DE9359 /* Palette.h */,
+				447369A719C5DC8300DE9359 /* StyledComponent.cpp */,
+				447369A819C5DC8300DE9359 /* StyledComponent.h */,
+				447369AA19C5DC8300DE9359 /* Palette.cpp */,
 				44647C7216DA4A6E00FA33BD /* WaveformComponent.cpp */,
 				44647C7316DA4A6F00FA33BD /* WaveformComponent.h */,
 				4471332616CD8FF500ED5338 /* TransportComponent.cpp */,
@@ -2688,6 +2703,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				447369AD19C5DC8300DE9359 /* Palette.cpp in Sources */,
 				DCD1DB3B5B564EB6EFCB74EB /* MainWindow.cpp in Sources */,
 				8A9502C9D27E245B83041F4A /* Main.cpp in Sources */,
 				465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */,
@@ -2705,6 +2721,7 @@
 				29CEA7CB356F0F8339499AD7 /* juce_gui_basics.mm in Sources */,
 				05EF86517C7CE2EB68DB96B6 /* juce_gui_extra.mm in Sources */,
 				138DE4376FFEC2F43F46D91A /* juce_opengl.mm in Sources */,
+				447369B019C5DF2200DE9359 /* UiStyle.cpp in Sources */,
 				443D1E3516572573004E645C /* Scumbler.cpp in Sources */,
 				44ABE52C16702D650045030E /* Passthrough.cpp in Sources */,
 				44ABE535167419B70045030E /* ScumblerComponent.cpp in Sources */,
@@ -2713,6 +2730,7 @@
 				44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */,
 				443D225316B0CDB8006B3CA6 /* PluginBlockComponent.cpp in Sources */,
 				4407EAA716B596D70024F3D7 /* PluginSlotComponent.cpp in Sources */,
+				447369AC19C5DC8300DE9359 /* StyledComponent.cpp in Sources */,
 				446DF52B16BD4FF9001FB962 /* PluginListWindow.cpp in Sources */,
 				44A7179916C7F64300E187F9 /* PluginEditorWindow.cpp in Sources */,
 				44A7179C16C8871D00E187F9 /* Loop.cpp in Sources */,

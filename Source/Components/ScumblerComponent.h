@@ -29,6 +29,7 @@
 
 #include "../Commands.h"
 #include "JuceHeader.h"
+#include "StyledComponent.h"
 #include "TrackComponent.h"
 #include "TransportComponent.h"  
 
@@ -45,15 +46,15 @@
   and the view, while the Scumbler itself functions as the model.
                                                                     //[/Comments]
 */
-class ScumblerComponent  : public Component,
+class ScumblerComponent  : public StyledComponent,
                            public ApplicationCommandTarget,
-                           public ChangeListener,
+                           //public ChangeListener,
                            public ButtonListener,
                            public LabelListener
 {
 public:
     //==============================================================================
-    ScumblerComponent (Scumbler* scumbler);
+    ScumblerComponent (UiStyle* style, Scumbler* scumbler);
     ~ScumblerComponent();
 
     //==============================================================================
@@ -98,7 +99,6 @@ public:
 
     bool keyPressed(const KeyPress& key);
 
-    String GetFontName() const {return fFontName; };
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -113,7 +113,6 @@ private:
     OwnedArray<TrackComponent>  fTracks;
     TransportComponent* fTransport;
     TooltipWindow fTooltipWindow;
-    String fFontName;
     ScopedPointer<Label> fTitle;
     //[/UserVariables]
 
