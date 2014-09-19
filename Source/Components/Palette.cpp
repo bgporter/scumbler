@@ -46,6 +46,17 @@ bool Palette::SetColor(const String& colorName, uint32 argb)
 }
 
 
+bool Palette::SetColor(const String& colorName, const String& existingColorName)
+{
+   Colour c = this->GetColor(existingColorName);
+   return this->SetColor(colorName, c);
+}
+
+bool Palette::SetColor(const String& colorName, Colour color)
+{
+   return this->SetColor(colorName, color.getARGB());
+}
+
 Colour Palette::GetColor(const String& colorName) const
 {
    uint32 value;

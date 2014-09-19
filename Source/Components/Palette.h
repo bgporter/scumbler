@@ -33,13 +33,29 @@ public:
     */
    bool SetColor(const String& colorName, uint32 argb);
 
+   /**
+    * SetColor variant that lets us refer to other already set colors. 
+    * @param  colorName         Idenitifier of the color id we want set
+    * @param  existingColorName Identifier of an existing color.   
+    * @return                   bool, success/fail.
+    */
+   bool SetColor(const String& colorName, const String& existingColorName);
+
+   /**
+    * Use a JUCE Colour object to define a palette color.
+    * @param  colorName Color ID to set.
+    * @param  color     JUCE Colour object to use
+    * @return           success/fail
+    */
+   bool SetColor(const String& colorName, Colour color);
+
 
    /**
     * Given a color style name, return the current Juce Colour object for it. Should
     * return a very obviously wrong color if calling code requests something we don't 
     * know about.
     * @param  colorName Name of a UI element to color
-    * @return           Colour object.
+    * @return           Colour object - in event of an error, returns an ugly color.
     */
    Colour GetColor(const String& colorName) const;
 
@@ -73,6 +89,9 @@ namespace palette
    // Application-level colors
    const String kAppBg("ApplicationBackground");
    const String kAppFg("ApplicationForeground");
+
+   // Track component colors
+
    // Plugin slot colors
    const String kPluginFullActiveFg("FullPluginActiveForeground");
    const String kPluginFullActiveBg("FullPluginActiveBackground");
