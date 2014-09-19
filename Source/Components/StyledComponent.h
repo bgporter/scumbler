@@ -25,7 +25,9 @@ public:
    /**
     * Handle new changes in the UiStyle -- should probably be called from both the 
     * derived class' ctor and also from the changeListener when the UiStyle lets 
-    * us know that it's changed.
+    * us know that it's changed. This is useful especially for updating components like 
+    * buttons etc that remember their colors once they're set -- update them when we get
+    * new palette information and they don't need to be re-set during each paint() operation.
     */
    virtual void UpdateStyle();
 
