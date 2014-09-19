@@ -33,8 +33,9 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-TrackComponent::TrackComponent (Track* track)
-    : fTrack(nullptr)
+TrackComponent::TrackComponent (UiStyle* style, Track* track)
+    : StyledComponent(style)
+    , fTrack(nullptr)
     , fCenterLineYPos(0)
 {
 
@@ -57,7 +58,7 @@ TrackComponent::TrackComponent (Track* track)
     //[Constructor] You can add your own custom stuff here..
     fPreEffects = new PluginBlockComponent(fPluginColors[kPreBlock], pre);
     fPostEffects = new PluginBlockComponent(fPluginColors[kPostBlock], post);
-    fLoop = new LoopComponent(&fLoopColors, loop);
+    fLoop = new LoopComponent(style, loop);
     this->addAndMakeVisible(fPreEffects);
     this->addAndMakeVisible(fPostEffects);
     this->addAndMakeVisible(fLoop);
@@ -71,8 +72,14 @@ TrackComponent::TrackComponent (Track* track)
    fInputGain->setRange (-96.0, 0.0, 0);
    fInputGain->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fInputGain->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-   fInputGain->setColour (Slider::thumbColourId, Colours::black);
-   fInputGain->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+/* !!! */
+ Colour fg = Colours::red;
+ 
+ fInputGain->setColour(Slider::thumbColourId, fg);
+ fInputGain->setColour(Slider::rotarySliderFillColourId, fg);
+/* !!! */
+    
+    
    fInputGain->setPopupDisplayEnabled(true, this);
    fInputGain->setTextValueSuffix(" dB");
    fInputGain->addListener(this);  
@@ -84,8 +91,7 @@ TrackComponent::TrackComponent (Track* track)
    fPan->setRange(0.f, 1.0f, 0);
    fPan->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
    fPan->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-   fPan->setColour (Slider::thumbColourId, Colours::black);
-   fPan->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+
    /*
    fPan->setPopupDisplayEnabled(true, this);
    fPan->setTextValueSuffix("");
@@ -107,8 +113,7 @@ TrackComponent::TrackComponent (Track* track)
    fOutputVolume->setRange (-96.0, 0.0, 0);
    fOutputVolume->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fOutputVolume->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-   fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
-   fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+
    fOutputVolume->setPopupDisplayEnabled(true, this);
    fOutputVolume->setTextValueSuffix(" dB");
    fOutputVolume->addListener(this);   
@@ -117,8 +122,7 @@ TrackComponent::TrackComponent (Track* track)
    fActive->setTooltip("Activate track");
    fActive->setButtonText("");
    fActive->addListener(this);
-   fActive->setColour(TextButton::buttonColourId, Colours::white);
-   fActive->setColour(TextButton::buttonOnColourId, Colours::green);
+
    fActive->setClickingTogglesState(true);
    this->addAndMakeVisible(fActive);
    bool active = false;
@@ -133,8 +137,7 @@ TrackComponent::TrackComponent (Track* track)
    fMute->setTooltip("Mute track");
    fMute->setButtonText("m");
    fMute->addListener(this);
-   fMute->setColour(TextButton::buttonColourId, Colours::white);
-   fMute->setColour(TextButton::buttonOnColourId, Colours::green);
+
    fMute->setClickingTogglesState(true);
    this->addAndMakeVisible(fMute);
 
@@ -142,8 +145,7 @@ TrackComponent::TrackComponent (Track* track)
    fSolo->setTooltip("Solo track");
    fSolo->setButtonText("s");
    fSolo->addListener(this);
-   fSolo->setColour(TextButton::buttonColourId, Colours::white);
-   fSolo->setColour(TextButton::buttonOnColourId, Colours::red);
+
    fSolo->setClickingTogglesState(true);
    this->addAndMakeVisible(fSolo);
 
@@ -153,6 +155,8 @@ TrackComponent::TrackComponent (Track* track)
    fDelete->addListener(this);
    // !!!TODO: Set button colors.
    this->addAndMakeVisible(fDelete);
+
+   this->UpdateStyle();
 
 
     //[/Constructor]
@@ -170,6 +174,33 @@ TrackComponent::~TrackComponent()
     //[Destructor]. You can add your own custom destruction code here..
     this->deleteAllChildren();
     //[/Destructor]
+}
+
+
+void TrackComponent::UpdateStyle()
+{
+   Colour fg = fStyle->GetColor(palette::kAppFg);
+   
+   fInputGain->setColour(Slider::thumbColourId, fg);
+   fInputGain->setColour(Slider::rotarySliderFillColourId, fg);
+
+   fPan->setColour(Slider::thumbColourId, fg);
+   fPan->setColour(Slider::rotarySliderFillColourId, fg);
+
+   fOutputVolume->setColour(Slider::thumbColourId, fg);
+   fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
+
+   fActive->setColour(TextButton::buttonColourId, Colours::white);
+   fActive->setColour(TextButton::buttonOnColourId, Colours::green);
+   
+   fMute->setColour(TextButton::buttonColourId, Colours::white);
+   fMute->setColour(TextButton::buttonOnColourId, Colours::green);
+
+   fSolo->setColour(TextButton::buttonColourId, Colours::white);
+   fSolo->setColour(TextButton::buttonOnColourId, Colours::red);
+
+   this->repaint();
+
 }
 
 //==============================================================================
@@ -381,18 +412,7 @@ TrackComponent::PluginColors::PluginColors()
 }
 
 
-TrackComponent::LoopColors::LoopColors()
-{
 
-  bg = Colours::white;
-  fg = Colours::black;
-  monoWave = Colours::black;
-  leftWave = Colour((uint8) 0xff,(uint8)  0, (uint8) 0, (uint8) 0x80);
-  rightWave = Colour((uint8) 0, (uint8) 0xC4, (uint8) 0x80, (uint8) 0x80);
-  tick = Colours::grey;
-  now = Colours::red;
-
-}
 void TrackComponent::ConnectToTrack(Track* track)
 {
   // if we are already listening to this track, there's nothing to do. Carry on.
@@ -436,16 +456,16 @@ void TrackComponent::UpdateColors()
    {
      if (pluginsActive[i])
      {
-        fPluginColors[i].fg = Colours::black;
-        fPluginColors[i].fullSlotFg = Colours::white;
-        fPluginColors[i].fullSlotBg = Colours::black;
+        fPluginColors[i].fg = fStyle->GetColor(palette::kAppFg);
+        fPluginColors[i].fullSlotFg = fStyle->GetColor(palette::kPluginFullActiveFg);
+        fPluginColors[i].fullSlotBg = fStyle->GetColor(palette::kAppFg);
         fPluginColors[i].mouseOver = Colours::red;
      }
      else
      {
         fPluginColors[i].fg = Colours::grey;
-        fPluginColors[i].fullSlotFg = Colours::black;
-        fPluginColors[i].fullSlotBg = Colours::lightgrey;
+        fPluginColors[i].fullSlotFg = fStyle->GetColor(palette::kPluginFullInactiveFg);
+        fPluginColors[i].fullSlotBg = fStyle->GetColor(palette::kPluginFullInactiveBg);
         fPluginColors[i].mouseOver = Colours::pink;
      }
    }
@@ -467,6 +487,10 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
 
        this->repaint();
      }
+  }
+  else if (source == fStyle)
+  {
+     this->UpdateStyle();
   }
 }
 

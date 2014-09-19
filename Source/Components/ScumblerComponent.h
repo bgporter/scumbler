@@ -99,6 +99,11 @@ public:
 
     bool keyPressed(const KeyPress& key);
 
+    /**
+     * Make any changes needed to reflect the current setting of our UiStyle object.
+     */
+    void UpdateStyle();
+
     //[/UserMethods]
 
     void paint (Graphics& g);

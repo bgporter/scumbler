@@ -19,3 +19,9 @@ void StyledComponent::changeListenerCallback (ChangeBroadcaster *source)
 {
    // re-implemented in derived classes that need to take action when the style changes.
 }
+
+
+void StyledComponent::UpdateStyle()
+{
+   // no-op implementation to be overidden by derived classes.
+}

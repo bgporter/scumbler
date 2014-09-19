@@ -12,9 +12,22 @@
 class StyledComponent : public Component, public ChangeListener
 {
 public:
+   /**
+    * Create the component and start listening to the UiStyle object for changes.
+    */
    StyledComponent(UiStyle* style);
+
    ~StyledComponent();
+   
+
    void changeListenerCallback (ChangeBroadcaster *source);
+
+   /**
+    * Handle new changes in the UiStyle -- should probably be called from both the 
+    * derived class' ctor and also from the changeListener when the UiStyle lets 
+    * us know that it's changed.
+    */
+   virtual void UpdateStyle();
 
 protected:
    UiStyle* fStyle;

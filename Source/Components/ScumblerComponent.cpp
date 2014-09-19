@@ -48,24 +48,25 @@ ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
 
     fTitle = new Label("title", fScumbler->GetTitle());
     this->addAndMakeVisible(fTitle);
-    fTitle->setFont (Font (fStyle->GetFontName(), 32.00f, Font::bold));
+
     fTitle->setJustificationType (Justification::centredLeft);
     fTitle->setEditable (false, true, false);
-    fTitle->setColour (TextEditor::textColourId, fStyle->GetColor(palette::kAppFg));
-    fTitle->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+
     fTitle->addListener(this);
 
 
         // adding track(s)
     for (int i = 0; i < fScumbler->GetNumTracks(); ++i)
     {
-      TrackComponent* tc = new TrackComponent(fScumbler->GetTrack(i));
+      TrackComponent* tc = new TrackComponent(fStyle, fScumbler->GetTrack(i));
       fTracks.add(tc);
       this->addAndMakeVisible(tc);
     }
 
     fTransport = new TransportComponent(fScumbler);
     this->addAndMakeVisible(fTransport);
+
+    this->UpdateStyle();
 
     
     setSize (600, 400);
@@ -90,13 +91,23 @@ ScumblerComponent::~ScumblerComponent()
     //[/Destructor]
 }
 
+void ScumblerComponent::UpdateStyle()
+{
+    fTitle->setFont (Font (fStyle->GetFontName(), 32.00f, Font::bold));
+    fTitle->setColour(Label::textColourId, fStyle->GetColor(palette::kAppFg));
+    fTitle->setColour (TextEditor::textColourId, fStyle->GetColor(palette::kAppFg));
+    fTitle->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+}
+
+
+
 //==============================================================================
 void ScumblerComponent::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    g.fillAll (fStyle->GetColor(palette::kAppBg));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -312,7 +323,7 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
         // adding track(s)
         for (int i = 0; i < trackDelta; ++i)
         {
-          TrackComponent* tc = new TrackComponent();
+          TrackComponent* tc = new TrackComponent(fStyle);
           fTracks.add(tc);
           this->addAndMakeVisible(tc);
         }
@@ -350,6 +361,10 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
     }
 
     this->repaint();
+  }
+  else if (fStyle == source)
+  {
+     this->UpdateStyle();
   }
 
 }

@@ -19,14 +19,14 @@ void DragLabel::mouseUp(const MouseEvent& e)
    Label::mouseUp(e);
 }
 
-LoopComponent::LoopComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop)
-:  fLoop(nullptr)
-,  fColors(colors)
+LoopComponent::LoopComponent(UiStyle* style, LoopProcessor* loop)
+:  StyledComponent(style)
+,  fLoop(nullptr)
 ,  fFeedback(nullptr)
 ,  fWaveform(nullptr)
 {
 
-   fWaveform = new WaveformComponent(fColors, nullptr);
+   fWaveform = new WaveformComponent(style, nullptr);
    this->addAndMakeVisible(fWaveform);
     
    this->ConnectToLoop(loop);
@@ -52,14 +52,14 @@ LoopComponent::LoopComponent(TrackComponent::LoopColors* colors, LoopProcessor* 
    fFeedback->setRange (-96.0, 0.0, 0);
    fFeedback->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fFeedback->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-   fFeedback->setColour (Slider::thumbColourId, Colours::black);
-   fFeedback->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+
    fFeedback->setPopupDisplayEnabled(true, this);
    fFeedback->setTextValueSuffix("dB");
    fFeedback->addListener(this);     
    this->addAndMakeVisible(fFeedback);
 
 
+   this->UpdateStyle();
 
 }
 
@@ -67,6 +67,12 @@ LoopComponent::~LoopComponent()
 {
    this->deleteAllChildren();
    
+}
+
+void LoopComponent::UpdateStyle()
+{
+   fFeedback->setColour (Slider::thumbColourId, Colours::black);
+   fFeedback->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
 }
 
 void LoopComponent::ConnectToLoop(LoopProcessor* loop)

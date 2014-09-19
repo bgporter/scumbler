@@ -9,6 +9,7 @@
 
 
 #include "Loop.h"
+#include "StyledComponent.h"
 #include "TrackComponent.h"
 
 class Track;
@@ -133,13 +134,14 @@ private:
 
 };
 
-class WaveformComponent :  public Component
-                        ,  public ChangeListener   
+class WaveformComponent :  public StyledComponent
 {
 public:
-   WaveformComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop);
+   WaveformComponent(UiStyle* style, LoopProcessor* loop);
 
    ~WaveformComponent();
+
+   void UpdateStyle();
 
    /**
     * Connect at runtime to a specific loop processor. This is useful because 
@@ -208,7 +210,6 @@ private:
 
 
 private:
-   TrackComponent::LoopColors* fColors;
    LoopProcessor* fLoop;
    LoopProcessor::LoopInfo  fLoopInfo;
    ScopedPointer<LoopProcessor::ThumbnailData> fThumbData;

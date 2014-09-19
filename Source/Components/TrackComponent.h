@@ -25,12 +25,14 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "JuceHeader.h"
 
+#include "StyledComponent.h"
 #include "../Track.h"
 
 
 // forward defs...
 class PluginBlockComponent;
 class LoopComponent;
+
 
 
 
@@ -47,14 +49,14 @@ class LoopComponent;
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class TrackComponent  : public Component
-                      , public ChangeListener
+class TrackComponent  : public StyledComponent
+                      //, public ChangeListener
                       , public ButtonListener
                       , public Slider::Listener
 {
 public:
     //==============================================================================
-    TrackComponent (Track* owner=nullptr);
+    TrackComponent (UiStyle* style, Track* owner=nullptr);
     ~TrackComponent();
 
     //==============================================================================
@@ -83,27 +85,11 @@ public:
 
     };
 
+
     /**
-     * \struct LoopColors
-     * The TrackComponent maintains an instance of this to control what colors the 
-     * LoopComponent uses to paint itself with.
+     * Respond to new style settings.
      */
-    struct LoopColors
-    {
-        /**
-         * A ctor to make sure we have defaults set somewhat sensibly.
-         */
-        LoopColors();
-
-        Colour bg;
-        Colour fg;
-        Colour monoWave;
-        Colour leftWave;
-        Colour rightWave;
-        Colour tick;
-        Colour now;
-
-    };
+    void UpdateStyle();
 
     /**
      * Set the Track object inside the Scumbler that this component will be representing 
@@ -177,7 +163,7 @@ private:
         kPluginBlockCount
     };
     PluginColors  fPluginColors[kPluginBlockCount];
-    LoopColors fLoopColors;
+
 
     //Child components (complex)
     PluginBlockComponent* fPreEffects;

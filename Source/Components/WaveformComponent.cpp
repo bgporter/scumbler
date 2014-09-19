@@ -36,8 +36,8 @@ WaveformPoint WaveformPointArray::GetPoint(int channel, int pixel) const
    return fPoints[pixel*fChannelCount + channel];
 }
 
-WaveformComponent::WaveformComponent(TrackComponent::LoopColors* colors, LoopProcessor* loop)
-:  fColors(colors)
+WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop)
+:  StyledComponent(style)
 ,  fLoop(nullptr)
 ,  fPixels(2)
 ,  fPendingSamples(0)
@@ -60,6 +60,11 @@ WaveformComponent::WaveformComponent(TrackComponent::LoopColors* colors, LoopPro
 WaveformComponent::~WaveformComponent()
 {
 
+}
+
+void WaveformComponent::UpdateStyle()
+{
+   // empty for now...
 }
 
 void WaveformComponent::ConnectToLoop(LoopProcessor* loop)
@@ -168,6 +173,10 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
          // save this data for the next update.
          fLoopInfo = info;
       }
+   }
+   else if (source == fStyle)
+   {
+      this->UpdateStyle();
    }
 }
 
@@ -307,7 +316,7 @@ void WaveformComponent::GetThumbnailData()
 
 void WaveformComponent::paint(Graphics& g)
 {
-   g.fillAll(fColors->bg);
+   g.fillAll(fStyle->GetColor(palette::kLoopBg));
 
    Rectangle<int> clip = g.getClipBounds();
 #ifdef qLogPaint
@@ -315,7 +324,7 @@ void WaveformComponent::paint(Graphics& g)
    c << clip.getX() << ".." << clip.getX() + clip.getWidth();
    Logger::outputDebugString(c); 
 #endif   
-   g.setColour(fColors->fg);
+   g.setColour(fStyle->GetColor(palette::kLoopFg));
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
    int nowPixel = this->PixelForSample(fNow);
@@ -330,7 +339,7 @@ void WaveformComponent::paint(Graphics& g)
    int height = this->getHeight();
 
    // draw tick markers.
-   g.setColour(fColors->tick);
+   g.setColour(fStyle->GetColor(palette::kLoopTick));
    for (int tick = 0; tick < fTicks.size(); ++tick)
    {
       int tickPixel = fTicks.getUnchecked(tick);
@@ -349,6 +358,13 @@ void WaveformComponent::paint(Graphics& g)
    // !!! Missing logic to handle a mono loop.
 
    // draw a line for every waveform deflection from the zero point.
+   // get some local var copies of palette colors
+   Colour bg = fStyle->GetColor(palette::kLoopBg);
+   Colour now = fStyle->GetColor(palette::kLoopNow);
+   Colour monoWave = fStyle->GetColor(palette::kLoopMonoWave);
+   Colour leftWave = fStyle->GetColor(palette::kLoopLeftWave);
+   Colour rightWave = fStyle->GetColor(palette::kLoopRightWave);
+
    for (int x = startIndex;  x < endIndex; ++x)
    {
       WaveformPoint left = fPixels.GetPoint(0, x);
@@ -356,23 +372,23 @@ void WaveformComponent::paint(Graphics& g)
 
       if ( (x == nowPixel) || (x == (nowPixel + 1)) || (x == nowPixel - 1) )
       {
-         g.setColour(fColors->now);
+         g.setColour(now);
          g.drawVerticalLine(x, 0, height);
-         g.setColour(fColors->bg);
+         g.setColour(bg);
          g.drawVerticalLine(x, jmax(left.top, right.top), jmin(left.bottom, right.bottom));
-         g.setColour(fColors->monoWave);
+         g.setColour(monoWave);
 
       }
       else
       { 
          if (left.top - left.bottom > 1)
          {
-            g.setColour(fColors->leftWave);
+            g.setColour(leftWave);
             g.drawVerticalLine(x, left.top, left.bottom);
          }
          if (right.top - right.bottom > 1)
          {  
-            g.setColour(fColors->rightWave);
+            g.setColour(rightWave);
             g.drawVerticalLine(x, right.top, right.bottom);
          }
       }

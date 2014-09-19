@@ -70,8 +70,27 @@ private:
 
 namespace palette
 {
+   // Application-level colors
    const String kAppBg("ApplicationBackground");
    const String kAppFg("ApplicationForeground");
+   // Plugin slot colors
+   const String kPluginFullActiveFg("FullPluginActiveForeground");
+   const String kPluginFullActiveBg("FullPluginActiveBackground");
+   const String kPluginFullInactiveFg("FullPluginInactiveForeground");
+   const String kPluginFullInactiveBg("FullPluginInactiveBackground");
+   const String kPluginActiveHover("PluginActiveHover");
+   const String kPluginInactiveHover("PluginInactiveHover");
+
+   // Waveform colors
+   const String kLoopBg("LoopBackground");
+   const String kLoopFg("LoopForeground");
+   const String kLoopMonoWave("LoopMonoWave");
+   const String kLoopLeftWave("LoopLeftWave");
+   const String kLoopRightWave("LoopRightWave");
+   const String kLoopTick("LoopTick");
+   const String kLoopNow("LoopNow");
+
+
 
 };
 
