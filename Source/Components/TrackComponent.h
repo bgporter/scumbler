@@ -82,6 +82,7 @@ public:
         Colour fullSlotBg;
         Colour fullSlotFg;
         Colour mouseOver;
+        Colour text;
 
     };
 

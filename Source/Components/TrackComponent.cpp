@@ -190,14 +190,14 @@ void TrackComponent::UpdateStyle()
    fOutputVolume->setColour(Slider::thumbColourId, fg);
    fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
 
-   fActive->setColour(TextButton::buttonColourId, Colours::white);
-   fActive->setColour(TextButton::buttonOnColourId, Colours::green);
+   fActive->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackActiveOff));
+   fActive->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackActiveOn));
    
-   fMute->setColour(TextButton::buttonColourId, Colours::white);
-   fMute->setColour(TextButton::buttonOnColourId, Colours::green);
+   fMute->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackMuteOff));
+   fMute->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackMuteOn));
 
-   fSolo->setColour(TextButton::buttonColourId, Colours::white);
-   fSolo->setColour(TextButton::buttonOnColourId, Colours::red);
+   fSolo->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackSoloOff));
+   fSolo->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackSoloOn));
 
    this->repaint();
 
@@ -406,6 +406,7 @@ TrackComponent::PluginColors::PluginColors()
 {
   bg = Colours::white;
   fg = Colours::black;
+  text = Colours::white;
   fullSlotBg = Colours::grey;
   fullSlotFg = Colours::white;
   mouseOver = Colours::red;
@@ -456,17 +457,19 @@ void TrackComponent::UpdateColors()
    {
      if (pluginsActive[i])
      {
-        fPluginColors[i].fg = fStyle->GetColor(palette::kAppFg);
+        fPluginColors[i].fg = fStyle->GetColor(palette::kPluginFullActiveFg);
         fPluginColors[i].fullSlotFg = fStyle->GetColor(palette::kPluginFullActiveFg);
-        fPluginColors[i].fullSlotBg = fStyle->GetColor(palette::kAppFg);
-        fPluginColors[i].mouseOver = Colours::red;
+        fPluginColors[i].fullSlotBg = fStyle->GetColor(palette::kPluginFullActiveBg);
+        fPluginColors[i].mouseOver = fStyle->GetColor(palette::kPluginActiveHover);
+        fPluginColors[i].text = fStyle->GetColor(palette::kPluginActiveText);
      }
      else
      {
-        fPluginColors[i].fg = Colours::grey;
+        fPluginColors[i].fg = fStyle->GetColor(palette::kPluginFullInactiveFg);
         fPluginColors[i].fullSlotFg = fStyle->GetColor(palette::kPluginFullInactiveFg);
         fPluginColors[i].fullSlotBg = fStyle->GetColor(palette::kPluginFullInactiveBg);
-        fPluginColors[i].mouseOver = Colours::pink;
+        fPluginColors[i].mouseOver = fStyle->GetColor(palette::kPluginInactiveHover);
+        fPluginColors[i].text = fStyle->GetColor(palette::kPluginInactiveText);
      }
    }
 }

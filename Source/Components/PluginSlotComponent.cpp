@@ -124,7 +124,7 @@ void PluginSlotComponent::paint (Graphics& g)
       rect.setWidth(rect.getWidth() - inset);
       rect.setHeight(rect.getHeight() - inset);
 
-      g.setColour(fColors.fullSlotFg);
+      g.setColour(fColors.text);
       g.drawFittedText(info.name, mRoundInt(rect.getX()), mRoundInt(rect.getY()),
          mRoundInt(rect.getWidth()), mRoundInt(rect.getHeight()), 
          Justification::horizontallyCentred | Justification::verticallyCentred, 2);

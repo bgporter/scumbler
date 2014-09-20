@@ -91,6 +91,13 @@ namespace palette
    const String kAppFg("ApplicationForeground");
 
    // Track component colors
+   const String kTrackFg("TrackForeground");
+   const String kTrackActiveOff("TrackActiveOff");
+   const String kTrackActiveOn("TrackActiveOn");
+   const String kTrackMuteOff("TrackMuteOff");
+   const String kTrackMuteOn("TrackMuteOn");
+   const String kTrackSoloOff("TrackSoloOff");
+   const String kTrackSoloOn("TrackSoloOn");
 
    // Plugin slot colors
    const String kPluginFullActiveFg("FullPluginActiveForeground");
@@ -99,6 +106,8 @@ namespace palette
    const String kPluginFullInactiveBg("FullPluginInactiveBackground");
    const String kPluginActiveHover("PluginActiveHover");
    const String kPluginInactiveHover("PluginInactiveHover");
+   const String kPluginActiveText("PluginActiveText");
+   const String kPluginInactiveText("PluginInactiveText");
 
    // Waveform colors
    const String kLoopBg("LoopBackground");
