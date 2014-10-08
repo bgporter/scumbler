@@ -9,45 +9,96 @@ namespace
    const uint32 kErrorColor = 0xff3cff00;
 }
 
-Palette::Palette(bool loadDefaults)
+Palette::Palette(FactoryPalette p)
 {
-   if (loadDefaults)
+   if (p != kEmptyPalette)
    {
-      this->SetColor(palette::kAppBg, 0xffffffff);
-      this->SetColor(palette::kAppFg, 0xff000000);
-
-
-      this->SetColor(palette::kTrackFg, palette::kAppFg); 
-      this->SetColor(palette::kTrackActiveOff, Colours::white); 
-      this->SetColor(palette::kTrackActiveOn, Colours::green);
-      this->SetColor(palette::kTrackMuteOff, Colours::white);
-      this->SetColor(palette::kTrackMuteOn, Colours::green);
-      this->SetColor(palette::kTrackSoloOff, Colours::white);
-      this->SetColor(palette::kTrackSoloOn, Colours::red);
-
-      this->SetColor(palette::kPluginFullActiveFg , palette::kAppFg);
-      this->SetColor(palette::kPluginFullActiveBg , palette::kAppFg);
-      this->SetColor(palette::kPluginFullInactiveFg , Colours::grey);
-      this->SetColor(palette::kPluginFullInactiveBg , Colours::grey);
-      this->SetColor(palette::kPluginActiveHover , Colours::red);
-      this->SetColor(palette::kPluginInactiveHover , Colours::pink);
-      this->SetColor(palette::kPluginActiveText , Colours::white);
-      this->SetColor(palette::kPluginInactiveText , Colours::white);
-
-      this->SetColor(palette::kLoopBg, 0xffffffff);
-      this->SetColor(palette::kLoopFg,0xff000000);
-      this->SetColor(palette::kLoopMonoWave, Colours::black);
-      this->SetColor(palette::kLoopLeftWave, 0x80ff0000);
-      this->SetColor(palette::kLoopRightWave, 0x8000c480);
-      this->SetColor(palette::kLoopTick, Colours::grey);
-      this->SetColor(palette::kLoopNow, Colours::red);
+      this->SetFactoryPalette(p);
    }
-
 }
 
 Palette::~Palette()
 {
   
+}
+
+
+void Palette::SetFactoryPalette(FactoryPalette p)
+{
+   switch (p)
+   {
+      case kDarkPalette:
+      {
+         this->SetColor(palette::kAppBg, Colours::black);
+         this->SetColor(palette::kAppFg, Colours::white);
+
+         this->SetColor(palette::kTrackFg, palette::kAppFg); 
+         this->SetColor(palette::kTrackActiveOff, Colours::black); 
+         this->SetColor(palette::kTrackActiveOn, Colours::green);
+         this->SetColor(palette::kTrackMuteOff, Colours::black);
+         this->SetColor(palette::kTrackMuteOn, Colours::green);
+         this->SetColor(palette::kTrackSoloOff, Colours::black);
+         this->SetColor(palette::kTrackSoloOn, Colours::red);
+
+         this->SetColor(palette::kPluginFullActiveFg , palette::kAppFg);
+         this->SetColor(palette::kPluginFullActiveBg , palette::kAppFg);
+         this->SetColor(palette::kPluginFullInactiveFg , Colours::grey);
+         this->SetColor(palette::kPluginFullInactiveBg , Colours::grey);
+         this->SetColor(palette::kPluginActiveHover , Colours::red);
+         this->SetColor(palette::kPluginInactiveHover , Colours::pink);
+         this->SetColor(palette::kPluginActiveText , Colours::black);
+         this->SetColor(palette::kPluginInactiveText , Colours::black);
+
+         this->SetColor(palette::kLoopBg, 0xffffffff);
+         this->SetColor(palette::kLoopFg,0xff000000);
+         this->SetColor(palette::kLoopMonoWave, Colours::white);
+         this->SetColor(palette::kLoopLeftWave, 0x80ff0000);
+         this->SetColor(palette::kLoopRightWave, 0x8000c480);
+         this->SetColor(palette::kLoopTick, Colours::grey);
+         this->SetColor(palette::kLoopNow, Colours::red);
+
+         this->SetColor(palette::kTransportBg, Colours::grey);
+         this->SetColor(palette::kTransportFg, Colours::white);
+      };
+      break;
+
+      case kLightPalette:
+      default:
+      {
+         this->SetColor(palette::kAppBg, 0xffffffff);
+         this->SetColor(palette::kAppFg, 0xff000000);
+
+         this->SetColor(palette::kTrackFg, palette::kAppFg); 
+         this->SetColor(palette::kTrackActiveOff, Colours::white); 
+         this->SetColor(palette::kTrackActiveOn, Colours::green);
+         this->SetColor(palette::kTrackMuteOff, Colours::white);
+         this->SetColor(palette::kTrackMuteOn, Colours::green);
+         this->SetColor(palette::kTrackSoloOff, Colours::white);
+         this->SetColor(palette::kTrackSoloOn, Colours::red);
+
+         this->SetColor(palette::kPluginFullActiveFg , palette::kAppFg);
+         this->SetColor(palette::kPluginFullActiveBg , palette::kAppFg);
+         this->SetColor(palette::kPluginFullInactiveFg , Colours::grey);
+         this->SetColor(palette::kPluginFullInactiveBg , Colours::grey);
+         this->SetColor(palette::kPluginActiveHover , Colours::red);
+         this->SetColor(palette::kPluginInactiveHover , Colours::pink);
+         this->SetColor(palette::kPluginActiveText , Colours::white);
+         this->SetColor(palette::kPluginInactiveText , Colours::white);
+
+         this->SetColor(palette::kLoopBg, 0xffffffff);
+         this->SetColor(palette::kLoopFg,0xff000000);
+         this->SetColor(palette::kLoopMonoWave, Colours::black);
+         this->SetColor(palette::kLoopLeftWave, 0x80ff0000);
+         this->SetColor(palette::kLoopRightWave, 0x8000c480);
+         this->SetColor(palette::kLoopTick, Colours::grey);
+         this->SetColor(palette::kLoopNow, Colours::red);
+
+         this->SetColor(palette::kTransportBg, Colours::grey);
+         this->SetColor(palette::kTransportFg, Colours::black);
+      };
+      break;
+
+   };
 }
 
 bool Palette::SetColor(const String& colorName, uint32 argb)

@@ -6,17 +6,18 @@
 #define h_TransportComponent
 
 #include "JuceHeader.h"
-
+#include "StyledComponent.h"
 class Scumbler;
 
 
-class TransportComponent   : public Component 
+class TransportComponent   : public StyledComponent 
                            , public ButtonListener
                            , public SliderListener
-                           , public ChangeListener
 {
 public:
-   TransportComponent(Scumbler* scumbler);
+   TransportComponent(UiStyle* style, Scumbler* scumbler);
+
+   void UpdateStyle();
 
    ~TransportComponent();
 

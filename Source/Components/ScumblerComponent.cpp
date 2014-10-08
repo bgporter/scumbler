@@ -63,7 +63,7 @@ ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
       this->addAndMakeVisible(tc);
     }
 
-    fTransport = new TransportComponent(fScumbler);
+    fTransport = new TransportComponent(fStyle, fScumbler);
     this->addAndMakeVisible(fTransport);
 
     this->UpdateStyle();

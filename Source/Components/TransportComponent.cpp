@@ -5,8 +5,8 @@
 #include "Scumbler.h"
 
 
-TransportComponent::TransportComponent(Scumbler* scumbler)
-:  Component("TransportComponent")
+TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
+:  StyledComponent(style)
 ,  fScumbler(scumbler)
 ,  fAddTrackButton(nullptr)
 ,  fPlayButton(nullptr)
@@ -17,42 +17,42 @@ TransportComponent::TransportComponent(Scumbler* scumbler)
    fAddTrackButton = new TextButton("Add track button");
    fAddTrackButton->setButtonText("+");
    fAddTrackButton->addListener(this);
-   fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
+
    fAddTrackButton->setEnabled(true);
    this->addAndMakeVisible(fAddTrackButton);
 
    fResetButton = new TextButton("reset button");
    fResetButton->setButtonText("reset");
    fResetButton->addListener(this);
-   fResetButton->setColour(TextButton::buttonColourId, Colours::white);
+
    this->addAndMakeVisible(fResetButton);
 
    fPlayButton = new TextButton("play button");
    fPlayButton->setButtonText("play");
    fPlayButton->addListener(this);
-   fPlayButton->setColour(TextButton::buttonColourId, Colours::white);
+
    this->addAndMakeVisible(fPlayButton);
 
    addAndMakeVisible (fPlayTime = new Label ("new label",
                                            "00:00:00"));
-   fPlayTime->setFont (Font ("Helvetica", 26.0000f, Font::plain));
+   fPlayTime->setFont (Font ("Helvetica", 26.0000f, Font::bold));
    fPlayTime->setJustificationType (Justification::centred);
    fPlayTime->setEditable (true, false, false);
-   fPlayTime->setColour(TextEditor::textColourId, Colours::black);
-   fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));
+
 
    addAndMakeVisible (fOutputVolume = new Slider ("Volume"));
    fOutputVolume->setTooltip ("Output volume");
    fOutputVolume->setRange (-96.0, 0.0, 0);
    fOutputVolume->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fOutputVolume->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-   fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
-   fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+
    fOutputVolume->setPopupDisplayEnabled(true, this);
    fOutputVolume->setTextValueSuffix("dB");
    fOutputVolume->addListener(this);   
 
    this->setSize(600, 50);
+
+   this->UpdateStyle();
 
    fScumbler->addChangeListener(this);
 
@@ -63,8 +63,23 @@ TransportComponent::~TransportComponent()
    this->deleteAllChildren();
 }
 
+
+void TransportComponent::UpdateStyle()
+{
+   fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
+   fResetButton->setColour(TextButton::buttonColourId, Colours::white);
+   fPlayButton->setColour(TextButton::buttonColourId, Colours::white);
+   fPlayTime->setColour(TextEditor::textColourId, Colours::black);
+   fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));
+   fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
+   fOutputVolume->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+}
+
 void TransportComponent::paint (Graphics& g)
 {
+
+
+   g.fillAll (fStyle->GetColor(palette::kTransportBg));
 #ifdef qSketch
    g.setColour(Colours::lightslategrey);
    g.drawRect(0, 0, this->getWidth(), this->getHeight());
@@ -134,7 +149,7 @@ void TransportComponent::sliderValueChanged (Slider* sliderThatWasMoved)
 
 void TransportComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
-   if (fScumbler == source)
+   if ((fScumbler == source) || (fStyle == source))
    {
       this->repaint();
    }

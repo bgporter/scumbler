@@ -14,16 +14,30 @@
 class Palette : public XmlPersistent
 {
 public:
+   enum FactoryPalette
+   {
+      kEmptyPalette = 0, 
+      kLightPalette, 
+      kDarkPalette    
+   };
+
    /**
     * Create the Palette object, optionally filling the color table in with our 
     * default values.
     */
-   Palette(bool loadDefaults=true);
+   Palette(FactoryPalette p = kEmptyPalette);
 
    /**
     * Destroy the Palette.
     */
    ~Palette();
+
+
+   /**
+    * Make this palette use one of the hard-coded factory palettes that we support.
+    * @param p [description]
+    */
+   void SetFactoryPalette(FactoryPalette p);
 
    /**
     * Set the specified color name to a desired value    .
@@ -117,6 +131,10 @@ namespace palette
    const String kLoopRightWave("LoopRightWave");
    const String kLoopTick("LoopTick");
    const String kLoopNow("LoopNow");
+
+   // Transport colors
+   const String kTransportBg("TransportBackground");
+   const String kTransportFg("TransportForeground");
 
 
 

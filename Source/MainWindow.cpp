@@ -206,11 +206,14 @@ void MainAppWindow::InitializeStyle()
     }
     if (String("") == uiFont)
     {
-        // none of the
+        // none of the requested fonts are available on this machine -- fall back to 
+        // whatever the sans serif default is.
         uiFont = Font::getDefaultSansSerifFontName();
     }
 
-    Palette* palette = new Palette(true);
+    // create a new palette with the default (light) palette. Someday we should
+    // write the last palette info into the app's preferences and restore accordingly.
+    Palette* palette = new Palette(Palette::kLightPalette);
 
     fStyle = new UiStyle(uiFont, palette);
 
