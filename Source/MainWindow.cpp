@@ -90,6 +90,7 @@ MainAppWindow::MainAppWindow()
 #endif
     
   this->setResizable(true, true);
+  this->setResizeLimits(800, 600, 5000, 5000);
   this->centreWithSize (1024, 768);
   this->setVisible (true);
 
