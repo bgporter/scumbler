@@ -28,6 +28,7 @@
 		447369AC19C5DC8300DE9359 /* StyledComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447369A719C5DC8300DE9359 /* StyledComponent.cpp */; };
 		447369AD19C5DC8300DE9359 /* Palette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447369AA19C5DC8300DE9359 /* Palette.cpp */; };
 		447369B019C5DF2200DE9359 /* UiStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447369AE19C5DF2200DE9359 /* UiStyle.cpp */; };
+		448FE20B19E981F100CF8438 /* SvgButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 448FE20919E981F100CF8438 /* SvgButton.cpp */; };
 		44A7179916C7F64300E187F9 /* PluginEditorWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */; };
 		44A7179C16C8871D00E187F9 /* Loop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44A7179A16C8871D00E187F9 /* Loop.cpp */; };
 		44ABE52C16702D650045030E /* Passthrough.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE52B16702D650045030E /* Passthrough.cpp */; };
@@ -314,6 +315,8 @@
 		447369AA19C5DC8300DE9359 /* Palette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Palette.cpp; path = ../../Source/Components/Palette.cpp; sourceTree = "<group>"; };
 		447369AE19C5DF2200DE9359 /* UiStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UiStyle.cpp; path = ../../Source/Components/UiStyle.cpp; sourceTree = "<group>"; };
 		447369AF19C5DF2200DE9359 /* UiStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UiStyle.h; path = ../../Source/Components/UiStyle.h; sourceTree = "<group>"; };
+		448FE20919E981F100CF8438 /* SvgButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SvgButton.cpp; path = ../../Source/Components/SvgButton.cpp; sourceTree = "<group>"; };
+		448FE20A19E981F100CF8438 /* SvgButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SvgButton.h; path = ../../Source/Components/SvgButton.h; sourceTree = "<group>"; };
 		44A7179716C7F64200E187F9 /* PluginEditorWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditorWindow.cpp; path = ../../Source/PluginEditorWindow.cpp; sourceTree = "<group>"; };
 		44A7179816C7F64300E187F9 /* PluginEditorWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginEditorWindow.h; path = ../../Source/PluginEditorWindow.h; sourceTree = "<group>"; };
 		44A7179A16C8871D00E187F9 /* Loop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Loop.cpp; path = ../../Source/Processors/Loop.cpp; sourceTree = "<group>"; };
@@ -1309,6 +1312,8 @@
 		44ABE5321674199D0045030E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				448FE20919E981F100CF8438 /* SvgButton.cpp */,
+				448FE20A19E981F100CF8438 /* SvgButton.h */,
 				447369AE19C5DF2200DE9359 /* UiStyle.cpp */,
 				447369AF19C5DF2200DE9359 /* UiStyle.h */,
 				447369A519C5DC8300DE9359 /* Palette.h */,
@@ -2705,6 +2710,7 @@
 			files = (
 				447369AD19C5DC8300DE9359 /* Palette.cpp in Sources */,
 				DCD1DB3B5B564EB6EFCB74EB /* MainWindow.cpp in Sources */,
+				448FE20B19E981F100CF8438 /* SvgButton.cpp in Sources */,
 				8A9502C9D27E245B83041F4A /* Main.cpp in Sources */,
 				465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */,
 				00AB4A52443D7E78B563DE6E /* juce_audio_devices.mm in Sources */,
