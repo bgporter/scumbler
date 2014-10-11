@@ -2,6 +2,7 @@
 
 #include "TransportComponent.h"
 
+#include "ComponentDefs.h"
 #include "Scumbler.h"
 
 
@@ -106,12 +107,15 @@ void TransportComponent::paint (Graphics& g)
 
 void TransportComponent::resized()
 {
-   int parentHeight = this->getHeight();
-   fAddTrackButton->setBounds (40, (parentHeight-24)/2, 24, 24);
-   fPlayButton->setBounds (296, (parentHeight-24)/2, 47, 24);
-   fPlayTime->setBounds (480, (parentHeight-24)/2, 150, 24);
-   fOutputVolume->setBounds (920, (parentHeight-24)/2, 32, 24);
-   fResetButton->setBounds (176, (parentHeight-24)/2, 47, 24);
+   int height = this->getHeight();
+   int width = this->getWidth();
+   int yPos = (height - kKnobHeight) / 2;
+
+   fAddTrackButton->setBounds (40, yPos, 24, 24);
+   fResetButton->setBounds (176, yPos, 47, 24);
+   fPlayButton->setBounds (296, yPos, 47, 24);
+   fPlayTime->setBounds ((width/2) - (150/2), yPos, 150, 24);
+   fOutputVolume->setBounds (width-60, yPos, 32, 24);
 }
 
 void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
