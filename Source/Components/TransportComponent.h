@@ -7,6 +7,9 @@
 
 #include "JuceHeader.h"
 #include "StyledComponent.h"
+#include "SvgButton.h"
+
+
 class Scumbler;
 
 
@@ -33,10 +36,16 @@ private:
    Scumbler* fScumbler;
 
    TextButton* fAddTrackButton;
-   TextButton* fPlayButton;
+   DrawableButton* fPlayButton;
    Label* fPlayTime;
    Slider* fOutputVolume;
    TextButton* fResetButton;   
+
+   // Button image data
+   ScopedPointer<SvgButton> fPlayUp;
+   ScopedPointer<SvgButton> fPlayHover;
+   ScopedPointer<SvgButton> fPlayDown;
+
 
    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TransportComponent);   
 };                         

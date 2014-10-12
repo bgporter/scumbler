@@ -95,6 +95,20 @@ void Palette::SetFactoryPalette(FactoryPalette p)
 
          this->SetColor(palette::kTransportBg, Colours::grey);
          this->SetColor(palette::kTransportFg, Colours::black);
+         this->SetColor(palette::kTransportPlayUpBorder, palette::kAppFg);
+         this->SetColor(palette::kTransportPlayUpFill, palette::kAppBg);
+         this->SetColor(palette::kTransportPlayUpFg, palette::kAppFg);
+         this->SetColor(palette::kTransportPlayUpFgFill, palette::kAppFg);
+
+         this->SetColor(palette::kTransportPlayHoverBorder, Colours::red);
+         this->SetColor(palette::kTransportPlayHoverFill, palette::kAppBg);
+         this->SetColor(palette::kTransportPlayHoverFg, Colours::red);
+         this->SetColor(palette::kTransportPlayHoverFgFill, Colours::red);
+
+         this->SetColor(palette::kTransportPlayDownBorder, Colours::green);
+         this->SetColor(palette::kTransportPlayDownFill, Colours::green);
+         this->SetColor(palette::kTransportPlayDownFg, Colours::green);
+         this->SetColor(palette::kTransportPlayDownFgFill, Colours::green);
       };
       break;
 

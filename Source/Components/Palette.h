@@ -135,7 +135,18 @@ namespace palette
    // Transport colors
    const String kTransportBg("TransportBackground");
    const String kTransportFg("TransportForeground");
-
+   const String kTransportPlayUpBorder("TransportPlayUpBorder");
+   const String kTransportPlayUpFill("TransportPlayUpFill");
+   const String kTransportPlayUpFg("TransportPlayUpFg");
+   const String kTransportPlayUpFgFill("TransportPlayUpFgFill");
+   const String kTransportPlayHoverBorder("TransportPlayHoverBorder");
+   const String kTransportPlayHoverFill("TransportPlayHoverFill");
+   const String kTransportPlayHoverFg("TransportPlayHoverFg");
+   const String kTransportPlayHoverFgFill("TransportPlayHoverFgFill");
+   const String kTransportPlayDownBorder("TransportPlayDownBorder");
+   const String kTransportPlayDownFill("TransportPlayDownFill");
+   const String kTransportPlayDownFg("TransportPlayDownFg");
+   const String kTransportPlayDownFgFill("TransportPlayDownFgFill");
 
 
 };

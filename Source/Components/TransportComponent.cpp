@@ -5,6 +5,9 @@
 #include "ComponentDefs.h"
 #include "Scumbler.h"
 
+// Buttons
+#include "Buttons/PlayButton.h"
+
 
 TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 :  StyledComponent(style)
@@ -28,9 +31,28 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 
    this->addAndMakeVisible(fResetButton);
 
-   fPlayButton = new TextButton("play button");
-   fPlayButton->setButtonText("play");
+   fPlayButton = new DrawableButton("play", DrawableButton::ImageFitted);
    fPlayButton->addListener(this);
+
+   // create the button images & get the palette data set
+   fPlayUp = new SvgButton(kPlayButton);
+   fPlayUp->SetPaletteEntry("bg-stroke", palette::kTransportPlayUpBorder);
+   fPlayUp->SetPaletteEntry("bg-fill", palette::kTransportPlayUpFill);
+   fPlayUp->SetPaletteEntry("fg-stroke", palette::kTransportPlayUpFg);
+   fPlayUp->SetPaletteEntry("fg-fill", palette::kTransportPlayUpFgFill);
+
+   fPlayHover = new SvgButton(kPlayButton);
+   fPlayHover->SetPaletteEntry("bg-stroke", palette::kTransportPlayHoverBorder);
+   fPlayHover->SetPaletteEntry("bg-fill", palette::kTransportPlayHoverFill);
+   fPlayHover->SetPaletteEntry("fg-stroke", palette::kTransportPlayHoverFg);
+   fPlayHover->SetPaletteEntry("fg-fill", palette::kTransportPlayHoverFgFill);
+
+   fPlayDown = new SvgButton(kPlayButton);
+   fPlayDown->SetPaletteEntry("bg-stroke", palette::kTransportPlayDownBorder);
+   fPlayDown->SetPaletteEntry("bg-fill", palette::kTransportPlayDownFill);
+   fPlayDown->SetPaletteEntry("fg-stroke", palette::kTransportPlayDownFg);
+   fPlayDown->SetPaletteEntry("fg-fill", palette::kTransportPlayDownFgFill);
+
 
    this->addAndMakeVisible(fPlayButton);
 
@@ -69,7 +91,16 @@ void TransportComponent::UpdateStyle()
 {
    fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
    fResetButton->setColour(TextButton::buttonColourId, Colours::white);
-   fPlayButton->setColour(TextButton::buttonColourId, Colours::white);
+
+   Drawable* up = fPlayUp->Create(fStyle);
+   Drawable* hover = fPlayHover->Create(fStyle);
+   Drawable* down = fPlayDown->Create(fStyle);
+   fPlayButton->setImages(up, hover, down);
+
+   delete up;
+   delete down; 
+   delete hover;
+
    fPlayTime->setColour(TextEditor::textColourId, Colours::black);
    fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));
    fOutputVolume->setColour (Slider::thumbColourId, Colours::black);
@@ -113,8 +144,8 @@ void TransportComponent::resized()
 
    fAddTrackButton->setBounds (40, yPos, 24, 24);
    fResetButton->setBounds (176, yPos, 47, 24);
-   fPlayButton->setBounds (296, yPos, 47, 24);
-   fPlayTime->setBounds ((width/2) - (150/2), yPos, 150, 24);
+    fPlayButton->setBounds (296, yPos, 32, 32);
+   fPlayTime->setBounds (480, yPos, 150, 24);
    fOutputVolume->setBounds (width-60, yPos, 32, 24);
 }
 

@@ -66,9 +66,11 @@ Drawable* SvgButton::Create(UiStyle* style)
       svg = svg.replace("{" + svgItem + "-opacity}", color.opacity);
    }
 
+   std::cout << svg << std::endl;
+
    XmlElement* x = XmlDocument::parse(svg);
    Drawable* retval = Drawable::createFromSVG(*x);
    delete x;
    return retval;
-   
+
 }
