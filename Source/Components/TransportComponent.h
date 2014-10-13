@@ -32,6 +32,13 @@ public:
    void changeListenerCallback(ChangeBroadcaster* source);
 
 private:
+   /**
+    * Load the correct play/pause graphics into the play button depending on the 
+    * current state of the Scumbler object. 
+    */
+   void SetPlayButton();
+
+private:
 
    Scumbler* fScumbler;
 
@@ -45,6 +52,15 @@ private:
    ScopedPointer<SvgButton> fPlayUp;
    ScopedPointer<SvgButton> fPlayHover;
    ScopedPointer<SvgButton> fPlayDown;
+   ScopedPointer<SvgButton> fPauseUp;
+   ScopedPointer<SvgButton> fPauseHover;
+   ScopedPointer<SvgButton> fPauseDown;
+
+
+   // Drawable data -- since we need to be able to swap play/pause images
+   // when the playback state changes, we keep those pointers around
+   OwnedArray<Drawable> fPlayDrawables;
+   OwnedArray<Drawable> fPauseDrawables;
 
 
    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TransportComponent);   
