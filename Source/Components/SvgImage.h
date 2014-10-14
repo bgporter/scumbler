@@ -2,8 +2,8 @@
 
 // !!! license
 
-#ifndef h_SvgButton
-#define h_SvgButton
+#ifndef h_SvgImage
+#define h_SvgImage
 
 #include "JuceHeader.h"
 
@@ -13,7 +13,7 @@
 class UiStyle;
 
 /**
- * \class SvgButton
+ * \class SvgImage
  *
  *  We want to be able to use SVG to define the design of our flat buttons. This class 
  *  lets us mark up SVG data to use as a template that can be styled at runtime using 
@@ -39,15 +39,15 @@ class UiStyle;
  * manage is palette-stylable SVG drawables.) 
  * 
  */
-class SvgButton
+class SvgImage
 {
 public:
    /**
     * Create the object, keeping a const version of the original string.
     */
-   SvgButton(const String& source);
+   SvgImage(const String& source);
 
-   ~SvgButton();
+   ~SvgImage();
 
    /**
     * Create an association between one of our template keys and a palette entry.

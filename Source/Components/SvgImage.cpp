@@ -1,6 +1,6 @@
 // Copyright (c) 2014 Brett g Porter
 
-#include "SvgButton.h"
+#include "SvgImage.h"
 
 #include "UiStyle.h"
 
@@ -28,23 +28,23 @@ namespace
 }
 
 
-SvgButton::SvgButton(const String& source)
+SvgImage::SvgImage(const String& source)
 :fSource(source)
 {
    
 }
 
-SvgButton::~SvgButton()
+SvgImage::~SvgImage()
 {
    
 }
 
-void SvgButton::SetPaletteEntry(const String& svgKey, const String& paletteKey)
+void SvgImage::SetPaletteEntry(const String& svgKey, const String& paletteKey)
 {
    fColorTable[svgKey] = paletteKey;
 }
 
-Drawable* SvgButton::Create(UiStyle* style)
+Drawable* SvgImage::Create(UiStyle* style)
 {
    // make a writable copy...
    String svg(fSource);
