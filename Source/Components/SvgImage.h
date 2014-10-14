@@ -52,10 +52,20 @@ public:
    /**
     * Create an association between one of our template keys and a palette entry.
     * This should only need to be done once at startup time for each of these objects.
+    * Each time the member fn `Create()` is called, we'll write the current color 
+    * values from the palette into our SVG output.
     * @param svgKey     e.g. 'bg-stroke'
     * @param paletteKey e.g. 'TransportPlayHoverBorder'
     */
    void SetPaletteEntry(const String& svgKey, const String& paletteKey);   
+
+   /**
+    * We can also pass literal data into template entries in the SVG data -- 
+    * perhaps useful for things like changing stroke-widths, transforms, etc
+    * @param svgKey template key to set
+    * @param value  Value to use for that template key.
+    */
+   void SetTemplateEntry(const String& svgKey, const String& value);
 
    /**
     * Create a new drawable object that uses current palette data from the UiStyle object
@@ -73,6 +83,8 @@ private:
    const String fSource;
 
    std::map<String, String> fColorTable;
+
+   std::map<String, String> fTemplateMap;
 };
 
 

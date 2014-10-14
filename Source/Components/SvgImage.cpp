@@ -44,12 +44,28 @@ void SvgImage::SetPaletteEntry(const String& svgKey, const String& paletteKey)
    fColorTable[svgKey] = paletteKey;
 }
 
+void SvgImage::SetTemplateEntry(const String& svgKey, const String& value)
+{
+   fTemplateMap[svgKey] = paletteKey;
+}
+
+
 Drawable* SvgImage::Create(UiStyle* style)
 {
    // make a writable copy...
    String svg(fSource);
 
    std::map<String, String>::iterator it;
+
+
+   // salk through each template map entry & replace it in the data
+   for (it = fTemplateMap.begin(); it != fTemplateMap.end(); ++it)
+   {
+      String svgItem = it->first;
+      String value = it->second;
+
+      svg = svg.replace("{" + svgItem + "}", value); 
+   }
 
    // walk through each color table association and replace the template items 
    // with correctly formatted color data.
@@ -66,7 +82,7 @@ Drawable* SvgImage::Create(UiStyle* style)
       svg = svg.replace("{" + svgItem + "-opacity}", color.opacity);
    }
 
-   std::cout << svg << std::endl;
+   //std::cout << svg << std::endl;
 
    XmlElement* x = XmlDocument::parse(svg);
    Drawable* retval = Drawable::createFromSVG(*x);
