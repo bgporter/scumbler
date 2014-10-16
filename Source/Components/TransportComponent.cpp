@@ -31,7 +31,7 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 
    this->addAndMakeVisible(fResetButton);
 
-   fPlayButton = new DrawableButton("play", DrawableButton::ImageFitted);
+   fPlayButton = new DrawableButton("play", DrawableButton::ImageStretched);
    fPlayButton->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
    fPlayButton->addListener(this);
 
@@ -162,7 +162,7 @@ void TransportComponent::resized()
 
    fAddTrackButton->setBounds (40, yPos, 24, 24);
    fResetButton->setBounds (176, yPos, 47, 24);
-    fPlayButton->setBounds (296, yPos, 32, 32);
+   fPlayButton->setBounds (296, yPos, 32, 32);
    fPlayTime->setBounds (480, yPos, 150, 24);
    fOutputVolume->setBounds (width-60, yPos, 32, 24);
 }
