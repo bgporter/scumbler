@@ -52,20 +52,19 @@ void SvgButton::SetTemplateEntry(int imageIndex, const String& svgKey, const Str
    {
       jassert(false);
    }
-
-
 }
 
 
 void SvgButton::SetButtonImages(DrawableButton* button, UiStyle* style)
 {
-   button->setImages(this->CreateDrawable(kNormal),
-                     this->CreateDrawable(kHover),
-                     this->CreateDrawable(kDown),
-                     this->CreateDrawable(kDisabled),
-                     this->CreateDrawable(kNormalOn),
-                     this->CreateDrawable(kHoverOn),
-                     this->CreateDrawable(kDisabledOn)
+   button->setImages(this->CreateDrawable(kNormal, style),
+                     this->CreateDrawable(kHover, style),
+                     this->CreateDrawable(kDown, style),
+                     this->CreateDrawable(kDisabled, style),
+                     this->CreateDrawable(kNormalOn, style),
+                     this->CreateDrawable(kHoverOn, style),
+                     this->CreateDrawable(kDownOn, style),
+                     this->CreateDrawable(kDisabledOn, style)
                      );
 }
 

@@ -46,7 +46,7 @@ void SvgImage::SetPaletteEntry(const String& svgKey, const String& paletteKey)
 
 void SvgImage::SetTemplateEntry(const String& svgKey, const String& value)
 {
-   fTemplateMap[svgKey] = paletteKey;
+   fTemplateMap[svgKey] = value;
 }
 
 

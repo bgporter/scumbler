@@ -32,51 +32,50 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
    this->addAndMakeVisible(fResetButton);
 
    fPlayButton = new DrawableButton("play", DrawableButton::ImageFitted);
+   fPlayButton->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
    fPlayButton->addListener(this);
 
-   fPlayDrawables.insert(0, nullptr);
-   fPlayDrawables.insert(1, nullptr);
-   fPlayDrawables.insert(2, nullptr);
 
-   fPauseDrawables.insert(0, nullptr);
-   fPauseDrawables.insert(1, nullptr);
-   fPauseDrawables.insert(2, nullptr);
+   fPlayButtonImages = new SvgButton(  kPlayButton,   // kNormal
+                                       kPlayButton,   // hover
+                                       kPlayButton,   // down
+                                       String::empty, // disabled
+                                       kPauseButton,  // normal-on
+                                       kPauseButton,  // hover-on
+                                       kPauseButton,  // down-on
+                                       String::empty  // disabled-on
+                                    );
+
    // create the button images & get the palette data set
-   fPlayUp = new SvgButton(kPlayButton);
-   fPlayUp->SetPaletteEntry("bg-stroke", palette::kTransportPlayUpBorder);
-   fPlayUp->SetPaletteEntry("bg-fill", palette::kTransportPlayUpFill);
-   fPlayUp->SetPaletteEntry("fg-stroke", palette::kTransportPlayUpFg);
-   fPlayUp->SetPaletteEntry("fg-fill", palette::kTransportPlayUpFgFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormal, "bg-stroke", palette::kTransportPlayUpBorder);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormal, "bg-fill", palette::kTransportPlayUpFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormal, "fg-stroke", palette::kTransportPlayUpFg);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormal, "fg-fill", palette::kTransportPlayUpFgFill);
 
-   fPlayHover = new SvgButton(kPlayButton);
-   fPlayHover->SetPaletteEntry("bg-stroke", palette::kTransportPlayHoverBorder);
-   fPlayHover->SetPaletteEntry("bg-fill", palette::kTransportPlayHoverFill);
-   fPlayHover->SetPaletteEntry("fg-stroke", palette::kTransportPlayHoverFg);
-   fPlayHover->SetPaletteEntry("fg-fill", palette::kTransportPlayHoverFgFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHover, "bg-stroke", palette::kTransportPlayHoverBorder);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHover, "bg-fill", palette::kTransportPlayHoverFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHover,"fg-stroke", palette::kTransportPlayHoverFg);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHover,"fg-fill", palette::kTransportPlayHoverFgFill);
 
-   fPlayDown = new SvgButton(kPlayButton);
-   fPlayDown->SetPaletteEntry("bg-stroke", palette::kTransportPlayDownBorder);
-   fPlayDown->SetPaletteEntry("bg-fill", palette::kTransportPlayDownFill);
-   fPlayDown->SetPaletteEntry("fg-stroke", palette::kTransportPlayDownFg);
-   fPlayDown->SetPaletteEntry("fg-fill", palette::kTransportPlayDownFgFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDown, "bg-stroke", palette::kTransportPlayDownBorder);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDown, "bg-fill", palette::kTransportPlayDownFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDown, "fg-stroke", palette::kTransportPlayDownFg);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDown, "fg-fill", palette::kTransportPlayDownFgFill);
 
-   fPauseUp = new SvgButton(kPauseButton);
-   fPauseUp->SetPaletteEntry("bg-stroke", palette::kTransportPlayUpBorder);
-   fPauseUp->SetPaletteEntry("bg-fill", palette::kTransportPlayUpFill);
-   fPauseUp->SetPaletteEntry("fg-stroke", palette::kTransportPlayUpFg);
-   fPauseUp->SetPaletteEntry("fg-fill", palette::kTransportPlayUpFgFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "bg-stroke", palette::kTransportPlayUpBorder);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "bg-fill", palette::kTransportPlayUpFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "fg-stroke", palette::kTransportPlayUpFg);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "fg-fill", palette::kTransportPlayUpFgFill);
 
-   fPauseHover = new SvgButton(kPauseButton);
-   fPauseHover->SetPaletteEntry("bg-stroke", palette::kTransportPlayHoverBorder);
-   fPauseHover->SetPaletteEntry("bg-fill", palette::kTransportPlayHoverFill);
-   fPauseHover->SetPaletteEntry("fg-stroke", palette::kTransportPlayHoverFg);
-   fPauseHover->SetPaletteEntry("fg-fill", palette::kTransportPlayHoverFgFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "bg-stroke", palette::kTransportPlayHoverBorder);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "bg-fill", palette::kTransportPlayHoverFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "fg-stroke", palette::kTransportPlayHoverFg);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "fg-fill", palette::kTransportPlayHoverFgFill);
 
-   fPauseDown = new SvgButton(kPauseButton);
-   fPauseDown->SetPaletteEntry("bg-stroke", palette::kTransportPlayDownBorder);
-   fPauseDown->SetPaletteEntry("bg-fill", palette::kTransportPlayDownFill);
-   fPauseDown->SetPaletteEntry("fg-stroke", palette::kTransportPlayDownFg);
-   fPauseDown->SetPaletteEntry("fg-fill", palette::kTransportPlayDownFgFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "bg-stroke", palette::kTransportPlayDownBorder);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "bg-fill", palette::kTransportPlayDownFill);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-stroke", palette::kTransportPlayDownFg);
+   fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-fill", palette::kTransportPlayDownFgFill);
 
 
    this->addAndMakeVisible(fPlayButton);
@@ -117,15 +116,8 @@ void TransportComponent::UpdateStyle()
    fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
    fResetButton->setColour(TextButton::buttonColourId, Colours::white);
 
-   fPlayDrawables.insert(0, fPlayUp->Create(fStyle));
-   fPlayDrawables.insert(1, fPlayHover->Create(fStyle));
-   fPlayDrawables.insert(2, fPlayDown->Create(fStyle));
+   fPlayButtonImages->SetButtonImages(fPlayButton, fStyle);
 
-   fPauseDrawables.insert(0, fPauseUp->Create(fStyle));
-   fPauseDrawables.insert(1, fPauseHover->Create(fStyle));
-   fPauseDrawables.insert(2, fPauseDown->Create(fStyle));
-
-   this->SetPlayButton();
 
    fPlayTime->setColour(TextEditor::textColourId, Colours::black);
    fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));
@@ -184,7 +176,6 @@ void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
    else if (fPlayButton == buttonThatWasClicked)
    {
       fScumbler->TogglePlay();
-      this->SetPlayButton();
    }
    else if (fResetButton == buttonThatWasClicked)
    {
@@ -213,19 +204,9 @@ void TransportComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
    if ((fScumbler == source) || (fStyle == source))
    {
+      fPlayButton->setToggleState(fScumbler->IsPlaying(), NotificationType::dontSendNotification);
       this->repaint();
    }
 
 }
 
-void TransportComponent::SetPlayButton()
-{
-   if (fScumbler->IsPlaying())
-   {
-      fPlayButton->setImages(fPauseDrawables[0], fPauseDrawables[1], fPauseDrawables[2]);
-   }
-   else
-   {
-      fPlayButton->setImages(fPlayDrawables[0], fPlayDrawables[1], fPlayDrawables[2]);
-   }
-}

@@ -35,6 +35,7 @@
 		44ABE535167419B70045030E /* ScumblerComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44ABE533167419B70045030E /* ScumblerComponent.cpp */; };
 		44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44B8599416A2FAC90028785C /* PluginBlock.cpp */; };
 		44CA10131852AD5D00BB53B4 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44CA10111852AD5D00BB53B4 /* Input.cpp */; };
+		44F851DE19EF3E8800FCE8D3 /* SvgImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44F851DC19EF3E8800FCE8D3 /* SvgImage.cpp */; };
 		44FFF83C16D5AE5600E53F1F /* Gain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44FFF83A16D5AE5600E53F1F /* Gain.cpp */; };
 		465C9A154786EA3EB40FA1F8 /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 969C40A1B4F980BFB51FD60B /* juce_audio_basics.mm */; };
 		469C39A90EA46A522ABF5DAB /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A92514B6C73E39D6596966 /* DiscRecording.framework */; };
@@ -331,6 +332,8 @@
 		44CA10111852AD5D00BB53B4 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Input.cpp; path = ../../Source/Processors/Input.cpp; sourceTree = "<group>"; };
 		44CA10121852AD5D00BB53B4 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Input.h; path = ../../Source/Processors/Input.h; sourceTree = "<group>"; };
 		44D5556AA04C6895D8DF32EF /* juce_HyperlinkButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_HyperlinkButton.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_HyperlinkButton.h; sourceTree = SOURCE_ROOT; };
+		44F851DC19EF3E8800FCE8D3 /* SvgImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SvgImage.cpp; path = ../../Source/Components/SvgImage.cpp; sourceTree = "<group>"; };
+		44F851DD19EF3E8800FCE8D3 /* SvgImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SvgImage.h; path = ../../Source/Components/SvgImage.h; sourceTree = "<group>"; };
 		44FFF83A16D5AE5600E53F1F /* Gain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Gain.cpp; path = ../../Source/Processors/Gain.cpp; sourceTree = "<group>"; };
 		44FFF83B16D5AE5600E53F1F /* Gain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Gain.h; path = ../../Source/Processors/Gain.h; sourceTree = "<group>"; };
 		45239C877F4865981E28389E /* juce_Button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Button.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_Button.h; sourceTree = SOURCE_ROOT; };
@@ -1312,6 +1315,8 @@
 		44ABE5321674199D0045030E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				44F851DC19EF3E8800FCE8D3 /* SvgImage.cpp */,
+				44F851DD19EF3E8800FCE8D3 /* SvgImage.h */,
 				448FE20919E981F100CF8438 /* SvgButton.cpp */,
 				448FE20A19E981F100CF8438 /* SvgButton.h */,
 				447369AE19C5DF2200DE9359 /* UiStyle.cpp */,
@@ -2717,6 +2722,7 @@
 				4408D272192D8136004819E9 /* SampleCounter.cpp in Sources */,
 				44CA10131852AD5D00BB53B4 /* Input.cpp in Sources */,
 				0451CBD8127DBC5A364B28D5 /* juce_audio_formats.mm in Sources */,
+				44F851DE19EF3E8800FCE8D3 /* SvgImage.cpp in Sources */,
 				0C574F6793807CBD0AE2B912 /* juce_audio_processors.mm in Sources */,
 				33EC4A5A827ED3B097CD7C7E /* juce_audio_utils.mm in Sources */,
 				3B7507D4F5DCB16F9912BDE5 /* juce_core.mm in Sources */,
