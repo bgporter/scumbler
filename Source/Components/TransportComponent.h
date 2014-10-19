@@ -40,9 +40,10 @@ private:
    DrawableButton* fPlayButton;
    Label* fPlayTime;
    Slider* fOutputVolume;
-   TextButton* fResetButton;   
+   DrawableButton* fResetButton;   
 
    ScopedPointer<SvgButton>   fPlayButtonImages;
+   ScopedPointer<SvgButton>   fResetButtonImages;
 
    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TransportComponent);   
 };                         

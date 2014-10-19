@@ -135,6 +135,7 @@ namespace palette
    // Transport colors
    const String kTransportBg("TransportBackground");
    const String kTransportFg("TransportForeground");
+
    const String kTransportPlayUpBorder("TransportPlayUpBorder");
    const String kTransportPlayUpFill("TransportPlayUpFill");
    const String kTransportPlayUpFg("TransportPlayUpFg");
@@ -148,6 +149,25 @@ namespace palette
    const String kTransportPlayDownFg("TransportPlayDownFg");
    const String kTransportPlayDownFgFill("TransportPlayDownFgFill");
 
+   const String kTransportResetUpBorder("TransportResetUpBorder");
+   const String kTransportResetUpFill("TransportResetUpFill");
+   const String kTransportResetUpFg("TransportResetUpFg");
+   const String kTransportResetUpFgFill("TransportResetUpFgFill");
+
+   const String kTransportResetHoverBorder("TransportResetHoverBorder");
+   const String kTransportResetHoverFill("TransportResetHoverFill");
+   const String kTransportResetHoverFg("TransportResetHoverFg");
+   const String kTransportResetHoverFgFill("TransportResetHoverFgFill");
+
+   const String kTransportResetDownBorder("TransportResetDownBorder");
+   const String kTransportResetDownFill("TransportResetDownFill");
+   const String kTransportResetDownFg("TransportResetDownFg");
+   const String kTransportResetDownFgFill("TransportResetDownFgFill");
+   
+   const String kTransportResetDisabledBorder("TransportResetDisabledBorder");
+   const String kTransportResetDisabledFill("TransportResetDisabledFill");
+   const String kTransportResetDisabledFg("TransportResetDisabledFg");
+   const String kTransportResetDisabledFgFill("TransportResetDisabledFgFill");
 
 };
 

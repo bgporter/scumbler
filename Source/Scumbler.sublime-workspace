@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"kDown",
+				"kDownOn"
+			],
+			[
+				"Crea",
+				"CreateDrawable"
+			],
+			[
+				"Cre",
+				"CreateDrawable"
+			],
+			[
+				"Cr",
+				"CreateDrawable"
+			],
+			[
+				"fPla",
+				"fPlayDrawables"
+			],
+			[
+				"fg-strok",
+				"fg-stroke-opacity"
+			],
+			[
+				"kApp",
+				"kAppBg"
+			],
+			[
+				"Ge",
+				"GetColor"
+			],
+			[
 				"text",
 				"textColourId"
 			],
@@ -275,7 +307,7 @@
 			"file": "Components/StyledComponent.h",
 			"settings":
 			{
-				"buffer_size": 776,
+				"buffer_size": 1015,
 				"line_ending": "Unix"
 			}
 		},
@@ -289,10 +321,74 @@
 			}
 		},
 		{
+			"file": "Components/SvgImage.h",
+			"settings":
+			{
+				"buffer_size": 2939,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/SvgImage.cpp",
+			"settings":
+			{
+				"buffer_size": 1862,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/SvgButton.cpp",
+			"settings":
+			{
+				"buffer_size": 2408,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/TransportComponent.h",
+			"settings":
+			{
+				"buffer_size": 1096,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/TransportComponent.cpp",
+			"settings":
+			{
+				"buffer_size": 10136,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/Buttons/PlayButton.h",
+			"settings":
+			{
+				"buffer_size": 1567,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/Buttons/ResetButton.h",
+			"settings":
+			{
+				"buffer_size": 797,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Components/Buttons/PlainButton.h",
+			"settings":
+			{
+				"buffer_size": 730,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "Components/Palette.h",
 			"settings":
 			{
-				"buffer_size": 2339,
+				"buffer_size": 6219,
 				"line_ending": "Unix"
 			}
 		},
@@ -300,88 +396,8 @@
 			"file": "Components/Palette.cpp",
 			"settings":
 			{
-				"buffer_size": 875,
+				"buffer_size": 6926,
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/TrackComponent.h",
-			"settings":
-			{
-				"buffer_size": 6125,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Components/TrackComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 18322,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Track.cpp",
-			"settings":
-			{
-				"buffer_size": 9892,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/ScumblerComponent.h",
-			"settings":
-			{
-				"buffer_size": 4148,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Components/ScumblerComponent.cpp",
-			"settings":
-			{
-				"buffer_size": 11698,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "Scumbler.cpp",
-			"settings":
-			{
-				"buffer_size": 21180,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/UiStyle.h",
-			"settings":
-			{
-				"buffer_size": 1253,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Components/UiStyle.cpp",
-			"settings":
-			{
-				"buffer_size": 766,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "MainWindow.h",
-			"settings":
-			{
-				"buffer_size": 5044,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "MainWindow.cpp",
-			"settings":
-			{
-				"buffer_size": 17543,
-				"line_ending": "Windows"
 			}
 		}
 	],
@@ -465,40 +481,55 @@
 	},
 	"file_history":
 	[
+		"/Users/bgporter/Desktop/m.svg",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/Buttons/PlayButton.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
+		"/Users/bgporter/Desktop/PauseButtonsvg.svg",
+		"/Users/bgporter/Desktop/PlayButton.svg",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/Palette.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/Palette.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
+		"/Users/bgporter/Desktop/m2.svg",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/SvgButton.h",
+		"/Users/bgporter/Desktop/PlayButton3.svg",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/SvgButton.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/UiStyle.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/UiStyle.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/StyledComponent.h",
+		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ComponentDefs.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/Style.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/Style.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/MainWindow.h",
 		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Main.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/ScumblerDefs.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Loop.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/WaveformComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ScumblerComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.sublime-project",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Commands.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/ComponentDefs.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginBlock.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/PluginConnector.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Track.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Scumbler.h",
 		"/Users/bgporter/personal/utilities/mp3/mover/mover.py",
 		"/Users/bgporter/Music/temp/OvO/Ovo.history",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Input.h",
 		"/Users/bgporter/Desktop/testing.xml",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/XmlPersistent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Test/test_PluginBlock.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/LoopComponent.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TransportComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/SampleCounter.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/SampleCounter.h",
@@ -507,8 +538,6 @@
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Passthrough.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginBlockComponent.h",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/PluginSlotComponent.cpp",
-		"/Users/bgporter/personal/tetrakite/scumbler/Source/Components/TrackComponent.h",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Processors/Input.cpp",
 		"/Users/bgporter/personal/tetrakite/scumbler/Source/Loop.cpp",
 		"/Users/bgporter/temp/fields.py",
@@ -579,20 +608,7 @@
 		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/Challenge1AAppDelegate.mm",
 		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/FixedPointRepresentation.cpp",
 		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/FixedPointRepresentation.h",
-		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/main.m",
-		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Controller.py",
-		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Buzzword.py",
-		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/LocalConfig.py",
-		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Day.py",
-		"/Users/bgporter/AnL/temp/discount.py",
-		"/Users/bgporter/AnL/ArtLogic/DevPractices/Buzzword/Config.py",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Global.sublime-settings",
-		"/Users/bgporter/temp/methods.py",
-		"/Users/bgporter/Library/Application Support/Sublime Text 2/Packages/Default/Base File.sublime-settings",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/appengine_config.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/context.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/date.py",
-		"/Users/bgporter/personal/wastebook/branches/tag-branch/wb2/AppEngine/help.py"
+		"/Users/bgporter/AnL/tests/pisarro/NickPisarroJr/Challenge1A/Challenge1A/main.m"
 	],
 	"find":
 	{
@@ -603,6 +619,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			"*.h",
 			""
 		]
 	},
@@ -611,6 +628,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"helve",
+			"fPlayBu",
+			"   \n",
+			"Xml",
+			"parentHeight",
+			"setCol",
+			"qSketch",
+			"LoopCol",
+			"setColou",
+			"ScumblerCompon",
+			"ScumblerCompo",
+			"setCol",
+			"LoopCol",
+			"fColors",
 			"UpdateCp;",
 			"Callbac",
 			"UpdateS",
@@ -724,21 +755,7 @@
 			"   \n",
 			".)",
 			"addChan",
-			"addCha",
-			"fInputNode",
-			"kPluginSlotHeight",
-			"outputDebugString",
-			"fNowIndex",
-			"LoopSizeChanged",
-			"SetLoopD",
-			"LoopSizeChanged",
-			"CalculateSamplesPerPixel",
-			"fPendingSamples",
-			"min",
-			".\n",
-			"fDirtyStart",
-			"LoopInfo",
-			"fPixelData"
+			"addCha"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -760,7 +777,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -768,20 +785,19 @@
 					"file": "Components/StyledComponent.h",
 					"settings":
 					{
-						"buffer_size": 776,
+						"buffer_size": 1015,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								475,
-								475
+								100,
+								0
 							]
 						],
 						"settings":
 						{
-							"is_xml": false,
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
@@ -804,8 +820,8 @@
 						"selection":
 						[
 							[
-								523,
-								523
+								36,
+								0
 							]
 						],
 						"settings":
@@ -822,132 +838,129 @@
 				},
 				{
 					"buffer": 2,
-					"file": "Components/Palette.h",
+					"file": "Components/SvgImage.h",
 					"settings":
 					{
-						"buffer_size": 2339,
+						"buffer_size": 2939,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2001,
-								2020
+								1531,
+								1531
 							]
 						],
 						"settings":
 						{
-							"is_xml": false,
 							"syntax": "Packages/C++/C++.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 644.0,
+						"translation.y": 652.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Components/Palette.cpp",
+					"file": "Components/SvgImage.cpp",
 					"settings":
 					{
-						"buffer_size": 875,
+						"buffer_size": 1862,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								324,
-								324
+								808,
+								808
 							]
 						],
 						"settings":
 						{
-							"is_xml": false,
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 53.0,
+						"translation.y": 335.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "Components/TrackComponent.h",
+					"file": "Components/SvgButton.cpp",
 					"settings":
 					{
-						"buffer_size": 6125,
+						"buffer_size": 2408,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3056,
-								3056
+								2035,
+								2035
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"is_xml": false,
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1267.0,
+						"translation.y": 661.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "Components/TrackComponent.cpp",
+					"file": "Components/TransportComponent.h",
 					"settings":
 					{
-						"buffer_size": 18322,
+						"buffer_size": 1096,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15081,
-								15081
+								971,
+								971
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
+							"tab_size": 3,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7492.0,
+						"translation.y": 329.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "Track.cpp",
+					"file": "Components/TransportComponent.cpp",
 					"settings":
 					{
-						"buffer_size": 9892,
+						"buffer_size": 10136,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1246,
-								1246
+								1113,
+								1113
 							]
 						],
 						"settings":
@@ -957,143 +970,31 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2827.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "Components/ScumblerComponent.h",
+					"file": "Components/Buttons/PlayButton.h",
 					"settings":
 					{
-						"buffer_size": 4148,
+						"buffer_size": 1567,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3388,
-								3388
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1174.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "Components/ScumblerComponent.cpp",
-					"settings":
-					{
-						"buffer_size": 11698,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2506,
-								2506
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1168.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "Scumbler.cpp",
-					"settings":
-					{
-						"buffer_size": 21180,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
+								760,
 								0
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 32.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "Components/UiStyle.h",
-					"settings":
-					{
-						"buffer_size": 1253,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1006,
-								1006
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
 							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 657.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "Components/UiStyle.cpp",
-					"settings":
-					{
-						"buffer_size": 766,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 3,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -1103,47 +1004,73 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
-					"file": "MainWindow.h",
+					"buffer": 8,
+					"file": "Components/Buttons/ResetButton.h",
 					"settings":
 					{
-						"buffer_size": 5044,
+						"buffer_size": 797,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4784,
-								4784
+								796,
+								796
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C++.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"is_xml": false,
+							"syntax": "Packages/C++/C++.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2230.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 13,
-					"file": "MainWindow.cpp",
+					"buffer": 9,
+					"file": "Components/Buttons/PlainButton.h",
 					"settings":
 					{
-						"buffer_size": 17543,
+						"buffer_size": 730,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6639,
-								6639
+								69,
+								69
+							]
+						],
+						"settings":
+						{
+							"is_xml": false,
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "Components/Palette.h",
+					"settings":
+					{
+						"buffer_size": 6219,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5046,
+								5046
 							]
 						],
 						"settings":
@@ -1153,7 +1080,35 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3316.0,
+						"translation.y": 2205.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "Components/Palette.cpp",
+					"settings":
+					{
+						"buffer_size": 6926,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6005,
+								6005
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1527.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1194,7 +1149,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 118.0
+		"height": 27.0
 	},
 	"replace":
 	{

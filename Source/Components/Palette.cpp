@@ -110,6 +110,29 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          this->SetColor(palette::kTransportPlayDownFill, palette::kAppFg);
          this->SetColor(palette::kTransportPlayDownFg, palette::kAppBg);
          this->SetColor(palette::kTransportPlayDownFgFill, palette::kAppBg);
+      
+         this->SetColor(palette::kTransportResetUpBorder, palette::kAppFg); 
+         this->SetColor(palette::kTransportResetUpFill, palette::kAppBg);
+         this->SetColor(palette::kTransportResetUpFg,  palette::kAppFg);
+         this->SetColor(palette::kTransportResetUpFgFill, palette::kAppFg);
+
+         this->SetColor(palette::kTransportResetHoverBorder,  Colours::red);
+         this->SetColor(palette::kTransportResetHoverFill, palette::kAppBg);
+         this->SetColor(palette::kTransportResetHoverFg, Colours::red);
+         this->SetColor(palette::kTransportResetHoverFgFill, Colours::red);
+
+         this->SetColor(palette::kTransportResetDownBorder, palette::kAppFg);
+         this->SetColor(palette::kTransportResetDownFill, palette::kAppFg);
+         this->SetColor(palette::kTransportResetDownFg, palette::kAppBg);
+         this->SetColor(palette::kTransportResetDownFgFill, palette::kAppBg);
+         
+         this->SetColor(palette::kTransportResetDisabledBorder, Colours::lightgrey);
+         this->SetColor(palette::kTransportResetDisabledFill, palette::kAppBg);
+         this->SetColor(palette::kTransportResetDisabledFg, Colours::lightgrey);
+         this->SetColor(palette::kTransportResetDisabledFgFill, Colours::lightgrey);
+
+
+
       };
       break;
 
