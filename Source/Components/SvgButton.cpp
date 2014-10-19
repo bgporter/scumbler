@@ -57,15 +57,22 @@ void SvgButton::SetTemplateEntry(int imageIndex, const String& svgKey, const Str
 
 void SvgButton::SetButtonImages(DrawableButton* button, UiStyle* style)
 {
-   button->setImages(this->CreateDrawable(kNormal, style),
-                     this->CreateDrawable(kHover, style),
-                     this->CreateDrawable(kDown, style),
-                     this->CreateDrawable(kDisabled, style),
-                     this->CreateDrawable(kNormalOn, style),
-                     this->CreateDrawable(kHoverOn, style),
-                     this->CreateDrawable(kDownOn, style),
-                     this->CreateDrawable(kDisabledOn, style)
-                     );
+   ScopedPointer<Drawable> normal(this->CreateDrawable(kNormal, style));
+   ScopedPointer<Drawable> hover(this->CreateDrawable(kHover, style));
+   ScopedPointer<Drawable> down(this->CreateDrawable(kDown, style));
+   ScopedPointer<Drawable> disabled(this->CreateDrawable(kDisabled, style));
+   ScopedPointer<Drawable> normalOn(this->CreateDrawable(kNormalOn, style));
+   ScopedPointer<Drawable> hoverOn(this->CreateDrawable(kHoverOn, style));
+   ScopedPointer<Drawable> downOn(this->CreateDrawable(kDownOn, style));
+   ScopedPointer<Drawable> disabledOn(this->CreateDrawable(kDisabledOn, style));
+   button->setImages(normal,
+                     hover,
+                     down,
+                     disabled,
+                     normalOn,
+                     hoverOn,
+                     downOn,
+                     disabledOn);
 }
 
 
