@@ -7,6 +7,7 @@
 
 // Buttons
 #include "Buttons/PlayButton.h"
+#include "Buttons/PlusButton.h"
 #include "Buttons/ResetButton.h"
 
 
@@ -19,11 +20,36 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 ,  fOutputVolume(nullptr)
 ,  fResetButton(nullptr)
 {
-   fAddTrackButton = new TextButton("Add track button");
-   fAddTrackButton->setButtonText("+");
+   fAddTrackButton = new DrawableButton("AddTrack", DrawableButton::ImageStretched);
    fAddTrackButton->addListener(this);
-
    fAddTrackButton->setEnabled(true);
+
+   fPlusButtonImages = new SvgButton( kPlusButton,
+                                      kPlusButton,
+                                      kPlusButton,
+                                      kPlusButton);
+                                       
+   // create the button images & get the palette data set
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kNormal, "bg-stroke", palette::kTransportResetUpBorder);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kNormal, "bg-fill", palette::kTransportResetUpFill);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kNormal, "fg-stroke", palette::kTransportResetUpFg);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kNormal, "fg-fill", palette::kTransportResetUpFgFill);
+
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kHover, "bg-stroke", palette::kTransportResetHoverBorder);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kHover, "bg-fill", palette::kTransportResetHoverFill);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kHover,"fg-stroke", palette::kTransportResetHoverFg);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kHover,"fg-fill", palette::kTransportResetHoverFgFill);
+
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDown, "bg-stroke", palette::kTransportResetDownBorder);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDown, "bg-fill", palette::kTransportResetDownFill);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDown, "fg-stroke", palette::kTransportResetDownFg);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDown, "fg-fill", palette::kTransportResetDownFgFill);
+
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "bg-stroke", palette::kTransportResetDisabledBorder);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "bg-fill", palette::kTransportResetDisabledFill);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "fg-stroke", palette::kTransportResetDisabledFg);
+   fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "fg-fill", palette::kTransportResetDisabledFgFill);
+
    this->addAndMakeVisible(fAddTrackButton);
 
    fResetButton = new DrawableButton("reset", DrawableButton::ImageStretched);
@@ -141,9 +167,8 @@ TransportComponent::~TransportComponent()
 
 void TransportComponent::UpdateStyle()
 {
-   fAddTrackButton->setColour(TextButton::buttonColourId, Colours::white);
-   fResetButton->setColour(TextButton::buttonColourId, Colours::white);
 
+   fPlusButtonImages->SetButtonImages(fAddTrackButton, fStyle);
    fPlayButtonImages->SetButtonImages(fPlayButton, fStyle);
    fResetButtonImages->SetButtonImages(fResetButton, fStyle);
 
@@ -186,13 +211,17 @@ void TransportComponent::resized()
 {
    int height = this->getHeight();
    int width = this->getWidth();
-   int yPos = (height - kKnobHeight) / 2;
+   int buttonSize = height * 0.64;
 
-   fAddTrackButton->setBounds (40, yPos, 24, 24);
-   fResetButton->setBounds (176, yPos, 32, 32);
-   fPlayButton->setBounds (296, yPos, 32, 32);
+   int yPos = (height - buttonSize) / 2;
+
+   std::cout << "transport height = " << height << std::endl;
+
+   fAddTrackButton->setBounds (40, yPos, buttonSize, buttonSize);
+   fResetButton->setBounds (176, yPos, buttonSize, buttonSize);
+   fPlayButton->setBounds (296, yPos, buttonSize, buttonSize);
    fPlayTime->setBounds (480, yPos, 150, 24);
-   fOutputVolume->setBounds (width-60, yPos, 32, 24);
+   fOutputVolume->setBounds (width-(40 + buttonSize), yPos, buttonSize, buttonSize);
 }
 
 void TransportComponent::buttonClicked (Button* buttonThatWasClicked)
