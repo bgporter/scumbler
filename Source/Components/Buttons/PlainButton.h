@@ -21,3 +21,6 @@ const String kPlainButton("<?xml version='1.0' standalone='no'?>\
    <ellipse cx='32' cy='32' rx='32' ry='32' \
       style='fill:#{bg-fill};fill-opacity:{bg-fill-opacity};stroke:#{bg-stroke};stroke-opacity:{bg-stroke-opacity};stroke-width:6'/>\
 </svg>");
+
+
+#endif

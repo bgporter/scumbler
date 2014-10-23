@@ -38,9 +38,9 @@ private:
 
    DrawableButton* fAddTrackButton;
    DrawableButton* fPlayButton;
+   DrawableButton* fResetButton;   
    Label* fPlayTime;
    Slider* fOutputVolume;
-   DrawableButton* fResetButton;   
 
    ScopedPointer<SvgButton>   fPlayButtonImages;
    ScopedPointer<SvgButton>   fPlusButtonImages;

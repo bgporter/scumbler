@@ -73,6 +73,15 @@ public:
     */
    Colour GetColor(const String& colorName) const;
 
+   /**
+    * Version of Getcolor that can return false if the requested color name isn't 
+    * in the palette table. 
+    * @param  colorName key in the palette
+    * @param  color     [out] Colour object (our ugly kErrorColor if needed)
+    * @return           true if the color key was found.
+    */
+   bool GetColor(const String& colorName, Colour& color) const;
+
 
 
    /**
@@ -140,10 +149,12 @@ namespace palette
    const String kTransportPlayUpFill("TransportPlayUpFill");
    const String kTransportPlayUpFg("TransportPlayUpFg");
    const String kTransportPlayUpFgFill("TransportPlayUpFgFill");
+
    const String kTransportPlayHoverBorder("TransportPlayHoverBorder");
    const String kTransportPlayHoverFill("TransportPlayHoverFill");
    const String kTransportPlayHoverFg("TransportPlayHoverFg");
    const String kTransportPlayHoverFgFill("TransportPlayHoverFgFill");
+   
    const String kTransportPlayDownBorder("TransportPlayDownBorder");
    const String kTransportPlayDownFill("TransportPlayDownFill");
    const String kTransportPlayDownFg("TransportPlayDownFg");
@@ -168,6 +179,46 @@ namespace palette
    const String kTransportResetDisabledFill("TransportResetDisabledFill");
    const String kTransportResetDisabledFg("TransportResetDisabledFg");
    const String kTransportResetDisabledFgFill("TransportResetDisabledFgFill");
+
+   const String kTrackActiveUpBorder("TrackActiveUpBorder");
+   const String kTrackActiveUpFill("TrackActiveUpFill");
+   const String kTrackActiveUpFg("TrackActiveUpFg");
+   const String kTrackActiveUpFgFill("TrackActiveUpFgFill");
+
+   const String kTrackActiveHoverBorder("TrackActiveHoverBorder");
+   const String kTrackActiveHoverFill("TrackActiveHoverFill");
+   const String kTrackActiveHoverFg("TrackActiveHoverFg");
+   const String kTrackActiveHoverFgFill("TrackActiveHoverFgFill");
+
+   const String kTrackActiveDownBorder("TrackActiveDownBorder");
+   const String kTrackActiveDownFill("TrackActiveDownFill");
+   const String kTrackActiveDownFg("TrackActiveDownFg");
+   const String kTrackActiveDownFgFill("TrackActiveDownFgFill");
+
+   const String kTrackActiveDisabledBorder("TrackActiveDisabledBorder");
+   const String kTrackActiveDisabledFill("TrackActiveDisabledFill");
+   const String kTrackActiveDisabledFg("TrackActiveDisabledFg");
+   const String kTrackActiveDisabledFgFill("TrackActiveDisabledFgFill");
+
+   const String kTrackActiveUpOnBorder("TrackActiveUpOnBorder");
+   const String kTrackActiveUpOnFill("TrackActiveUpOnFill");
+   const String kTrackActiveUpOnFg("TrackActiveUpOnFg");
+   const String kTrackActiveUpOnFgFill("TrackActiveUpOnFgFill");
+
+   const String kTrackActiveHoverOnBorder("TrackActiveHoverOnBorder");
+   const String kTrackActiveHoverOnFill("TrackActiveHoverOnFill");
+   const String kTrackActiveHoverOnFg("TrackActiveHoverOnFg");
+   const String kTrackActiveHoverOnFgFill("TrackActiveHoverOnFgFill");
+
+   const String kTrackActiveDownOnBorder("TrackActiveDownOnBorder");
+   const String kTrackActiveDownOnFill("TrackActiveDownOnFill");
+   const String kTrackActiveDownOnFg("TrackActiveDownOnFg");
+   const String kTrackActiveDownOnFgFill("TrackActiveDownOnFgFill");
+
+   const String kTrackActiveDisabledOnBorder("TrackActiveDisabledOnBorder");
+   const String kTrackActiveDisabledOnFill("TrackActiveDisabledOnFill");
+   const String kTrackActiveDisabledOnFg("TrackActiveDisabledOnFg");
+   const String kTrackActiveDisabledOnFgFill("TrackActiveDisabledOnFgFill");
 
 };
 

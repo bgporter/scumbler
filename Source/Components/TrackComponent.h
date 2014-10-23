@@ -26,6 +26,7 @@
 #include "JuceHeader.h"
 
 #include "StyledComponent.h"
+#include "SvgButton.h"
 #include "../Track.h"
 
 
@@ -177,10 +178,12 @@ private:
     Slider* fPan;
     ToggleButton* fLeftEnabled;
     ToggleButton* fRightEnabled;
-    TextButton* fActive;
     TextButton* fMute;
     TextButton* fSolo; 
     TextButton* fDelete;
+    DrawableButton* fActive;
+
+    ScopedPointer<SvgButton> fActiveButtonImages;
     
     float fCenterLineYPos;
     float fCenterLineStartX;

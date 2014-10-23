@@ -2771,6 +2771,7 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				"HEADER_SEARCH_PATHS[arch=*]" = ../../../../vst2.x/vstsdk2.4/;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Scumbler;
 				WARNING_CFLAGS = "-Wreorder";
@@ -2820,6 +2821,7 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				"HEADER_SEARCH_PATHS[arch=*]" = ../../../../vst2.x/vstsdk2.4/;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = Scumbler;
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;

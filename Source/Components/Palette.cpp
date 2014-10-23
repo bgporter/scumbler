@@ -131,6 +131,23 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          this->SetColor(palette::kTransportResetDisabledFg, Colours::lightgrey);
          this->SetColor(palette::kTransportResetDisabledFgFill, Colours::lightgrey);
 
+         this->SetColor(palette::kTrackActiveUpBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveUpFill, Colours::lightgrey);
+
+         this->SetColor(palette::kTrackActiveHoverBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveHoverFill, Colours::lightgrey);
+         
+         this->SetColor(palette::kTrackActiveDownBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveDownFill, Colours::green);
+
+         this->SetColor(palette::kTrackActiveUpOnBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveUpOnFill, Colours::green);
+
+         this->SetColor(palette::kTrackActiveHoverOnBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveHoverOnFill, Colours::green);
+         
+         this->SetColor(palette::kTrackActiveDownOnBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveDownOnFill, Colours::green);
 
 
       };
@@ -159,6 +176,16 @@ bool Palette::SetColor(const String& colorName, Colour color)
 
 Colour Palette::GetColor(const String& colorName) const
 {
+   Colour c;
+   // use the other form of this method and ignore the return value.
+   this->GetColor(colorName, c);
+   return c;
+}
+
+
+bool Palette::GetColor(const String& colorName, Colour& color) const
+{
+   bool retval = true;
    uint32 value;
    try
    {
@@ -168,10 +195,11 @@ Colour Palette::GetColor(const String& colorName) const
    {
       value = kErrorColor;
       std::cout << "Unknown palette color requested - " << colorName << std::endl;
+      retval = false;
    }
 
-   return Colour(value);
-
+   color = Colour(value);
+   return retval;
 }
 
 void Palette::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
