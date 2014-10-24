@@ -43,6 +43,18 @@ Colour UiStyle::GetColor(const String& color) const
    }
 }
 
+
+bool UiStyle::GetColor(const String& colorName, Colour& color) const
+{
+   jassert(fPalette);
+   bool retval = false;
+   if (fPalette)
+   {
+      retval = fPalette->GetColor(colorName, color);
+   }
+   return retval;
+}
+
 String UiStyle::GetFontName() const
 {
    return fFontName;

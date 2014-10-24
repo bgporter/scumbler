@@ -39,6 +39,15 @@ public:
    Colour GetColor(const String& color) const;
 
    /**
+    * Version of Getcolor that can return false if the requested color name isn't 
+    * in the palette table. 
+    * @param  colorName key in the palette
+    * @param  color     [out] Colour object (our ugly kErrorColor if needed)
+    * @return           true if the color key was found.
+    */
+   bool GetColor(const String& colorName, Colour& color) const;
+
+   /**
     * Return the name of the font to use
     * @return name of the font.
     */
