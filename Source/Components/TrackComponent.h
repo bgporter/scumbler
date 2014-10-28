@@ -181,9 +181,8 @@ private:
     TextButton* fMute;
     TextButton* fSolo; 
     TextButton* fDelete;
-    DrawableButton* fActive;
+    SvgButton* fActive;
 
-    ScopedPointer<SvgButton> fActiveButtonImages;
     
     float fCenterLineYPos;
     float fCenterLineStartX;

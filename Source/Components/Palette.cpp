@@ -131,22 +131,22 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          this->SetColor(palette::kTransportResetDisabledFg, Colours::lightgrey);
          this->SetColor(palette::kTransportResetDisabledFgFill, Colours::lightgrey);
 
-         this->SetColor(palette::kTrackActiveUpBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveUpBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveUpFill, Colours::lightgrey);
 
-         this->SetColor(palette::kTrackActiveHoverBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveHoverBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveHoverFill, Colours::lightgrey);
          
-         this->SetColor(palette::kTrackActiveDownBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveDownBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveDownFill, Colours::green);
 
-         this->SetColor(palette::kTrackActiveUpOnBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveUpOnBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveUpOnFill, Colours::green);
 
-         this->SetColor(palette::kTrackActiveHoverOnBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveHoverOnBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveHoverOnFill, Colours::green);
          
-         this->SetColor(palette::kTrackActiveDownOnBorder, palette::kAppBg);
+         this->SetColor(palette::kTrackActiveDownOnBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveDownOnFill, Colours::green);
 
 

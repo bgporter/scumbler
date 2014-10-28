@@ -118,55 +118,20 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fOutputVolume->setTextValueSuffix(" dB");
    fOutputVolume->addListener(this);   
 
-   fActive = new DrawableButton("Active", DrawableButton::ImageStretched);
-   fActive->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
+   fActive = new SvgButton("Active", kPlainButton, fStyle);
    fActive->setTooltip("Activate track");
-
-#if 0
-   fActiveButtonImages = new SvgButton( kPlainButton, // normal 
-                                        kPlainButton, // hover 
-                                        kPlainButton,  // down
-                                        String::empty,  // disabled
-                                        kPlainButton, // normal on
-                                        kPlainButton, // hover on
-                                        kPlainButton);   // down on)
-
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormal, "bg-stroke", palette::kTrackActiveUpBorder);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormal, "bg-fill", palette::kTrackActiveUpFill);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormal, "fg-stroke", palette::kTrackActiveUpFg);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormal, "fg-fill", palette::kTrackActiveUpFgFill);
-
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHover, "bg-stroke", palette::kTrackActiveHoverBorder);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHover, "bg-fill", palette::kTrackActiveHoverFill);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHover, "fg-stroke", palette::kTrackActiveHoverFg);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHover, "fg-fill", palette::kTrackActiveHoverFgFill);
-
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDown, "bg-stroke", palette::kTrackActiveDownBorder);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDown, "bg-fill", palette::kTrackActiveDownFill);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDown, "fg-stroke", palette::kTrackActiveDownFg);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDown, "fg-fill", palette::kTrackActiveDownFgFill);
-
-
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "bg-stroke", palette::kTrackActiveUpOnBorder);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "bg-fill", palette::kTrackActiveUpOnFill);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "fg-stroke", palette::kTrackActiveUpOnFg);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kNormalOn, "fg-fill", palette::kTrackActiveUpOnFgFill);
-
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "bg-stroke", palette::kTrackActiveHoverOnBorder);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "bg-fill", palette::kTrackActiveHoverOnFill);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "fg-stroke", palette::kTrackActiveHoverOnFg);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kHoverOn, "fg-fill", palette::kTrackActiveHoverOnFgFill);
-
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "bg-stroke", palette::kTrackActiveDownOnBorder);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "bg-fill", palette::kTrackActiveDownOnFill);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-stroke", palette::kTrackActiveDownOnFg);
-   fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-fill", palette::kTrackActiveDownOnFgFill);
-#endif
-
    fActive->addListener(this);
-
    fActive->setClickingTogglesState(true);
+
+   fActive->SetContext("Track", "Active");
+   fActive->AddButtonImage(SvgButton::kHover, kPlainButton);
+   fActive->AddButtonImage(SvgButton::kDown, kPlainButton);
+   fActive->AddButtonImage(SvgButton::kNormalOn, kPlainButton);
+   fActive->AddButtonImage(SvgButton::kHoverOn, kPlainButton);
+   fActive->AddButtonImage(SvgButton::kDownOn, kPlainButton);
+
    this->addAndMakeVisible(fActive);
+
    bool active = false;
    if (fTrack)
    {
@@ -232,10 +197,13 @@ void TrackComponent::UpdateStyle()
    fOutputVolume->setColour(Slider::thumbColourId, fg);
    fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
 
+   fActive->UpdateStyle();
+
+
 #if 0
    fActiveButtonImages->SetButtonImages(fActive, fStyle);
  #endif
-   
+
    fMute->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackMuteOff));
    fMute->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackMuteOn));
 
