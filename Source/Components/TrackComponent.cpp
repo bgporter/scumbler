@@ -200,10 +200,6 @@ void TrackComponent::UpdateStyle()
    fActive->UpdateStyle();
 
 
-#if 0
-   fActiveButtonImages->SetButtonImages(fActive, fStyle);
- #endif
-
    fMute->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackMuteOff));
    fMute->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackMuteOn));
 
