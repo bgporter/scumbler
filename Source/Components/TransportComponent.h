@@ -36,15 +36,12 @@ private:
 
    Scumbler* fScumbler;
 
-   DrawableButton* fAddTrackButton;
-   DrawableButton* fPlayButton;
-   DrawableButton* fResetButton;   
+   SvgButton* fAddTrackButton;
+   SvgButton* fPlayButton;
+   SvgButton* fResetButton;   
    Label* fPlayTime;
    Slider* fOutputVolume;
 
-   ScopedPointer<SvgButton>   fPlayButtonImages;
-   ScopedPointer<SvgButton>   fPlusButtonImages;
-   ScopedPointer<SvgButton>   fResetButtonImages;
 
    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TransportComponent);   
 };                         

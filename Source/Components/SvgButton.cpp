@@ -5,22 +5,21 @@
 
 
 
-SvgButton::SvgButton(const String& normal, const String& hover, const String& down,
-   const String& disabled, const String& normalOn, const String& hoverOn, 
-   const String& downOn, const String& disabledOn)
+SvgButton::SvgButton(const String& buttonName, const String& normal, UiStyle* style)
+:  DrawableButton(buttonName, DrawableButton::ImageStretched)
+,  fStyle(style)
 {
+   // make sure we don't let JUCE draw an outline when we're 'on'
+   this->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
+
+   for (int i = kNormal; i < kButtonImageCount; ++i)
+   {
+      fButtonImages.insert(i, nullptr);
+   }
+
    // we must have at least a normal image
    jassert(normal != String::empty);
-   fButtonImages.insert(kNormal, new SvgImage(normal));
-   // for the rest, we either insert an SvgImage or nullptr
-   fButtonImages.insert(kHover, hover.isNotEmpty() ? new SvgImage(hover) : nullptr);
-   fButtonImages.insert(kDown, down.isNotEmpty() ? new SvgImage(down) : nullptr);
-   fButtonImages.insert(kDisabled, disabled.isNotEmpty() ? new SvgImage(disabled) : nullptr);
-   fButtonImages.insert(kNormalOn, normalOn.isNotEmpty() ? new SvgImage(normalOn) : nullptr);
-   fButtonImages.insert(kHoverOn, hoverOn.isNotEmpty() ? new SvgImage(hoverOn) : nullptr);
-   fButtonImages.insert(kDownOn, downOn.isNotEmpty() ? new SvgImage(downOn) : nullptr);
-   fButtonImages.insert(kDisabledOn, disabledOn.isNotEmpty() ? new SvgImage(disabledOn) : nullptr);
-
+   this->AddButtonImage(kNormal, normal);
 }
 
 
@@ -28,6 +27,35 @@ SvgButton::~SvgButton()
 {
    // deliberately blank
 }
+
+void SvgButton::SetContext(const String& component, const String& button)
+{
+   fComponentContext = component;
+   fButtonContext = button;
+}
+
+
+bool SvgButton::AddButtonImage(int imageIndex, const String& buttonText)
+{
+   // NOTE a bit of weirdness here -- above, we say that the button has to have 
+   // a kNormal image, but we don't test here to make sure that they're not setting
+   // kNormal to String::empty (or something else invalid.) Have to trust myself.
+   // Also, you - hypocrite reader!
+    bool retval = false;
+   if (imageIndex >= kNormal && imageIndex < kButtonImageCount)
+   {
+      fButtonImages.insert(imageIndex,
+                           buttonText.isNotEmpty() ? new SvgImage(buttonText) : nullptr);
+      retval = true;
+   }
+   else
+   {
+      jassert(false);
+   }
+
+    return retval;
+}
+
 
 void SvgButton::SetPaletteEntry(int imageIndex, const String& svgKey, const String& paletteKey)
 {
@@ -55,17 +83,34 @@ void SvgButton::SetTemplateEntry(int imageIndex, const String& svgKey, const Str
 }
 
 
-void SvgButton::SetButtonImages(DrawableButton* button, UiStyle* style)
+void SvgButton::UpdateStyle()
 {
-   ScopedPointer<Drawable> normal(this->CreateDrawable(kNormal, style));
-   ScopedPointer<Drawable> hover(this->CreateDrawable(kHover, style));
-   ScopedPointer<Drawable> down(this->CreateDrawable(kDown, style));
-   ScopedPointer<Drawable> disabled(this->CreateDrawable(kDisabled, style));
-   ScopedPointer<Drawable> normalOn(this->CreateDrawable(kNormalOn, style));
-   ScopedPointer<Drawable> hoverOn(this->CreateDrawable(kHoverOn, style));
-   ScopedPointer<Drawable> downOn(this->CreateDrawable(kDownOn, style));
-   ScopedPointer<Drawable> disabledOn(this->CreateDrawable(kDisabledOn, style));
-   button->setImages(normal,
+   for (int buttonState=kNormal; buttonState < kButtonImageCount; ++buttonState)
+   {
+      if (fButtonImages[buttonState])
+      {
+         String bgStroke = this->FindPaletteKey(buttonState, "Border");
+         String bgFill = this->FindPaletteKey(buttonState, "Fill");
+         String fgStroke = this->FindPaletteKey(buttonState, "Fg");
+         String fgFill = this->FindPaletteKey(buttonState, "FgFill");
+
+         this->SetPaletteEntry(buttonState, "bg-stroke", bgStroke);
+         this->SetPaletteEntry(buttonState, "bg-fill", bgFill);
+         this->SetPaletteEntry(buttonState, "fg-stroke", fgStroke);
+         this->SetPaletteEntry(buttonState, "fg-fill", fgFill);
+      }
+   }
+
+
+   ScopedPointer<Drawable> normal(this->CreateDrawable(kNormal));
+   ScopedPointer<Drawable> hover(this->CreateDrawable(kHover));
+   ScopedPointer<Drawable> down(this->CreateDrawable(kDown));
+   ScopedPointer<Drawable> disabled(this->CreateDrawable(kDisabled));
+   ScopedPointer<Drawable> normalOn(this->CreateDrawable(kNormalOn));
+   ScopedPointer<Drawable> hoverOn(this->CreateDrawable(kHoverOn));
+   ScopedPointer<Drawable> downOn(this->CreateDrawable(kDownOn));
+   ScopedPointer<Drawable> disabledOn(this->CreateDrawable(kDisabledOn));
+   this->setImages(  normal,
                      hover,
                      down,
                      disabled,
@@ -76,7 +121,47 @@ void SvgButton::SetButtonImages(DrawableButton* button, UiStyle* style)
 }
 
 
-Drawable* SvgButton::CreateDrawable(int imageIndex, UiStyle* style)
+Drawable* SvgButton::CreateDrawable(int imageIndex)
 {
-   return fButtonImages[imageIndex] ? fButtonImages[imageIndex]->Create(style) : nullptr;
+   return fButtonImages[imageIndex] ? fButtonImages[imageIndex]->Create(fStyle) : nullptr;
+}
+
+
+
+String SvgButton::FindPaletteKey(int state, const String& element) const
+{
+   const char* const states[] = {"Up", "Hover", "Down", "Disabled", "UpOn", 
+      "HoverOn", "DownOn", "DisabledOn", nullptr};
+   StringArray stateNames(states);
+
+   String stateName = stateNames[state];
+   Colour color;
+
+   // try increasingly less specific key names, starting with fully specified
+   String key = fComponentContext + fButtonContext + stateName + element;
+   if (!fStyle->GetColor(key, color))
+   {
+      // ...then trying a component-level key...
+      key = fComponentContext + stateName + element;
+      if (!fStyle->GetColor(key, color))
+      {
+         // then an app-wide key...
+         key = stateName + element;
+         if (!fStyle->GetColor(key, color))
+         {
+            // ...and then give up -- we'll use default app fg/bg colors
+            if (element == "Fill")
+            {
+               key = "ApplicationBackground";
+            }
+            else
+            {
+               key = "ApplicationForeground";
+            }
+         }
+      }
+   }
+
+   return key;
+
 }

@@ -20,10 +20,17 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 ,  fOutputVolume(nullptr)
 ,  fResetButton(nullptr)
 {
-   fAddTrackButton = new DrawableButton("AddTrack", DrawableButton::ImageStretched);
+   fAddTrackButton = new SvgButton("AddTrack", kPlusButton, fStyle);
    fAddTrackButton->addListener(this);
    fAddTrackButton->setEnabled(true);
 
+   // the AddTrack button reuses the play button palette entries. 
+   fAddTrackButton->SetContext("Transport", "Play");
+   fAddTrackButton->AddButtonImage(SvgButton::kHover, kPlusButton);
+   fAddTrackButton->AddButtonImage(SvgButton::kDown, kPlusButton);
+   fAddTrackButton->AddButtonImage(SvgButton::kDisabled, kPlusButton);
+
+#if 0
    fPlusButtonImages = new SvgButton( kPlusButton,
                                       kPlusButton,
                                       kPlusButton,
@@ -49,12 +56,14 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
    fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "bg-fill", palette::kTransportResetDisabledFill);
    fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "fg-stroke", palette::kTransportResetDisabledFg);
    fPlusButtonImages->SetPaletteEntry(SvgButton::kDisabled, "fg-fill", palette::kTransportResetDisabledFgFill);
+#endif
 
    this->addAndMakeVisible(fAddTrackButton);
-
+#if 0
    fResetButton = new DrawableButton("reset", DrawableButton::ImageStretched);
    fResetButton->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
    fResetButton->addListener(this);
+
 
    fResetButtonImages = new SvgButton( kResetButton, // normal
                                        kResetButton, // hover
@@ -82,10 +91,13 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
    fResetButtonImages->SetPaletteEntry(SvgButton::kDisabled, "bg-fill", palette::kTransportResetDisabledFill);
    fResetButtonImages->SetPaletteEntry(SvgButton::kDisabled, "fg-stroke", palette::kTransportResetDisabledFg);
    fResetButtonImages->SetPaletteEntry(SvgButton::kDisabled, "fg-fill", palette::kTransportResetDisabledFgFill);
+#endif
+
 
    this->addAndMakeVisible(fResetButton);
 
-   fPlayButton = new DrawableButton("play", DrawableButton::ImageStretched);
+#if 0
+    fPlayButton = new DrawableButton("play", DrawableButton::ImageStretched);
    fPlayButton->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
    fPlayButton->addListener(this);
 
@@ -130,7 +142,7 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
    fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "bg-fill", palette::kTransportPlayDownFill);
    fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-stroke", palette::kTransportPlayDownFg);
    fPlayButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-fill", palette::kTransportPlayDownFgFill);
-
+#endif
 
    this->addAndMakeVisible(fPlayButton);
 
@@ -168,10 +180,13 @@ TransportComponent::~TransportComponent()
 void TransportComponent::UpdateStyle()
 {
 
+#if 0
    fPlusButtonImages->SetButtonImages(fAddTrackButton, fStyle);
    fPlayButtonImages->SetButtonImages(fPlayButton, fStyle);
    fResetButtonImages->SetButtonImages(fResetButton, fStyle);
+#endif
 
+   fAddTrackButton->UpdateStyle();
 
    fPlayTime->setColour(TextEditor::textColourId, Colours::black);
    fPlayTime->setColour(TextEditor::backgroundColourId, Colour (0x0));

@@ -122,6 +122,7 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fActive->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
    fActive->setTooltip("Activate track");
 
+#if 0
    fActiveButtonImages = new SvgButton( kPlainButton, // normal 
                                         kPlainButton, // hover 
                                         kPlainButton,  // down
@@ -160,7 +161,7 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "bg-fill", palette::kTrackActiveDownOnFill);
    fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-stroke", palette::kTrackActiveDownOnFg);
    fActiveButtonImages->SetPaletteEntry(SvgButton::kDownOn, "fg-fill", palette::kTrackActiveDownOnFgFill);
-
+#endif
 
    fActive->addListener(this);
 
@@ -231,7 +232,9 @@ void TrackComponent::UpdateStyle()
    fOutputVolume->setColour(Slider::thumbColourId, fg);
    fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
 
+#if 0
    fActiveButtonImages->SetButtonImages(fActive, fStyle);
+ #endif
    
    fMute->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackMuteOff));
    fMute->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackMuteOn));
