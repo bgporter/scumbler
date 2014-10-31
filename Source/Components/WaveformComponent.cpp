@@ -59,6 +59,8 @@ WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop)
 
 WaveformComponent::~WaveformComponent()
 {
+   this->ConnectToLoop(nullptr);
+   
 
 }
 
@@ -73,11 +75,13 @@ void WaveformComponent::ConnectToLoop(LoopProcessor* loop)
    {
       if (fLoop)
       {
+         std::cout << "  waveform component " << this << " disconnecting from loop " << fLoop << std::endl;
          fLoop->removeChangeListener(this);
       }
       fLoop = loop;
       if (fLoop)
       {
+         std::cout << "  waveform component " << this << " connecting to loop " << fLoop << std::endl;
          fLoop->addChangeListener(this);
          // if we don't have a struct to hold thumbnail data yet, or we do, but 
          // it's got the wrong number of channels for this loop processor, create

@@ -81,6 +81,8 @@ Track::~Track()
    bool reconnectInputAndOutput = (0 == --Track::sTrackCount);
     
    fScumbler->RemoveBetween(input, fInputId, output, true, reconnectInputAndOutput);
+
+   this->removeChangeListener(fScumbler);
 }
 
 void Track::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
@@ -182,7 +184,7 @@ XmlElement* Track::DumpXml(int formatVersion) const
 void Track::SetName(const String& name)
 {
    fName = name;
-   std::cout << "Track::SetName->sendChangeMessage" << std::endl;
+   //std::cout << "Track::SetName->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 
@@ -202,7 +204,7 @@ tk::Result Track::Solo(bool soloed)
    ScopedLock sl(fMutex);
    Track* track = soloed ? this : nullptr; 
    return fScumbler->SoloTrack(track);
-   std::cout << "Track::Solo->sendChangeMessage" << std::endl;
+   //std::cout << "Track::Solo->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 
@@ -232,7 +234,7 @@ tk::Result Track::Mute(bool muted)
    if (muted != fMuted)
    {
       fMuted = muted;
-      std::cout << "Track::Mute->sendChangeMessage" << std::endl;
+      //std::cout << "Track::Mute->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
    return tk::kSuccess;
@@ -248,7 +250,7 @@ bool Track::IsMuted() const
 tk::Result Track::SetActive(bool isActive)
 {
    fInputProcessor->SetActive(isActive);
-   std::cout << "Track::SetActive->sendChangeMessage" << std::endl;
+   //std::cout << "Track::SetActive->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
    if (isActive)
    {
@@ -272,7 +274,7 @@ void Track::SetInputGain(float gainInDb)
       fInputProcessor->SetGain(gain);
 
       // update our observers.
-   std::cout << "Track::SetInputGain->sendChangeMessage" << std::endl;
+      // std::cout << "Track::SetInputGain->sendChangeMessage" << std::endl;
       this->sendChangeMessage();
    }
 }
@@ -288,7 +290,7 @@ tk::Result Track::SetInputPan(float pan)
    {
       fInputProcessor->SetPan(pan);
       fPan = pan;
-      std::cout << "Track::SetInputPan->sendChangeMessage" << std::endl;
+      // std::cout << "Track::SetInputPan->sendChangeMessage" << std::endl;
       fScumbler->SetDirty();
       this->sendChangeMessage();
    }
@@ -390,7 +392,7 @@ void Track::UpdateChangeListeners(bool add, ListenTo target, ChangeListener* lis
 void Track::AskToBeDeleted()
 {
    fDeleteMe = true;
-   std::cout << "Track::AskToBeDeleted->sendChangeMessage" << std::endl;
+   // std::cout << "Track::AskToBeDeleted->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 }
 

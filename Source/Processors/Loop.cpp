@@ -50,11 +50,13 @@ LoopProcessor::LoopProcessor(Track* track, int channelCount)
 ,  fLoopCount(0)
 ,  fWasReset(false)
 {
+   std::cout << "Creating LoopProcessor @ " << this << std::endl;
 
 }
 
 LoopProcessor::~LoopProcessor()
 {
+   std::cout << "Deleting LoopProcessor @ " << this << std::endl;
 
 }
 

@@ -21,12 +21,13 @@
 
 //[Headers] You can add your own extra header files here...
 //[/Headers]
-
 #include "TrackComponent.h"
-#include "PluginBlockComponent.h"
-#include "LoopComponent.h"
+
 #include "Buttons/PlainButton.h"
+#include "Buttons/PlusButton.h"
 #include "ComponentDefs.h"
+#include "LoopComponent.h"
+#include "PluginBlockComponent.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
@@ -118,6 +119,15 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fOutputVolume->setTextValueSuffix(" dB");
    fOutputVolume->addListener(this);   
 
+
+   fDelete = new SvgButton("Delete", kXButton, fStyle);
+   fDelete->setTooltip("Delete track");
+   fDelete->SetContext("Track", "Delete");
+   fDelete->addListener(this);
+   fDelete->AddButtonImage(SvgButton::kHover, kXButton);
+   fDelete->AddButtonImage(SvgButton::kDown, kXButton);
+   this->addAndMakeVisible(fDelete);
+
    fActive = new SvgButton("Active", kPlainButton, fStyle);
    fActive->setTooltip("Activate track");
    fActive->addListener(this);
@@ -156,12 +166,6 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fSolo->setClickingTogglesState(true);
    this->addAndMakeVisible(fSolo);
 
-   fDelete = new TextButton("Delete");
-   fDelete->setTooltip("Delete track");
-   fDelete->setButtonText("x");
-   fDelete->addListener(this);
-   // !!!TODO: Set button colors.
-   this->addAndMakeVisible(fDelete);
 
    this->UpdateStyle();
 
@@ -173,7 +177,7 @@ TrackComponent::~TrackComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     // Preven us (and our children!) from receiving any new change notifications
-    //this->ConnectToTrack(nullptr);
+    this->ConnectToTrack(nullptr);
     //[/Destructor_pre]
 
 
@@ -198,6 +202,7 @@ void TrackComponent::UpdateStyle()
    fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
 
    fActive->UpdateStyle();
+   fDelete->UpdateStyle();
 
 
    fMute->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackMuteOff));
@@ -429,6 +434,7 @@ void TrackComponent::ConnectToTrack(Track* track)
     // disconnect any old track from us and our children..
     if (fTrack)
     {
+      std::cout << "TrackComponent " << this << " disconnecting from track " << fTrack << std::endl;
       fTrack->removeChangeListener(this);
       fPreEffects->ConnectToPluginBlock(nullptr);
       fPostEffects->ConnectToPluginBlock(nullptr);
@@ -437,6 +443,7 @@ void TrackComponent::ConnectToTrack(Track* track)
     fTrack = track;
     if (fTrack)
     {
+      std::cout << "TrackComponent " << this << " connecting to track " << fTrack << std::endl;
       fTrack->addChangeListener(this);
       fPreEffects->ConnectToPluginBlock(fTrack->GetPreEffectBlock());
       fPostEffects->ConnectToPluginBlock(fTrack->GetPostEffectBlock());

@@ -65,6 +65,7 @@ LoopComponent::LoopComponent(UiStyle* style, LoopProcessor* loop)
 
 LoopComponent::~LoopComponent()
 {
+   this->ConnectToLoop(nullptr);
    this->deleteAllChildren();
    
 }
@@ -81,11 +82,13 @@ void LoopComponent::ConnectToLoop(LoopProcessor* loop)
    {
       if (fLoop)
       {
+         std::cout << " LoopComponent " << this << " disconnecting from loop processor " << fLoop << std::endl;
          fLoop->removeChangeListener(this);
       }
       fLoop = loop;
       if (fLoop)
       {
+         std::cout << " LoopComponent " << this << " connecting to loop processor " << fLoop << std::endl;
          fLoop->addChangeListener(this);
       }
    }

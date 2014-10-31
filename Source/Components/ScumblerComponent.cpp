@@ -308,7 +308,7 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
 
 void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
-  std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
+  // std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
   if (source == fScumbler)
   {
     // if the number of tracks has changed, we need to refresh things.

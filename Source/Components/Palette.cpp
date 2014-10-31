@@ -194,7 +194,7 @@ bool Palette::GetColor(const String& colorName, Colour& color) const
    catch (std::out_of_range)
    {
       value = kErrorColor;
-      std::cout << "Unknown palette color requested - " << colorName << std::endl;
+      //std::cout << "Unknown palette color requested - " << colorName << std::endl;
       retval = false;
    }
 

@@ -16,6 +16,7 @@ PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors const& c
 
 PluginBlockComponent::~PluginBlockComponent()
 {
+   this->ConnectToPluginBlock(nullptr);
 }
 
 void PluginBlockComponent::paint (Graphics& g)
