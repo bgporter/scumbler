@@ -25,6 +25,7 @@
 
 #include "Buttons/PlainButton.h"
 #include "Buttons/PlusButton.h"
+#include "Buttons/MuteButton.h"
 #include "ComponentDefs.h"
 #include "LoopComponent.h"
 #include "PluginBlockComponent.h"
@@ -150,10 +151,16 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fActive->setToggleState(active, NotificationType::dontSendNotification); 
    
 
-   fMute = new TextButton("Mute");
+   fMute = new SvgButton("Mute", kMuteButton, fStyle);
    fMute->setTooltip("Mute track");
-   fMute->setButtonText("m");
+   fMute->SetContext("Track", "Mute");
    fMute->addListener(this);
+
+   fMute->AddButtonImage(SvgButton::kHover, kMuteButton);
+   fMute->AddButtonImage(SvgButton::kDown, kMuteButton);
+   fMute->AddButtonImage(SvgButton::kNormalOn, kMuteButton);
+   fMute->AddButtonImage(SvgButton::kHoverOn, kMuteButton);
+   fMute->AddButtonImage(SvgButton::kDownOn, kMuteButton);
 
    fMute->setClickingTogglesState(true);
    this->addAndMakeVisible(fMute);
@@ -203,10 +210,9 @@ void TrackComponent::UpdateStyle()
 
    fActive->UpdateStyle();
    fDelete->UpdateStyle();
+   fMute->UpdateStyle();
 
 
-   fMute->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackMuteOff));
-   fMute->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackMuteOn));
 
    fSolo->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackSoloOff));
    fSolo->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackSoloOn));

@@ -178,7 +178,7 @@ private:
     Slider* fPan;
     ToggleButton* fLeftEnabled;
     ToggleButton* fRightEnabled;
-    TextButton* fMute;
+    SvgButton* fMute;
     TextButton* fSolo; 
     SvgButton* fDelete;
     SvgButton* fActive;
