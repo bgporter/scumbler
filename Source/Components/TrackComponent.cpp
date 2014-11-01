@@ -286,8 +286,6 @@ void TrackComponent::paint (Graphics& g)
         fDelete->setVisible(false);
     }
 
-    //g.drawRect(fSolo->getBounds());
-    //g.drawRect(fMute->getBounds());
 
 
     //[/UserPaint]
@@ -350,7 +348,7 @@ void TrackComponent::resized()
 
     // The activate track button is directly underneath the pre plugin block.
     Rectangle<int> activeBounds(fPreEffects->getX(), fPreEffects->getBottom()+5, 
-      kKnobHeight, kKnobHeight);
+      kKnobHeight*0.75, kKnobHeight*0.75);
     fActive->setBounds(activeBounds);
     activeBounds.translate(kKnobHeight * 2, 0);
     fPan->setBounds(activeBounds);
@@ -365,7 +363,7 @@ void TrackComponent::resized()
     // with the right edge of the solo button aligned with the right edge of the
     // post effect block.
     Rectangle<int> buttonBounds(fPostEffects->getRight()-kKnobHeight, fPostEffects->getBottom()+5,
-      kKnobHeight, kKnobHeight);
+      kKnobHeight, kKnobHeight * 0.75);
     fMute->setBounds(buttonBounds);
     Rectangle<int> soloBounds = buttonBounds.translated(-30, 0);
     fSolo->setBounds(soloBounds);
