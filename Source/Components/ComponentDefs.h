@@ -27,4 +27,22 @@ const float kPluginSlotHeight = 0.6f;
 // dimensions of the knobs that we use.
 const int kKnobWidth = 24;
 const int kKnobHeight = 24;
+
+
+namespace tk
+{
+   enum ButtonState
+   {
+      kButtonNormal = 0,
+      kButtonHover,
+      kButtonDown,
+      kButtonDisabled,
+      kButtonNormalOn,
+      kButtonHoverOn,
+      kButtonDownOn,
+      kButtonDisabledOn,
+      kButtonStateCount // keep this last.
+   }; 
+};
+
 #endif

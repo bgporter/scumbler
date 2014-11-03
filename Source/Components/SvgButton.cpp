@@ -3,6 +3,8 @@
 
 #include "SvgButton.h"
 
+#include "ComponentDefs.h"
+
 
 
 SvgButton::SvgButton(const String& buttonName, const String& normal, UiStyle* style)
@@ -12,14 +14,14 @@ SvgButton::SvgButton(const String& buttonName, const String& normal, UiStyle* st
    // make sure we don't let JUCE draw an outline when we're 'on'
    this->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
 
-   for (int i = kNormal; i < kButtonImageCount; ++i)
+   for (int i = tk::kButtonNormal; i < tk::kButtonStateCount; ++i)
    {
       fButtonImages.insert(i, nullptr);
    }
 
    // we must have at least a normal image
    jassert(normal != String::empty);
-   this->AddButtonImage(kNormal, normal);
+   this->AddButtonImage(tk::kButtonNormal, normal);
 }
 
 
@@ -42,7 +44,7 @@ bool SvgButton::AddButtonImage(int imageIndex, const String& buttonText)
    // kNormal to String::empty (or something else invalid.) Have to trust myself.
    // Also, you - hypocrite reader!
     bool retval = false;
-   if (imageIndex >= kNormal && imageIndex < kButtonImageCount)
+    if (imageIndex >= tk::kButtonNormal && imageIndex < tk::kButtonStateCount)
    {
       fButtonImages.insert(imageIndex,
                            buttonText.isNotEmpty() ? new SvgImage(buttonText) : nullptr);
@@ -85,7 +87,7 @@ void SvgButton::SetTemplateEntry(int imageIndex, const String& svgKey, const Str
 
 void SvgButton::UpdateStyle()
 {
-   for (int buttonState=kNormal; buttonState < kButtonImageCount; ++buttonState)
+    for (int buttonState=tk::kButtonNormal; buttonState < tk::kButtonStateCount; ++buttonState)
    {
       if (fButtonImages[buttonState])
       {
@@ -102,14 +104,14 @@ void SvgButton::UpdateStyle()
    }
 
 
-   ScopedPointer<Drawable> normal(this->CreateDrawable(kNormal));
-   ScopedPointer<Drawable> hover(this->CreateDrawable(kHover));
-   ScopedPointer<Drawable> down(this->CreateDrawable(kDown));
-   ScopedPointer<Drawable> disabled(this->CreateDrawable(kDisabled));
-   ScopedPointer<Drawable> normalOn(this->CreateDrawable(kNormalOn));
-   ScopedPointer<Drawable> hoverOn(this->CreateDrawable(kHoverOn));
-   ScopedPointer<Drawable> downOn(this->CreateDrawable(kDownOn));
-   ScopedPointer<Drawable> disabledOn(this->CreateDrawable(kDisabledOn));
+   ScopedPointer<Drawable> normal(this->CreateDrawable(tk::kButtonNormal));
+   ScopedPointer<Drawable> hover(this->CreateDrawable(tk::kButtonHover));
+   ScopedPointer<Drawable> down(this->CreateDrawable(tk::kButtonDown));
+   ScopedPointer<Drawable> disabled(this->CreateDrawable(tk::kButtonDisabled));
+   ScopedPointer<Drawable> normalOn(this->CreateDrawable(tk::kButtonNormalOn));
+   ScopedPointer<Drawable> hoverOn(this->CreateDrawable(tk::kButtonHoverOn));
+   ScopedPointer<Drawable> downOn(this->CreateDrawable(tk::kButtonDownOn));
+   ScopedPointer<Drawable> disabledOn(this->CreateDrawable(tk::kButtonDisabledOn));
    this->setImages(  normal,
                      hover,
                      down,

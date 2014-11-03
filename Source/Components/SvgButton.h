@@ -13,6 +13,7 @@
 class SvgButton : public DrawableButton
 {
 public:
+  #if 0
    enum ImageType
    {
       kNormal = 0,
@@ -25,6 +26,7 @@ public:
       kDisabledOn,
       kButtonImageCount // keep this last.
    };
+   #endif
 
    /**
     * Create the button, passing in the SVG text of the normal image and also the 
