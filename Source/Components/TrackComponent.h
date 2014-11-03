@@ -27,6 +27,7 @@
 
 #include "StyledComponent.h"
 #include "SvgButton.h"
+#include "FlatButton.h"  
 #include "../Track.h"
 
 
@@ -178,7 +179,7 @@ private:
     Slider* fPan;
     ToggleButton* fLeftEnabled;
     ToggleButton* fRightEnabled;
-    SvgButton* fMute;
+    FlatButton* fMute;
     TextButton* fSolo; 
     SvgButton* fDelete;
     SvgButton* fActive;

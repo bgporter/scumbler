@@ -26,9 +26,9 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 
    // the AddTrack button reuses the play button palette entries. 
    fAddTrackButton->SetContext("Transport", "Play");
-   fAddTrackButton->AddButtonImage(SvgButton::kHover, kPlusButton);
-   fAddTrackButton->AddButtonImage(SvgButton::kDown, kPlusButton);
-   fAddTrackButton->AddButtonImage(SvgButton::kDisabled, kPlusButton);
+   fAddTrackButton->AddButtonImage(tk::kButtonHover, kPlusButton);
+   fAddTrackButton->AddButtonImage(tk::kButtonDown, kPlusButton);
+   fAddTrackButton->AddButtonImage(tk::kButtonDisabled, kPlusButton);
 
    this->addAndMakeVisible(fAddTrackButton);
 
@@ -36,9 +36,9 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
    fResetButton->addListener(this);
    fResetButton->setEnabled(true);
    fResetButton->SetContext("Transport", "Play");
-   fResetButton->AddButtonImage(SvgButton::kHover, kResetButton);
-   fResetButton->AddButtonImage(SvgButton::kDown, kResetButton);
-   fResetButton->AddButtonImage(SvgButton::kDisabled, kResetButton);
+   fResetButton->AddButtonImage(tk::kButtonHover, kResetButton);
+   fResetButton->AddButtonImage(tk::kButtonDown, kResetButton);
+   fResetButton->AddButtonImage(tk::kButtonDisabled, kResetButton);
    this->addAndMakeVisible(fResetButton);
 
 
@@ -46,11 +46,11 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
    fPlayButton->addListener(this);
    fPlayButton->setEnabled(true);
    fPlayButton->SetContext("Transport", "Play");
-   fPlayButton->AddButtonImage(SvgButton::kHover, kPlayButton);
-   fPlayButton->AddButtonImage(SvgButton::kDown, kPlayButton);
-   fPlayButton->AddButtonImage(SvgButton::kNormalOn, kPauseButton);
-   fPlayButton->AddButtonImage(SvgButton::kHoverOn, kPauseButton);
-   fPlayButton->AddButtonImage(SvgButton::kDownOn, kPauseButton);
+   fPlayButton->AddButtonImage(tk::kButtonHover, kPlayButton);
+   fPlayButton->AddButtonImage(tk::kButtonDown, kPlayButton);
+   fPlayButton->AddButtonImage(tk::kButtonNormalOn, kPauseButton);
+   fPlayButton->AddButtonImage(tk::kButtonHoverOn, kPauseButton);
+   fPlayButton->AddButtonImage(tk::kButtonDownOn, kPauseButton);
 
    this->addAndMakeVisible(fPlayButton);
 

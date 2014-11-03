@@ -22,6 +22,11 @@ void FlatButton::UpdateStyle()
    fColors[tk::kButtonHover].fill = Colours::blue;
    fColors[tk::kButtonDown].fill = Colours::green;
    fColors[tk::kButtonDisabled].fill = Colours::grey;
+   fColors[tk::kButtonNormalOn].fill = Colours::pink;
+   fColors[tk::kButtonHoverOn].fill = Colours::cyan;
+   fColors[tk::kButtonDownOn].fill = Colours::lightgreen;
+   fColors[tk::kButtonDisabledOn].fill = Colours::lightgrey;
+
 }
 
 void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonDown)
@@ -34,7 +39,7 @@ void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonD
    //VERY temporary code to just get the mechanics of this button down.
    if (isMouseOverButton)
    {
-      state = isToggled ? tk::kHoverButtonOn : tk::kHoverButton;
+      state = isToggled ? tk::kButtonHoverOn : tk::kButtonHover;
    }
    else if (isButtonDown)
    {

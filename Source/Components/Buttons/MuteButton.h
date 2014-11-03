@@ -10,6 +10,13 @@
 /**
  * rectangular button with a lower-case Helvetica "m" on it for muting a track. 
  * Native dimensions are 32x24 px.
+ *
+ * Notes on how this was created:
+ * 1. Image created in Inkscape
+ * 2. Selected text, converted object to path
+ * 3. save as plain SVG (not Inkscape SVG)
+ * 4. edit SVG text (replace double-quotes w single quotes, pull out unnecessary stuff)
+ * 5. clean up for header file (backslash line continuations, etc.)
  */
 
 

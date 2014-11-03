@@ -77,3 +77,6 @@ private:
    Shape    fShape;
    Colors   fColors[tk::kButtonStateCount];
 };
+
+
+#endif

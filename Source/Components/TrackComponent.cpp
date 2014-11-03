@@ -125,8 +125,8 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fDelete->setTooltip("Delete track");
    fDelete->SetContext("Track", "Delete");
    fDelete->addListener(this);
-   fDelete->AddButtonImage(SvgButton::kHover, kXButton);
-   fDelete->AddButtonImage(SvgButton::kDown, kXButton);
+   fDelete->AddButtonImage(tk::kButtonHover, kXButton);
+   fDelete->AddButtonImage(tk::kButtonDown, kXButton);
    this->addAndMakeVisible(fDelete);
 
    fActive = new SvgButton("Active", kPlainButton, fStyle);
@@ -135,11 +135,11 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fActive->setClickingTogglesState(true);
 
    fActive->SetContext("Track", "Active");
-   fActive->AddButtonImage(SvgButton::kHover, kPlainButton);
-   fActive->AddButtonImage(SvgButton::kDown, kPlainButton);
-   fActive->AddButtonImage(SvgButton::kNormalOn, kPlainButton);
-   fActive->AddButtonImage(SvgButton::kHoverOn, kPlainButton);
-   fActive->AddButtonImage(SvgButton::kDownOn, kPlainButton);
+   fActive->AddButtonImage(tk::kButtonHover, kPlainButton);
+   fActive->AddButtonImage(tk::kButtonDown, kPlainButton);
+   fActive->AddButtonImage(tk::kButtonNormalOn, kPlainButton);
+   fActive->AddButtonImage(tk::kButtonHoverOn, kPlainButton);
+   fActive->AddButtonImage(tk::kButtonDownOn, kPlainButton);
 
    this->addAndMakeVisible(fActive);
 
@@ -151,17 +151,18 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fActive->setToggleState(active, NotificationType::dontSendNotification); 
    
 
-   fMute = new SvgButton("Mute", kMuteButton, fStyle);
+   fMute = new FlatButton("Mute", FlatButton::kRect, fStyle);
    fMute->setTooltip("Mute track");
-   fMute->SetContext("Track", "Mute");
+   //fMute->SetContext("Track", "Mute");
    fMute->addListener(this);
 
-   fMute->AddButtonImage(SvgButton::kHover, kMuteButton);
-   fMute->AddButtonImage(SvgButton::kDown, kMuteButton);
-   fMute->AddButtonImage(SvgButton::kNormalOn, kMuteButton);
-   fMute->AddButtonImage(SvgButton::kHoverOn, kMuteButton);
-   fMute->AddButtonImage(SvgButton::kDownOn, kMuteButton);
-
+#if 0
+   fMute->AddButtonImage(tk::kButtonHover, kMuteButton);
+   fMute->AddButtonImage(tk::kButtonDown, kMuteButton);
+   fMute->AddButtonImage(tk::kButtonNormalOn, kMuteButton);
+   fMute->AddButtonImage(tk::kButtonHoverOn, kMuteButton);
+   fMute->AddButtonImage(tk::kButtonDownOn, kMuteButton);
+#endif
    fMute->setClickingTogglesState(true);
    this->addAndMakeVisible(fMute);
 
