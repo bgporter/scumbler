@@ -7,26 +7,13 @@
 
 #include "JuceHeader.h"
 
+#include "StyledButton.h"
 #include "SvgImage.h"
 #include "UiStyle.h"
 
-class SvgButton : public DrawableButton
+class SvgButton : public DrawableButton, public StyledButton
 {
 public:
-  #if 0
-   enum ImageType
-   {
-      kNormal = 0,
-      kHover,
-      kDown,
-      kDisabled,
-      kNormalOn,
-      kHoverOn,
-      kDownOn,
-      kDisabledOn,
-      kButtonImageCount // keep this last.
-   };
-   #endif
 
    /**
     * Create the button, passing in the SVG text of the normal image and also the 
@@ -40,15 +27,6 @@ public:
    
 
    ~SvgButton();
-
-   /**
-    * Let this button know its context. To simplify styling, we use a convention-based
-    * scheme to 
-    * @param component Name of the component this button is a part of
-    * @param button    'name' of this button as used in the palette name. Not necessarily
-    *                   its name in source code 
-    */
-   void SetContext(const String& component, const String& button);
 
 
    /**
@@ -89,21 +67,9 @@ private:
    Drawable* CreateDrawable(int imageIndex);
 
 
-   /**
-    * Contains the algorithm that maps information about a button into potential 
-    * palette keys, and looks into the currently active palette to find the best 
-    * match of actually defined keys. 
-    * @param  state   Button state (as an integer)
-    * @param  element Which element of the button are we looking for (border, fill, etc)  
-    * @return         String name of the palette key for this element.
-    */
-   String FindPaletteKey(int state, const String& element) const;
+
 
 private:
-   UiStyle* fStyle;
-   String   fComponentContext;
-   String   fButtonContext;
-
 
    OwnedArray<SvgImage> fButtonImages;
 

@@ -9,7 +9,7 @@
 
 SvgButton::SvgButton(const String& buttonName, const String& normal, UiStyle* style)
 :  DrawableButton(buttonName, DrawableButton::ImageStretched)
-,  fStyle(style)
+,  StyledButton(style)
 {
    // make sure we don't let JUCE draw an outline when we're 'on'
    this->setColour(DrawableButton::backgroundOnColourId, Colours::transparentWhite);
@@ -30,12 +30,13 @@ SvgButton::~SvgButton()
    // deliberately blank
 }
 
+#if 0
 void SvgButton::SetContext(const String& component, const String& button)
 {
    fComponentContext = component;
    fButtonContext = button;
 }
-
+#endif
 
 bool SvgButton::AddButtonImage(int imageIndex, const String& buttonText)
 {
@@ -129,41 +130,3 @@ Drawable* SvgButton::CreateDrawable(int imageIndex)
 }
 
 
-
-String SvgButton::FindPaletteKey(int state, const String& element) const
-{
-   const char* const states[] = {"Up", "Hover", "Down", "Disabled", "UpOn", 
-      "HoverOn", "DownOn", "DisabledOn", nullptr};
-   StringArray stateNames(states);
-
-   String stateName = stateNames[state];
-   Colour color;
-
-   // try increasingly less specific key names, starting with fully specified
-   String key = fComponentContext + fButtonContext + stateName + element;
-   if (!fStyle->GetColor(key, color))
-   {
-      // ...then trying a component-level key...
-      key = fComponentContext + stateName + element;
-      if (!fStyle->GetColor(key, color))
-      {
-         // then an app-wide key...
-         key = stateName + element;
-         if (!fStyle->GetColor(key, color))
-         {
-            // ...and then give up -- we'll use default app fg/bg colors
-            if (element == "Fill")
-            {
-               key = "ApplicationBackground";
-            }
-            else
-            {
-               key = "ApplicationForeground";
-            }
-         }
-      }
-   }
-
-   return key;
-
-}

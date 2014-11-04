@@ -17,8 +17,8 @@ TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
 ,  fAddTrackButton(nullptr)
 ,  fPlayButton(nullptr)
 ,  fPlayTime(nullptr)
-,  fOutputVolume(nullptr)
 ,  fResetButton(nullptr)
+,  fOutputVolume(nullptr)
 {
    fAddTrackButton = new SvgButton("AddTrack", kPlusButton, fStyle);
    fAddTrackButton->addListener(this);

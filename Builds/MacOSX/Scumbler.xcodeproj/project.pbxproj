@@ -20,6 +20,7 @@
 		440C787D167A9660004648C3 /* Track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787B167A9660004648C3 /* Track.cpp */; };
 		440C7881167E26C7004648C3 /* TrackComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440C787F167E26C6004648C3 /* TrackComponent.cpp */; };
 		4426A1641A082AD4007847C3 /* FlatButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4426A1621A082AD4007847C3 /* FlatButton.cpp */; };
+		4426A1671A086E74007847C3 /* StyledButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4426A1651A086E74007847C3 /* StyledButton.cpp */; };
 		443D1E3516572573004E645C /* Scumbler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D1E3316572573004E645C /* Scumbler.cpp */; };
 		443D225316B0CDB8006B3CA6 /* PluginBlockComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 443D225116B0CDB8006B3CA6 /* PluginBlockComponent.cpp */; };
 		44647C7416DA4A6F00FA33BD /* WaveformComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44647C7216DA4A6E00FA33BD /* WaveformComponent.cpp */; };
@@ -300,6 +301,8 @@
 		4412BCC769B92EFF13CDA173 /* juce_ToneGeneratorAudioSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ToneGeneratorAudioSource.cpp; path = ../../JuceLibraryCode/modules/juce_audio_basics/sources/juce_ToneGeneratorAudioSource.cpp; sourceTree = SOURCE_ROOT; };
 		4426A1621A082AD4007847C3 /* FlatButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FlatButton.cpp; path = ../../Source/Components/FlatButton.cpp; sourceTree = "<group>"; };
 		4426A1631A082AD4007847C3 /* FlatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlatButton.h; path = ../../Source/Components/FlatButton.h; sourceTree = "<group>"; };
+		4426A1651A086E74007847C3 /* StyledButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StyledButton.cpp; path = ../../Source/Components/StyledButton.cpp; sourceTree = "<group>"; };
+		4426A1661A086E74007847C3 /* StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyledButton.h; path = ../../Source/Components/StyledButton.h; sourceTree = "<group>"; };
 		443D1E3316572573004E645C /* Scumbler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Scumbler.cpp; path = ../../Source/Scumbler.cpp; sourceTree = "<group>"; };
 		443D1E3416572573004E645C /* Scumbler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scumbler.h; path = ../../Source/Scumbler.h; sourceTree = "<group>"; };
 		443D225116B0CDB8006B3CA6 /* PluginBlockComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginBlockComponent.cpp; path = ../../Source/Components/PluginBlockComponent.cpp; sourceTree = "<group>"; };
@@ -1318,6 +1321,8 @@
 		44ABE5321674199D0045030E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				4426A1651A086E74007847C3 /* StyledButton.cpp */,
+				4426A1661A086E74007847C3 /* StyledButton.h */,
 				4426A1621A082AD4007847C3 /* FlatButton.cpp */,
 				4426A1631A082AD4007847C3 /* FlatButton.h */,
 				44F851DC19EF3E8800FCE8D3 /* SvgImage.cpp */,
@@ -2743,6 +2748,7 @@
 				443D1E3516572573004E645C /* Scumbler.cpp in Sources */,
 				44ABE52C16702D650045030E /* Passthrough.cpp in Sources */,
 				44ABE535167419B70045030E /* ScumblerComponent.cpp in Sources */,
+				4426A1671A086E74007847C3 /* StyledButton.cpp in Sources */,
 				440C787D167A9660004648C3 /* Track.cpp in Sources */,
 				440C7881167E26C7004648C3 /* TrackComponent.cpp in Sources */,
 				44B8599716A2FAC90028785C /* PluginBlock.cpp in Sources */,

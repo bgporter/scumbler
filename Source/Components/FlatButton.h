@@ -58,6 +58,15 @@ public:
    ~FlatButton();
 
    /**
+    * Let this button know its context. To simplify styling, we use a convention-based
+    * scheme to 
+    * @param component Name of the component this button is a part of
+    * @param button    'name' of this button as used in the palette name. Not necessarily
+    *                   its name in source code 
+    */
+   void SetContext(const String& component, const String& button);
+
+   /**
     * Get new colors/fonts when they change.
     */
    void UpdateStyle();

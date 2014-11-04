@@ -43,7 +43,16 @@ public:
     */
    virtual void UpdateStyle() = 0;
 
-  
+protected:
+   /**
+    * Contains the algorithm that maps information about a button into potential 
+    * palette keys, and looks into the currently active palette to find the best 
+    * match of actually defined keys. 
+    * @param  state   Button state (as an integer)
+    * @param  element Which element of the button are we looking for (border, fill, etc)  
+    * @return         String name of the palette key for this element.
+    */
+   String FindPaletteKey(int state, const String& element) const;   
 
 protected:
    UiStyle* fStyle;

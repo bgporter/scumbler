@@ -163,6 +163,7 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fMute->AddButtonImage(tk::kButtonHoverOn, kMuteButton);
    fMute->AddButtonImage(tk::kButtonDownOn, kMuteButton);
 #endif
+   
    fMute->setClickingTogglesState(true);
    this->addAndMakeVisible(fMute);
 

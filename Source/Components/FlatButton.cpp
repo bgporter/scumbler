@@ -18,6 +18,9 @@ FlatButton::~FlatButton()
 
 void FlatButton::UpdateStyle()
 {
+
+   //VERY temporary code to just get the mechanics of this button down.
+   // Real code need to query the style object for palette settings.
    fColors[tk::kButtonNormal].fill = Colours::red;
    fColors[tk::kButtonHover].fill = Colours::blue;
    fColors[tk::kButtonDown].fill = Colours::green;
@@ -36,7 +39,7 @@ void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonD
    bool isToggled = this->getToggleState();
    bool isEnabled = this->isEnabled();
 
-   //VERY temporary code to just get the mechanics of this button down.
+
    if (isMouseOverButton)
    {
       state = isToggled ? tk::kButtonHoverOn : tk::kButtonHover;
