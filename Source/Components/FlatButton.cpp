@@ -5,7 +5,7 @@
 
 FlatButton::FlatButton(const String& buttonName, FlatButton::Shape shape, UiStyle* style)
 :  Button(buttonName)
-,  fStyle(style)
+,  StyledButton(style)
 ,  fShape(shape)
 {
 
@@ -30,6 +30,19 @@ void FlatButton::UpdateStyle()
    fColors[tk::kButtonDownOn].fill = Colours::lightgreen;
    fColors[tk::kButtonDisabledOn].fill = Colours::lightgrey;
 
+
+   // look up each combination of button state and button element (border/fill/fg)
+   // and update the appropriate fColors struct entry.
+   for (int buttonState=tk::kButtonNormal; buttonState < tk::kButtonStateCount; ++buttonState)
+   {
+      String bgStroke = this->FindPaletteKey(buttonState, "Border");
+      String bgFill = this->FindPaletteKey(buttonState, "Fill");
+      String fgStroke = this->FindPaletteKey(buttonState, "Fg");
+
+      fColors[buttonState].border = fStyle->GetColor(bgStroke);
+      fColors[buttonState].fill = fStyle->GetColor(bgFill);
+      fColors[buttonState].fg = fStyle->GetColor(fgStroke);
+   }
 }
 
 void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonDown)
@@ -61,6 +74,9 @@ void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonD
    Rectangle<float> rect = Rectangle<float>(0, 0, this->getWidth(), this->getHeight());
    g.setColour(fColors[state].fill);
    g.fillRect(rect);
+
+   g.setColour(fColors[state].border);
+   g.drawRect(rect, 3.0);
 
 
 }
