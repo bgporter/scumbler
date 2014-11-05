@@ -203,9 +203,11 @@ tk::Result Track::Solo(bool soloed)
 {
    ScopedLock sl(fMutex);
    Track* track = soloed ? this : nullptr; 
-   return fScumbler->SoloTrack(track);
+   tk::Result retval = fScumbler->SoloTrack(track);
    //std::cout << "Track::Solo->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
+
+   return retval;
 }
 
 Track::SoloState Track::IsSoloed() const
