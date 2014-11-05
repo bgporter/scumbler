@@ -217,11 +217,6 @@ void TrackComponent::UpdateStyle()
    fMute->UpdateStyle();
    fSolo->UpdateStyle();
 
-
-
-   fSolo->setColour(TextButton::buttonColourId, fStyle->GetColor(palette::kTrackSoloOff));
-   fSolo->setColour(TextButton::buttonOnColourId, fStyle->GetColor(palette::kTrackSoloOn));
-
    this->repaint();
 
 }
