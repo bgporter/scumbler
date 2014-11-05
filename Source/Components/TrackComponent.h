@@ -180,7 +180,7 @@ private:
     ToggleButton* fLeftEnabled;
     ToggleButton* fRightEnabled;
     FlatButton* fMute;
-    TextButton* fSolo; 
+    FlatButton* fSolo; 
     SvgButton* fDelete;
     SvgButton* fActive;
 

@@ -153,7 +153,8 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
 
    fMute = new FlatButton("Mute", FlatButton::kRect, fStyle);
    fMute->setTooltip("Mute track");
-   //fMute->SetContext("Track", "Mute");
+   fMute->setButtonText("M");
+   fMute->SetContext("Track", "Mute");
    fMute->addListener(this);
 
 #if 0
@@ -163,13 +164,14 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
    fMute->AddButtonImage(tk::kButtonHoverOn, kMuteButton);
    fMute->AddButtonImage(tk::kButtonDownOn, kMuteButton);
 #endif
-   
+
    fMute->setClickingTogglesState(true);
    this->addAndMakeVisible(fMute);
 
-   fSolo = new TextButton("Solo");
+   fSolo = new FlatButton("Solo", FlatButton::kRect, fStyle);
    fSolo->setTooltip("Solo track");
-   fSolo->setButtonText("s");
+   fSolo->setButtonText("S");
+   fSolo->SetContext("Track", "Solo"); 
    fSolo->addListener(this);
 
    fSolo->setClickingTogglesState(true);
@@ -213,6 +215,7 @@ void TrackComponent::UpdateStyle()
    fActive->UpdateStyle();
    fDelete->UpdateStyle();
    fMute->UpdateStyle();
+   fSolo->UpdateStyle();
 
 
 
