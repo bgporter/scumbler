@@ -76,6 +76,7 @@ public:
 
 private:
    Shape    fShape;
+   String   fFontName;
    Colors   fColors[tk::kButtonStateCount];
 };
 

@@ -19,18 +19,6 @@ FlatButton::~FlatButton()
 void FlatButton::UpdateStyle()
 {
 
-   //VERY temporary code to just get the mechanics of this button down.
-   // Real code need to query the style object for palette settings.
-   fColors[tk::kButtonNormal].fill = Colours::red;
-   fColors[tk::kButtonHover].fill = Colours::blue;
-   fColors[tk::kButtonDown].fill = Colours::green;
-   fColors[tk::kButtonDisabled].fill = Colours::grey;
-   fColors[tk::kButtonNormalOn].fill = Colours::pink;
-   fColors[tk::kButtonHoverOn].fill = Colours::cyan;
-   fColors[tk::kButtonDownOn].fill = Colours::lightgreen;
-   fColors[tk::kButtonDisabledOn].fill = Colours::lightgrey;
-
-
    // look up each combination of button state and button element (border/fill/fg)
    // and update the appropriate fColors struct entry.
    for (int buttonState=tk::kButtonNormal; buttonState < tk::kButtonStateCount; ++buttonState)
@@ -43,6 +31,7 @@ void FlatButton::UpdateStyle()
       fColors[buttonState].fill = fStyle->GetColor(bgFill);
       fColors[buttonState].fg = fStyle->GetColor(fgStroke);
    }
+   fFontName = fStyle->GetFontName();
 }
 
 void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonDown)
@@ -78,5 +67,9 @@ void FlatButton::paintButton(Graphics& g, bool isMouseOverButton, bool isButtonD
    g.setColour(fColors[state].border);
    g.drawRect(rect, 3.0);
 
+   g.setColour(fColors[state].fg);
+   g.setFont(Font(fFontName, this->getHeight()*0.8, Font::bold));
+   //g.drawText(this->getButtonText(), rect, Justification::centred);
+    g.drawFittedText(this->getButtonText(), 0, 0, this->getWidth(), this->getHeight(), Justification::centred, 1);
 
 }
