@@ -25,7 +25,7 @@
 #define mMax(x, y) (x) < (y) ? (y) : (x)
 
 
-
+#define mMsg(msg) std::cout << (msg) << std::endl
 /**
  * @typedef NodeId
  *

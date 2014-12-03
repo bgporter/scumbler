@@ -44,6 +44,7 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
 , fProcessing(false)
 , fPlaying(false)
 , fDirty(false)
+, fTimeUpdate(false)
 , fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
 , fOutputNode(tk::kInvalidNode)
@@ -170,6 +171,8 @@ void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
    if (source == fSampleCount)
    {
       // just notify that we've changed so the time readout can change.
+      fTimeUpdate = true;
+       mMsg('.');
       this->sendChangeMessage();
    }
    else
@@ -243,6 +246,14 @@ bool Scumbler::IsDirty() const
 {
    return fDirty;
 }
+
+bool Scumbler::UpdateTime() 
+{
+   bool retval = fTimeUpdate;
+   fTimeUpdate = false;
+   return retval;
+}
+
 
 void Scumbler::Reset(bool addFirstTrack)
 {

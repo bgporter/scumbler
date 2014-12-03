@@ -144,6 +144,12 @@ public:
    bool IsDirty() const;
 
    /**
+    * Do we need to just update the time output? 
+    * @return bool.
+    */
+   bool UpdateTime();
+
+   /**
     * Do a complete reset on the processor graph. 
     * @param addFirstTrack Should we add a single empty track to the scumbler so 
     *                      it can start working right away? 
@@ -539,6 +545,11 @@ private:
     * Do changes need to be saved?
     */
    bool fDirty;
+
+   /**
+    * Set true when we need to update the time display (so we can avoid repainting the entire window.
+    */
+   bool fTimeUpdate;
 
    KnownPluginList::SortMethod fPluginSort;
 
