@@ -4,7 +4,7 @@
 
 #include "Track.h"
 
-#define kPixelsPerRedraw 5
+#define kPixelsPerRedraw 3
 
 // turn on/off log statements in the paint() loop.
 //#define qLogPaint
@@ -223,7 +223,6 @@ void WaveformComponent::CalculateSamplesPerPixel()
    // Yes, this should be bumped out into a named constant or configurable
    // value.
    fRedrawAfterSampleCount = static_cast<int>(kPixelsPerRedraw * spp);
-
    // recalculate where the tick markers need to go.
    fTicks.clear();
    for (int i = 0; i < info.fLoopLength; i += info.fSampleRate)
