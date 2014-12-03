@@ -148,8 +148,39 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          
          this->SetColor(palette::kTrackActiveDownOnBorder, palette::kAppFg);
          this->SetColor(palette::kTrackActiveDownOnFill, Colours::green);
+   
+         this->SetColor(palette::kTrackMuteUpBorder, 0xffcf7677);
+         this->SetColor(palette::kTrackMuteUpFill, 0xffff9698);
+         this->SetColor(palette::kTrackMuteUpFg, 0xffcf7677);
 
+         this->SetColor(palette::kTrackMuteHoverBorder, 0xffcf7677);
+         this->SetColor(palette::kTrackMuteHoverFill, 0xffff9698);
+         this->SetColor(palette::kTrackMuteHoverFg, 0xff000000);
 
+         this->SetColor(palette::kTrackMuteDownBorder, 0xff000000);
+         this->SetColor(palette::kTrackMuteDownFill, 0xffff0000);
+         this->SetColor(palette::kTrackMuteDownFg, 0xff000000);
+/*
+         this->SetColor(palette::kTrackMuteDisabledBorder, );
+         this->SetColor(palette::kTrackMuteDisabledFill, );
+         this->SetColor(palette::kTrackMuteDisabledFg, );
+*/
+         this->SetColor(palette::kTrackMuteUpOnBorder, 0xff000000);
+         this->SetColor(palette::kTrackMuteUpOnFill, 0xffff0000);
+         this->SetColor(palette::kTrackMuteUpOnFg, 0xff000000);
+/*
+         this->SetColor(palette::kTrackMuteHoverOnBorder, );
+         this->SetColor(palette::kTrackMuteHoverOnFill, );
+         this->SetColor(palette::kTrackMuteHoverOnFg, );
+
+         this->SetColor(palette::kTrackMuteDownOnBorder, );
+         this->SetColor(palette::kTrackMuteDownOnFill, );
+         this->SetColor(palette::kTrackMuteDownOnFg, );
+
+         this->SetColor(palette::kTrackMuteDisabledOnBorder, );
+         this->SetColor(palette::kTrackMuteDisabledOnFill, );
+         this->SetColor(palette::kTrackMuteDisabledOnFg, );
+*/
       };
       break;
 

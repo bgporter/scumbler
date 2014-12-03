@@ -220,6 +220,40 @@ namespace palette
    const String kTrackActiveDisabledOnFg("TrackActiveDisabledOnFg");
    const String kTrackActiveDisabledOnFgFill("TrackActiveDisabledOnFgFill");
 
+   const String kTrackMuteUpBorder("TrackMuteUpBorder");
+   const String kTrackMuteUpFill("TrackMuteUpFill");
+   const String kTrackMuteUpFg("TrackMuteUpFg");
+
+   const String kTrackMuteHoverBorder("TrackMuteHoverBorder");
+   const String kTrackMuteHoverFill("TrackMuteHoverFill");
+   const String kTrackMuteHoverFg("TrackMuteHoverFg");
+   
+   const String kTrackMuteDownBorder("TrackMuteDownBorder");
+   const String kTrackMuteDownFill("TrackMuteDownFill");
+   const String kTrackMuteDownFg("TrackMuteDownFg");
+
+   const String kTrackMuteDisabledBorder("TrackMuteDisabledBorder");
+   const String kTrackMuteDisabledFill("TrackMuteDisabledFill");
+   const String kTrackMuteDisabledFg("TrackMuteDisabledFg");
+
+   const String kTrackMuteUpOnBorder("TrackMuteUpOnBorder");
+   const String kTrackMuteUpOnFill("TrackMuteUpOnFill");
+   const String kTrackMuteUpOnFg("TrackMuteUpOnFg");
+
+   const String kTrackMuteHoverOnBorder("TrackMuteHoverOnBorder");
+   const String kTrackMuteHoverOnFill("TrackMuteHoverOnFill");
+   const String kTrackMuteHoverOnFg("TrackMuteHoverOnFg");
+   
+   const String kTrackMuteDownOnBorder("TrackMuteDownOnBorder");
+   const String kTrackMuteDownOnFill("TrackMuteDownOnFill");
+   const String kTrackMuteDownOnFg("TrackMuteDownOnFg");
+
+   const String kTrackMuteDisabledOnBorder("TrackMuteDisabledOnBorder");
+   const String kTrackMuteDisabledOnFill("TrackMuteDisabledOnFill");
+   const String kTrackMuteDisabledOnFg("TrackMuteDisabledOnFg");
+
 };
+
+
 
 #endif // this MUST be the last line in this file.
