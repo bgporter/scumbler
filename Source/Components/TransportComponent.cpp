@@ -107,6 +107,7 @@ void TransportComponent::UpdateStyle()
 void TransportComponent::paint (Graphics& g)
 {
 
+   mMsg("TransportComponent::paint");
 
    g.fillAll (fStyle->GetColor(palette::kTransportBg));
 #ifdef qSketch
@@ -140,7 +141,7 @@ void TransportComponent::resized()
 
    int yPos = (height - buttonSize) / 2;
 
-   std::cout << "transport height = " << height << std::endl;
+   //std::cout << "transport height = " << height << std::endl;
 
    fAddTrackButton->setBounds (40, yPos, buttonSize, buttonSize);
    fResetButton->setBounds (176, yPos, buttonSize, buttonSize);
