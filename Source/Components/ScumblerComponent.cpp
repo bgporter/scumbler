@@ -107,6 +107,7 @@ void ScumblerComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
+    mMsg("ScumblerComponent::paint");
     g.fillAll (fStyle->GetColor(palette::kAppBg));
 
     //[UserPaint] Add your own custom painting code here..
@@ -311,6 +312,12 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
   // std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
   if (source == fScumbler)
   {
+    if (fScumbler->UpdateTime())
+    {
+       // if the only thing new is that the transport needs to be updated, just do that.
+       fTransport->repaint();    
+       return;  
+    }
     // if the number of tracks has changed, we need to refresh things.
     int trackCount = fScumbler->GetNumTracks();
     int trackDelta = trackCount - fTracks.size();
