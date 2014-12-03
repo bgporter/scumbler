@@ -239,7 +239,7 @@ void TrackComponent::paint (Graphics& g)
     // - the signal line before the waveform for inactive tracks should be gray
     // - all the black should be gray for muted tracks.
     
-
+    mMsg("TrackComponent::paint");
     float halfWidth = this->getWidth() / 2.0;
 
     // first, draw the signal line underneath the pre-effects:
