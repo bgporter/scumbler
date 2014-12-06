@@ -167,7 +167,7 @@ void Palette::SetFactoryPalette(FactoryPalette p)
 */
          this->SetColor(palette::kTrackMuteUpOnBorder, 0xff000000);
          this->SetColor(palette::kTrackMuteUpOnFill, 0xffff0000);
-         this->SetColor(palette::kTrackMuteUpOnFg, 0xff000000);
+         this->SetColor(palette::kTrackMuteUpOnFg, 0xffffffff);
 /*
          this->SetColor(palette::kTrackMuteHoverOnBorder, );
          this->SetColor(palette::kTrackMuteHoverOnFill, );

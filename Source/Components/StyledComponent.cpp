@@ -3,8 +3,9 @@
 #include "StyledComponent.h"
 
 
-StyledComponent::StyledComponent(UiStyle* style)
-: fStyle(style)
+StyledComponent::StyledComponent(UiStyle* style, const String& name)
+:  Component(name)
+,  fStyle(style)
 {
    fStyle->addChangeListener(this);
 }
@@ -24,4 +25,14 @@ void StyledComponent::changeListenerCallback (ChangeBroadcaster *source)
 void StyledComponent::UpdateStyle()
 {
    // no-op implementation to be overidden by derived classes.
+}
+
+void LogPaint(Component* c, Graphics& g)
+{
+    String output = c->getName() + " ";
+    Rectangle<int> clip = g.getClipBounds();
+    
+    output << clip.getX() << ", " << clip.getY() << " w = " << clip.getWidth() << " h = " << clip.getHeight();
+    
+    Logger::outputDebugString(output);
 }

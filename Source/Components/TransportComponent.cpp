@@ -12,7 +12,7 @@
 
 
 TransportComponent::TransportComponent(UiStyle* style, Scumbler* scumbler)
-:  StyledComponent(style)
+:  StyledComponent(style, "TransportComponent")
 ,  fScumbler(scumbler)
 ,  fAddTrackButton(nullptr)
 ,  fPlayButton(nullptr)
@@ -107,8 +107,7 @@ void TransportComponent::UpdateStyle()
 void TransportComponent::paint (Graphics& g)
 {
 
-   mMsg("TransportComponent::paint");
-
+   LogPaint(this, g);
    g.fillAll (fStyle->GetColor(palette::kTransportBg));
 #ifdef qSketch
    g.setColour(Colours::lightslategrey);

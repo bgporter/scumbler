@@ -119,6 +119,11 @@ private:
     TransportComponent* fTransport;
     TooltipWindow fTooltipWindow;
     ScopedPointer<Label> fTitle;
+
+    // measuring redraw frequency during playback
+    Time fPlaybackStart;
+    int fRepaintCount;
+    bool fPlaying;
     //[/UserVariables]
 
     //==============================================================================

@@ -137,7 +137,7 @@ private:
 class WaveformComponent :  public StyledComponent
 {
 public:
-   WaveformComponent(UiStyle* style, LoopProcessor* loop);
+   WaveformComponent(UiStyle* style, LoopProcessor* loop, const String& name=String::empty);
 
    ~WaveformComponent();
 
@@ -248,6 +248,15 @@ private:
     */
    Array<int> fTicks;
 
+   /**
+    * Let's try caching the colors that we use. maybe the dict lookups are costly when we do them all the time...
+    */
+   Colour fBg; 
+   Colour fFg;
+   Colour fNowLine;
+   Colour fMonoWave;
+   Colour fLeftWave;
+   Colour fRightWave;
 
 };
 

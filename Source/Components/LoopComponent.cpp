@@ -26,7 +26,7 @@ LoopComponent::LoopComponent(UiStyle* style, LoopProcessor* loop)
 ,  fWaveform(nullptr)
 {
 
-   fWaveform = new WaveformComponent(style, nullptr);
+   fWaveform = new WaveformComponent(style, nullptr, "WaveformComponent");
    this->addAndMakeVisible(fWaveform);
     
    this->ConnectToLoop(loop);

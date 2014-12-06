@@ -31,7 +31,7 @@ extern ApplicationCommandManager* gCommandManager;
 
 //==============================================================================
 ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
-    : StyledComponent(style)
+    : StyledComponent(style, "ScumblerComponent")
     , fScumbler(scumbler)
     , fTransport(nullptr)
 {
@@ -107,7 +107,11 @@ void ScumblerComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    mMsg("ScumblerComponent::paint");
+    LogPaint(this, g);
+    if (fScumbler->IsPlaying())
+    {
+      fRepaintCount++;
+    }
     g.fillAll (fStyle->GetColor(palette::kAppBg));
 
     //[UserPaint] Add your own custom painting code here..
@@ -312,6 +316,25 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
   // std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
   if (source == fScumbler)
   {
+    bool isPlaying = fScumbler->IsPlaying();
+    if (fPlaying != isPlaying)
+    {
+       fPlaying = isPlaying;
+       if (fPlaying)
+       {
+          fPlaybackStart = Time::getCurrentTime();
+          fRepaintCount = 0;
+       }
+       else
+       {
+          Time end = Time::getCurrentTime();
+          double duration = (end.toMilliseconds() - fPlaybackStart.toMilliseconds()) / 1000.0;
+           double rate = fRepaintCount / duration;
+          String out = String(fRepaintCount);
+           out << " repaints in " << String(duration) << " seconds (" << rate << "/sec)";
+           Logger::outputDebugString(out);
+       }
+    }
     if (fScumbler->UpdateTime())
     {
        // if the only thing new is that the transport needs to be updated, just do that.
@@ -367,6 +390,7 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
       this->SetTrackBounds(i, tc);
     }
 
+    mMsg("ScumblerComponent->repaint()");
     this->repaint();
   }
   else if (fStyle == source)

@@ -15,7 +15,7 @@ public:
    /**
     * Create the component and start listening to the UiStyle object for changes.
     */
-   StyledComponent(UiStyle* style);
+   StyledComponent(UiStyle* style, const String& name=String::empty);
 
    ~StyledComponent();
    
@@ -35,5 +35,8 @@ protected:
    UiStyle* fStyle;
 
 };
+
+
+void LogPaint(Component* c, Graphics& g);
 
 #endif // this MUST be the last line in this file.
