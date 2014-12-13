@@ -91,7 +91,7 @@ void PluginSlotComponent::paint (Graphics& g)
 
    // we reduce so we're sure that our fat borders are all displayed. 
    rect.reduce(2.0f, 2.0f);
-   const float kCornerSize = this->getHeight() / 2;
+   const float kCornerSize = this->getHeight() / 4;
    if (this->IsEmpty())
    {
       g.setColour(fColors.bg);
