@@ -360,16 +360,16 @@ void WaveformComponent::paint(Graphics& g)
       {
          // top tick
          g.drawLine(tickLeftX, 0, tickRightX, 0, 2);
-         g.drawVerticalLine(tickPixel, 0, 8);
+         //g.drawVerticalLine(tickPixel, 0, 8);
+         g.drawVerticalLine(tickPixel, 0, height);
          // bottom tick
          g.drawLine(tickLeftX, height, tickRightX, height, 2);
-         g.drawVerticalLine(tickPixel, height-9, height);
+         //g.drawVerticalLine(tickPixel, height-9, height);
       }
    }
    // !!! Missing logic to handle a mono loop.
 
    // draw a line for every waveform deflection from the zero point.
-
    for (int x = startIndex;  x < endIndex; ++x)
    {
       WaveformPoint left = fPixels.GetPoint(0, x);
