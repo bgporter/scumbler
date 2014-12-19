@@ -42,15 +42,15 @@
                                                                     //[Comments]
   @class ScumblerComponent
 
-  We use a MVC design for the app here. The ScumblerComponent acts as the model
+  We use a MVC design for the app here. The ScumblerComponent acts as the controller
   and the view, while the Scumbler itself functions as the model.
                                                                     //[/Comments]
 */
 class ScumblerComponent  : public StyledComponent,
                            public ApplicationCommandTarget,
-                           //public ChangeListener,
                            public ButtonListener,
-                           public LabelListener
+                           public LabelListener, 
+                           public Timer
 {
 public:
     //==============================================================================
@@ -95,6 +95,11 @@ public:
      */
     void changeListenerCallback(ChangeBroadcaster* source);
 
+    /**
+     * Called when our timer interval elapses.
+     */
+    void timerCallback();
+
     void labelTextChanged(Label* source);
 
     bool keyPressed(const KeyPress& key);
@@ -124,6 +129,11 @@ private:
     Time fPlaybackStart;
     int fRepaintCount;
     bool fPlaying;
+
+    /**
+     * How fast should the timer update?
+     */
+    int fFramesPerSecond;
     //[/UserVariables]
 
     //==============================================================================

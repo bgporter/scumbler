@@ -84,7 +84,10 @@ ScumblerComponent::~ScumblerComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
-
+    if (fPlaying)
+    {
+      this->stopTimer();
+    }
     deleteAndZero(fTransport);
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -322,11 +325,16 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
        fPlaying = isPlaying;
        if (fPlaying)
        {
+          // we are transitioning from being paused to playing.
           fPlaybackStart = Time::getCurrentTime();
           fRepaintCount = 0;
+          int interval = static_cast<int>(1000.0 / fFramesPerSecond);
+          this->startTimer(interval);
        }
        else
        {
+          this->stopTimer();
+          // we are returning to a paused state.
           Time end = Time::getCurrentTime();
           double duration = (end.toMilliseconds() - fPlaybackStart.toMilliseconds()) / 1000.0;
            double rate = fRepaintCount / duration;
@@ -399,6 +407,16 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
   }
 
 }
+
+void ScumblerComponent::timerCallback()
+{
+   // currently, we only have the timer running when we're playing, and 
+   // we repaint the entire UI. When we have meters (etc) that want to be 
+   // updated live all the time, we may want to put more clever logic in here.
+   this->repaint();
+}
+
+
 
 bool ScumblerComponent::keyPressed(const KeyPress& key)
 {
