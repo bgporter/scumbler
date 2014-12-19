@@ -36,6 +36,83 @@ WaveformPoint WaveformPointArray::GetPoint(int channel, int pixel) const
    return fPoints[pixel*fChannelCount + channel];
 }
 
+
+class WavePath
+{
+public:
+   WavePath(float height, int width)
+   :  fAxis(height/2.0)
+   ,  fWidth(width-1)
+   ,  fInWave(false)
+   {
+
+   }
+
+   ~WavePath()
+   {
+
+   }
+
+   void AddPoint(int xPos, const WaveformPoint& p)
+   {
+      if (!fInWave)
+      {
+         // are we starting to draw a waveform?
+         if (p.nonZero)
+         {
+            fTop.startNewSubPath(xPos, fAxis);
+            fBottom.startNewSubPath(xPos, fAxis);
+            fInWave = true;
+         }
+      }
+      if (fInWave)
+      {
+         fTop.lineTo(xPos, p.top);
+         fBottom.lineTo(xPos, p.bottom);
+
+         if (! p.nonZero)
+         {
+            // we've gone back to zero, so close this subpath out.
+            fTop.lineTo(xPos, fAxis);
+            fBottom.lineTo(xPos, fAxis);
+            fTop.closeSubPath();
+            fBottom.closeSubPath();
+            fInWave = false;
+         }
+      }
+   }
+
+   void ClosePath()
+   {
+      if (fInWave)
+      {
+         fTop.lineTo(fWidth, fAxis);
+         fBottom.lineTo(fWidth, fAxis);
+         fTop.closeSubPath();
+         fBottom.closeSubPath();
+         fInWave = false;
+      }
+   }
+
+   void Draw(Graphics& g)
+   {
+      g.fillPath(fTop);
+      g.fillPath(fBottom);
+   }
+
+private:
+   Path fTop;
+   Path fBottom;
+
+   float fAxis;
+   int fWidth;
+
+   bool fInWave;
+
+};
+
+
+
 WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop, const String& name)
 :  StyledComponent(style, name)
 ,  fLoop(nullptr)
@@ -50,7 +127,7 @@ WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop, const 
    // then revealed much faster -- we'll only execute the paint() method when 
    // an explicit call to repaint() is made.
    // 
-   this->setBufferedToImage(true);
+   //this->setBufferedToImage(true);
    if (loop)
    {
       this->ConnectToLoop(loop);
@@ -177,7 +254,7 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
                fNow = info.fLoopSample;
                int startIndex = jmax(0, fDirtyStart-2);
                // redraw just the region around our newly updated pixels.
-               this->repaint(startIndex, 0, fDirtyPixels + 4, this->getHeight());
+               //this->repaint(startIndex, 0, fDirtyPixels + 4, this->getHeight());
                this->fPendingSamples -= samplesDrawn;
             }
          }
@@ -310,11 +387,11 @@ void WaveformComponent::GetThumbnailData()
       // Left channel first, 
       float pixelVal = fThumbData->GetPixelValue(0, i);
       float deflection  = fFullScaleHeight * pixelVal;
-      fPixels.SetPoint(0, pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
+      fPixels.SetPoint(0, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
       // ...then right channel.
       pixelVal = fThumbData->GetPixelValue(1, i);
       deflection  = fFullScaleHeight * pixelVal;
-      fPixels.SetPoint(1, pixelIndex, WaveformPoint(fCenterYPos + deflection, fCenterYPos - deflection));
+      fPixels.SetPoint(1, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
    }
    fDirtyPixels += fThumbData->fPixelsReturned;
 #ifdef qLogPaint
@@ -369,6 +446,7 @@ void WaveformComponent::paint(Graphics& g)
    }
    // !!! Missing logic to handle a mono loop.
 
+#ifdef qDrawLines
    // draw a line for every waveform deflection from the zero point.
    for (int x = startIndex;  x < endIndex; ++x)
    {
@@ -398,6 +476,27 @@ void WaveformComponent::paint(Graphics& g)
          }
       }
    }
+#else
+   int width = this->getWidth();
+   WavePath left(height, width);
+   WavePath right(height, width);
+
+   for (int x = 0; x < this->getWidth(); ++x)
+   {
+      left.AddPoint(x, fPixels.GetPoint(0, x));
+      right.AddPoint(x, fPixels.GetPoint(1, x));
+   }
+   left.ClosePath();
+   right.ClosePath();
+
+   g.setColour(fLeftWave);
+   left.Draw(g);
+   g.setColour(fRightWave);
+   right.Draw(g);
+
+   // !!! draw NOW line. 
+
+#endif
    // there's nothing dirty anymore because we've displayed everything. 
    fDirtyStart = INT_MAX;
    fDirtyPixels = 0;

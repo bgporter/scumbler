@@ -39,7 +39,7 @@ public:
    :  top(top_)
    ,  bottom(bottom_)
    {
-     // empty.
+     this->SetNonZero();
    }
 
    ~WaveformPoint()
@@ -50,11 +50,26 @@ public:
    WaveformPoint(const WaveformPoint& other)
    :  top(other.top)
    ,  bottom(other.bottom)
+   ,  nonZero(other.nonZero)
    {
       // empty.  
    }
 
 
+   inline void SetNonZero()
+   {
+      nonZero = ((bottom - top) >= 2.0);
+   }
+
+    friend void swap(WaveformPoint& first, WaveformPoint& second)
+    {
+        using std::swap;
+        
+        swap(first.top, second.top);
+        swap(first.bottom, second.bottom);
+        swap(first.nonZero, second.nonZero);
+    }
+    
    /**
     * See http://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
     * for an explanation of why we take this parm by val and not by ref.
@@ -65,28 +80,20 @@ public:
       return *this;
    }
 
-
-
-   friend void swap(WaveformPoint& first, WaveformPoint& second)
-   {
-      using std::swap;
-      
-      swap(first.top, second.top);
-      swap(first.bottom, second.bottom); 
-   }
-
-
    void Set(float top_, float bottom_)
    {
       top = top_;
       bottom = bottom_;
+      this->SetNonZero();
    }
 
 public:
   float top;
   float bottom;
+  bool  nonZero;  // true if this is a point worth drawing
 
 };
+
 
 
 class WaveformPointArray

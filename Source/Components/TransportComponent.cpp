@@ -187,7 +187,7 @@ void TransportComponent::changeListenerCallback(ChangeBroadcaster* source)
    if ((fScumbler == source) || (fStyle == source))
    {
       fPlayButton->setToggleState(fScumbler->IsPlaying(), NotificationType::dontSendNotification);
-      this->repaint();
+      //this->repaint();
    }
 
 }

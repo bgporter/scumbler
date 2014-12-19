@@ -34,6 +34,7 @@ ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
     : StyledComponent(style, "ScumblerComponent")
     , fScumbler(scumbler)
     , fTransport(nullptr)
+    , fFramesPerSecond(20)
 {
 
 
@@ -343,12 +344,14 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
            Logger::outputDebugString(out);
        }
     }
+    /*
     if (fScumbler->UpdateTime())
     {
        // if the only thing new is that the transport needs to be updated, just do that.
        fTransport->repaint();    
        return;  
     }
+    */
     // if the number of tracks has changed, we need to refresh things.
     int trackCount = fScumbler->GetNumTracks();
     int trackDelta = trackCount - fTracks.size();
