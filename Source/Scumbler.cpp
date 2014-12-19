@@ -172,8 +172,8 @@ void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
    {
       // just notify that we've changed so the time readout can change.
       fTimeUpdate = true;
-       mMsg('.');
-      this->sendChangeMessage();
+       //mMsg('.');
+      //this->sendChangeMessage();
    }
    else
    {
