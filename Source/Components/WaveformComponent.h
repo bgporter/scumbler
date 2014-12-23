@@ -265,6 +265,12 @@ private:
    Colour fLeftWave;
    Colour fRightWave;
 
+
+   /**
+    * Protect the thumbnail data from read/write collisions.
+    */
+   CriticalSection fMutex;
+
 };
 
 #endif

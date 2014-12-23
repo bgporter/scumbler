@@ -4,7 +4,7 @@
 
 #include "Track.h"
 
-#define kPixelsPerRedraw 3
+#define kPixelsPerRedraw 1
 
 // turn on/off log statements in the paint() loop.
 //#define qLogPaint
@@ -178,6 +178,7 @@ void WaveformComponent::ConnectToLoop(LoopProcessor* loop)
          }
 
          this->CalculateSamplesPerPixel();
+         this->Clear();
       }
    }   
 }
@@ -232,7 +233,7 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
                newSamples = (info.fLoopLength - fLoopInfo.fLoopSample) +  info.fLoopSample;
             }
             fPendingSamples += newSamples;
-            if (fPendingSamples > fRedrawAfterSampleCount)
+            if (fPendingSamples >= fRedrawAfterSampleCount)
             {
                fThumbData->fMaxThumbnailValues = fPendingSamples / fThumbData->fSamplesPerPixel;
                // We can find out how many samples' worth of data we got thumbnail data
@@ -379,19 +380,23 @@ void WaveformComponent::GetThumbnailData()
    fLoop->GetThumbnailData(fThumbData);
 
    // ...and update the display buffer.
-   for (int i = 0; i < fThumbData->fPixelsReturned; ++i, ++pixelIndex)
+   if (1)
    {
-      // each value in the fPixelData array is absolute value 0..1 of the 
-      // max sample in the pertinent chunk. We need to convert that into a pair
-      // of pixel y-values that are symmetrical about the vertical center of this component.
-      // Left channel first, 
-      float pixelVal = fThumbData->GetPixelValue(0, i);
-      float deflection  = fFullScaleHeight * pixelVal;
-      fPixels.SetPoint(0, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
-      // ...then right channel.
-      pixelVal = fThumbData->GetPixelValue(1, i);
-      deflection  = fFullScaleHeight * pixelVal;
-      fPixels.SetPoint(1, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
+      ScopedLock sl(fMutex);
+      for (int i = 0; i < fThumbData->fPixelsReturned; ++i, ++pixelIndex)
+      {
+         // each value in the fPixelData array is absolute value 0..1 of the 
+         // max sample in the pertinent chunk. We need to convert that into a pair
+         // of pixel y-values that are symmetrical about the vertical center of this component.
+         // Left channel first, 
+         float pixelVal = fThumbData->GetPixelValue(0, i);
+         float deflection  = fFullScaleHeight * pixelVal;
+         fPixels.SetPoint(0, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
+         // ...then right channel.
+         pixelVal = fThumbData->GetPixelValue(1, i);
+         deflection  = fFullScaleHeight * pixelVal;
+         fPixels.SetPoint(1, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
+      }
    }
    fDirtyPixels += fThumbData->fPixelsReturned;
 #ifdef qLogPaint
@@ -415,7 +420,7 @@ void WaveformComponent::paint(Graphics& g)
    g.setColour(fFg);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
-   int nowPixel = this->PixelForSample(fNow);
+   int nowPixel = jmax(0, this->PixelForSample(fNow));
 #ifdef qLogPaint
    String s("  PAINT Now = "); 
    s << nowPixel;
@@ -444,48 +449,21 @@ void WaveformComponent::paint(Graphics& g)
          //g.drawVerticalLine(tickPixel, height-9, height);
       }
    }
-   // !!! Missing logic to handle a mono loop.
 
-#ifdef qDrawLines
-   // draw a line for every waveform deflection from the zero point.
-   for (int x = startIndex;  x < endIndex; ++x)
-   {
-      WaveformPoint left = fPixels.GetPoint(0, x);
-      WaveformPoint right = fPixels.GetPoint(1, x);
-
-      if ( (x == nowPixel) || (x == (nowPixel + 1)) || (x == nowPixel - 1) )
-      {
-         g.setColour(fNowLine);
-         g.drawVerticalLine(x, 0, height);
-         g.setColour(fBg);
-         g.drawVerticalLine(x, jmax(left.top, right.top), jmin(left.bottom, right.bottom));
-         g.setColour(fMonoWave);
-
-      }
-      else
-      { 
-         if (left.top - left.bottom > 1)
-         {
-            g.setColour(fLeftWave);
-            g.drawVerticalLine(x, left.top, left.bottom);
-         }
-         if (right.top - right.bottom > 1)
-         {  
-            g.setColour(fRightWave);
-            g.drawVerticalLine(x, right.top, right.bottom);
-         }
-      }
-   }
-#else
    int width = this->getWidth();
    WavePath left(height, width);
    WavePath right(height, width);
 
-   for (int x = 0; x < this->getWidth(); ++x)
+   if (1)
    {
-      left.AddPoint(x, fPixels.GetPoint(0, x));
-      right.AddPoint(x, fPixels.GetPoint(1, x));
+      ScopedLock sl(fMutex);
+      for (int x = 0; x < width; ++x)
+      {
+         left.AddPoint(x, fPixels.GetPoint(0, x));
+         right.AddPoint(x, fPixels.GetPoint(1, x));
+      }
    }
+
    left.ClosePath();
    right.ClosePath();
 
@@ -495,8 +473,10 @@ void WaveformComponent::paint(Graphics& g)
    right.Draw(g);
 
    // !!! draw NOW line. 
+   g.setColour(fNowLine);
+   g.fillRect(nowPixel, 0, 3, height);
 
-#endif
+
    // there's nothing dirty anymore because we've displayed everything. 
    fDirtyStart = INT_MAX;
    fDirtyPixels = 0;
