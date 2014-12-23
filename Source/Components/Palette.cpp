@@ -55,7 +55,7 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          this->SetColor(palette::kLoopLeftWave, 0x80ff0000);
          this->SetColor(palette::kLoopRightWave, 0x8000c480);
          this->SetColor(palette::kLoopTick, Colours::grey);
-         this->SetColor(palette::kLoopNow, Colours::red);
+         this->SetColor(palette::kLoopNow, 0xc0ff0000);
 
          this->SetColor(palette::kTransportBg, Colours::grey);
          this->SetColor(palette::kTransportFg, Colours::white);
@@ -91,7 +91,7 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          this->SetColor(palette::kLoopLeftWave, 0x80ff0000);
          this->SetColor(palette::kLoopRightWave, 0x8000c480);
          this->SetColor(palette::kLoopTick, Colours::grey);
-         this->SetColor(palette::kLoopNow, Colours::red);
+         this->SetColor(palette::kLoopNow, 0x80ff0000);
 
          this->SetColor(palette::kTransportBg, Colours::grey);
          this->SetColor(palette::kTransportFg, Colours::black);
