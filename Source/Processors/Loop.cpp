@@ -51,6 +51,7 @@ LoopProcessor::LoopProcessor(Track* track, int channelCount)
 ,  fWasReset(false)
 {
    std::cout << "Creating LoopProcessor @ " << this << std::endl;
+   this->SetLoopDuration(fLoopDuration);
 
 }
 
@@ -135,7 +136,7 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
 
    float accum = data->fStart;
    int startSample = static_cast<int>(accum);
-   int samplesAvailable = fLoopBuffer->getNumSamples() - startSample;
+    int samplesAvailable = fLoopBuffer ? fLoopBuffer->getNumSamples() - startSample : 0;
    int pixelsDesired = data->fMaxThumbnailValues;
    int pixelsAvailable = 0;
    int samplesDesired = pixelsDesired * data->fSamplesPerPixel;
