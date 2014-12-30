@@ -453,6 +453,7 @@ void TrackComponent::ConnectToTrack(Track* track)
       fPreEffects->ConnectToPluginBlock(fTrack->GetPreEffectBlock());
       fPostEffects->ConnectToPluginBlock(fTrack->GetPostEffectBlock());
       fLoop->ConnectToLoop(fTrack->GetLoop());
+      this->UpdateColors();
       this->repaint();
     }
   }
