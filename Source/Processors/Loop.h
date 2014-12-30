@@ -53,6 +53,7 @@ public:
       bool operator!=(const LoopInfo& rhs) const { return !operator==(rhs); };
    };
 
+#if 0
    /**
     * @struct ThumbnailData -- used to retrieve sample data from the loop processor that
     * can be used for waveform display. 
@@ -128,6 +129,8 @@ public:
 
 
    };
+#endif
+
 
    /**
     * Create the loop processor.
@@ -135,7 +138,7 @@ public:
     * @param channelCount number of input and output channels for this loop.
     * 
     */
-   LoopProcessor(Track* track, int channelCount = 1);
+   LoopProcessor(Track* track, int channelCount = 2);
 
    ~LoopProcessor();
 
@@ -170,14 +173,24 @@ public:
     */
    bool IsPlaying() const;
 
-
+#if 0
    /**
     * Fill the passed-in ThumbnailData structure with information about sample peaks
     * that can be used elsewhere to display a thumbnail of the waveform
     * @param  data Reference to a ThumbnailData structure
     */
    void GetThumbnailData(ThumbnailData* data);
+#endif
 
+   /**
+    * Returns the highest absolute sample value in the specified range of the specified 
+    * channel. 
+    * @param  channel     Channel num (should be 0/1 in this application.)
+    * @param  startSample Index of the first sample to look at.
+    * @param  endSample   Index of the last sample to look at. 
+    * @return             floating point sample value (0..1)
+    */
+   float GetThumbnailPoint(int channel, int startSample, int endSample);
 
    /**
     * Clear and reset the loop, setting all read/write positions back to zero.

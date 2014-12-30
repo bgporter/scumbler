@@ -12,7 +12,7 @@
 #define mMax(x, y) (x) < (y) ? (y) : (x)
 #endif
 
-
+#if 0
 LoopProcessor::ThumbnailData::ThumbnailData(int channelCount)
 :  fChannelCount(channelCount)
 {
@@ -37,7 +37,7 @@ float LoopProcessor::ThumbnailData::GetPixelValue(int channel, int pixelNum)
 {
    return fPixelData[pixelNum * fChannelCount + channel];
 }
-
+#endif
 
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
 :  PassthroughProcessor(channelCount, channelCount)
@@ -126,7 +126,7 @@ bool LoopProcessor::IsPlaying() const
    return retval;
 }
 
-
+#if 0
 void LoopProcessor::GetThumbnailData(ThumbnailData* data)
 {
    // !!! Note that all of this logic breaks down when samples per pixel 
@@ -198,6 +198,22 @@ void LoopProcessor::GetThumbnailData(ThumbnailData* data)
    }
    data->fStart = accum;
    data->fPixelsReturned = pixelsAvailable;
+}
+
+#endif
+
+float LoopProcessor::GetThumbnailPoint(int channel, int startSample, int endSample)
+{
+   float retval = 0.f;
+   jassert(endSample > startSample);
+   jassert(channel < fInputChannelCount);
+   if (fLoopBuffer && (channel < fInputChannelCount) && (endSample > startSample))
+   {
+      endSample = mMin(endSample, fLoopBuffer->getNumSamples());
+      int numSamples = endSample - startSample;
+      retval = fLoopBuffer->getMagnitude(channel, startSample, numSamples);
+   }
+   return retval;
 }
 
 

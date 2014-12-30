@@ -9,7 +9,7 @@
 // turn on/off log statements in the paint() loop.
 //#define qLogPaint
 
-
+#if 0
 WaveformPointArray::WaveformPointArray(int channels)
 :  fChannelCount(channels)
 {
@@ -36,87 +36,16 @@ WaveformPoint WaveformPointArray::GetPoint(int channel, int pixel) const
    return fPoints[pixel*fChannelCount + channel];
 }
 
+#endif
 
-class WavePath
-{
-public:
-   WavePath(float height, int width)
-   :  fAxis(height/2.0)
-   ,  fWidth(width-1)
-   ,  fInWave(false)
-   {
-
-   }
-
-   ~WavePath()
-   {
-
-   }
-
-   void AddPoint(int xPos, const WaveformPoint& p)
-   {
-      if (!fInWave)
-      {
-         // are we starting to draw a waveform?
-         if (p.nonZero)
-         {
-            fTop.startNewSubPath(xPos, fAxis);
-            fBottom.startNewSubPath(xPos, fAxis);
-            fInWave = true;
-         }
-      }
-      if (fInWave)
-      {
-         fTop.lineTo(xPos, p.top);
-         fBottom.lineTo(xPos, p.bottom);
-
-         if (! p.nonZero)
-         {
-            // we've gone back to zero, so close this subpath out.
-            fTop.lineTo(xPos, fAxis);
-            fBottom.lineTo(xPos, fAxis);
-            fTop.closeSubPath();
-            fBottom.closeSubPath();
-            fInWave = false;
-         }
-      }
-   }
-
-   void ClosePath()
-   {
-      if (fInWave)
-      {
-         fTop.lineTo(fWidth, fAxis);
-         fBottom.lineTo(fWidth, fAxis);
-         fTop.closeSubPath();
-         fBottom.closeSubPath();
-         fInWave = false;
-      }
-   }
-
-   void Draw(Graphics& g)
-   {
-      g.fillPath(fTop);
-      g.fillPath(fBottom);
-   }
-
-private:
-   Path fTop;
-   Path fBottom;
-
-   float fAxis;
-   int fWidth;
-
-   bool fInWave;
-
-};
 
 
 
 WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop, const String& name)
 :  StyledComponent(style, name)
 ,  fLoop(nullptr)
-,  fPixels(2)
+,  fThumb(fLoop)
+//,  fPixels(2)
 ,  fPendingSamples(0)
 ,  fRedrawAfterSampleCount(0)
 ,  fDirtyStart(INT_MAX)
@@ -139,8 +68,6 @@ WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop, const 
 WaveformComponent::~WaveformComponent()
 {
    this->ConnectToLoop(nullptr);
-   
-
 }
 
 void WaveformComponent::UpdateStyle()
@@ -167,17 +94,8 @@ void WaveformComponent::ConnectToLoop(LoopProcessor* loop)
       {
          std::cout << "  waveform component " << this << " connecting to loop " << fLoop << std::endl;
          fLoop->addChangeListener(this);
-         // if we don't have a struct to hold thumbnail data yet, or we do, but 
-         // it's got the wrong number of channels for this loop processor, create
-         // one that's right.
-         if (!fThumbData || (fThumbData->fChannelCount != fLoop->GetInputChannelCount()))
-         {
-            // we're using a scoped pointer, so this will delete an old one if 
-            // it's there.
-            fThumbData = new LoopProcessor::ThumbnailData(fLoop->GetInputChannelCount());
-         }
-
-         this->CalculateSamplesPerPixel();
+         fThumb.ConnectToLoop(fLoop);
+         //!!!this->CalculateSamplesPerPixel();
          this->Clear();
       }
    }   
@@ -212,52 +130,14 @@ void WaveformComponent::changeListenerCallback(ChangeBroadcaster* source)
             Logger::outputDebugString("LOOP RESET");
 #endif   
             // loop was just reset & cleared..
-            fDirtyStart = INT_MAX;
-            fDirtyPixels = 0;
-            fNow = 0;
-            fPendingSamples = 0;
-            fThumbData->fStart = 0;
+            fThumb.Reset();
             this->Clear();
          }
 
          else if (info.fLoopSample != fLoopInfo.fLoopSample)
          {
             // the loop has new samples in it that we need to deal with.
-            int newSamples = info.fLoopSample - fLoopInfo.fLoopSample;
-
-            if (newSamples < 0)
-            {
-               // we've wrapped in the loop -- calculate the number of samples from 
-               // the old position to the end of the loop and from the beginning of 
-               // the loop to the new position
-               newSamples = (info.fLoopLength - fLoopInfo.fLoopSample) +  info.fLoopSample;
-            }
-            fPendingSamples += newSamples;
-            if (fPendingSamples >= fRedrawAfterSampleCount)
-            {
-               fThumbData->fMaxThumbnailValues = fPendingSamples / fThumbData->fSamplesPerPixel;
-               // We can find out how many samples' worth of data we got thumbnail data
-               // for by comparing fThumbData->fStart before and after calling 
-               // GetThumbnailData().
-               int startSample = static_cast<int>(fThumbData->fStart);
-               this->GetThumbnailData();
-               int endSample = static_cast<int>(fThumbData->fStart);
-               int samplesDrawn = endSample - startSample;
-               if (0 == endSample)
-               {
-                  // we wrapped, so we're only drawing to the end of the loop buffer.
-                  samplesDrawn = info.fLoopLength - startSample;
-               }
-               else
-               {
-                  samplesDrawn = endSample - startSample;
-               }
-               fNow = info.fLoopSample;
-               int startIndex = jmax(0, fDirtyStart-2);
-               // redraw just the region around our newly updated pixels.
-               //this->repaint(startIndex, 0, fDirtyPixels + 4, this->getHeight());
-               this->fPendingSamples -= samplesDrawn;
-            }
+            fThumb.Update();
          }
          // save this data for the next update.
          fLoopInfo = info;
@@ -278,26 +158,26 @@ void WaveformComponent::resized()
 #endif   
 
    int width = this->getWidth();
-   fPixels.Resize(width);
-
-   // if we resize, we need to repaint everything.
-   this->CalculateSamplesPerPixel();
-   // figure out how high a full-scale waveform pixel should go from 
-   // the center line
-   fCenterYPos = this->getHeight() / 2.0;
-   fFullScaleHeight = fCenterYPos * 0.9f;
+   int height = this->getHeight();
+   fCenterYPos = height / 2.0;
+   fThumb.Resize(width, height);
+   // if either the component size or loop length changed, we need to 
+   // also recalculate where the ticks should be drawn.
    LoopProcessor::LoopInfo info;
-   if (fLoop)
+   fLoop->GetLoopInfo(info);
+   fTicks.clear();
+   for (int i = 0; i < info.fLoopLength; i += info.fSampleRate)
    {
-      fLoop->GetLoopInfo(info);
-      if (info.fLoopLength > 0)
-      {
-         this->Clear();
-      }
+      int pixel = fThumb.PixelForSample(i);
+      fTicks.add(pixel);
    }
+   fTicks.add(this->getWidth() -1);
 
+   fThumb.Update();
+   this->repaint();
 }
 
+#if 0
 void WaveformComponent::CalculateSamplesPerPixel()
 {
    LoopProcessor::LoopInfo info;
@@ -317,6 +197,7 @@ void WaveformComponent::CalculateSamplesPerPixel()
    }
    fTicks.add(this->getWidth() -1);
 }
+#endif
 
 void WaveformComponent::Clear()
 {
@@ -324,13 +205,8 @@ void WaveformComponent::Clear()
 #ifdef qLogPaint
    Logger::outputDebugString("CLEAR!");
 #endif   
-   fThumbData->fMaxThumbnailValues = this->getWidth();
-   float oldStart = fThumbData->fStart;
-   fThumbData->fStart = 0;
-   this->GetThumbnailData();
-   // the next time we receive samples, they'll come right after the current
-   // loop position.
-   fThumbData->fStart = oldStart;
+   fThumb.FullRefresh();
+   fThumb.Update();
 
    this->repaint();
 }
@@ -341,24 +217,11 @@ void WaveformComponent::LoopSizeChanged()
 #ifdef qLogPaint
    Logger::outputDebugString("LoopSizeChanged!");
 #endif   
-   // set the scaling factor between the sample buffer and this view
-   this->CalculateSamplesPerPixel();
-   // ...and make sure we recalc/redraw everything after a full reset
-   fPendingSamples = 0;
-   fDirtyStart = INT_MAX;
-   fDirtyPixels = 0;
-   fThumbData->fStart = 0;
-   fNow = 0;
-   this->Clear();
+   this->resized();
 }
 
 
-int WaveformComponent::PixelForSample(int sampleNum)
-{
-   return static_cast<int>(sampleNum / fThumbData->fSamplesPerPixel);
-}
-
-
+#if 0
 void WaveformComponent::GetThumbnailData()
 {
    // remember the first sample we're interested in, because the value
@@ -405,6 +268,7 @@ void WaveformComponent::GetThumbnailData()
 #endif   
 
 }
+#endif
 
 void WaveformComponent::paint(Graphics& g)
 {
@@ -420,7 +284,7 @@ void WaveformComponent::paint(Graphics& g)
    g.setColour(fFg);
    g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
 
-   int nowPixel = jmax(0, this->PixelForSample(fNow));
+   int nowPixel = jmax(0, fThumb.PixelForSample(fNow));
 #ifdef qLogPaint
    String s("  PAINT Now = "); 
    s << nowPixel;
@@ -450,34 +314,11 @@ void WaveformComponent::paint(Graphics& g)
       }
    }
 
-   int width = this->getWidth();
-   WavePath left(height, width);
-   WavePath right(height, width);
 
-   if (1)
-   {
-      ScopedLock sl(fMutex);
-      for (int x = 0; x < width; ++x)
-      {
-         left.AddPoint(x, fPixels.GetPoint(0, x));
-         right.AddPoint(x, fPixels.GetPoint(1, x));
-      }
-   }
-
-   left.ClosePath();
-   right.ClosePath();
-
-   g.setColour(fLeftWave);
-   left.Draw(g);
-   g.setColour(fRightWave);
-   right.Draw(g);
+   fThumb.Draw(g, fLeftWave, fRightWave);
 
    // !!! draw NOW line. 
    g.setColour(fNowLine);
-   g.fillRect(nowPixel, 0, 3, height);
+   g.fillRect(fThumb.NowPixel(), 0, 3, height);
 
-
-   // there's nothing dirty anymore because we've displayed everything. 
-   fDirtyStart = INT_MAX;
-   fDirtyPixels = 0;
 }
