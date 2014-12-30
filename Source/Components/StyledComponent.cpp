@@ -29,10 +29,12 @@ void StyledComponent::UpdateStyle()
 
 void LogPaint(Component* c, Graphics& g)
 {
+    /*
     String output = c->getName() + " ";
     Rectangle<int> clip = g.getClipBounds();
     
     output << clip.getX() << ", " << clip.getY() << " w = " << clip.getWidth() << " h = " << clip.getHeight();
     
     Logger::outputDebugString(output);
+    */
 }
