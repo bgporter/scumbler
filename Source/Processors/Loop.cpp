@@ -12,32 +12,6 @@
 #define mMax(x, y) (x) < (y) ? (y) : (x)
 #endif
 
-#if 0
-LoopProcessor::ThumbnailData::ThumbnailData(int channelCount)
-:  fChannelCount(channelCount)
-{
-}
-
-void LoopProcessor::ThumbnailData::Resize(int newCapacity)
-{
-   fPixelData.resize(newCapacity * fChannelCount);
-}
-
-void LoopProcessor::ThumbnailData::SetPixelValue(int channel, int pixelNum, float val)
-{
-   // DANGER: assuming that all parameters are sane values
-   assert(channel <= fChannelCount);
-
-   // we are manually stuffing 
-   fPixelData.set(pixelNum * fChannelCount + channel, val);
-
-}
-
-float LoopProcessor::ThumbnailData::GetPixelValue(int channel, int pixelNum)
-{
-   return fPixelData[pixelNum * fChannelCount + channel];
-}
-#endif
 
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
 :  PassthroughProcessor(channelCount, channelCount)
@@ -126,81 +100,7 @@ bool LoopProcessor::IsPlaying() const
    return retval;
 }
 
-#if 0
-void LoopProcessor::GetThumbnailData(ThumbnailData* data)
-{
-   // !!! Note that all of this logic breaks down when samples per pixel 
-   // is < 1.0. It's not clear what we'd want to display in that case anyway
-   // at the current moment -- we'll re-evaluate when we get there (and get
-   // this code working)
 
-   float accum = data->fStart;
-   int startSample = static_cast<int>(accum);
-    int samplesAvailable = fLoopBuffer ? fLoopBuffer->getNumSamples() - startSample : 0;
-   int pixelsDesired = data->fMaxThumbnailValues;
-   int pixelsAvailable = 0;
-   int samplesDesired = pixelsDesired * data->fSamplesPerPixel;
-
-   if (samplesAvailable < data->fSamplesPerPixel)
-   {
-      // not enough samples there for us to deal with. This shouldn't happen.
-      data->fPixelsReturned = 0;
-      // set the thumbnail data to restart at the beginning on the next loop.
-      data->fStart = 0;     
-      return;
-   }
-   else if (samplesAvailable < samplesDesired)
-   {
-      // we can only give them some of the data that they'd like.
-      pixelsAvailable = int(samplesAvailable / data->fSamplesPerPixel);
-   }
-   else
-   {
-      // typical case -- we can give them all the data that they want.
-      pixelsAvailable = pixelsDesired;
-   }
-
-   
-   // !!! first iteration -- only deal with one channel.
-   int channel = 0;
-   float pixelVal;
-   for (int pixelIndex = 0; pixelIndex < pixelsAvailable; ++pixelIndex)
-   {
-      accum += data->fSamplesPerPixel;
-      int endSample = static_cast<int>(accum);
-      endSample = mMin(endSample, fLoopBuffer->getNumSamples());
-      if (1 == data->fChannelCount)
-      {
-         // Currently: We look for the highest absolute sample value across *all* samples
-         // in the buffer. If we ever want to handle the channels separately, we'd need to 
-         // run this loop inside another loop for each of the channels.
-         pixelVal = fLoopBuffer->getMagnitude(startSample, (endSample - startSample));
-         data->SetPixelValue(channel, pixelIndex, pixelVal);
-      }
-      else
-      {
-
-         for (int channel = 0; channel < data->fChannelCount; ++channel)
-         {
-            pixelVal = fLoopBuffer->getMagnitude(channel, startSample, (endSample-startSample));
-            data->SetPixelValue(channel, pixelIndex, pixelVal);
-         }
-      }
-
-
-      // get ready for the next pixel.
-      startSample = endSample;
-   }
-   // see if we need to wrap on the next call.
-   if (static_cast<int>(accum + 0.5) >= fLoopBuffer->getNumSamples())
-   {
-      accum = 0.0f;
-   }
-   data->fStart = accum;
-   data->fPixelsReturned = pixelsAvailable;
-}
-
-#endif
 
 float LoopProcessor::GetThumbnailPoint(int channel, int startSample, int endSample)
 {

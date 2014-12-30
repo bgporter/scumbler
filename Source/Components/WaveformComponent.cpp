@@ -9,37 +9,6 @@
 // turn on/off log statements in the paint() loop.
 //#define qLogPaint
 
-#if 0
-WaveformPointArray::WaveformPointArray(int channels)
-:  fChannelCount(channels)
-{
-   // empty
-}
-
-WaveformPointArray::~WaveformPointArray()
-{
-   // empty
-}
-
-void WaveformPointArray::Resize(int width)
-{
-   fPoints.resize(width * fChannelCount);
-}
-
-void WaveformPointArray::SetPoint(int channel, int pixel, WaveformPoint const& point)
-{
-   fPoints.set(pixel*fChannelCount + channel, point);
-}
-
-WaveformPoint WaveformPointArray::GetPoint(int channel, int pixel) const
-{
-   return fPoints[pixel*fChannelCount + channel];
-}
-
-#endif
-
-
-
 
 WaveformComponent::WaveformComponent(UiStyle* style, LoopProcessor* loop, const String& name)
 :  StyledComponent(style, name)
@@ -177,27 +146,6 @@ void WaveformComponent::resized()
    this->repaint();
 }
 
-#if 0
-void WaveformComponent::CalculateSamplesPerPixel()
-{
-   LoopProcessor::LoopInfo info;
-   fLoop->GetLoopInfo(info);
-   float spp = 1.0f * info.fLoopLength / this->getWidth();
-   fThumbData->fSamplesPerPixel = spp;
-   // Change how frequently we redraw by changing the constant here.
-   // Yes, this should be bumped out into a named constant or configurable
-   // value.
-   fRedrawAfterSampleCount = static_cast<int>(kPixelsPerRedraw * spp);
-   // recalculate where the tick markers need to go.
-   fTicks.clear();
-   for (int i = 0; i < info.fLoopLength; i += info.fSampleRate)
-   {
-      int pixel = this->PixelForSample(i);
-      fTicks.add(pixel);
-   }
-   fTicks.add(this->getWidth() -1);
-}
-#endif
 
 void WaveformComponent::Clear()
 {
@@ -220,55 +168,6 @@ void WaveformComponent::LoopSizeChanged()
    this->resized();
 }
 
-
-#if 0
-void WaveformComponent::GetThumbnailData()
-{
-   // remember the first sample we're interested in, because the value
-   // is overwritten after we fetch thumbnail data
-   int startSample = static_cast<int>(fThumbData->fStart);
-   // ...and use that sample to know where the returned data is going to need 
-   // to go for display.
-   int pixelIndex = this->PixelForSample(startSample);
-   // if this is the lowest-numbered pixel that we've seen since we were last
-   // displayed, it's the start of our new dirty region that will need to 
-   // be displayed.
-#ifdef qLogPaint
-   String s("GTD: fDirtyStart was ");
-   s << fDirtyStart;
-#endif   
-   fDirtyStart = jmin(fDirtyStart, pixelIndex);
-
-   // get the data
-   fLoop->GetThumbnailData(fThumbData);
-
-   // ...and update the display buffer.
-   if (1)
-   {
-      ScopedLock sl(fMutex);
-      for (int i = 0; i < fThumbData->fPixelsReturned; ++i, ++pixelIndex)
-      {
-         // each value in the fPixelData array is absolute value 0..1 of the 
-         // max sample in the pertinent chunk. We need to convert that into a pair
-         // of pixel y-values that are symmetrical about the vertical center of this component.
-         // Left channel first, 
-         float pixelVal = fThumbData->GetPixelValue(0, i);
-         float deflection  = fFullScaleHeight * pixelVal;
-         fPixels.SetPoint(0, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
-         // ...then right channel.
-         pixelVal = fThumbData->GetPixelValue(1, i);
-         deflection  = fFullScaleHeight * pixelVal;
-         fPixels.SetPoint(1, pixelIndex, WaveformPoint(fCenterYPos - deflection, fCenterYPos + deflection));
-      }
-   }
-   fDirtyPixels += fThumbData->fPixelsReturned;
-#ifdef qLogPaint
-   s << " is now " <<  fDirtyStart << " fDirtyPixels = " << fDirtyPixels; 
-   Logger::outputDebugString(s);
-#endif   
-
-}
-#endif
 
 void WaveformComponent::paint(Graphics& g)
 {
