@@ -225,8 +225,18 @@ void LoopThumbnail::Update()
    // the last sample we can look at depending on whether we're getting the whole 
    // buffer or just what's arrived since the last time we updated...
    int endSample = fFullRefresh ? info.fLoopLength : info.fLoopSample;
+   if (endSample < startSample)
+   {
+      endSample = info.fLoopLength;
+   }
    int pixelsAvailable = static_cast<int>((endSample - startSample) / fSamplesPerPixel);
    int startPixel = this->PixelForSample(startSample);
+
+   std::cout << "THUMB - fStart: " << fStart << 
+                " startPix: " << startPixel <<
+                " pixAvailable: " << pixelsAvailable << std::endl;
+
+
    // we need at least a single pixel's worth of samples befor we do anything.
    if (pixelsAvailable >= 1)
    {
