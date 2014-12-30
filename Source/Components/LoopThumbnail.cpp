@@ -132,6 +132,7 @@ private:
 LoopThumbnail::LoopThumbnail(LoopProcessor* loop)
 :  fLoop(nullptr)
 ,  fStart(0.f)
+,  fStartPixel(0)
 ,  fSamplesPerPixel(1.0f)
 ,  fChannelCount(2)
 ,  fFullRefresh(true)
@@ -177,7 +178,7 @@ void LoopThumbnail::Resize(int width, int height)
      {
         LoopProcessor::LoopInfo info;
         fLoop->GetLoopInfo(info);
-        fSamplesPerPixel = 1.0f * info.fLoopLength / fWidth;
+        fSamplesPerPixel = static_cast<double>(info.fLoopLength) / fWidth;
      }
 
      this->FullRefresh();
@@ -191,6 +192,17 @@ int LoopThumbnail::PixelForSample(int sampleNum) const
    return static_cast<int>(sampleNum / fSamplesPerPixel);
 }
 
+bool LoopThumbnail::PixelRange(int index, int& low, int& hi)
+{
+   bool retval = false;
+   if ((index > 0) && (index < fWidth))
+   {
+      retval = true;
+      low = static_cast<int>(index * fSamplesPerPixel);
+      hi = static_cast<int>((index+1) * fSamplesPerPixel); 
+   }  
+   return retval;
+}
 
 int LoopThumbnail::NowPixel() const
 {
@@ -218,53 +230,34 @@ void LoopThumbnail::FullRefresh()
 
 void LoopThumbnail::Update()
 {
-   float accum = fStart;
-   int startSample = static_cast<int>(accum);
    LoopProcessor::LoopInfo info;
-   fLoop->GetLoopInfo(info);   
-   // the last sample we can look at depending on whether we're getting the whole 
-   // buffer or just what's arrived since the last time we updated...
+   fLoop->GetLoopInfo(info);    
    int endSample = fFullRefresh ? info.fLoopLength : info.fLoopSample;
-   if (endSample < startSample)
+   int endPixel = this->PixelForSample(endSample);
+   if (endPixel < fStart)
    {
-      endSample = info.fLoopLength;
+     // we wrapped around.
+     endPixel = fWidth;
    }
-   int pixelsAvailable = static_cast<int>((endSample - startSample) / fSamplesPerPixel);
-   int startPixel = this->PixelForSample(startSample);
-
-   std::cout << "THUMB - fStart: " << fStart << 
-                " startPix: " << startPixel <<
-                " pixAvailable: " << pixelsAvailable << std::endl;
-
-
-   // we need at least a single pixel's worth of samples befor we do anything.
-   if (pixelsAvailable >= 1)
+   if (endPixel > fStart)
    {
-      float pixelVal;
-      for (int pixelNum = 0; pixelNum < pixelsAvailable; ++pixelNum)
+      for (int x = fStart; x < endPixel; ++x)
       {
-         accum += fSamplesPerPixel;
-         int lastSample = static_cast<int>(accum);
-         lastSample = mMin(lastSample, info.fLoopLength);
-         for (int channel = 0; channel < fChannelCount; ++channel)
-         {
-            pixelVal = fLoop->GetThumbnailPoint(channel, startSample, lastSample);
-            this->SetPixel(channel, startPixel+pixelNum, pixelVal);
-
-         }
-         // move along to the enxt block of data...
-         startSample = lastSample;
-      }
-      // ..and save our position for the next update.
-      fStart = accum;
+          int low;
+          int hi;
+          if (this->PixelRange(x, low, hi))
+          {
+             for (int channel = 0; channel < fChannelCount; ++channel)
+             {
+               float pixelVal = fLoop->GetThumbnailPoint(channel, low, hi);
+               this->SetPixel(channel, x, pixelVal);              
+             }  
+          }  
+      } 
+      fStart = endPixel == fWidth ? 0 : endPixel;
+      fFullRefresh = false;
+      fNowSample = info.fLoopSample; 
    }
-   // if we hit the end of the loop, wrap for the next time!
-   if (fStart + 0.5 > info.fLoopLength)
-   {
-      fStart = 0.f;
-   }
-   fFullRefresh = false;
-   fNowSample = info.fLoopSample;
 }
 
 void LoopThumbnail::Draw(Graphics& g, Colour leftColor, Colour rightColor)
@@ -278,6 +271,9 @@ void LoopThumbnail::Draw(Graphics& g, Colour leftColor, Colour rightColor)
       right.AddPoint(x, this->GetPoint(1, x));
    }
 
+   left.ClosePath();
+   right.ClosePath();
+   
    g.setColour(leftColor);
    left.Draw(g);
 

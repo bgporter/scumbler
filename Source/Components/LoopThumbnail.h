@@ -115,6 +115,15 @@ public:
    int PixelForSample(int sampleNum) const;
 
    /**
+    * For a given pixel index, return the sample range that contributes to it. 
+    * @param  index pixel index, 0..width-1
+    * @param  low   First sample number represented by this pixel
+    * @param  hi    one sample past the last one used for this pixel.
+    * @return       bool, false if the index is out of range.
+    */
+   bool PixelRange(int index, int& low, int& hi);
+
+   /**
     * Get the pixel index (0..width-1) showing where 'now' is. 
     * @return pixel index.
     */
@@ -142,10 +151,13 @@ private:
     */
    float fStart;
 
+
+   int fStartPixel;
+
    /**
     * How many samples' worth of data are represented with each pixel on screen?
     */
-   float fSamplesPerPixel;
+   double fSamplesPerPixel;
 
    /**
     * Number of channels; always matches the output channel count of the loop that we're
