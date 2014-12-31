@@ -177,6 +177,7 @@ private:
     */
    Colour fBg; 
    Colour fFg;
+   Colour fTickLine;
    Colour fNowLine;
    Colour fMonoWave;
    Colour fLeftWave;

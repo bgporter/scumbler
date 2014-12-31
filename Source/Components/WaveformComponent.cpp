@@ -44,6 +44,7 @@ void WaveformComponent::UpdateStyle()
    fBg = fStyle->GetColor(palette::kLoopBg);
    fFg = fStyle->GetColor(palette::kLoopFg);
    fNowLine = fStyle->GetColor(palette::kLoopNow);
+   fTickLine = fStyle->GetColor(palette::kLoopTick);
    fMonoWave = fStyle->GetColor(palette::kLoopMonoWave);
    fLeftWave = fStyle->GetColor(palette::kLoopLeftWave);
    fRightWave = fStyle->GetColor(palette::kLoopRightWave);
@@ -171,50 +172,30 @@ void WaveformComponent::LoopSizeChanged()
 
 void WaveformComponent::paint(Graphics& g)
 {
-   LogPaint(this, g);
-   g.fillAll(fStyle->GetColor(palette::kLoopBg));
 
-   Rectangle<int> clip = g.getClipBounds();
-#ifdef qLogPaint
-   String c("  PAINT redrawing ");
-   c << clip.getX() << ".." << clip.getX() + clip.getWidth();
-   Logger::outputDebugString(c); 
-#endif   
-   g.setColour(fFg);
-   g.drawLine(0, fCenterYPos, this->getWidth(), fCenterYPos);
-
-   int nowPixel = jmax(0, fThumb.PixelForSample(fNow));
-#ifdef qLogPaint
-   String s("  PAINT Now = "); 
-   s << nowPixel;
-   Logger::outputDebugString(s);
-#endif   
-
-   int startIndex = clip.getX();
-   int endIndex = startIndex + clip.getWidth();
    int height = this->getHeight();
+   int width = this->getWidth();
+   LogPaint(this, g);
+   g.fillAll(fBg);
+
+   g.setColour(fFg);
+   g.drawLine(0, fCenterYPos, width, fCenterYPos);
+
+
 
    // draw tick markers.
-   g.setColour(fStyle->GetColor(palette::kLoopTick));
+   g.setColour(fTickLine);
    for (int tick = 0; tick < fTicks.size(); ++tick)
    {
       int tickPixel = fTicks.getUnchecked(tick);
-      int tickLeftX = tickPixel - 4;
-      int tickRightX = tickPixel + 4;
-      if ((tickRightX >= startIndex) && tickLeftX <= endIndex)
-      {
-         // top tick
-         g.drawLine(tickLeftX, 0, tickRightX, 0, 2);
-         //g.drawVerticalLine(tickPixel, 0, 8);
-         g.drawVerticalLine(tickPixel, 0, height);
-         // bottom tick
-         g.drawLine(tickLeftX, height, tickRightX, height, 2);
-         //g.drawVerticalLine(tickPixel, height-9, height);
-      }
+      g.drawVerticalLine(tickPixel, 0, height);
    }
 
 
    fThumb.Draw(g, fLeftWave, fRightWave);
+
+   g.setColour(fFg);
+   g.drawRect(0, 0, width, height, 3.0);
 
    // !!! draw NOW line. 
    g.setColour(fNowLine);
