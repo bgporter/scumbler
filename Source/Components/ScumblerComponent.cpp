@@ -34,7 +34,7 @@ ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
     : StyledComponent(style, "ScumblerComponent")
     , fScumbler(scumbler)
     , fTransport(nullptr)
-    , fFramesPerSecond(10)
+    , fFramesPerSecond(25)
 {
 
 
