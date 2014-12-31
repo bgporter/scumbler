@@ -75,6 +75,7 @@ void Palette::SetFactoryPalette(FactoryPalette p)
          this->SetColor(palette::kTrackMuteOn, Colours::green);
          this->SetColor(palette::kTrackSoloOff, Colours::white);
          this->SetColor(palette::kTrackSoloOn, Colours::red);
+         this->SetColor(palette::kTrackBorder, Colours::grey);
 
          this->SetColor(palette::kPluginFullActiveFg , palette::kAppFg);
          this->SetColor(palette::kPluginFullActiveBg , palette::kAppFg);

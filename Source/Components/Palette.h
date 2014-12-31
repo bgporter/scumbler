@@ -121,6 +121,7 @@ namespace palette
    const String kTrackMuteOn("TrackMuteOn");
    const String kTrackSoloOff("TrackSoloOff");
    const String kTrackSoloOn("TrackSoloOn");
+   const String kTrackBorder("TrackBorder");
 
    // Plugin slot colors
    const String kPluginFullActiveFg("FullPluginActiveForeground");
