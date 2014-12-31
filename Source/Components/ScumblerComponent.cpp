@@ -59,7 +59,9 @@ ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
         // adding track(s)
     for (int i = 0; i < fScumbler->GetNumTracks(); ++i)
     {
-      TrackComponent* tc = new TrackComponent(fStyle, fScumbler->GetTrack(i));
+      TrackComponent* tc = new TrackComponent(fStyle);
+      tc->SetTrackNumber(i+1, fScumbler->GetNumTracks());
+      tc->ConnectToTrack(fScumbler->GetTrack(i));
       fTracks.add(tc);
       this->addAndMakeVisible(tc);
     }
@@ -397,8 +399,9 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
     {
       TrackComponent* tc = fTracks.getUnchecked(i);
       Track* track = fScumbler->GetTrack(i);
-      tc->ConnectToTrack(track);
       tc->SetTrackNumber(i+1, trackCount);
+      tc->ConnectToTrack(track);
+
       this->SetTrackBounds(i, tc);
     }
 
