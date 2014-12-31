@@ -398,6 +398,7 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
       TrackComponent* tc = fTracks.getUnchecked(i);
       Track* track = fScumbler->GetTrack(i);
       tc->ConnectToTrack(track);
+      tc->SetTrackNumber(i+1, trackCount);
       this->SetTrackBounds(i, tc);
     }
 
