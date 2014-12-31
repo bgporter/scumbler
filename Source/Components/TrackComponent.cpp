@@ -288,6 +288,12 @@ void TrackComponent::paint (Graphics& g)
     }
 
 
+    if (fTrackNum < fTrackCount)
+    {
+        g.setColour(fStyle->GetColor(palette::kTrackBorder));
+        g.drawHorizontalLine(this->getHeight() - 2, 0, this->getWidth());
+    }
+
 
     //[/UserPaint]
 }
@@ -370,7 +376,7 @@ void TrackComponent::resized()
     fSolo->setBounds(soloBounds);
 
     // the delete button is at the upper right of each track.
-    Rectangle<int> deleteBounds(0, 0, kKnobHeight/2, kKnobHeight/2);
+    Rectangle<int> deleteBounds(0, 2, kKnobHeight/2, kKnobHeight/2);
     fDelete->setBounds(deleteBounds);
 
 
@@ -460,6 +466,12 @@ void TrackComponent::ConnectToTrack(Track* track)
 
 }
 
+
+void TrackComponent::SetTrackNumber(int number, int count)
+{
+   fTrackNum = number;
+   fTrackCount = count;
+}
 
 Track* TrackComponent::GetTrack() const
 {

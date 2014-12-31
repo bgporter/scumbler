@@ -103,6 +103,14 @@ public:
      */
     void ConnectToTrack(Track* track);    
 
+
+    /**
+     * Tell this track component what its track number is for display purposes. We 
+     * reset this every time tracks are added or deleted from the scumbler.
+     * @param number Track number (1-based)
+     * @param count  Total number of tracks.
+     */
+    void SetTrackNumber(int number, int count);
     /**
      * Returns a pointer to the track object within the Scumbler that's being represented 
      * on screen by this component (and its children). Note that this may change at runtime,
@@ -188,6 +196,9 @@ private:
     float fCenterLineYPos;
     float fCenterLineStartX;
     int fCenterLineStopX;
+
+    int fTrackNum;
+    int fTrackCount;
 
     //[/UserVariables]
 
