@@ -39,6 +39,8 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
     : StyledComponent(style, "TrackComponent")
     , fTrack(nullptr)
     , fCenterLineYPos(0)
+    , fTrackNum(0)
+    , fTrackCount(0)
 {
 
     //[UserPreSize]
@@ -66,8 +68,17 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
     this->addAndMakeVisible(fLoop);
 
 
-   this->ConnectToTrack(track);
 
+
+
+    fTitle = new Label("title", this->GetTrackName());
+    this->addAndMakeVisible(fTitle);
+    fTitle->setJustificationType (Justification::centredLeft);
+    fTitle->setEditable (false, true, false);
+
+    fTitle->addListener(this);
+
+   this->ConnectToTrack(track);
 
    addAndMakeVisible (fInputGain = new Slider ("Input gain"));
    fInputGain->setTooltip ("Input gain");
@@ -212,6 +223,12 @@ void TrackComponent::UpdateStyle()
    fOutputVolume->setColour(Slider::thumbColourId, fg);
    fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
 
+
+    fTitle->setFont(Font(fStyle->GetFontName(), 18.00f, Font::bold));
+    fTitle->setColour(Label::textColourId, fStyle->GetColor(palette::kAppFg));
+    fTitle->setColour(TextEditor::textColourId, fStyle->GetColor(palette::kAppFg));
+    fTitle->setColour(TextEditor::backgroundColourId, Colour (0x00000000));
+
    fActive->UpdateStyle();
    fDelete->UpdateStyle();
    fMute->UpdateStyle();
@@ -328,6 +345,7 @@ void TrackComponent::resized()
     int effectBlockYPos = trackHeight * 0.1;
     fCenterLineYPos = effectBlockYPos + (effectBlockHeight / 2.0);
 
+    fTitle->setBounds(2, 0, loopX-8, 19);
     
     fPreEffects->setBounds(preX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
     fLoop->setBounds(loopX, effectBlockYPos, loopWidth, pluginBlockHeight);
@@ -377,7 +395,7 @@ void TrackComponent::resized()
     fSolo->setBounds(soloBounds);
 
     // the delete button is at the upper right of each track.
-    Rectangle<int> deleteBounds(0, 2, kKnobHeight/2, kKnobHeight/2);
+    Rectangle<int> deleteBounds(this->getWidth() - 8, 2, kKnobHeight/2, kKnobHeight/2);
     fDelete->setBounds(deleteBounds);
 
 
@@ -461,6 +479,7 @@ void TrackComponent::ConnectToTrack(Track* track)
       fPostEffects->ConnectToPluginBlock(fTrack->GetPostEffectBlock());
       fLoop->ConnectToLoop(fTrack->GetLoop());
       this->UpdateColors();
+      fTitle->setText(this->GetTrackName(), NotificationType::dontSendNotification);
       this->repaint();
     }
   }
@@ -477,6 +496,24 @@ void TrackComponent::SetTrackNumber(int number, int count)
 Track* TrackComponent::GetTrack() const
 {
    return fTrack;  
+}
+
+
+String TrackComponent::GetTrackName() const
+{
+  String trackName = String::empty;
+   if (fTrack)
+   {
+      trackName = fTrack->GetName();
+   }
+
+   if (trackName == String::empty)
+   {
+      trackName = "untitled";
+   }
+
+   return String(fTrackNum) + ": " + trackName;
+
 }
 
 void TrackComponent::UpdateColors()
@@ -528,6 +565,15 @@ void TrackComponent::changeListenerCallback(ChangeBroadcaster* source)
   {
      this->UpdateStyle();
   }
+}
+
+void TrackComponent::labelTextChanged(Label* source)
+{
+   if (source == fTitle)
+   {
+     fTrack->SetName(fTitle->getText());
+     fTitle->setText(this->GetTrackName(), NotificationType::dontSendNotification);
+   }  
 }
 
 void TrackComponent::buttonClicked (Button* buttonThatWasClicked)

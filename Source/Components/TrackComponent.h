@@ -54,6 +54,7 @@ class LoopComponent;
 class TrackComponent  : public StyledComponent
                       //, public ChangeListener
                       , public ButtonListener
+                      , public LabelListener
                       , public Slider::Listener
 {
 public:
@@ -119,6 +120,15 @@ public:
      */
     Track* GetTrack() const;
 
+
+    /**
+     * REturn a track name for display for this track. **Q:** Why not just use 
+     * `fTrack->GetName()`? **A:** when a track is untitled, we display things differently
+     * than if the track has been given an explicit name.
+     * @return String to display.
+     *
+     */
+    String GetTrackName() const;
     /**
      * Update the colors used to draw this track component (and its children)
      */
@@ -129,6 +139,12 @@ public:
      * Called when something we're watching calls us back with a notification.
      */
     void changeListenerCallback(ChangeBroadcaster* source);
+
+    /**
+     * The user edited the title of this track.
+     * @param source [description]
+     */
+    void labelTextChanged(Label* source);
 
     /**
      * Called when the volume knob changes.
@@ -182,6 +198,7 @@ private:
     LoopComponent*  fLoop;
     
     // Child components (buttons, etc.)
+    Label* fTitle;
     Slider* fInputGain;
     Slider* fOutputVolume;
     Slider* fPan;
