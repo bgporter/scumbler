@@ -361,6 +361,7 @@ void TrackComponent::resized()
     fPan->setBounds(activeBounds);
     activeBounds.translate(kKnobHeight * 2, 0);
     activeBounds.setHeight(kKnobHeight / 2);
+    activeBounds.setWidth(kKnobHeight);
     fLeftEnabled->setBounds(activeBounds);
     activeBounds.translate(0, kKnobHeight / 2);
     fRightEnabled->setBounds(activeBounds);
