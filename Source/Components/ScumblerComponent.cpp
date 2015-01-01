@@ -322,6 +322,7 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
   // std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
   if (source == fScumbler)
   {
+    fTitle->setText(fScumbler->GetTitle(), NotificationType::dontSendNotification);
     bool isPlaying = fScumbler->IsPlaying();
     if (fPlaying != isPlaying)
     {

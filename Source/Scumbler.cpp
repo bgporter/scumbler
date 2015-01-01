@@ -110,6 +110,7 @@ tk::Result Scumbler::SetTitle(String title)
 {
    fTitle = title; 
    this->SetDirty();
+   this->sendChangeMessage();
    return tk::kSuccess;
 }
 
@@ -123,6 +124,8 @@ void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
       int formatVersion = e->getIntAttribute(tag::kFileFormat);
       int activeTrackIndex = e->getIntAttribute(tag::kActiveTrackIndex, 0);
       float outputVolume = e->getDoubleAttribute(tag::kOutputVolume, 0);
+      String name = e->getStringAttribute(tag::kName, String::empty);
+      this->SetTitle(name);
 
       // get the 'tracks' tag that contains all of the track data.
       XmlElement* tracks = e->getChildByName(tag::kTracks);
@@ -153,6 +156,7 @@ XmlElement* Scumbler::DumpXml(int formatVersion) const
 {
    XmlElement* node = new XmlElement(tag::kScumbler);
    node->setAttribute(tag::kFileFormat, formatVersion);
+   node->setAttribute(tag::kName, fTitle);
    node->setAttribute(tag::kActiveTrackIndex, fActiveTrackIndex);
    node->setAttribute(tag::kOutputVolume, fOutputVolume);
    XmlElement* trackContainer = node->createNewChildElement(tag::kTracks);
