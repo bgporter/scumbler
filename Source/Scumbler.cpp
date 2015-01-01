@@ -109,6 +109,7 @@ String Scumbler::GetTitle() const
 tk::Result Scumbler::SetTitle(String title)
 {
    fTitle = title; 
+   this->SetDirty();
    return tk::kSuccess;
 }
 
