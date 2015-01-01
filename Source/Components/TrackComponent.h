@@ -198,6 +198,7 @@ private:
     LoopComponent*  fLoop;
     
     // Child components (buttons, etc.)
+    Label* fNumLabel;
     Label* fTitle;
     Slider* fInputGain;
     Slider* fOutputVolume;

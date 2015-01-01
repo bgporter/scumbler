@@ -39,8 +39,8 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
     : StyledComponent(style, "TrackComponent")
     , fTrack(nullptr)
     , fCenterLineYPos(0)
-    , fTrackNum(0)
-    , fTrackCount(0)
+    , fTrackNum(1)
+    , fTrackCount(1)
 {
 
     //[UserPreSize]
@@ -71,12 +71,21 @@ TrackComponent::TrackComponent (UiStyle* style, Track* track)
 
 
 
+
     fTitle = new Label("title", this->GetTrackName());
     this->addAndMakeVisible(fTitle);
     fTitle->setJustificationType (Justification::centredLeft);
     fTitle->setEditable (false, true, false);
 
     fTitle->addListener(this);
+
+    fNumLabel = new Label("trackNum", "X:");
+    this->addAndMakeVisible(fNumLabel);
+    fNumLabel->setJustificationType(Justification::centredRight);
+    fNumLabel->setEditable(false);
+    // always stay to the left of the title.
+    fNumLabel->attachToComponent(fTitle, true);
+
 
    this->ConnectToTrack(track);
 
@@ -224,10 +233,16 @@ void TrackComponent::UpdateStyle()
    fOutputVolume->setColour(Slider::rotarySliderFillColourId, fg);
 
 
+    fNumLabel->setFont(Font(fStyle->GetFontName(), 18.00f, Font::bold));
+    fNumLabel->setColour(Label::textColourId, fStyle->GetColor(palette::kAppFg));
+
     fTitle->setFont(Font(fStyle->GetFontName(), 18.00f, Font::bold));
     fTitle->setColour(Label::textColourId, fStyle->GetColor(palette::kAppFg));
     fTitle->setColour(TextEditor::textColourId, fStyle->GetColor(palette::kAppFg));
     fTitle->setColour(TextEditor::backgroundColourId, Colour (0x00000000));
+
+
+
 
    fActive->UpdateStyle();
    fDelete->UpdateStyle();
@@ -345,8 +360,11 @@ void TrackComponent::resized()
     int effectBlockYPos = trackHeight * 0.1;
     fCenterLineYPos = effectBlockYPos + (effectBlockHeight / 2.0);
 
-    fTitle->setBounds(2, 0, loopX-8, 19);
     
+    fTitle->setBounds(26, 0, loopX-18, 19);
+    //fNumLabel->setBounds(2, 0, 10, 19);
+
+
     fPreEffects->setBounds(preX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
     fLoop->setBounds(loopX, effectBlockYPos, loopWidth, pluginBlockHeight);
     fPostEffects->setBounds(postX, effectBlockYPos, pluginBlockWidth, effectBlockHeight);
@@ -395,7 +413,7 @@ void TrackComponent::resized()
     fSolo->setBounds(soloBounds);
 
     // the delete button is at the upper right of each track.
-    Rectangle<int> deleteBounds(this->getWidth() - 8, 2, kKnobHeight/2, kKnobHeight/2);
+    Rectangle<int> deleteBounds(this->getWidth() - 12, 2, kKnobHeight/2, kKnobHeight/2);
     fDelete->setBounds(deleteBounds);
 
 
@@ -491,6 +509,8 @@ void TrackComponent::SetTrackNumber(int number, int count)
 {
    fTrackNum = number;
    fTrackCount = count;
+
+   fNumLabel->setText(String(number) + ":", NotificationType::dontSendNotification);
 }
 
 Track* TrackComponent::GetTrack() const
@@ -512,8 +532,7 @@ String TrackComponent::GetTrackName() const
       trackName = "untitled";
    }
 
-   return String(fTrackNum) + ": " + trackName;
-
+   return trackName;
 }
 
 void TrackComponent::UpdateColors()

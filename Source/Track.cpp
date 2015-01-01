@@ -185,6 +185,7 @@ void Track::SetName(const String& name)
 {
    fName = name;
    //std::cout << "Track::SetName->sendChangeMessage" << std::endl;
+   fScumbler->SetDirty();
    this->sendChangeMessage();
 }
 
