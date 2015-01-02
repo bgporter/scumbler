@@ -1,0 +1,15 @@
+html
+{
+   background-color: #99e5ff;
+   font-family: Helvetica, Verdana, Arial, sans-serif;
+   font-size: smaller;   
+}
+
+.content
+{
+   background-color: whitesmoke;
+   margin-left: 6em;
+   margin-right: 10em;
+   padding: 3em;
+
+}
