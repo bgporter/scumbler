@@ -3,8 +3,9 @@
 #include "PluginBlockComponent.h"
 #include "ComponentDefs.h"
 
-PluginBlockComponent::PluginBlockComponent(PluginBlock* plugins)
-:  fPlugins(nullptr)
+PluginBlockComponent::PluginBlockComponent(TrackComponent::PluginColors const& colors, PluginBlock* plugins)
+:  fColors(colors)
+,  fPlugins(nullptr)
 {
    if (nullptr != plugins)
    {
@@ -15,7 +16,7 @@ PluginBlockComponent::PluginBlockComponent(PluginBlock* plugins)
 
 PluginBlockComponent::~PluginBlockComponent()
 {
-
+   this->ConnectToPluginBlock(nullptr);
 }
 
 void PluginBlockComponent::paint (Graphics& g)
@@ -113,22 +114,26 @@ void PluginBlockComponent::ConnectToPluginBlock(PluginBlock* plugins)
    {
       // connect to our new source of data.
       fPlugins->addChangeListener(this);
-      if (fPlugins->Size() != fSlots.size())
+      // on first run, we need to create the slot components to use.
+      int needToCreate = fPlugins->Size() - fSlots.size();
+      for (int i = 0; i < needToCreate; ++i)
       {
-         fSlots.clear();
-         for (int i = 0; i < fPlugins->Size(); ++i)
-         {
-            PluginSlotComponent* slot = new PluginSlotComponent(fPlugins, i);
-            fSlots.add(slot);
-            this->addAndMakeVisible(slot);
-            //this->SetSlotBounds(i, slot);
-         }
+         PluginSlotComponent* slot = new PluginSlotComponent(fColors, fPlugins, i);
+         fSlots.add(slot);
+         this->addAndMakeVisible(slot);
+      }
+    
+      // ...and now, we need to actually set the slot component data correctly.
+      for (int i = 0; i < fPlugins->Size(); ++i)
+      {
+         fSlots[i]->SetData(fPlugins, i);
       }
    }
 }
 
 void PluginBlockComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+  std::cout << "PluginBlockComponent::changeListenerCallback" << std::endl;
    if (source == fPlugins)
    {
       this->repaint();

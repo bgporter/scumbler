@@ -8,8 +8,11 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "PluginConnector.h"
+#include "XmlPersistent.h"
+
 
 class GainProcessor;
+class SampleCounterProcessor;
 class Track;
 
 
@@ -39,7 +42,9 @@ float GainToDb(float gain);
  * - writing output to file, etc.
  */
 class Scumbler  : public ChangeBroadcaster
+                , public ChangeListener
                 , public PluginConnector
+                , public XmlPersistent
 {
 public:
 #ifdef qUnitTests
@@ -64,28 +69,97 @@ public:
    ~Scumbler();
 
 
+
    /**
-    * \name TogglePlay
-    * \brief Switches the scumbler object between the play and pause states.
+    * Connect this scumbler to the playback mechanism and start handling audio.
+    * @return kSuccess or kAlreadyStarted.
+    */
+   tk::Result StartProcessing();
+
+   /**
+    * Disconnect this scumbler from the audio playback mechanism and stop processing audio.
+    * @return kSuccess or kAlreadyStopped.
+    */
+   tk::Result StopProcessing();
+
+
+   /**
+    * Get the title of this scumbler object.
+    * @return the title/name.
+    */
+   String GetTitle() const; 
+
+   /**
+    * Change the title of this scumbler object.
+    * @return success/fail
+    */
+   tk::Result SetTitle(String title);
+
+   /**
+    * Load this object from the provided XmlElement object. If this object owns 
+    * objects of classes that are also XmlPersistent, call those recursively.
+    * @param e      XmlElement object with our data to restore .
+    * @param errors If we encounter errors, we add strings describing those errors
+    *               to this array. 
+    */
+   void LoadXml(XmlElement* e, StringArray& errors, int formatVersion);
+
+   /**
+    * Create a new XmlElement object and fill it with our contents (and recursively
+    * our children if appropriate)
+    * @return The XmlElement to write to disk.
+    */
+   XmlElement* DumpXml(int formatVersion) const;
+
+   /**
+    * Called when something needs to notify us of a change. Initially, 
+    * this is only used when Track objects need to tell us that they
+    * want to be deleted.
+    * @param source object that's notifying us.
+    */
+   void changeListenerCallback(ChangeBroadcaster* source);
+
+   /**
+    * Switches the scumbler object between the play and pause states.
     */
     void TogglePlay();
    /**
-    * \name IsPlaying
-    * \brief returns bool indicating whether the Scumbler is processing 
+    *  returns bool indicating whether the Scumbler is processing 
     *   audio right now.
     */
    bool IsPlaying() const;
 
    /**
-    * \name Reset
-    * \brief Do a complete reset on the processor graph. 
+    * Set (or clear) the dirty state of this object.
+    * @param isDirty Should we set or clear (default = set).
+    */
+   void SetDirty(bool isDirty=true);
+
+
+   /**
+    * Returns true if the scumbler has been changed since the last time it was
+    * saved.
+    * @return true/false.
+    */
+   bool IsDirty() const;
+
+   /**
+    * Do we need to just update the time output? 
+    * @return bool.
+    */
+   bool UpdateTime();
+
+   /**
+    * Do a complete reset on the processor graph. 
+    * @param addFirstTrack Should we add a single empty track to the scumbler so 
+    *                      it can start working right away? 
     *
     * After removing (and therefore deleting) all of the processor nodes that 
     * were added to the graph, creates new input & output processors and adds them.
     * **NOTE** that the Scumbler object should be reset after creation, after the 
     * Audio device manager is initialized.
     */
-    void Reset();
+    void Reset(bool addFirstTrack=false);
 
     /**
      * Set the scumbler's master output volume. 
@@ -99,6 +173,12 @@ public:
      */
     float GetOutputVolume() const;
 
+    /**
+     * Get the number of samples that we've processed while in play mode.
+     * @return # of samples, as an unsigned long. 
+     */
+    uint64 GetSampleCount() const;
+
 
     /**
      * @name PluginConnector operations
@@ -106,8 +186,7 @@ public:
     ///@{
 
    /**
-     * \name Connect
-     * \brief Connect a source node to a destination node in the graph.
+     * Connect a source node to a destination node in the graph.
      * @return tk::Result code indicating success or the reason for failure.
      */
     virtual tk::Result Connect(NodeId source, NodeId dest);
@@ -124,7 +203,7 @@ public:
     tk::Result Disconnect(NodeId source, NodeId dest);
 
     /**
-     * Insert 'newNode' in the graph inbetween 'before' and 'after'.
+     * Insert 'newNode' in the graph in between 'before' and 'after'.
      * @param  before  The node that 'newNode' should be inserted after. The 
      *                 special value Scumbler::kInput can be used to connect 
      *                 newNode to the input node.
@@ -133,9 +212,13 @@ public:
      * @param  after   The node that 'newNode' should be inserted before. The 
      *                 special value Scumbler::kOutput can be used to connect the 
      *                 newNode to the Scumbler's output.
+     * @param disconnect Do we need to disconnect before+after before inserting newNode?
+     *                   This is useful when we're adding a track -- the input and output nodes
+     *                   are no longer directly connected, so there's no reason to disconnect
+     *                   them from each other first. 
      * @return         tk::Result
      */
-    tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after);
+    tk::Result InsertBetween(NodeId before, NodeId newNode, NodeId after, bool disconnect=true);
 
     /**
      * Disconnect the node `nodetoRemove` that's connected between `before` and 
@@ -150,9 +233,16 @@ public:
      *                      be connected to `after`.
      * @param  deleteNode   Should the node be deleted from the graph after it's 
      *                      disconnected?
+     * @param  reconnect    Should `before` and `after` be reconnected to each other after 
+     *                      we disconnect `nodeToRemove`? (Useful when deleting a track -- we 
+     *                      don't want the input and output to be directly connected again.)
      * @return              tk::Result
      */
-    tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode=false);
+    tk::Result RemoveBetween(NodeId before, NodeId nodeToRemove, NodeId after, bool deleteNode, 
+      bool reconnect=true);
+
+
+
     /**
      * Insert the provided AudioProcessor object into the Scumbler's filter 
      * graph.  The Scumbler takes ownership of the object, and it should 
@@ -195,6 +285,17 @@ public:
     */
    AudioProcessorEditor* GetEditorForNode(NodeId node, bool useGeneric);
 
+
+   /**
+    * Fill a memory block with the current state of the requested node.
+    * @param  node id of the node we're interested in
+    * @param  m    Memory block to fill
+    * @return      success/fail.
+    */
+   tk::Result GetStateInformationForNode(NodeId node, MemoryBlock& m);
+
+   tk::Result SetStateInformationForNode(NodeId node, MemoryBlock& m);
+
    /**
     * Fill in a PluginDescription object for the specified node. We use this when 
     * saving a Scumbler to disk.
@@ -233,6 +334,53 @@ public:
     tk::Result DeleteTrack(int index);
 
     /**
+     * Set the track at the specified index as active, deactivating whichever track had
+     * been active before that.
+     * @param  index Index of the track to activate
+     * @return       Success/fail status.
+     */
+    tk::Result ActivateTrack(int index);
+
+    /**
+     * Activate the track pointed to.
+     * @param  track Pointer to the track to activate (must exist and be present in 
+     *               our list of tracks)
+     * @return       success/fail
+     */
+    tk::Result ActivateTrack(Track* track);
+
+    /**
+     * Activate the next track in the list, wrapping around at the end. Doesn't
+     * do anything if there aren't at least 2 tracks.
+     * @return success/fail status
+     */
+    tk::Result ActivateNextTrack();
+
+    /**
+     * Activate the previous track, wrapping around. 
+     * @return success/fail
+     */
+    tk::Result ActivatePreviousTrack();
+
+    /**
+     * Called from inside the Track::SetActive() implementation. The track object that's 
+     * being activated lets the Scumbler know that this is happening. The Scumbler 
+     * then looks for the current active track and deactivates it, updating the index of 
+     * the currently active track
+     * @param  trackBeingActivated Pointer to the track that's being activated.
+     * @return                     success/fail.
+     */
+    tk::Result TrackIsActivating(Track* trackBeingActivated);
+
+    /**
+     * Return the index of the currently active track, or -1 if there's no
+     * track currently active (shouldn't happen)
+     * @return zero-based track index.
+     */
+    int GetActiveTrackIndex() const;
+
+
+    /**
      * Set a track as being soloed. Pass in nullptr to have no tracks soloed. Individual 
      * tracks can process their output by calling scumbler->GetSoloTrack(). If that 
      * returns nullptr, no tracks are soloed, and they can output normally. If the return 
@@ -257,6 +405,14 @@ public:
      * @return success/fail.
      */
     tk::Result ResetAllTracks(); 
+
+    /**
+     * Reset the loop pointers of all tracks to the specified position (default = 
+     * beginning), but *don't* do anything to the loop contents   .
+     * @param  loopPos Sample#     
+     * @return         success/fail.
+     */
+    tk::Result SeekAllTracksAbsolute(int loopPos=0);
 
     /**
      * Move an existing track to a different index in the array. 
@@ -302,14 +458,12 @@ public:
 
 protected:
   /**
-    * \name Play
-    * \brief Start audio through our processor graph.
+    * Start audio through our processor graph.
     */
   void Play();
 
   /**
-   * \name Pause
-   * \brief Stop audio playback.
+   * Stop audio playback (but keep the loop pointers where they are)
    */
   void Pause();
 
@@ -373,10 +527,29 @@ private:
 
    AudioPluginFormatManager& fPluginManager;
 
+
+
+   String fTitle;
+
+   /**
+    * Are we processing audio right now?
+    */
+   
+   bool fProcessing;
    /**
     * Are we playing right now?
     */
    bool fPlaying;
+
+   /**
+    * Do changes need to be saved?
+    */
+   bool fDirty;
+
+   /**
+    * Set true when we need to update the time display (so we can avoid repainting the entire window.
+    */
+   bool fTimeUpdate;
 
    KnownPluginList::SortMethod fPluginSort;
 
@@ -385,7 +558,9 @@ private:
     */
    NodeId fInputNode;
    NodeId fOutputNode;
-   NodeId fGainNode;
+
+   SampleCounterProcessor* fSampleCount;
+   NodeId fSampleCountNode;
 
 
    /**
@@ -397,6 +572,11 @@ private:
    Track* fSoloTrack; 
 
    /**
+    * Index of the currently active track. PERSISTED
+    */
+   int fActiveTrackIndex;
+
+   /**
     * Our current output volume in dB (default = 0)
     */
    float fOutputVolume;
@@ -406,6 +586,10 @@ private:
     * to the filter graph.
     */
    GainProcessor* fOutputGain;
+   /**
+    * NodeId of the output GainProcessor.
+    */
+   NodeId fGainNode;
 
 };
 

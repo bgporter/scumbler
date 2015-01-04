@@ -8,6 +8,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "Loop.h"
+#include "StyledComponent.h"
+#include "TrackComponent.h"
 #include "WaveformComponent.h"
 
 
@@ -29,16 +31,18 @@ protected:
 private:
 };
 
-class LoopComponent  :  public Component 
-                     ,  public ChangeListener
+class LoopComponent  :  public StyledComponent
+                     //,  public ChangeListener
                      ,  public ButtonListener
                      ,  public Label::Listener
                      ,  public Slider::Listener
 {
 public:
-   LoopComponent(LoopProcessor* loop);
+   LoopComponent(UiStyle* style, LoopProcessor* loop);
 
    ~LoopComponent();
+
+   void UpdateStyle();
 
    /**
     * Wire this component up at runtime to the LoopProcessor we'll be representing on screen.
@@ -79,6 +83,7 @@ public:
 
 private:
    LoopProcessor* fLoop;
+   UiStyle* fStyle;
    Label* fDuration;
    Slider*  fFeedback;
    WaveformComponent* fWaveform;

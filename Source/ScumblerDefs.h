@@ -21,7 +21,11 @@
 // simple macro fn to round a float to an int
 #define mRoundInt(f) static_cast<int>((f) + 0.5)
 
+#define mMin(x, y) (x) < (y) ? (x) : (y)
+#define mMax(x, y) (x) < (y) ? (y) : (x)
 
+
+#define mMsg(msg) std::cout << (msg) << std::endl
 /**
  * @typedef NodeId
  *
@@ -29,6 +33,11 @@
  */
 typedef uint32  NodeId;
 
+
+/**
+ * Namespace to hold constant values and enums that need to be available across
+ * the entire project.
+ */
 namespace tk
 {
   /**
@@ -50,6 +59,8 @@ namespace tk
       kSlotFull,            /**< Attempting to put something into a full slot */  
       kPluginLoadError,     /**< error loading a plugin; check error string */
       kNotWhenPlaying,      /**< this operation can't happen when we're playing. */
+      kAlreadyStarted,      /**< trying to start something that's already started*/
+      kAlreadyStopped,      /**< trying to stop something that's already stopped. */
 
    };
 
@@ -63,8 +74,55 @@ namespace tk
        kOutput      = 0xfffffffe   /**< our output node. */
    }; 
 
+
+   /**
+    * @enum Specify left/right/both.
+    */
+   enum ChannelEnable
+   {
+      kNoChannel = 0x00,
+      kLeftChannel = 0x01,
+      kRightChannel = 0x02,
+      kStereo = 0x03
+   };
+
+
+
 };
 
+/**
+ * Namespace to hold the string literals that we use when serializing Scumbler
+ * objects to XML. 
+ */
+namespace tag
+{
 
+   const String kActive("active");
+   const String kActiveTrackIndex("activeTrackIndex");
+   const String kChannels("channels");
+   const String kFileFormat("format");
+   const String kInputGain("inputGain");
+   const String kLoop("loop");
+   const String kLoopDuration("duration");
+   const String kLoopFeedback("feedback");
+   const String kLoopPosition("loopPosition");
+   const String kMuted("muted");
+   const String kName("name");
+   const String kOutputVolume("outputVolume");
+   const String kPan("pan");
+   const String kPlugin("PLUGIN"); // all caps because JUCE does this one.
+   const String kPostBlock("post");
+   const String kPreBlock("pre");
+   const String kScumbler("scumbler");
+   const String kSlot("slot");
+   const String kSlots("slots");
+   const String kSoloed("soloed");
+   const String kState("state");
+   const String kTitle("title");
+   const String kTrack("track");
+   const String kTracks("tracks");
+
+
+};
 
 #endif // this must be the last line in this file.

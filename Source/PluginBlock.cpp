@@ -38,6 +38,95 @@ PluginBlock::~PluginBlock()
    }
 }
 
+void PluginBlock::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
+{
+   XmlElement* slots = e->getChildByName(tag::kSlots);
+   if (slots)
+   {
+      int slotIndex = 0;
+      forEachXmlChildElement(*slots, slot)
+      {
+         XmlElement* plugin = slot->getChildByName(tag::kPlugin);
+         if (plugin)
+         {
+            PluginDescription pd;
+            if (pd.loadFromXml(*plugin))
+            {
+               String msg;
+               tk::Result result = this->LoadPluginAtIndex(slotIndex, pd, msg);
+               if (tk::kSuccess == result)
+               {
+                  // the plugin is loaded in the right place; now we need to restore its 
+                  // state as we last left it.
+                  PluginInfo info = this->PluginInSlot(slotIndex);
+                  XmlElement* state = slot->getChildByName(tag::kState);
+                  if (state)
+                  {
+                     MemoryBlock m;
+                     m.fromBase64Encoding(state->getAllSubText());
+                     result = fScumbler->SetStateInformationForNode(info.id, m);
+                     if (tk::kSuccess != result)
+                     {
+                        errors.add("Unable to restore plugin state for " + pd.name);
+                     }
+                  }
+                  else
+                  {
+                     errors.add("State information for " + pd.name + " missing from file.");
+                  }
+               }
+               else
+               {
+                  errors.add("Unable to load " + pd.name);
+               }
+            }
+            else
+            {
+               errors.add("Error getting plugin info.");
+            }
+
+         }
+         ++slotIndex;
+      }
+
+   }
+   else 
+   {
+      errors.add("File format error -- missing <slots>");
+   }
+}
+
+
+XmlElement* PluginBlock::DumpXml(int formatVersion) const
+{
+   XmlElement* node = new XmlElement(tag::kSlots);
+   for (int i = 0; i < this->Size(); ++i)
+   {
+      XmlElement* slotNode = node->createNewChildElement(tag::kSlot);
+      PluginInfo slotInfo = this->PluginInSlot(i);
+      if (tk::kInvalidNode != slotInfo.id)
+      {
+         // there's a real plugin here -- store its description and state.
+         PluginDescription pd;
+         tk::Result result = fScumbler->GetPluginDescriptionForNode(slotInfo.id, pd);
+         if (tk::kSuccess == result)
+         {
+            slotNode->addChildElement(pd.createXml());
+         }
+
+         MemoryBlock m;
+         result = fScumbler->GetStateInformationForNode(slotInfo.id, m);
+         if (tk::kSuccess == result)
+         {
+            XmlElement* state = slotNode->createNewChildElement(tag::kState);
+            state->addTextElement(m.toBase64Encoding());
+         }
+      }
+   }
+
+   return node;
+}
+
 int PluginBlock::Size() const
 {
    return fPlugins.size();
@@ -60,6 +149,8 @@ tk::Result PluginBlock::InsertPluginAtIndex(PluginInfo plugin, int index)
             if (tk::kSuccess == retval)
             {
                fPlugins.set(index, plugin); 
+   //std::cout << "PluginBlock::InsertPluginAtIndex->sendChangeMessage" << std::endl;
+               fScumbler->SetDirty();
                this->sendChangeMessage();
             }
          }
@@ -94,6 +185,8 @@ tk::Result PluginBlock::RemovePluginAtIndex(int index, bool deleteNode)
             {
                fPlugins.set(index, PluginInfo());
             }
+            //std::cout << "PLuginBlock::RemovePluginAtIndex->sendChangeMessage" << std::endl;
+            fScumbler->SetDirty();
             this->sendChangeMessage();
          }
          else

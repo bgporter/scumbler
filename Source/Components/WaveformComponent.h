@@ -9,88 +9,69 @@
 
 
 #include "Loop.h"
+#include "LoopThumbnail.h"
+#include "StyledComponent.h"
+#include "TrackComponent.h"
 
 class Track;
 
 
-/**
- * @struct WaveformPoint
- * The Waveform component keeps an array of these structures to cache the 
- * high/low points (y-values) to be drawn at that pixel location, so our draw loop
- * will look something like:
- * for xPos in range(0, width):
- *    drawLine(xPos, wavePoints[xPos].top, xPos, wavePoints[xPos].bottom) 
- *
- * ...obviously there's a lot more logic in there for invalidating regions, 
- * calculating the values, etc. We use the compiler's copy ctor, op=, etc.
- *
- * Note that the values here are yValues relative to the component, and should be 
- * symmetrical w/r/t the center line of the component. We should do those calculations
- * as rarely as possible. 
- */
-struct WaveformPoint
+#if 0
+class WaveformPointArray
 {
 public:
-   WaveformPoint(float top_ = 0, float bottom_ = 0)
-   :  top(top_)
-   ,  bottom(bottom_)
-   {
-     // empty.
-   }
+   /**
+    * Create an empty array of points.
+    */
+   WaveformPointArray(int channels);
 
-   ~WaveformPoint()
-   {
-      // empty.
-   }
-
-   WaveformPoint(const WaveformPoint& other)
-   :  top(other.top)
-   ,  bottom(other.bottom)
-   {
-      // empty.  
-   }
-
+   ~WaveformPointArray();
 
    /**
-    * See http://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
-    * for an explanation of why we take this parm by val and not by ref.
+    * Resize the array to hold (fChannels * width) WaveformPoints.
+    * @param width Number of points to hold.
     */
-   WaveformPoint& operator=(WaveformPoint rhs)
-   {
-      swap(*this, rhs);
-      return *this;
-   }
+   void Resize(int width);
+
+   /**
+    * Set a new value for the point at (channel, pixel)
+    * @param channel Channel num
+    * @param pixel   Pixel index
+    * @param point   Ref to a waveform point.
+    */
+   void SetPoint(int channel, int pixel, WaveformPoint const& point);
+
+   /**
+    * Get the waveform point data for the specified (channel, pixel)
+    * @param  channel hannel num
+    * @param  pixel   pixel index
+    * @return         WaveFormPoint object.
+    */
+   WaveformPoint GetPoint(int channel, int pixel) const;
+
+   /**
+    * Get the number of channels to draw.
+    * @return the number of channels (0..1)
+    */
+   int ChannelCount() const { return fChannelCount;};
 
 
-
-   friend void swap(WaveformPoint& first, WaveformPoint& second)
-   {
-      using std::swap;
-      
-      swap(first.top, second.top);
-      swap(first.bottom, second.bottom); 
-   }
-
-
-   void Set(float top_, float bottom_)
-   {
-      top = top_;
-      bottom = bottom_;
-   }
-
-public:
-  float top;
-  float bottom;
+private:
+   int fChannelCount;
+   Array<WaveformPoint> fPoints;
 
 };
 
-class WaveformComponent :  public Component
-                        ,  public ChangeListener   
+#endif
+
+class WaveformComponent :  public StyledComponent
 {
 public:
-   WaveformComponent(LoopProcessor* loop);
+   WaveformComponent(UiStyle* style, LoopProcessor* loop, const String& name=String::empty);
 
    ~WaveformComponent();
+
+   void UpdateStyle();
 
    /**
     * Connect at runtime to a specific loop processor. This is useful because 
@@ -112,11 +93,13 @@ public:
     */
    void resized();
 
+#if 0
    /**
     * Whenever the width of this component changes or the loop duration changes, 
     * we need to recalculate the number of samples represented by a single pixel. 
     */
    void CalculateSamplesPerPixel();
+#endif
 
    /**
     * Refresh the pixel buffer from the loop and redraw the entire component.
@@ -133,6 +116,7 @@ public:
     */
    void LoopSizeChanged();
 
+#if 0
    /**
     * Call into the LoopProcessor to get any updated waveform data that we 
     * need for display; 
@@ -140,30 +124,20 @@ public:
     * repainted appropriately.
     */
    void GetThumbnailData();
-
+#endif
+   
    /**
     * Called by JUCE when we need to paint ourself.
     * @param g Graphics object to use to draw.
     */
    void paint(Graphics& g);
 
-
-private:
-  /**
-   * Returns the pixel x-index that corresponds to the passed-in sample. Doesn't do much 
-   * to sanity-check the input parameter, so use with caution.
-   * @param  sampleNum The index of the sample in the loop processor
-   * @return           X-index of the corresponding pixel.
-   */
-  int PixelForSample(int sampleNum);
-
-
 private:
    LoopProcessor* fLoop;
    LoopProcessor::LoopInfo  fLoopInfo;
-   ScopedPointer<LoopProcessor::ThumbnailData> fThumbData;
-   // for the moment, a single array; not one per channel.
-   Array<WaveformPoint> fPixels;
+   //ScopedPointer<LoopProcessor::ThumbnailData> fThumbData;
+   //WaveformPointArray fPixels;
+   LoopThumbnail fThumb;
 
    float fFullScaleHeight;  /**< scale factor for a wave val == 1.0 */
    float fCenterYPos; 
@@ -198,6 +172,22 @@ private:
     */
    Array<int> fTicks;
 
+   /**
+    * Let's try caching the colors that we use. maybe the dict lookups are costly when we do them all the time...
+    */
+   Colour fBg; 
+   Colour fFg;
+   Colour fTickLine;
+   Colour fNowLine;
+   Colour fMonoWave;
+   Colour fLeftWave;
+   Colour fRightWave;
+
+
+   /**
+    * Protect the thumbnail data from read/write collisions.
+    */
+   CriticalSection fMutex;
 
 };
 

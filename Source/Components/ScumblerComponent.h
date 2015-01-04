@@ -29,6 +29,7 @@
 
 #include "../Commands.h"
 #include "JuceHeader.h"
+#include "StyledComponent.h"
 #include "TrackComponent.h"
 #include "TransportComponent.h"  
 
@@ -41,18 +42,19 @@
                                                                     //[Comments]
   @class ScumblerComponent
 
-  We use a MVC design for the app here. The ScumblerComponent acts as the model
+  We use a MVC design for the app here. The ScumblerComponent acts as the controller
   and the view, while the Scumbler itself functions as the model.
                                                                     //[/Comments]
 */
-class ScumblerComponent  : public Component,
+class ScumblerComponent  : public StyledComponent,
                            public ApplicationCommandTarget,
-                           public ChangeListener,
-                           public ButtonListener
+                           public ButtonListener,
+                           public LabelListener, 
+                           public Timer
 {
 public:
     //==============================================================================
-    ScumblerComponent (Scumbler* scumbler);
+    ScumblerComponent (UiStyle* style, Scumbler* scumbler);
     ~ScumblerComponent();
 
     //==============================================================================
@@ -93,6 +95,20 @@ public:
      */
     void changeListenerCallback(ChangeBroadcaster* source);
 
+    /**
+     * Called when our timer interval elapses.
+     */
+    void timerCallback();
+
+    void labelTextChanged(Label* source);
+
+    bool keyPressed(const KeyPress& key);
+
+    /**
+     * Make any changes needed to reflect the current setting of our UiStyle object.
+     */
+    void UpdateStyle();
+
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -107,6 +123,17 @@ private:
     OwnedArray<TrackComponent>  fTracks;
     TransportComponent* fTransport;
     TooltipWindow fTooltipWindow;
+    ScopedPointer<Label> fTitle;
+
+    // measuring redraw frequency during playback
+    Time fPlaybackStart;
+    int fRepaintCount;
+    bool fPlaying;
+
+    /**
+     * How fast should the timer update?
+     */
+    int fFramesPerSecond;
     //[/UserVariables]
 
     //==============================================================================

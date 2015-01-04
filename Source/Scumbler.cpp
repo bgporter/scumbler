@@ -5,8 +5,9 @@
 #include <math.h>
 
 #include "Commands.h"
-#include "Processors/Passthrough.h"
 #include "Processors/Gain.h"
+#include "Processors/Passthrough.h"
+#include "Processors/SampleCounter.h"
 #include "Track.h"
 
 
@@ -39,32 +40,168 @@ Scumbler::Scumbler(AudioDeviceManager& deviceManager,
                   AudioPluginFormatManager& pluginManager)
 : fDeviceManager(deviceManager)
 , fPluginManager(pluginManager)
+, fTitle("Untitled")
+, fProcessing(false)
 , fPlaying(false)
+, fDirty(false)
+, fTimeUpdate(false)
 , fPluginSort(KnownPluginList::defaultOrder)
 , fInputNode(tk::kInvalidNode)
 , fOutputNode(tk::kInvalidNode)
-, fGainNode(tk::kInvalidNode)
+, fSampleCount(nullptr)
 , fSoloTrack(nullptr)
+, fActiveTrackIndex(-1)
 , fOutputVolume(0.0f) 
+, fGainNode(tk::kInvalidNode)
 {
 #ifdef qUnitTests
-   jassert(nullptr == instance);
+   //jassert(nullptr == instance);
    // save the pointer to this scumbler instance as 'the' scumbler instance.
    instance = this;
 #endif
-   fPlayer.setProcessor(&fGraph);
-   fDeviceManager.addAudioCallback(&fPlayer);
+   this->StartProcessing();
    this->Reset();
    this->SetOutputVolume(fOutputVolume);
+   fDirty = false;
 }
 
 Scumbler::~Scumbler()
 {
    this->removeAllChangeListeners();
-   fDeviceManager.removeAudioCallback(&fPlayer);
-   fPlayer.setProcessor(nullptr);
+   this->StopProcessing();
    fGraph.clear();
+   std::cout << "Exiting Scumbler dtor" << std::endl;
 }
+
+
+tk::Result Scumbler::StartProcessing()
+{
+   tk::Result retval = tk::kAlreadyStarted;
+   if (!fProcessing)
+   {
+      fPlayer.setProcessor(&fGraph);
+      fDeviceManager.addAudioCallback(&fPlayer);
+      fProcessing = true;
+   }
+   return retval;
+
+}
+
+
+tk::Result Scumbler::StopProcessing()
+{
+   tk::Result retval = tk::kAlreadyStopped;
+   if (fProcessing)
+   {
+      fDeviceManager.removeAudioCallback(&fPlayer);
+      fPlayer.setProcessor(nullptr);
+      fProcessing = false;
+      retval = tk::kSuccess;
+   }
+   return retval;
+}
+
+String Scumbler::GetTitle() const
+{
+   return fTitle;
+}
+
+tk::Result Scumbler::SetTitle(String title)
+{
+   fTitle = title; 
+   this->SetDirty();
+   this->sendChangeMessage();
+   return tk::kSuccess;
+}
+
+
+void Scumbler::LoadXml(XmlElement* e, StringArray& errors, int formatVersion)
+{
+   if (e->hasTagName(tag::kScumbler))
+   {
+      this->Reset(false);
+      // retrieve the scumbler values, but don't do anything with them yet.
+      int formatVersion = e->getIntAttribute(tag::kFileFormat);
+      int activeTrackIndex = e->getIntAttribute(tag::kActiveTrackIndex, 0);
+      float outputVolume = e->getDoubleAttribute(tag::kOutputVolume, 0);
+      String name = e->getStringAttribute(tag::kName, String::empty);
+      this->SetTitle(name);
+
+      // get the 'tracks' tag that contains all of the track data.
+      XmlElement* tracks = e->getChildByName(tag::kTracks);
+      int trackIndex = 0;
+      forEachXmlChildElement(*tracks, track)
+      {
+         this->AddTrack();
+         Track* t = this->GetTrack(trackIndex++);
+         t->LoadXml(track, errors, formatVersion);
+      }
+      // now that all the tracks are loaded, we can activate one and set the volume.
+      this->ActivateTrack(activeTrackIndex);
+      this->SetOutputVolume(outputVolume);
+   }
+   else
+   {
+      // !!! add an error string to the error message list
+      // 
+   }
+
+   // by definition, right after we've reloaded from disk, we're not dirty.
+   this->SetDirty(false);
+
+}
+
+
+XmlElement* Scumbler::DumpXml(int formatVersion) const
+{
+   XmlElement* node = new XmlElement(tag::kScumbler);
+   node->setAttribute(tag::kFileFormat, formatVersion);
+   node->setAttribute(tag::kName, fTitle);
+   node->setAttribute(tag::kActiveTrackIndex, fActiveTrackIndex);
+   node->setAttribute(tag::kOutputVolume, fOutputVolume);
+   XmlElement* trackContainer = node->createNewChildElement(tag::kTracks);
+   for (int i = 0; i < this->GetNumTracks(); ++i)
+   {
+      Track* t = this->GetTrack(i);
+      XmlElement* trackData = t->DumpXml(formatVersion);
+       trackContainer->addChildElement(trackData);
+   }
+
+   return node;
+}
+
+void Scumbler::changeListenerCallback(ChangeBroadcaster* source)
+{
+   // std::cout << "Scumbler::changeListenerCallback()" << std::endl;
+   if (source == fSampleCount)
+   {
+      // just notify that we've changed so the time readout can change.
+      fTimeUpdate = true;
+       //mMsg('.');
+      //this->sendChangeMessage();
+   }
+   else
+   {
+      // for now, assume that we're being notified that a track wants us to delete it.
+      // look through the list & delete any tracks that want to be deleted.
+      // We go through the list in reverse so that we don't skip items if there are 
+      // more than one that want to be deleted.
+      
+      for (int i = (fTracks.size() - 1); i >= 0; --i)
+      {
+         Track* t = fTracks[i];
+         if (t->WantsToBeDeleted())
+         {
+            if (i == this->GetActiveTrackIndex())
+            {
+               this->ActivatePreviousTrack();
+            }
+            this->DeleteTrack(i);
+         }
+      }
+   }
+}
+
 
 void Scumbler::SetPluginSortOrder(KnownPluginList::SortMethod sort)
 {
@@ -93,6 +230,7 @@ void Scumbler::TogglePlay()
    {
       this->Play();
    }
+   // std::cout << "Scumbler::TogglePlay->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 
 }
@@ -102,7 +240,27 @@ bool Scumbler::IsPlaying() const
    return fPlaying;
 }
 
-void Scumbler::Reset()
+void Scumbler::SetDirty(bool isDirty)
+{
+   fDirty = isDirty;
+   // std::cout << "Scumbler::SetDirty(" << isDirty << ");" << std::endl;
+   this->sendChangeMessage();
+}
+
+bool Scumbler::IsDirty() const
+{
+   return fDirty;
+}
+
+bool Scumbler::UpdateTime() 
+{
+   bool retval = fTimeUpdate;
+   fTimeUpdate = false;
+   return retval;
+}
+
+
+void Scumbler::Reset(bool addFirstTrack)
 {
    this->Pause();
 
@@ -137,13 +295,25 @@ void Scumbler::Reset()
       fGainNode = tk::kInvalidNode;
    }
 
+   // Add the processor that counts samples for us
+   fSampleCount = new SampleCounterProcessor(this, 5000);
+   fSampleCount->addChangeListener(this);
+   fSampleCountNode = this->AddProcessor(fSampleCount);
+   this->Connect(fInputNode, fSampleCountNode);
 
 
    // Delete any tracks that we have, returning to zero tracks.
    fTracks.clear();
-   // ... and then add a single track to start out.
-   this->AddTrack();
+
+   if (addFirstTrack)
+   {
+      // ... and then add a single track to start out.
+      this->AddTrack();
+      // (and make sure it's active so it receives input!)
+      this->ActivateTrack(0);
+   }
    // let anyone listening tk::know that we've changed.
+   // std::cout << "Scumbler::Reset->sendChangeMessage" << std::endl;
    this->sendChangeMessage();
 
 }
@@ -160,7 +330,8 @@ void Scumbler::SetOutputVolume(float volumeInDb)
       fOutputGain->SetGain(gain);
 
       // update our observers.
-      this->sendChangeMessage();
+      // std::cout << "Scumbler::SetOutputVolume->sendChangeMessage" << std::endl;
+      this->SetDirty();
    }
 }
 
@@ -169,7 +340,10 @@ float Scumbler::GetOutputVolume() const
    return fOutputVolume;
 }
 
-
+uint64 Scumbler::GetSampleCount() const
+{
+   return fSampleCount->GetSampleCount();
+}
 
 tk::Result Scumbler::Connect(NodeId source, NodeId dest)
 {
@@ -182,17 +356,20 @@ tk::Result Scumbler::Disconnect(NodeId source, NodeId dest)
 }
 
 
-tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
+tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after, bool disconnect)
 {
    tk::Result retval = tk::kFailure;
 
    before = this->HandleSpecialNode(before);
    after = this->HandleSpecialNode(after);
 
-   // 1: we can't succeed of before and after aren't connected.
-   if (!fGraph.isConnected(before, after))
+   if (disconnect)
    {
-      return tk::kNotConnected;
+      // 1: we can't succeed of before and after aren't connected.
+      if (!fGraph.isConnected(before, after))
+      {
+         return tk::kNotConnected;
+      }
    }
    // the new connections both need to be legal before we start messing with things. 
    if (!fGraph.canConnect(before, 0, newNode, 0) || 
@@ -201,7 +378,7 @@ tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
       return tk::kIllegalConnection;
    }
    //  first, disconnect the two nodes that are already being connected.
-   retval = this->Disconnect(before, after);
+   retval = disconnect ? this->Disconnect(before, after) : tk::kSuccess;
    if (tk::kSuccess == retval)
    {
       retval = this->Connect(before, newNode);
@@ -217,7 +394,7 @@ tk::Result Scumbler::InsertBetween(NodeId before, NodeId newNode, NodeId after)
 
 
 tk::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove, 
-   NodeId after, bool deleteNode)
+   NodeId after, bool deleteNode, bool reconnect)
 {
    tk::Result retval = tk::kFailure;
 
@@ -249,9 +426,12 @@ tk::Result Scumbler::RemoveBetween(NodeId before, NodeId nodeToRemove,
       retval = this->Disconnect(nodeToRemove, after);
       if (tk::kSuccess == retval)
       {
-         // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
-         // never been there.
-         retval = this->Connect(before, after);
+         if (reconnect)
+         {
+            // 4. Re-connect the before and after nodes, as if the nodeToRemove had 
+            // never been there.
+            retval = this->Connect(before, after);
+         }
          if (deleteNode)
          {
             fGraph.removeNode(nodeToRemove);
@@ -290,7 +470,8 @@ int Scumbler::GetNumTracks() const
 tk::Result Scumbler::AddTrack(const String& name)
 {
    fTracks.add(new Track(this, kPreEffects, kPostEffects, name));
-   this->sendChangeMessage();
+   // std::cout << "Scumbler::AddTrack->sendChangeMessage" << std::endl;
+   this->SetDirty();
    return tk::kSuccess;
 }
 
@@ -302,10 +483,96 @@ tk::Result Scumbler::DeleteTrack(int index)
    {
       fTracks.remove(index);
       retval = tk::kSuccess;
-      this->sendChangeMessage();
+      // std::cout << "Scumbler::DeleteTrack->sendChangeMessage" << std::endl;
+      this->SetDirty();
    }
    return retval;
 }
+
+
+tk::Result Scumbler::ActivateTrack(int index)
+{
+   tk::Result retval = tk::kFailure;
+   if ((index >= 0) && (index < this->GetNumTracks()) )
+   {
+      retval = tk::kSuccess;
+      if (index != fActiveTrackIndex)
+      {
+         Track* newActive = this->GetTrack(index);
+         newActive->SetActive(true);
+         // std::cout << "Scumbler::ActivateTrack->sendChangeMessage" << std::endl;
+         this->SetDirty();
+      }
+   }
+   return retval;
+}
+
+tk::Result Scumbler::ActivateTrack(Track* track)
+{
+   tk::Result retval = tk::kFailure;
+
+   return retval;
+}
+
+tk::Result Scumbler::ActivateNextTrack()
+{
+   tk::Result retval = tk::kFailure;
+   int trackCount = this->GetNumTracks();
+   if (trackCount > 1)
+   {
+      int currentActiveTrack = this->GetActiveTrackIndex();
+      if (currentActiveTrack >= 0)
+      {
+         if (++currentActiveTrack >= trackCount)
+         {
+            currentActiveTrack = 0;
+         }
+         retval = this->ActivateTrack(currentActiveTrack);
+      }
+   }
+   return retval;
+}
+
+
+tk::Result Scumbler::ActivatePreviousTrack()
+{
+   tk::Result retval = tk::kFailure;
+   int trackCount = this->GetNumTracks();
+   if (trackCount > 1)
+   {
+      int currentActiveTrack = this->GetActiveTrackIndex();
+      if (currentActiveTrack >= 0)
+      {
+         if (--currentActiveTrack < 0)
+         {
+            currentActiveTrack = trackCount - 1;
+         }
+         retval = this->ActivateTrack(currentActiveTrack);
+      }
+   }
+   return retval;   
+}
+
+tk::Result Scumbler::TrackIsActivating(Track* trackBeingActivated)
+{
+   tk::Result retval = tk::kSuccess;
+
+   // get a pointer to the currently active track (this may return nullptr)
+   Track* currentActiveTrack = this->GetTrack(fActiveTrackIndex);
+   if (nullptr != currentActiveTrack && currentActiveTrack != trackBeingActivated)
+   {
+      currentActiveTrack->SetActive(false);
+   }
+   fActiveTrackIndex = fTracks.indexOf(trackBeingActivated);
+
+   return retval;
+}
+
+int Scumbler::GetActiveTrackIndex() const
+{
+   return fActiveTrackIndex;
+}
+
 
 tk::Result Scumbler::SoloTrack(Track* trackToSolo)
 {
@@ -325,6 +592,20 @@ tk::Result Scumbler::ResetAllTracks()
       Track* t = this->GetTrack(i);
       t->ResetLoop();
    }
+   // set the sample count back to zero.
+   fSampleCount->Reset();
+   return tk::kSuccess;
+
+}
+
+tk::Result Scumbler::SeekAllTracksAbsolute(int loopPos)
+{
+   for (int i = 0; i < this->GetNumTracks(); ++i)
+   {
+      Track* t = this->GetTrack(i);
+      t->SeekAbsolute(loopPos);
+   }
+
    return tk::kSuccess;
 
 }
@@ -344,7 +625,8 @@ tk::Result Scumbler::MoveTrack(int fromIndex, int toIndex)
       }
       fTracks.move(fromIndex, toIndex);
       retval = tk::kSuccess;
-      this->sendChangeMessage();
+   // std::cout << "Scumbler::MoveTrack->sendChangeMessage" << std::endl;
+      this->SetDirty();
    }
    return retval;
 }
@@ -495,6 +777,40 @@ AudioProcessorEditor* Scumbler::GetEditorForNode(NodeId node, bool useGeneric)
    }
    return retval;
 }
+
+
+tk::Result Scumbler::GetStateInformationForNode(NodeId nodeId, MemoryBlock& m)
+{
+   tk::Result retval = tk::kFailure;
+   AudioProcessorGraph::Node* node = fGraph.getNodeForId(nodeId);
+   if (nullptr != node)
+   {
+      // get the actual processor object behind this node, and have 
+      // it stuff its state data into the memory block that we've been passed.
+      AudioProcessor* processor = node->getProcessor();
+      processor->getStateInformation(m);
+      retval = tk::kSuccess;
+   }
+
+   return retval;
+}
+
+tk::Result Scumbler::SetStateInformationForNode(NodeId nodeId, MemoryBlock& m)
+{
+   tk::Result retval = tk::kFailure;
+   AudioProcessorGraph::Node* node = fGraph.getNodeForId(nodeId);
+   if (nullptr != node)
+   {
+      // get the actual processor object behind this node, and have 
+      // it restore its state from the passed in memory block.
+      AudioProcessor* processor = node->getProcessor();
+      processor->setStateInformation(m.getData(), (int) m.getSize());
+      retval = tk::kSuccess;
+   }
+
+   return retval;   
+}
+
 
 tk::Result Scumbler::GetPluginDescriptionForNode(NodeId nodeId, PluginDescription& desc)
 {

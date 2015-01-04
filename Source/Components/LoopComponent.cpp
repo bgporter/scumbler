@@ -19,13 +19,14 @@ void DragLabel::mouseUp(const MouseEvent& e)
    Label::mouseUp(e);
 }
 
-LoopComponent::LoopComponent(LoopProcessor* loop)
-:  fLoop(nullptr)
+LoopComponent::LoopComponent(UiStyle* style, LoopProcessor* loop)
+:  StyledComponent(style)
+,  fLoop(nullptr)
 ,  fFeedback(nullptr)
 ,  fWaveform(nullptr)
 {
 
-   fWaveform = new WaveformComponent(nullptr);
+   fWaveform = new WaveformComponent(style, nullptr, "WaveformComponent");
    this->addAndMakeVisible(fWaveform);
     
    this->ConnectToLoop(loop);
@@ -36,7 +37,12 @@ LoopComponent::LoopComponent(LoopProcessor* loop)
    fDuration->setEditable(false, true, false);
    fDuration->setBorderSize(1, 1);
    //fDuration->setColour(Label::outlineColourId, Colours::green);
-   fDuration->setText(String(fLoop->GetLoopDuration()) + " ms", false);
+   String dur = "----";
+   if (fLoop)
+   {
+      dur = String(fLoop->GetLoopDuration());
+   }
+   fDuration->setText(dur + " ms", false);
    fDuration->addListener(this);
    this->addAndMakeVisible(fDuration);
 
@@ -46,21 +52,28 @@ LoopComponent::LoopComponent(LoopProcessor* loop)
    fFeedback->setRange (-96.0, 0.0, 0);
    fFeedback->setSliderStyle (Slider::RotaryHorizontalVerticalDrag);
    fFeedback->setTextBoxStyle (Slider::NoTextBox, false, 80, 20);
-   fFeedback->setColour (Slider::thumbColourId, Colours::black);
-   fFeedback->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
+
    fFeedback->setPopupDisplayEnabled(true, this);
    fFeedback->setTextValueSuffix("dB");
    fFeedback->addListener(this);     
    this->addAndMakeVisible(fFeedback);
 
 
+   this->UpdateStyle();
 
 }
 
 LoopComponent::~LoopComponent()
 {
+   this->ConnectToLoop(nullptr);
    this->deleteAllChildren();
    
+}
+
+void LoopComponent::UpdateStyle()
+{
+   fFeedback->setColour (Slider::thumbColourId, Colours::black);
+   fFeedback->setColour (Slider::rotarySliderFillColourId, Colour (0x7f000000));
 }
 
 void LoopComponent::ConnectToLoop(LoopProcessor* loop)
@@ -69,11 +82,13 @@ void LoopComponent::ConnectToLoop(LoopProcessor* loop)
    {
       if (fLoop)
       {
+         std::cout << " LoopComponent " << this << " disconnecting from loop processor " << fLoop << std::endl;
          fLoop->removeChangeListener(this);
       }
       fLoop = loop;
       if (fLoop)
       {
+         std::cout << " LoopComponent " << this << " connecting to loop processor " << fLoop << std::endl;
          fLoop->addChangeListener(this);
       }
    }

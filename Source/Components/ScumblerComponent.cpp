@@ -30,10 +30,11 @@ extern ApplicationCommandManager* gCommandManager;
 //[/MiscUserDefs]
 
 //==============================================================================
-ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
-    : Component ("The Scumbler")
+ScumblerComponent::ScumblerComponent (UiStyle* style, Scumbler* scumbler)
+    : StyledComponent(style, "ScumblerComponent")
     , fScumbler(scumbler)
     , fTransport(nullptr)
+    , fFramesPerSecond(25)
 {
 
 
@@ -42,16 +43,33 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
 
 
     //[Constructor] You can add your own custom stuff here..
+    
+
+
+
+    fTitle = new Label("title", fScumbler->GetTitle());
+    this->addAndMakeVisible(fTitle);
+
+    fTitle->setJustificationType (Justification::centredLeft);
+    fTitle->setEditable (false, true, false);
+
+    fTitle->addListener(this);
+
+
         // adding track(s)
     for (int i = 0; i < fScumbler->GetNumTracks(); ++i)
     {
-      TrackComponent* tc = new TrackComponent(fScumbler->GetTrack(i));
+      TrackComponent* tc = new TrackComponent(fStyle);
+      tc->SetTrackNumber(i+1, fScumbler->GetNumTracks());
+      tc->ConnectToTrack(fScumbler->GetTrack(i));
       fTracks.add(tc);
       this->addAndMakeVisible(tc);
     }
 
-    fTransport = new TransportComponent(fScumbler);
+    fTransport = new TransportComponent(fStyle, fScumbler);
     this->addAndMakeVisible(fTransport);
+
+    this->UpdateStyle();
 
     
     setSize (600, 400);
@@ -59,6 +77,9 @@ ScumblerComponent::ScumblerComponent (Scumbler* scumbler)
 
     // subscribe to change notifications coming from the scumbler object.
     fScumbler->addChangeListener(this);
+
+    this->setWantsKeyboardFocus(true);
+    this->grabKeyboardFocus();
     //[/Constructor]
 }
 
@@ -66,12 +87,25 @@ ScumblerComponent::~ScumblerComponent()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
-
+    if (fPlaying)
+    {
+      this->stopTimer();
+    }
     deleteAndZero(fTransport);
 
     //[Destructor]. You can add your own custom destruction code here..
     //[/Destructor]
 }
+
+void ScumblerComponent::UpdateStyle()
+{
+    fTitle->setFont (Font (fStyle->GetFontName(), 32.00f, Font::bold));
+    fTitle->setColour(Label::textColourId, fStyle->GetColor(palette::kAppFg));
+    fTitle->setColour (TextEditor::textColourId, fStyle->GetColor(palette::kAppFg));
+    fTitle->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
+}
+
+
 
 //==============================================================================
 void ScumblerComponent::paint (Graphics& g)
@@ -79,7 +113,12 @@ void ScumblerComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    LogPaint(this, g);
+    if (fScumbler->IsPlaying())
+    {
+      fRepaintCount++;
+    }
+    g.fillAll (fStyle->GetColor(palette::kAppBg));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -88,6 +127,7 @@ void ScumblerComponent::paint (Graphics& g)
 void ScumblerComponent::resized()
 {
     //[UserResized] Add your own custom resize handling here..
+    fTitle->setBounds(0, 0, this->getWidth(), 32);
     int trackCount = fTracks.size();
     for (int i = 0; i < trackCount; ++i)
     {
@@ -121,10 +161,10 @@ ApplicationCommandTarget* ScumblerComponent::getNextCommandTarget()
 void ScumblerComponent::getAllCommands(Array<CommandID>& commands)
 {
   const CommandID ids[] = {
-    CommandIds::kNew,
-    CommandIds::kOpen,
-    CommandIds::kSave,
-    CommandIds::kSaveAs,
+    //CommandIds::kNew,
+    //CommandIds::kOpen,
+    //CommandIds::kSave,
+    //CommandIds::kSaveAs,
     CommandIds::kPlay,
     //CommandIds::kPause,
     //CommandIds::kRewind,
@@ -144,6 +184,7 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
   String category = "General";
   switch (commandID)
   {
+#if 0
     case CommandIds::kNew:
     {
       result.setInfo("New",
@@ -181,7 +222,7 @@ void ScumblerComponent::getCommandInfo(CommandID commandID, ApplicationCommandIn
           ModifierKeys::shiftModifier | ModifierKeys::commandModifier, 0));
     }
     break;
-
+#endif
     case CommandIds::kPlay:
     {
       if (fScumbler->IsPlaying())
@@ -278,8 +319,42 @@ bool ScumblerComponent::perform(const InvocationInfo& info)
 
 void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
 {
+  // std::cout << "ScumblerComponent::changeListenerCallback" << std::endl;
   if (source == fScumbler)
   {
+    fTitle->setText(fScumbler->GetTitle(), NotificationType::dontSendNotification);
+    bool isPlaying = fScumbler->IsPlaying();
+    if (fPlaying != isPlaying)
+    {
+       fPlaying = isPlaying;
+       if (fPlaying)
+       {
+          // we are transitioning from being paused to playing.
+          fPlaybackStart = Time::getCurrentTime();
+          fRepaintCount = 0;
+          int interval = static_cast<int>(1000.0 / fFramesPerSecond);
+          this->startTimer(interval);
+       }
+       else
+       {
+          this->stopTimer();
+          // we are returning to a paused state.
+          Time end = Time::getCurrentTime();
+          double duration = (end.toMilliseconds() - fPlaybackStart.toMilliseconds()) / 1000.0;
+           double rate = fRepaintCount / duration;
+          String out = String(fRepaintCount);
+           out << " repaints in " << String(duration) << " seconds (" << rate << "/sec)";
+           Logger::outputDebugString(out);
+       }
+    }
+    /*
+    if (fScumbler->UpdateTime())
+    {
+       // if the only thing new is that the transport needs to be updated, just do that.
+       fTransport->repaint();    
+       return;  
+    }
+    */
     // if the number of tracks has changed, we need to refresh things.
     int trackCount = fScumbler->GetNumTracks();
     int trackDelta = trackCount - fTracks.size();
@@ -292,7 +367,7 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
         // adding track(s)
         for (int i = 0; i < trackDelta; ++i)
         {
-          TrackComponent* tc = new TrackComponent();
+          TrackComponent* tc = new TrackComponent(fStyle);
           fTracks.add(tc);
           this->addAndMakeVisible(tc);
         }
@@ -302,6 +377,10 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
       {
         // deleting track(s)
         trackDelta *= -1;
+        std::cout << "there are " << fTracks.size() << " trackComponents, and we are deleting " <<
+        trackDelta << std::endl;
+
+          
         for (int i = 0; i < trackDelta; ++i)
         {
           // remove the last trackComponent from the list and delete it.
@@ -321,15 +400,64 @@ void ScumblerComponent::changeListenerCallback(ChangeBroadcaster* source)
     {
       TrackComponent* tc = fTracks.getUnchecked(i);
       Track* track = fScumbler->GetTrack(i);
+      tc->SetTrackNumber(i+1, trackCount);
       tc->ConnectToTrack(track);
+
       this->SetTrackBounds(i, tc);
     }
 
+    mMsg("ScumblerComponent->repaint()");
     this->repaint();
+  }
+  else if (fStyle == source)
+  {
+     this->UpdateStyle();
   }
 
 }
 
+void ScumblerComponent::timerCallback()
+{
+   // currently, we only have the timer running when we're playing, and 
+   // we repaint the entire UI. When we have meters (etc) that want to be 
+   // updated live all the time, we may want to put more clever logic in here.
+   this->repaint();
+}
+
+
+
+bool ScumblerComponent::keyPressed(const KeyPress& key)
+{
+   bool retval = false;
+   if (key.isKeyCode(KeyPress::tabKey))
+   {
+      ModifierKeys mod = key.getModifiers();
+      if (mod.isShiftDown())
+      {
+         fScumbler->ActivatePreviousTrack();
+      }
+      else
+      {
+         fScumbler->ActivateNextTrack();
+      }
+      retval = true;
+   } 
+   else
+   {
+      retval = false;
+   }
+   return retval;
+}
+
+
+void ScumblerComponent::labelTextChanged(Label* source)
+{
+  if (fTitle == source)
+  {
+    fScumbler->SetTitle(source->getText());
+  }
+
+}
 
 void ScumblerComponent::SetTrackBounds(int index, TrackComponent* tc)
 {

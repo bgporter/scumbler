@@ -5,12 +5,12 @@
 
 extern KnownPluginList gKnownPlugins;
 
-PluginSlotComponent::PluginSlotComponent(PluginBlock* block, int index)
-:  fPluginBlock(block)
-,  fIndex(index)
+PluginSlotComponent::PluginSlotComponent(TrackComponent::PluginColors const& colors, PluginBlock* block, int index)
+:  fColors(colors)
 ,  fMouseOver(false)
 ,  fPluginName(String::empty)
 {
+   this->SetData(block, index);
    this->setTooltip("(empty)");
    Random r;
    this->SetEditorPosition(r.nextInt(200), r.nextInt(200));
@@ -20,6 +20,12 @@ PluginSlotComponent::PluginSlotComponent(PluginBlock* block, int index)
 PluginSlotComponent::~PluginSlotComponent()
 {
 
+}
+
+void PluginSlotComponent::SetData(PluginBlock* block, int index)
+{
+   fPluginBlock = block;
+   fIndex = index;
 }
 
 void PluginSlotComponent::SetEditorPosition(int x, int y)
@@ -85,22 +91,22 @@ void PluginSlotComponent::paint (Graphics& g)
 
    // we reduce so we're sure that our fat borders are all displayed. 
    rect.reduce(2.0f, 2.0f);
-   const float kCornerSize = this->getHeight() / 2;
+   const float kCornerSize = this->getHeight() / 4;
    if (this->IsEmpty())
    {
-      g.setColour(Colours::white);
+      g.setColour(fColors.bg);
    }
    else
    {
-      g.setColour(Colours::black);
+      g.setColour(fColors.fullSlotBg);
    }
 
    g.fillRoundedRectangle(rect, kCornerSize);
 
-   Colour c = Colours::black;
+   Colour c = fColors.fg;
    if (fMouseOver)
    {
-      c = Colours::red;
+      c = fColors.mouseOver;
    }
    g.setColour(c);
    g.drawRoundedRectangle(rect, kCornerSize, 3.000f);
@@ -118,7 +124,7 @@ void PluginSlotComponent::paint (Graphics& g)
       rect.setWidth(rect.getWidth() - inset);
       rect.setHeight(rect.getHeight() - inset);
 
-      g.setColour(Colours::white);
+      g.setColour(fColors.text);
       g.drawFittedText(info.name, mRoundInt(rect.getX()), mRoundInt(rect.getY()),
          mRoundInt(rect.getWidth()), mRoundInt(rect.getHeight()), 
          Justification::horizontallyCentred | Justification::verticallyCentred, 2);

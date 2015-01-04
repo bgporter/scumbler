@@ -9,12 +9,15 @@
 
 #include "PluginBlock.h"
 #include "Processors/Gain.h"
+#include "Processors/Input.h"
 #include "Processors/Loop.h"
 #include "Processors/Passthrough.h"
 #include "Scumbler.h"
+#include "XmlPersistent.h"
 
 
 class Track : public ChangeBroadcaster
+            , public XmlPersistent
 {
 public:
    /**
@@ -30,6 +33,24 @@ public:
     * \brief destructor. 
     */
    ~Track();
+
+
+   /**
+    * Load this object from the provided XmlElement object. If this object owns 
+    * objects of classes that are also XmlPersistent, call those recursively.
+    * @param e      XmlElement object with our data to restore .
+    * @param errors If we encounter errors, we add strings describing those errors
+    *               to this array. 
+    */
+   void LoadXml(XmlElement* e, StringArray& errors, int formatVersion);
+
+   /**
+    * Create a new XmlElement object and fill it with our contents (and recursively
+    * our children if appropriate)
+    * @return The XmlElement to write to disk.
+    */
+   XmlElement* DumpXml(int formatVersion) const;
+
 
    /**
     * Change the name of this track.
@@ -84,10 +105,78 @@ public:
    bool IsMuted() const;
 
    /**
+    * Activate/deactivate this track. 
+    * NOTE that I'm not sure I've got the atomicity of this action figured out yet;
+    * worried that we'll (e.g.) activate 1 and handle a block of samples before we execute
+    * the instructions to deactivate 0. I'll deal with that later.
+    * @param  isActive is this track supposed to be receiving samples?
+    * @return          Success/fail.
+    */
+   tk::Result SetActive(bool isActive);
+
+   /**
+    * Is this track currently set as active?
+    * @return true/false. If true, the input processor for this track will pass us samples.
+    * 
+    */
+   bool IsActive() const;
+
+   /**
+    * Set the input gain to be applied to this track before going into the pre-effects
+    * block. default = 0.0.
+    * @param gainInDb gain in dB, probably -96..+6 (?)
+    */
+   void SetInputGain(float gainInDb);
+
+   /**
+    * Return the current gain in dB applied to the input of this track
+    * @return Gain value.
+    */
+   float GetInputGain() const;
+
+   /**
+    * Set the pan value to be applied to the input to this track. 
+    * NOTE that this only has an effect when the input node is a single channel and
+    * the InputProcessor is set to generate a stereo pair.
+    * @param  pan 0.0 = fully left, 1.0 == fully right. Default = 0.5
+    * @return     success/fail.
+    */
+   tk::Result SetInputPan(float pan);
+
+   /**
+    * Get the pan setting applied to the input of this channel (0 <= pan <= 1)
+    * @return float.
+    */
+   float GetInputPan() const;
+
+
+
+
+   /**
+    * Control whether we're looking at left, right, or both inputs.
+    * @param channels Enum indicating what this input should be listening to.
+    */
+   void SetEnabledChannels(tk::ChannelEnable channels);
+
+   /**
+    * Get the currently enabled channel(s)
+    * @return Enum with the channel settings.
+    */
+   tk::ChannelEnable GetEnabledChannels() const;
+
+
+   /**
     * Reset the contents of the loop. Zero out all samples & return the loop 
     * read/write position to zero.
     */
    void ResetLoop();
+
+   /**
+    * Set the loop pointer to the specified sample position inside the loop. 
+    * If loopPos < 0 or > loopLength, we clamp the new position to those legal bounds.
+    * @param loopPos sample # (0..loopLength);
+    */
+   void SeekAbsolute(int loopPos = 0);
 
     /**
      * Set the track's output volume. 
@@ -151,6 +240,27 @@ public:
    LoopProcessor* GetLoop() const { return fLoop; };
    
 
+   /**
+    * When the user deletes a track with the UI, we need to tell the 
+    * Scumbler that owns us asynchronously to delete us. When we notify
+    * it that we want to be deleted, it checks each track to see which 
+    * one wants to go away and deletes it.
+    * @return Does this track want to be deleted?
+    */
+   bool WantsToBeDeleted() const { return fDeleteMe; };
+
+   /**
+    * Sets the track into a state where the Scumbler can tell that 
+    * it should be deleted.
+    */
+   void AskToBeDeleted();
+
+   /**
+    * Returns true if there's more than one track in the scumbler, otherwise
+    * false.
+    * @return bool.
+    */
+   bool CanBeDeleted() const;
 
 private:
    // !!! NOTE that at some point I expect Tracks to be copyable, either with 
@@ -164,6 +274,11 @@ private:
     * don't delete it.
     */
    Scumbler* fScumbler;
+
+   /**
+    * Set to true when this track wants the Scumbler to delete it.
+    */
+   bool fDeleteMe;
 
    /**
     * We can give each track a name for display in the UI.
@@ -180,6 +295,32 @@ private:
     * Is this track currently muted?
     */
    bool fMuted;
+
+   /**
+    * Is this track active (should the inputProcessor be passing samples through?)
+    */
+   bool fInputActive;
+
+   /**
+    * dB of gain to apply to the input to this track.
+    */
+   float fInputGain;
+
+
+   /**
+    * Where should a mono input signal be panned?
+    */
+   float fPan;
+
+   /**
+    * A non-owning pointer to the input processor for this track
+    */
+   InputProcessor* fInputProcessor;
+   
+   /**
+    * the node Id of the input processor
+    */
+   NodeId fInputId;
 
    /**
     * A block of effects that should be applied before the loop processor.
@@ -218,7 +359,13 @@ private:
 
    CriticalSection fMutex;
 
-
+   /**
+    * The first track to be created and the last one to be deleted need to 
+    * be handled differently (so we disconnect input & output when we create the first
+    * track, but not the others, and in reverse we only reconnect in/out when we are deleting
+    * the final track.)
+    */
+   static int sTrackCount;
 };
 
 

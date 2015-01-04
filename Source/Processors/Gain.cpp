@@ -5,7 +5,7 @@
 #include "Track.h"
 
 GainProcessor::GainProcessor(Track* track, int channelCount)
-:  PassthroughProcessor(channelCount)
+:  PassthroughProcessor(channelCount, channelCount)
 ,  fTrack(track)
 ,  fGain(1.0f)
 {

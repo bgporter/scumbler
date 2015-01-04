@@ -9,6 +9,7 @@
 
 #include "PluginBlock.h"
 #include "PluginEditorWindow.h"
+#include "TrackComponent.h"
 
 class PluginSlotComponent  : public Component
                            , public SettableTooltipClient
@@ -20,10 +21,17 @@ public:
    };
 
 
-   PluginSlotComponent(PluginBlock* block, int index);
+   PluginSlotComponent(TrackComponent::PluginColors const& colors, PluginBlock* block, int index);
    ~PluginSlotComponent();
 
    bool IsEmpty() const;
+
+   /**
+    * Set the plugin block and index that this slot gets its data from.
+    * @param block Pointer to the PluginBlock
+    * @param index Index in the PLuginBlock.
+    */
+   void SetData(PluginBlock* block, int index);
 
    /**
      * @name PluginEditorWindow operations.
@@ -73,6 +81,7 @@ public:
    ///@}
 
 private:
+   TrackComponent::PluginColors const& fColors;
    PluginBlock*   fPluginBlock;
    int            fIndex;
    bool           fMouseOver;

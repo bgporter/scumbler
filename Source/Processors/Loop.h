@@ -35,6 +35,7 @@ public:
       int     fLoopLength;  //**< number of samples in the loop
       int     fLoopCount;   //**< how many times have we played through the loop?
       bool    fIsPlaying;   //**< are we currently playing?
+      bool    fWasReset;    //**< was the buffer reset since the last time we looked at it?
 
       /**
        * We need to provide our own op= -- this is used in the waveform component to 
@@ -46,11 +47,13 @@ public:
                (fLoopSample == rhs.fLoopSample) &&
                (fLoopLength == rhs.fLoopLength) &&
                (fLoopCount == rhs.fLoopCount) &&
-               (fIsPlaying == rhs.fIsPlaying));
+               (fIsPlaying == rhs.fIsPlaying) &&
+               (fWasReset == rhs.fWasReset));
       };
       bool operator!=(const LoopInfo& rhs) const { return !operator==(rhs); };
    };
 
+#if 0
    /**
     * @struct ThumbnailData -- used to retrieve sample data from the loop processor that
     * can be used for waveform display. 
@@ -115,11 +118,27 @@ public:
        */
       void SetPixelValue(int channel, int pixelNum, float val);
 
+      /**
+       * Return the pixel value for the specified (channel, pixelNum) tuple.
+       * @param  channel  Channel# (0..channelCount-1)
+       * @param  pixelNum pixel num being addressed (0..currentWidth)
+       * @return          value from 0..1
+       */
+      float GetPixelValue(int channel, int pixelNum);
+
 
 
    };
+#endif
 
-   LoopProcessor(Track* track, int channelCount = 1);
+
+   /**
+    * Create the loop processor.
+    * @param track non-owning pointer to the track that owns us. 
+    * @param channelCount number of input and output channels for this loop.
+    * 
+    */
+   LoopProcessor(Track* track, int channelCount = 2);
 
    ~LoopProcessor();
 
@@ -154,14 +173,24 @@ public:
     */
    bool IsPlaying() const;
 
-
+#if 0
    /**
     * Fill the passed-in ThumbnailData structure with information about sample peaks
     * that can be used elsewhere to display a thumbnail of the waveform
     * @param  data Reference to a ThumbnailData structure
     */
    void GetThumbnailData(ThumbnailData* data);
+#endif
 
+   /**
+    * Returns the highest absolute sample value in the specified range of the specified 
+    * channel. 
+    * @param  channel     Channel num (should be 0/1 in this application.)
+    * @param  startSample Index of the first sample to look at.
+    * @param  endSample   Index of the last sample to look at. 
+    * @return             floating point sample value (0..1)
+    */
+   float GetThumbnailPoint(int channel, int startSample, int endSample);
 
    /**
     * Clear and reset the loop, setting all read/write positions back to zero.
@@ -169,11 +198,19 @@ public:
    void Reset();
 
    /**
+    * Set the loop pointer to the specified sample position inside the loop. 
+    * If loopPos < 0 or > loopLength, we clamp the new position to those legal bounds.
+    * @param loopPos sample # (0..loopLength);
+    */
+   void SeekAbsolute(int loopPos = 0);
+   
+
+   /**
     * Retrieve useful and current data about the state of our looping so we can 
     * update the UI correctly.
     * @param info LoopInfo struct. Filled on output.
     */
-   void GetLoopInfo(LoopInfo& info) const;
+   void GetLoopInfo(LoopInfo& info);
    /**
      * @name required overrides of pure virtual functions.
      */
@@ -269,6 +306,11 @@ private:
     * Number of times we've looped. Updated each time we wrap around.
     */
    int fLoopCount;
+
+   /**
+    * Were we fully reset since the last time the display code looked at us?
+    */
+   bool fWasReset;
 
    /**
     * Make access to variables threadsafe.

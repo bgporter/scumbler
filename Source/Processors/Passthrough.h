@@ -11,7 +11,7 @@
 /**
  * @class PassthroughProcessor
  *
- * No-op audio processor that we're reallyl only using for test. You can create an 
+ * No-op audio processor that we're really only using for test. You can create an 
  * instance with 1 or 2 input/output channels. Whatever comes in goes out unaffected.
  */
 class PassthroughProcessor : public AudioProcessor
@@ -19,9 +19,10 @@ class PassthroughProcessor : public AudioProcessor
 public:
    /**
     *  @param inputChannelCount number of desired input channels
-    *  @param outputChannelCount number of desired output channels.
+    *  @param outputChannelCount number of desired output channels (if ==0, will match 
+    *                            the setting of the input channels.)
     */
-   PassthroughProcessor(int channelCount = 1);
+   PassthroughProcessor(int inputChannelCount = 1, int outputChannelCount=0);
 
    /**
     * Destructor.
@@ -39,7 +40,9 @@ public:
     */
    const String getName() const;
 
-   int GetChannelCount() const { return fChannelCount; };
+   int GetInputChannelCount() const { return fInputChannelCount; };
+   
+   int GetOutputChannelCount() const { return fOutputChannelCount; };
  
    /**
     * Called before playback starts to get things ready.
@@ -99,7 +102,9 @@ public:
 
 
 protected:
-    int fChannelCount;
+    int fInputChannelCount;
+    int fOutputChannelCount;
+
 private:
    //JUCE_DECLARE_NON_COPYABLE(PassthroughProcessor);
 

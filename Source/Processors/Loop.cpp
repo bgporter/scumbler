@@ -7,36 +7,14 @@
 #include "Track.h"
 
 
-
+#if 0
 #define mMin(x, y) (x) < (y) ? (x) : (y)
 #define mMax(x, y) (x) < (y) ? (y) : (x)
+#endif
 
-
-
-LoopProcessor::ThumbnailData::ThumbnailData(int channelCount)
-{
-   fPixelData.resize(channelCount);
-}
-
-void LoopProcessor::ThumbnailData::Resize(int newCapacity)
-{
-   // for (int channel = 0; channel < fPixelData.size(); ++channel)
-   // {
-   //    fPixelData[channel].resize(newCapacity);
-   // }
-   fPixelData.resize(newCapacity);
-}
-
-void LoopProcessor::ThumbnailData::SetPixelValue(int channel, int pixelNum, float val)
-{
-   // DANGER: assuming that all parameters are sane values
-   //fPixelData[channel].set(pixelNum, val);
-   fPixelData.set(pixelNum, val);
-
-}
 
 LoopProcessor::LoopProcessor(Track* track, int channelCount)
-:  PassthroughProcessor(channelCount)
+:  PassthroughProcessor(channelCount, channelCount)
 ,  fTrack(track)
 ,  fSampleRate(44100.0)
 ,  fLoopDuration(4000)
@@ -44,12 +22,16 @@ LoopProcessor::LoopProcessor(Track* track, int channelCount)
 ,  fLoopBuffer(nullptr)
 ,  fLoopPosition(0)
 ,  fLoopCount(0)
+,  fWasReset(false)
 {
+   std::cout << "Creating LoopProcessor @ " << this << std::endl;
+   this->SetLoopDuration(fLoopDuration);
 
 }
 
 LoopProcessor::~LoopProcessor()
 {
+   std::cout << "Deleting LoopProcessor @ " << this << std::endl;
 
 }
 
@@ -70,13 +52,13 @@ tk::Result LoopProcessor::SetLoopDuration(int milliseconds)
 
       if (nullptr == fLoopBuffer)
       {
-          fLoopBuffer = new AudioSampleBuffer(fChannelCount, sampleCount);
+          fLoopBuffer = new AudioSampleBuffer(fInputChannelCount, sampleCount);
           this->Reset();
       }
       else if (sampleCount != fLoopBuffer->getNumSamples())
       {
          // resizing
-         fLoopBuffer->setSize(fChannelCount, sampleCount);
+         fLoopBuffer->setSize(fInputChannelCount, sampleCount);
          this->Reset();
       }
       retval = tk::kSuccess;
@@ -119,62 +101,19 @@ bool LoopProcessor::IsPlaying() const
 }
 
 
-void LoopProcessor::GetThumbnailData(ThumbnailData* data)
+
+float LoopProcessor::GetThumbnailPoint(int channel, int startSample, int endSample)
 {
-   // !!! Note that all of this logic breaks down when samples per pixel 
-   // is < 1.0. It's not clear what we'd want to display in that case anyway
-   // at the current moment -- we'll re-evaluate when we get there (and get
-   // this code working)
-
-   float accum = data->fStart;
-   int startSample = static_cast<int>(accum);
-   int samplesAvailable = fLoopBuffer->getNumSamples() - startSample;
-   int pixelsDesired = data->fMaxThumbnailValues;
-   int pixelsAvailable = 0;
-   int samplesDesired = pixelsDesired * data->fSamplesPerPixel;
-
-   if (samplesAvailable < data->fSamplesPerPixel)
+   float retval = 0.f;
+   jassert(endSample > startSample);
+   jassert(channel < fInputChannelCount);
+   if (fLoopBuffer && (channel < fInputChannelCount) && (endSample > startSample))
    {
-      // not enough samples there for us to deal with. This shouldn't happen.
-      data->fPixelsReturned = 0;
-      // set the thumbnail data to restart at the beginning on the next loop.
-      data->fStart = 0;     
-      return;
-   }
-   else if (samplesAvailable < samplesDesired)
-   {
-      // we can only give them some of the data that they'd like.
-      pixelsAvailable = int(samplesAvailable / data->fSamplesPerPixel);
-   }
-   else
-   {
-      // typical case -- we can give them all the data that they want.
-      pixelsAvailable = pixelsDesired;
-   }
-
-   
-   // !!! first iteration -- only deal with one channel.
-   int channel = 0;
-   for (int pixelIndex = 0; pixelIndex < pixelsAvailable; ++pixelIndex)
-   {
-      accum += data->fSamplesPerPixel;
-      int endSample = static_cast<int>(accum);
       endSample = mMin(endSample, fLoopBuffer->getNumSamples());
-      // Currently: We look for the highest absolute sample value across *all* samples
-      // in the buffer. If we ever want to handle the channels separately, we'd need to 
-      // run this loop inside another loop for each of the channels.
-      float pixelVal = fLoopBuffer->getMagnitude(startSample, (endSample - startSample));
-      data->SetPixelValue(channel, pixelIndex, pixelVal);
-      // get ready for the next pixel.
-      startSample = endSample;
+      int numSamples = endSample - startSample;
+      retval = fLoopBuffer->getMagnitude(channel, startSample, numSamples);
    }
-   // see if we need to wrap on the next call.
-   if (static_cast<int>(accum + 0.5) >= fLoopBuffer->getNumSamples())
-   {
-      accum = 0.0f;
-   }
-   data->fStart = accum;
-   data->fPixelsReturned = pixelsAvailable;
+   return retval;
 }
 
 
@@ -184,10 +123,33 @@ void LoopProcessor::Reset()
    fLoopBuffer->clear();
    fLoopPosition = 0;
    fLoopCount = 0;    // ?
+   fWasReset = true;
    this->sendChangeMessage();
 }
 
-void LoopProcessor::GetLoopInfo(LoopInfo& info) const
+void LoopProcessor::SeekAbsolute(int loopPos)
+{
+   if (fLoopBuffer)
+   {
+      if ((loopPos < 0) || (loopPos >= fLoopBuffer->getNumSamples()) )
+      {
+         loopPos = 0;
+      }
+   }
+   else
+   {
+      loopPos = 0;
+   }
+
+   ScopedLock sl(fMutex);
+   fLoopPosition = loopPos;
+   fWasReset = true;
+
+   this->sendChangeMessage();
+
+}
+
+void LoopProcessor::GetLoopInfo(LoopInfo& info)
 {
    ScopedLock sl(fMutex);   
    info.fSampleRate = fSampleRate;
@@ -202,6 +164,8 @@ void LoopProcessor::GetLoopInfo(LoopInfo& info) const
    }
    info.fLoopCount = fLoopCount;
    info.fIsPlaying = fTrack->IsPlaying();
+   info.fWasReset = fWasReset;
+   fWasReset = false;
 }
 
 const String LoopProcessor::getName() const
@@ -233,7 +197,7 @@ void LoopProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMess
       int sampleCount = buffer.getNumSamples();
       int loopSampleCount = fLoopBuffer->getNumSamples();
       float feedbackGain = fFeedback;
-      for (int channel = 0; channel < fChannelCount; ++channel)
+      for (int channel = 0; channel < fInputChannelCount; ++channel)
       {
          // this is easy if we don't need to wrap around the loop 
          // buffer when processing this block

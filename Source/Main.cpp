@@ -67,6 +67,23 @@ public:
     //==============================================================================
     void systemRequestedQuit()
     {
+        if (mainWindow->IsDirty())
+        {
+            int result = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+                "Save Before Quitting?",
+                "The scumbler has been changed since it was last saved. Save before quitting?",
+                "Save", "Quit", "Cancel");
+            if (1 == result)
+            {
+                mainWindow->Save();
+            }
+            else if (0 == result)
+            {
+                // cancel -- don't quit!
+                return;
+            }
+
+        }
         quit();
     }
 

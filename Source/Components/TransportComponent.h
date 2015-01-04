@@ -6,17 +6,21 @@
 #define h_TransportComponent
 
 #include "JuceHeader.h"
+#include "StyledComponent.h"
+#include "SvgButton.h"
+
 
 class Scumbler;
 
 
-class TransportComponent   : public Component 
+class TransportComponent   : public StyledComponent 
                            , public ButtonListener
                            , public SliderListener
-                           , public ChangeListener
 {
 public:
-   TransportComponent(Scumbler* scumbler);
+   TransportComponent(UiStyle* style, Scumbler* scumbler);
+
+   void UpdateStyle();
 
    ~TransportComponent();
 
@@ -27,16 +31,17 @@ public:
 
    void changeListenerCallback(ChangeBroadcaster* source);
 
+
 private:
 
    Scumbler* fScumbler;
 
-   TextButton* fAddTrackButton;
-   TextButton* fStopButton;
-   TextButton* fPlayButton;
+   SvgButton* fAddTrackButton;
+   SvgButton* fPlayButton;
+   SvgButton* fResetButton;   
    Label* fPlayTime;
    Slider* fOutputVolume;
-   TextButton* fResetButton;   
+
 
    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TransportComponent);   
 };                         

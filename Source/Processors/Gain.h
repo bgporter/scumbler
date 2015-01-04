@@ -19,6 +19,8 @@ public:
     *              processor will also obey the solo and mute states
     *              of the track to possibly set the gain value to 
     *              zero as approriate.
+    * @param ChannelCount (5/3/14 BgP) All Gain Processors have symmetric 
+    *                     input/output channels now.
     */
    GainProcessor(Track* track=nullptr, int channelCount=1);
 
@@ -53,7 +55,7 @@ public:
    float GetGain() const;
 
 
-private:
+protected:
 
    /**
     * our (optional) track object. We don't own it, so don't delete it.

@@ -39,6 +39,7 @@ void ChangeBroadcaster::addChangeListener (ChangeListener* const listener)
     jassert (MessageManager::getInstance()->currentThreadHasLockedMessageManager());
 
     changeListeners.add (listener);
+    //std::cout << "BDCST@ "<< this << " adding listener @ " << listener << ", " << changeListeners.size() << " listeners" << std::endl;
 }
 
 void ChangeBroadcaster::removeChangeListener (ChangeListener* const listener)
@@ -48,6 +49,7 @@ void ChangeBroadcaster::removeChangeListener (ChangeListener* const listener)
     jassert (MessageManager::getInstance()->currentThreadHasLockedMessageManager());
 
     changeListeners.remove (listener);
+    //std::cout << "BDCST@ "<< this << " removing listener @ " << listener << ", " << changeListeners.size() << " listeners" << std::endl;
 }
 
 void ChangeBroadcaster::removeAllChangeListeners()

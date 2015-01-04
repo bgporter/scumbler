@@ -20,6 +20,7 @@ extern ApplicationProperties* gAppProperties;
 extern KnownPluginList  gKnownPlugins;
 
 class PluginListWindow;
+class UiStyle;
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
@@ -49,6 +50,48 @@ public:
      * @param display Passing `true` will display the plugin window, `false` will delete it. 
      */
     void ViewPlugins(bool display=true);
+
+    /**
+     * Get the UiStyle used by the application set up. 
+     */
+    void InitializeStyle();
+
+
+    /**
+     * Clear the scumbler and create a new, empty workspace for us. If the scumbler is
+     * currently dirty, we should make sure to give the user an option to save the
+     * current contents before nuking them.
+     */
+    void New();
+
+    /**
+     * Open a Scumbler file from disk. If the current scumbler needs to be saved first, 
+     * we should make sure that can happen.
+     */
+    void Open();
+    /**
+     * Save the current Scumbler to the current file. If there isn't a file open, 
+     * do SaveAs() instead.
+     */
+    void Save();
+
+    /**
+     * Save the current Scumbler into a new file.
+     */
+    void SaveAs();
+
+    /**
+     * has the scumbler been changed since it was last saved?
+     * @return true/false
+     */
+    bool IsDirty() const;
+
+    /**
+     * Create a new Scumbler for us to use. If there was already one in place, this new
+     * one will completely replace it and it will be deleted automatically  .
+     * @param addFirstTrack If true, creates a new empty track.
+     */
+    void CreateNewScumblerAndComponent(bool addFirstTrack);
 
     /**
      * @name MenuBarModel overrides.
@@ -119,10 +162,17 @@ private:
      */
     ScopedPointer<Scumbler> fScumbler;
 
+    ScopedPointer<UiStyle>  fStyle;
+
     /**
      * A pointer to the window that lists/scans for plugins.
      */
     ScopedPointer<PluginListWindow>  fPluginWindow;
+
+    /**
+     * Path to the currently open file (if any)
+     */
+    String fFilePath;
 };
 
 
